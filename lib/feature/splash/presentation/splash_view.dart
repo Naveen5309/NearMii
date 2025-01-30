@@ -1,0 +1,77 @@
+import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+
+class SplashView extends ConsumerStatefulWidget {
+  const SplashView({super.key});
+
+  @override
+  ConsumerState<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends ConsumerState<SplashView>
+    with SingleTickerProviderStateMixin {
+  // late AnimationController _controller;
+  // late Animation _animation;
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNextScreen();
+
+    // _controller =
+    //     AnimationController(duration: const Duration(seconds: 3), vsync: this);
+    // _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    //   CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    // );
+
+    // // Start the animation
+    // _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    // _controller.dispose();
+    super.dispose();
+  }
+
+  void _navigateToNextScreen() async {
+    // Simulate a delay for the splash screen
+    await Future.delayed(const Duration(seconds: 3), () {
+      // Navigate to the next screen (replace with your next screen logic)
+      if (mounted) {
+        offAllNamed(context, Routes.onboard);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SizedBox(
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(color: AppColor.appThemeColor),
+              ),
+              SizedBox(
+                // width: MediaQuery.of(context).size.width * 0.5,
+                // height: MediaQuery.of(context).size.width * 0.25,
+                child: SvgPicture.asset(
+                  Assets.appLogo,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

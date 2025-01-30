@@ -1,0 +1,103 @@
+name: NearMii
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.1
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.8
+  equatable: ^2.0.5
+  get_it: ^7.7.0
+  connectivity_plus: ^6.0.5
+  dio: ^5.7.0
+  bot_toast: ^4.1.3
+  mime: ^1.0.6
+  hive_ce_flutter: ^2.0.0
+  flutter_riverpod: ^2.5.1
+  flutter_svg: ^2.0.17
+  flutter_screenutil: ^5.9.3
+  smooth_page_indicator: ^1.2.0+3
+  pinput: ^5.0.1
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^4.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/fonts/
+    - assets/icons/
+    - assets/images/
+  #   - images/a_dot_ham.jpeg
+
+
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Baloo Paaji 2
+      fonts:
+        - asset: assets/fonts/BalooPaaji2-Regular.ttf
+          weight: 400
+    - family: MADE TOMMY
+      fonts:
+        - asset: assets/fonts/MADE TOMMY Black_PERSONAL USE.otf
+          weight: 900
+        - asset: assets/fonts/MADE TOMMY Bold_PERSONAL USE.otf
+          weight: 700
+        - asset: assets/fonts/MADE TOMMY ExtraBold_PERSONAL USE.otf
+          weight: 800
+        - asset: assets/fonts/MADE TOMMY Light_PERSONAL USE.otf
+          weight: 300
+        - asset: assets/fonts/MADE TOMMY Medium_PERSONAL USE.otf
+          weight: 500
+        - asset: assets/fonts/MADE TOMMY Regular_PERSONAL USE.otf
+          weight: 400
+        - asset: assets/fonts/MADE TOMMY Thin_PERSONAL USE.otf
+          weight: 100
+
+
+
+
+      
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

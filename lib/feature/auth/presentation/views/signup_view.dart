@@ -1,0 +1,252 @@
+import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/common_widgets/app_text.dart';
+import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
+import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_rich_text.dart';
+import 'package:NearMii/feature/common_widgets/custom_rich_text_three_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+class SignUpView extends StatelessWidget {
+  const SignUpView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        body: BgImageContainer(
+            bgImage: Assets.loginBg,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: totalHeight,
+                    ),
+                    //Logo
+
+                    // const Text("APPlOGO"),
+
+                    SvgPicture.asset(
+                      Assets.appLogo,
+                      height: 20,
+                      width: 20,
+                    ),
+
+                    AppText(
+                      text: AppString.signUpToYourAccount,
+                      fontSize: 32.sp,
+                    ),
+
+                    15.verticalSpace,
+                    AppText(
+                      text: AppString.letSignUpToYourAccount,
+                      fontSize: 14.sp,
+                      color: AppColor.grey999,
+                    ),
+
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+
+                    //Field forms
+
+                    formsFieldsSection(),
+
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: context.height * .02),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Consumer(
+                            builder: (context, ref, child) {
+                              return
+                                  // final check = ref.watch(checkPrivacy);
+                                  // return GestureDetector(
+                                  //   onTap: () {
+                                  //     ref.read(checkPrivacy.notifier).state =
+                                  //         !ref.read(checkPrivacy.notifier).state;
+                                  //   },
+                                  //   child:
+                                  Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 1.0,
+                                          color: AppColor.btnColor,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0),
+                                        color: AppColor.btnColor,
+                                      ),
+                                      child:
+                                          //  check
+                                          //     ?
+
+                                          Center(
+                                        child: Icon(
+                                          Icons.check_sharp,
+                                          color: AppColor.primary,
+                                          size: 16
+                                              .sp, // Adjust icon size to fit nicely in the box.
+                                        ),
+                                      )
+                                      // : const SizedBox()
+                                      // );
+                                      );
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: context.width * .02),
+                            child: SizedBox(
+                              width: context.width * .83,
+                              child: Wrap(
+                                children: [
+                                  CustomRichTextThreeWidget(
+                                    text: AppString.iAgreeTo,
+                                    onTap: () {},
+                                    onTap2: () {},
+                                    clickableText: AppString.termsAndConditions,
+                                    clickableText2: AppString.privacyPolicy,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    //login
+                    CommonAppBtn(
+                      onTap: () {
+                        offAllNamed(context, Routes.completeProfile);
+                      },
+                      title: AppString.signUp,
+                      textSize: 16.sp,
+                    ),
+
+                    //OR CONTINUE WITH
+
+                    orContinueWith(context: context),
+
+                    //social media section
+                    socialMediaSection(),
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+
+                    //ALREADY HAVE AN ACCOUNT
+                    Align(
+                      alignment: Alignment.center,
+                      child: CustomRichText(
+                          onTap: () {
+                            toNamed(context, Routes.login);
+                          },
+                          text: AppString.alreadyHaveAnAccount,
+                          clickableText: AppString.signIn),
+                    )
+                  ],
+                ),
+              ),
+            )),
+      ),
+    );
+  }
+
+//FORMS FIELDS SECTION
+  Widget formsFieldsSection() {
+    return Column(
+      children: [
+        //EMAIL ADDRESS
+        CustomLabelTextField(
+          prefixIcon: Assets.icUser,
+          controller: TextEditingController(),
+          labelText: AppString.emailAddress,
+        ),
+
+        //PASSWORD
+        CustomLabelTextField(
+          prefixIcon: Assets.icLock,
+          controller: TextEditingController(),
+          labelText: AppString.pswd,
+        ),
+
+        //CONFIRM PASSWORD
+        CustomLabelTextField(
+          prefixIcon: Assets.icLock,
+          controller: TextEditingController(),
+          labelText: AppString.confirmPswd,
+        )
+      ],
+    );
+  }
+}
+
+//SOCIAL MEDIA SECTION
+
+Widget socialMediaSection() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      SvgPicture.asset(Assets.icFbSingle),
+      SvgPicture.asset(Assets.google),
+      SvgPicture.asset(Assets.apple),
+    ],
+  );
+}
+
+//OR CONTINUE WITH
+
+Widget orContinueWith({required BuildContext context}) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: context.height * .05),
+    child: Row(
+      children: [
+        Expanded(
+          child: customDividerContainer(gradientColor: [
+            AppColor.black000000.withOpacity(.01),
+            AppColor.black000000.withOpacity(.2),
+          ]),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: AppText(
+            text: AppString.orContinueWiths,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColor.black000000.withOpacity(.6),
+          ),
+        ),
+        Expanded(
+          child: customDividerContainer(gradientColor: [
+            AppColor.black000000.withOpacity(.2),
+            AppColor.black000000.withOpacity(.01),
+          ]),
+        ),
+      ],
+    ),
+  );
+}
+
+//CUSTOM DIVIDER CONTAINER
+Widget customDividerContainer({required List<Color> gradientColor}) {
+  return Container(
+    height: 1.5,
+    decoration: BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: gradientColor)),
+  );
+}
