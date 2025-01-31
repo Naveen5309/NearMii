@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
@@ -6,9 +8,8 @@ import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
-import 'package:NearMii/feature/common_widgets/custom_rich_text_three_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -35,10 +36,13 @@ class CompleteProfileView extends StatelessWidget {
 
                     // const Text("APPlOGO"),
 
-                    SvgPicture.asset(
-                      Assets.appLogo,
-                      height: 20,
-                      width: 20,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: SvgPicture.asset(
+                        Assets.icDummyLogo,
+                        // height: 100,
+                        // width: 100,
+                      ),
                     ),
 
                     AppText(
@@ -53,91 +57,30 @@ class CompleteProfileView extends StatelessWidget {
                       color: AppColor.grey999,
                     ),
 
-                    SizedBox(
-                      height: context.height * .05,
-                    ),
-
-                    profileSection(),
-                    //Field forms
-
-                    formsFieldsSection(),
-
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: context.height * .02),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Consumer(
-                            builder: (context, ref, child) {
-                              return
-                                  // final check = ref.watch(checkPrivacy);
-                                  // return GestureDetector(
-                                  //   onTap: () {
-                                  //     ref.read(checkPrivacy.notifier).state =
-                                  //         !ref.read(checkPrivacy.notifier).state;
-                                  //   },
-                                  //   child:
-                                  Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1.0,
-                                          color: AppColor.btnColor,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                        color: AppColor.btnColor,
-                                      ),
-                                      child:
-                                          //  check
-                                          //     ?
-
-                                          Center(
-                                        child: Icon(
-                                          Icons.check_sharp,
-                                          color: AppColor.primary,
-                                          size: 16
-                                              .sp, // Adjust icon size to fit nicely in the box.
-                                        ),
-                                      )
-                                      // : const SizedBox()
-                                      // );
-                                      );
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: context.width * .02),
-                            child: SizedBox(
-                              width: context.width * .83,
-                              child: Wrap(
-                                children: [
-                                  CustomRichTextThreeWidget(
-                                    text: AppString.iAgreeTo,
-                                    onTap: () {},
-                                    onTap2: () {},
-                                    clickableText: AppString.termsAndConditions,
-                                    clickableText2: AppString.privacyPolicy,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          EdgeInsets.symmetric(vertical: context.height * .04),
+                      child: profileSection(),
                     ),
 
+                    //Field forms
+
+                    formsFieldsSection(context: context),
+                    SizedBox(
+                      height: context.height * .01,
+                    ),
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.login);
+                        offAllNamed(context, Routes.selectSocialMedia);
                       },
-                      title: AppString.login,
+                      title: AppString.next,
                       textSize: 16.sp,
                     ),
 
-                    //OR CONTINUE WITH
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
                   ],
                 ),
               ),
@@ -169,7 +112,7 @@ class CompleteProfileView extends StatelessWidget {
   }
 
 //FORMS FIELDS SECTION
-  Widget formsFieldsSection() {
+  Widget formsFieldsSection({required BuildContext context}) {
     return Column(
       children: [
         //FULL NAME
@@ -185,13 +128,88 @@ class CompleteProfileView extends StatelessWidget {
           controller: TextEditingController(),
           labelText: AppString.designation,
         ),
+        //phone number
 
-        //PHONE NUMBER
-        CustomLabelTextField(
-          prefixIcon: Assets.icLock,
+        CustomPhoneNumber(
+          prefixIcon: Assets.icGender,
           controller: TextEditingController(),
           labelText: AppString.phoneNumber,
         ),
+
+        // DropdownButtonFormField2<String>(
+        //   isExpanded: true,
+        //   decoration: InputDecoration(
+        //     contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        //     border: OutlineInputBorder(
+        //       borderRadius: BorderRadius.circular(100),
+        //     ),
+        //     // Add more decoration..
+        //   ),
+        //   hint: const Text(
+        //     'Gender',
+        //     style: TextStyle(fontSize: 14),
+        //   ),
+        //   items: genderList
+        //       .map((item) => DropdownMenuItem<String>(
+        //             value: item,
+        //             child: Text(
+        //               item,
+        //               style: TextStyle(
+        //                 fontSize: 14.sp,
+        //               ),
+        //             ),
+        //           ))
+        //       .toList(),
+        //   validator: (value) {
+        //     if (value == null) {
+        //       return 'Please select gender.';
+        //     }
+        //     return null;
+        //   },
+        //   onChanged: (value) {
+        //     //Do something when selected item is changed.
+        //   },
+        //   onSaved: (value) {
+        //     // selectedValue = value.toString();
+        //   },
+        //   buttonStyleData: const ButtonStyleData(
+        //     padding: EdgeInsets.only(right: 8),
+        //   ),
+        //   iconStyleData: const IconStyleData(
+        //     icon: Icon(
+        //       Icons.arrow_drop_down,
+        //       color: Colors.black45,
+        //     ),
+        //     iconSize: 24,
+        //   ),
+        //   dropdownStyleData: DropdownStyleData(
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(15),
+        //     ),
+        //   ),
+        //   menuItemStyleData: const MenuItemStyleData(
+        //     padding: EdgeInsets.symmetric(horizontal: 16),
+        //   ),
+        // ),
+
+        // //PHONE NUMBER
+        // CustomDropdownButton(
+        //   buttonWidth: context.width,
+        //   // dropdownDecoration:
+        //   //     BoxDecoration(borderRadius: BorderRadius.circular(100)),
+        //   dropdownItems: const ["one", "two"],
+        //   hint: "Gender",
+        //   onChanged: (val) {},
+        //   value: "one",
+        //   icon: SvgPicture.asset(Assets.icArrowDown),
+        // ),
+        // const CustomPhoneNumberField(),
+
+        // CustomLabelTextField(
+        //   prefixIcon: Assets.icLock,
+        //   controller: TextEditingController(),
+        //   labelText: AppString.phoneNumber,
+        // ),
 
         //GENDER
         CustomLabelTextField(
@@ -199,16 +217,73 @@ class CompleteProfileView extends StatelessWidget {
           controller: TextEditingController(),
           suffixIcon: Assets.icArrowDown,
           labelText: AppString.gender,
+          readOnly: true,
+          onTapOnSuffixIcon: () {
+            log("on click on gender suffix icon");
+
+            showMenu(
+              context: context,
+              position: const RelativeRect.fromLTRB(
+                  100, 400, 100, 0), // Adjust position
+              items: genderList.map((String gender) {
+                return PopupMenuItem<String>(
+                  value: gender,
+                  child: Text(gender),
+                );
+              }).toList(),
+            ).then((value) {
+              if (value != null) {
+                // setState(() {
+                //   selectedGender = value;
+                // });
+              }
+            });
+          },
         ),
 
         //DATE OF BIRTH
         CustomLabelTextField(
+          readOnly: true,
+
           prefixIcon: Assets.icCake,
           controller: TextEditingController(),
           suffixIcon: Assets.icCalender,
           labelText: AppString.dob,
+          onTapOnSuffixIcon: () async {
+            final DateTime? picked = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1970, 8),
+              lastDate: DateTime.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: Colors.green, // Header background color
+                    hintColor: Colors.green, // Accent color
+                    colorScheme: const ColorScheme.light(
+                        primary: Colors.green), // Active date color
+                    buttonTheme: const ButtonThemeData(
+                        textTheme: ButtonTextTheme.primary),
+                  ),
+                  child: child!,
+                );
+              },
+            );
+            // if (picked != null && picked != selectedDate) {
+            //   // setState(() {
+            //   //   selectedDate = picked;
+            //   // });
+            // }
+          },
 
           // labelText: AppString.confirmPswd,
+        ),
+
+        //REFERREL CODE
+        CustomLabelTextField(
+          prefixIcon: Assets.icReferrelCode,
+          controller: TextEditingController(),
+          labelText: AppString.enterReferralCode,
         ),
       ],
     );

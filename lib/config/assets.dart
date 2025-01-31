@@ -106,10 +106,10 @@ class Assets {
   static const String icVip = 'assets/icons/vip.svg';
   static const String icDesignation = 'assets/icons/designation.svg';
   static const String icArrowDown = 'assets/icons/arrow_down.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String icDummyLogo = 'assets/icons/dummy_logo.svg';
+  static const String icEye = 'assets/icons/eye.svg';
+  static const String icEyeOff = 'assets/icons/eye-slash.svg';
+  static const String icReferrelCode = 'assets/icons/referrel_code.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';

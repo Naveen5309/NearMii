@@ -116,8 +116,8 @@ abstract final class AppString {
   static const String iAgreeTo = "I agreed to";
   static const String privacyPolicy = "Privacy Policies";
   static const String enterOtp = "Enter OTP shared on your email";
-  // static const String dob = "Date of birth";
-  //  static const String localDirectory="appname";
+  static const String selectCountry = "Select Country";
+  static const String enterReferralCode = "Enter referral code";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

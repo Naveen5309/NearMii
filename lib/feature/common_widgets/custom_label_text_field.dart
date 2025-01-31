@@ -12,6 +12,9 @@ class CustomLabelTextField extends StatefulWidget {
   final String? labelText;
   final String prefixIcon;
   final String? suffixIcon;
+  final bool? readOnly;
+  final VoidCallback? onTapOnSuffixIcon;
+  final VoidCallback? onTapOnPrefixIcon;
 
   const CustomLabelTextField(
       {super.key,
@@ -20,7 +23,10 @@ class CustomLabelTextField extends StatefulWidget {
       this.enableBorder,
       this.focusBorder,
       this.labelText,
+      this.readOnly,
       this.suffixIcon,
+      this.onTapOnPrefixIcon,
+      this.onTapOnSuffixIcon,
       required this.prefixIcon});
 
   @override
@@ -70,6 +76,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
           clipBehavior: Clip.none,
           children: <Widget>[
             TextField(
+              readOnly: widget.readOnly ?? false,
               textAlign: TextAlign.start, // Ensures text aligns on the left
               cursorColor: AppColor.appThemeColor, // Set cursor color here
 
@@ -84,12 +91,15 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                 suffixIconConstraints: const BoxConstraints(
                     maxWidth: 50, maxHeight: 50, minHeight: 25, minWidth: 25),
                 suffixIcon: widget.suffixIcon != null
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
-                        child: SvgPicture.asset(
-                          widget.suffixIcon!,
-                          height: 24,
-                          width: 24,
+                    ? InkWell(
+                        onTap: widget.onTapOnSuffixIcon,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: SvgPicture.asset(
+                            widget.suffixIcon!,
+                            height: 24,
+                            width: 24,
+                          ),
                         ),
                       )
                     : const SizedBox(),
@@ -114,7 +124,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                     ),
 
                 contentPadding: const EdgeInsets.only(
-                    left: 40, right: 20, top: 20, bottom: 20), // Adjust padding
+                    left: 45, right: 20, top: 20, bottom: 20), // Adjust padding
                 // hintText: isTextFieldEmpty
                 //     ? widget.labelText
                 //     : null, // Hide hint when text is entered
@@ -145,15 +155,18 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
             Positioned.fill(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: SvgPicture.asset(
-                    widget.prefixIcon,
-                    colorFilter: ColorFilter.mode(
-                      textEditHasFocus
-                          ? AppColor.green173E01
-                          : AppColor.green173E01.withOpacity(.4),
-                      BlendMode.srcIn,
+                child: GestureDetector(
+                  onTap: widget.onTapOnPrefixIcon,
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: SvgPicture.asset(
+                      widget.prefixIcon,
+                      colorFilter: ColorFilter.mode(
+                        textEditHasFocus
+                            ? AppColor.green173E01
+                            : AppColor.green173E01.withOpacity(.4),
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

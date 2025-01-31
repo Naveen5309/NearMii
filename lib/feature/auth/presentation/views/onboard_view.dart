@@ -75,10 +75,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                       padding: EdgeInsets.only(
                           top: context.height * .1,
                           bottom: context.height * .05),
-                      child: AppText(
-                        text: AppString.skip,
-                        fontSize: 14.sp,
-                      ),
+                      child: ref.watch(onboardIndicatorIndex) != 2
+                          ? AppText(
+                              text: AppString.skip,
+                              fontSize: 14.sp,
+                            )
+                          : const SizedBox(
+                              child: Text(' '),
+                            ),
                     ),
                   ),
                 ),

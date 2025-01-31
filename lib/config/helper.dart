@@ -141,3 +141,8 @@ bool isHtml(String input) {
 double totalHeight =
     MediaQuery.of(navigatorKey.currentState!.context).padding.top +
         AppBar().preferredSize.height;
+
+List<String> genderList = [
+  "Male",
+  "FeMale",
+];

@@ -33,10 +33,13 @@ class LoginView extends StatelessWidget {
 
                     // const Text("APPlOGO"),
 
-                    SvgPicture.asset(
-                      Assets.appLogo,
-                      height: 50,
-                      width: 50,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: SvgPicture.asset(
+                        Assets.icDummyLogo,
+                        // height: 100,
+                        // width: 100,
+                      ),
                     ),
 
                     AppText(
@@ -133,6 +136,7 @@ class LoginView extends StatelessWidget {
           prefixIcon: Assets.icLock,
           controller: TextEditingController(),
           labelText: AppString.pswd,
+          suffixIcon: Assets.icEye,
         )
       ],
     );

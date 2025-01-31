@@ -35,10 +35,13 @@ class SignUpView extends StatelessWidget {
 
                     // const Text("APPlOGO"),
 
-                    SvgPicture.asset(
-                      Assets.appLogo,
-                      height: 20,
-                      width: 20,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: SvgPicture.asset(
+                        Assets.icDummyLogo,
+                        // height: 100,
+                        // width: 100,
+                      ),
                     ),
 
                     AppText(
@@ -54,7 +57,7 @@ class SignUpView extends StatelessWidget {
                     ),
 
                     SizedBox(
-                      height: context.height * .05,
+                      height: context.height * .04,
                     ),
 
                     //Field forms
@@ -180,6 +183,7 @@ class SignUpView extends StatelessWidget {
           prefixIcon: Assets.icLock,
           controller: TextEditingController(),
           labelText: AppString.pswd,
+          suffixIcon: Assets.icEye,
         ),
 
         //CONFIRM PASSWORD
@@ -187,6 +191,7 @@ class SignUpView extends StatelessWidget {
           prefixIcon: Assets.icLock,
           controller: TextEditingController(),
           labelText: AppString.confirmPswd,
+          suffixIcon: Assets.icEyeOff,
         )
       ],
     );
@@ -210,7 +215,7 @@ Widget socialMediaSection() {
 
 Widget orContinueWith({required BuildContext context}) {
   return Padding(
-    padding: EdgeInsets.symmetric(vertical: context.height * .05),
+    padding: EdgeInsets.symmetric(vertical: context.height * .03),
     child: Row(
       children: [
         Expanded(

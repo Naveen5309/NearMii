@@ -27,10 +27,13 @@ class AuthView extends StatelessWidget {
 
               // const Text("APPlOGO"),
 
-              SvgPicture.asset(
-                Assets.appLogo,
-                height: 100,
-                width: 100,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: SvgPicture.asset(
+                  Assets.icDummyLogo,
+                  // height: 100,
+                  // width: 100,
+                ),
               ),
 
               //Title

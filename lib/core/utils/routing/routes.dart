@@ -11,7 +11,7 @@ class Routes {
   static const String otpVerify = '/otpVerify';
   static const String completeProfile = '/completeProfile';
   static const String addSocialProfile = '/addSocialProfile';
-  // static const String onboard = '/onboard';
+  static const String selectSocialMedia = '/selectSocialMedia';
   // static const String onboard = '/onboard';
   // static const String onboard = '/onboard';
   // static const String onboard = '/onboard';

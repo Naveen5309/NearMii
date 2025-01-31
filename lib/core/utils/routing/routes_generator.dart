@@ -4,6 +4,7 @@ import 'package:NearMii/feature/auth/presentation/views/forgot_password_view.dar
 import 'package:NearMii/feature/auth/presentation/views/login_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/onboard_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart';
+import 'package:NearMii/feature/auth/presentation/views/select_social_media_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/signup_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/verity_otp_view.dart';
 import 'package:NearMii/feature/splash/presentation/splash_view.dart';
@@ -36,6 +37,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ResetPasswordView());
       case Routes.completeProfile:
         return MaterialPageRoute(builder: (_) => const CompleteProfileView());
+      case Routes.selectSocialMedia:
+        return MaterialPageRoute(builder: (_) => const SelectSocialMediaView());
 
 //SIGN UP
       case Routes.signUp:
