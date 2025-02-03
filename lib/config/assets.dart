@@ -110,6 +110,26 @@ class Assets {
   static const String icEye = 'assets/icons/eye.svg';
   static const String icEyeOff = 'assets/icons/eye-slash.svg';
   static const String icReferrelCode = 'assets/icons/referrel_code.svg';
+  static const String icUnselectedHome = 'assets/icons/unselected_home.svg';
+  static const String icUnselectedClock = 'assets/icons/unselected_clock.svg';
+  static const String icUnselectedNotification =
+      'assets/icons/unselected_notification.svg';
+  static const String icUnselectedSetting =
+      'assets/icons/unselected_setting.svg';
+  static const String icSelectedClock = 'assets/icons/selected_clock.svg';
+  static const String icSelectedHome = 'assets/icons/selected_home.svg';
+  static const String icInvite = 'assets/icons/invite.svg';
+  static const String icHomeProfile = 'assets/icons/home_profile.svg';
+  static const String icSelectedNotification =
+      'assets/icons/selected_notification.svg';
+  static const String icSelectedSetting = 'assets/icons/selected_setting.svg';
+  static const String icHomeBg = 'assets/images/home_bg.svg';
+  static const String icHomePngBg = 'assets/images/home_png_bg.png';
+  static const String icLocation = 'assets/icons/location.svg';
+  static const String icStar = 'assets/icons/star.svg';
+  static const String icMap = 'assets/icons/map.svg';
+  static const String icSearch = 'assets/icons/search.svg';
+  // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';

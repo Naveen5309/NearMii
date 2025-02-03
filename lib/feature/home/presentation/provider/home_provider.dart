@@ -20,6 +20,12 @@ final homeUseCaseProvider = Provider.autoDispose<HomeUseCase>((ref) {
   return HomeUseCaseImpl(repository: repository);
 });
 
+// Define a Provider for HomeUseCase
+final bottomNavIndexProvider = Provider.autoDispose<HomeUseCase>((ref) {
+  final repository = ref.watch(homeRepoProvider);
+  return HomeUseCaseImpl(repository: repository);
+});
+
 final getPreferenceProvider =
     FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
   final getUserHomeCase = ref.watch(homeUseCaseProvider);

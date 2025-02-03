@@ -118,7 +118,7 @@ abstract final class AppString {
   static const String enterOtp = "Enter OTP shared on your email";
   static const String selectCountry = "Select Country";
   static const String enterReferralCode = "Enter referral code";
-  //  static const String localDirectory="appname";
+  static const String mapView = "Map View";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

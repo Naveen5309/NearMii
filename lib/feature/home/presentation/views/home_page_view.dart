@@ -1,36 +1,162 @@
+import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
+import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
+import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
+import 'package:NearMii/feature/common_widgets/custom_map_view_icon.dart';
+import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
+import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../provider/home_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePageView extends ConsumerWidget {
   const HomePageView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final getPreference = ref.watch(getPreferenceProvider);
+    // final getPreference = ref.watch(getPreferenceProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const AppText(text: "Preferences"),
-        centerTitle: true,
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(Assets.icHomePngBg),
+                  ),
+                ),
+
+                height: MediaQuery.sizeOf(context).height * 0.29,
+                // color: Colors.green,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: totalHeight -
+                            MediaQuery.of(navigatorKey.currentState!.context)
+                                .padding
+                                .top,
+                      ),
+                      15.verticalSpace,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //WELCOME BACK TEXT
+                              AppText(
+                                text: AppString.welcomeBack,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primary.withOpacity(.8),
+                              ),
+                              5.verticalSpace,
+                              //NAME
+
+                              AppText(
+                                text: "Brooklyn Simmons",
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.primary,
+                              ),
+                            ],
+                          ),
+                          Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: AppColor.primary.withOpacity(.16),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const CustomCacheNetworkImage(
+                                  height: 45,
+                                  width: 45,
+                                  img: "https://picsum.photos/250?image=9",
+                                  imageRadius: 40)),
+                        ],
+                      ),
+                      SizedBox(
+                        height: context.height * .05,
+                      ),
+                      const LocationCard(
+                        location: "Philadelphia",
+                        address: "Preston Rd. Inglewood, Maine",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height: context.height * .62,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: 15,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return CustomProfileCard(
+                      profileImage:
+                          'https://picsum.photos/250?image=9', // Replace with actual image
+                      name: "Robert Fox",
+                      designation: "Senior Developer",
+                      distance: "50 meters away",
+                      onUnlockTap: () {
+                        print("Unlock Now Clicked!");
+                      },
+                    );
+                  },
+                ),
+              )
+              // Container(
+              //   padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+              //   child: Column(
+              //     children: [
+              //       CustomProfileCard(
+              //         profileImage:
+              //             'https://picsum.photos/250?image=9', // Replace with actual image
+              //         name: "Robert Fox",
+              //         designation: "Senior Developer",
+              //         distance: "50 meters away",
+              //         onUnlockTap: () {
+              //           print("Unlock Now Clicked!");
+              //         },
+              //       ),
+              //       CustomProfileCard(
+              //         profileImage:
+              //             'https://picsum.photos/250?image=9', // Replace with actual image
+              //         name: "Robert Fox",
+              //         designation: "Senior Developer",
+              //         distance: "50 meters away",
+              //         onUnlockTap: () {
+              //           print("Unlock Now Clicked!");
+              //         },
+              //       ),
+              //       CustomProfileCard(
+              //         profileImage:
+              //             'https://picsum.photos/250?image=9', // Replace with actual image
+              //         name: "Robert Fox",
+              //         designation: "Senior Developer",
+              //         distance: "50 meters away",
+              //         onUnlockTap: () {
+              //           print("Unlock Now Clicked!");
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
+          Positioned(right: 0, bottom: 100.h, child: const CustomMapViewIcon())
+        ],
       ),
-      body: SafeArea(
-          child: getPreference.when(
-              data: (data) => PreferenceList(
-                    list: data,
-                  ),
-              error: (e, s) => Center(
-                    child: AppText(text: e.toString()),
-                  ),
-              loading: () => const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.primary,
-                    ),
-                  ))),
     );
   }
 }
@@ -68,3 +194,122 @@ class PreferenceList extends ConsumerWidget {
     }
   }
 }
+
+
+
+
+// class HomeScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//         child: Column(
+//           children: [
+//             Container(
+//               decoration: BoxDecoration(
+//                   image: DecorationImage(
+//                       image: AssetImage("assets/images/background.png"))),
+//               height: MediaQuery.sizeOf(context).height * 0.3,
+//               // color: Colors.green,
+//               child: Padding(
+//                 padding:
+//                     const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     15.verticalSpace,
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Text(
+//                               AppString.welcomeBack,
+//                               style: TextStyle(
+//                                   fontSize: 16.sp, color: Colors.white),
+//                             ),
+//                             Text(
+//                               AppString.BrooklynText,
+//                               style: TextStyle(
+//                                   fontSize: 20.sp, color: Colors.white),
+//                             ),
+//                           ],
+//                         ),
+//                         Container(
+//                           padding: EdgeInsets.all(5),
+//                           decoration: BoxDecoration(
+//                             color: Color(0xff30D082),
+//                             shape: BoxShape.circle,
+//                           ),
+//                           child: Container(
+//                             width: 50.sp,
+//                             height: 50.sp,
+//                             decoration: BoxDecoration(
+//                               shape: BoxShape.circle,
+//                               image: DecorationImage(
+//                                 image: NetworkImage(
+//                                     'https://picsum.photos/250?image=9'),
+//                                 fit: BoxFit
+//                                     .cover, // Ensures image fills the circle properly
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     SizedBox(
+//                       height: 48.sp,
+//                     ),
+//                     LocationCard(
+//                       location: "Philadelphia",
+//                       address: "Preston Rd. Inglewood, Maine",
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             Container(
+//               padding: EdgeInsets.symmetric(horizontal: 11, vertical: 11),
+//               child: Column(
+//                 children: [
+//                   CustomProfileCard(
+//                     profileImage:
+//                         'https://picsum.photos/250?image=9', // Replace with actual image
+//                     name: "Robert Fox",
+//                     designation: "Senior Developer",
+//                     distance: "50 meters away",
+//                     onUnlockTap: () {
+//                       print("Unlock Now Clicked!");
+//                     },
+//                   ),
+//                   CustomProfileCard(
+//                     profileImage:
+//                         'https://picsum.photos/250?image=9', // Replace with actual image
+//                     name: "Robert Fox",
+//                     designation: "Senior Developer",
+//                     distance: "50 meters away",
+//                     onUnlockTap: () {
+//                       print("Unlock Now Clicked!");
+//                     },
+//                   ),
+//                   CustomProfileCard(
+//                     profileImage:
+//                         'https://picsum.photos/250?image=9', // Replace with actual image
+//                     name: "Robert Fox",
+//                     designation: "Senior Developer",
+//                     distance: "50 meters away",
+//                     onUnlockTap: () {
+//                       print("Unlock Now Clicked!");
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
