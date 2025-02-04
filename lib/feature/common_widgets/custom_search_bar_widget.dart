@@ -16,17 +16,16 @@ class CustomSearchBarWidget extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(88),
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.grey999.withOpacity(0.07),
-            spreadRadius: 0, // No spread
-            blurRadius: 10, // Soft blur
-            offset: const Offset(0, 2), // Shadow only at the bottom
-          ),
-        ],
-        color: Colors.white,
-      ),
+          borderRadius: BorderRadius.circular(88),
+          boxShadow: [
+            BoxShadow(
+              color: AppColor.grey999.withOpacity(.16),
+              spreadRadius: 0, // No spread
+              blurRadius: 7, // Soft blur
+              offset: const Offset(0, 5), // Shadow only at the bottom
+            ),
+          ],
+          color: AppColor.primary),
       child: TextField(
         decoration: InputDecoration(
           hintText: AppString.searchHere,
@@ -40,13 +39,17 @@ class CustomSearchBarWidget extends StatelessWidget {
             ),
             child: SvgPicture.asset(
               Assets.icSearch,
-              colorFilter:
-                  const ColorFilter.mode(AppColor.greenB9c5b3, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColor.greenB9c5b3,
+                BlendMode.srcIn,
+              ),
             ),
           ),
           border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 12.0,
+            // horizontal: 10.0,
+          ),
         ),
       ),
     );

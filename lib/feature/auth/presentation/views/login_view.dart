@@ -45,6 +45,7 @@ class LoginView extends StatelessWidget {
                     AppText(
                       text: AppString.signInToYourAccount,
                       fontSize: 32.sp,
+                      // style: AppTextStyle.regular,
                     ),
 
                     15.verticalSpace,

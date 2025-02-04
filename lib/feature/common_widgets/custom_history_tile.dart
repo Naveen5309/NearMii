@@ -9,6 +9,7 @@ class CustomTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String time;
+  final bool isHistory;
   final VoidCallback? onTap;
 
   const CustomTile({
@@ -17,6 +18,7 @@ class CustomTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.time,
+    required this.isHistory,
     this.onTap,
   });
 

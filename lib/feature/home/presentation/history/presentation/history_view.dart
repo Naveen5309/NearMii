@@ -1,5 +1,6 @@
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
+import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_history_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,49 +25,53 @@ class _HistoryViewState extends State<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: const Text('Custom Tiles'),
-        backgroundColor: Colors.blueAccent,
-      ),
+      backgroundColor: AppColor.primary,
       body: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.width * .07),
-          child: Column(
-            children: [
-              const CustomSearchBarWidget(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            const CustomAppbarWidget(
+              title: AppString.history,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .07),
+              child: Column(
                 children: [
-                  AppText(
-                    text: AppString.recent,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  SizedBox(
-                    height: context.height * .7,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      itemCount: 15,
-                      itemBuilder: (context, index) {
-                        return const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          child: CustomTile(
-                            time: "1h ago",
-                            title: "NAME",
-                            leadingIcon: '',
-                            subtitle: 'Designation',
-                          ),
-                        );
-                      },
-                    ),
+                  const CustomSearchBarWidget(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        text: AppString.recent,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      SizedBox(
+                        height: context.height * .7,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          itemCount: 15,
+                          itemBuilder: (context, index) {
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5),
+                              child: CustomTile(
+                                isHistory: true,
+                                time: "1h ago",
+                                title: "NAME",
+                                leadingIcon: '',
+                                subtitle: 'Designation',
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

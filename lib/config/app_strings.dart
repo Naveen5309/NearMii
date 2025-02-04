@@ -119,8 +119,8 @@ abstract final class AppString {
   static const String selectCountry = "Select Country";
   static const String enterReferralCode = "Enter referral code";
   static const String mapView = "Map View";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  static const String history = "History";
+  static const String notification = "Notifications";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

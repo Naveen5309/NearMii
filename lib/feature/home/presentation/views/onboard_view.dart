@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:NearMii/feature/common_widgets/custom_profile_widget.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/history_view.dart';
 import 'package:NearMii/feature/home/presentation/provider/onboard_provider.dart';
 import 'package:NearMii/feature/home/presentation/views/home_page_view.dart';
@@ -12,7 +13,7 @@ import '../../../../../config/assets.dart';
 import '../../../../../config/helper.dart';
 
 class BottomNavigationView extends ConsumerWidget {
-  BottomNavigationView({super.key});
+  const BottomNavigationView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,7 +90,7 @@ class BottomNavigationView extends ConsumerWidget {
                                 : Assets.icUnselectedHome,
                           ),
                         ),
-                        // MESSAGE
+                        // HISTORY
                         Expanded(
                           child: navItems(
                             onTap: () {
@@ -104,6 +105,10 @@ class BottomNavigationView extends ConsumerWidget {
                                 : Assets.icUnselectedClock,
                           ),
                         ),
+
+//PROFILE
+                        const CustomProfileWidget(),
+                        // NOTIFICATION
 
                         Expanded(
                           child: navItems(
