@@ -7,6 +7,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
+import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:flutter/material.dart';
@@ -211,35 +212,68 @@ class CompleteProfileView extends StatelessWidget {
         //   labelText: AppString.phoneNumber,
         // ),
 
-        //GENDER
-        CustomLabelTextField(
-          prefixIcon: Assets.icGender,
-          controller: TextEditingController(),
-          suffixIcon: Assets.icArrowDown,
-          labelText: AppString.gender,
-          readOnly: true,
-          onTapOnSuffixIcon: () {
-            log("on click on gender suffix icon");
-
-            showMenu(
-              context: context,
-              position: const RelativeRect.fromLTRB(
-                  100, 400, 100, 0), // Adjust position
-              items: genderList.map((String gender) {
-                return PopupMenuItem<String>(
-                  value: gender,
-                  child: Text(gender),
-                );
-              }).toList(),
-            ).then((value) {
-              if (value != null) {
-                // setState(() {
-                //   selectedGender = value;
-                // });
-              }
-            });
-          },
+        CustomDropdownButton(
+          customBtn: IgnorePointer(
+            child: CustomLabelTextField(
+              prefixIcon: Assets.icGender,
+              controller: TextEditingController(),
+              suffixIcon: Assets.icArrowDown,
+              labelText: AppString.gender,
+              readOnly: true,
+            ),
+          ),
+          hint: "Gender",
+          value: "Male",
+          dropdownItems: genderList,
+          onChanged: (value) {},
         ),
+        //GENDER
+        // Stack(
+        //   children: [
+        //     CustomLabelTextField(
+        //       prefixIcon: Assets.icGender,
+        //       controller: TextEditingController(),
+        //       suffixIcon: Assets.icArrowDown,
+        //       labelText: AppString.gender,
+        //       readOnly: true,
+        //       onTapOnSuffixIcon: () {
+        //         // log("on click on gender suffix icon");
+
+        //         // showMenu(
+        //         //   context: context,
+        //         //   position: const RelativeRect.fromLTRB(
+        //         //       100, 400, 100, 0), // Adjust position
+        //         //   items: genderList.map((String gender) {
+        //         //     return PopupMenuItem<String>(
+        //         //       value: gender,
+        //         //       child: Text(gender),
+        //         //     );
+        //         //   }).toList(),
+        //         // ).then((value) {
+        //         //   if (value != null) {
+        //         //     // setState(() {
+        //         //     //   selectedGender = value;
+        //         //     // });
+        //         //   }
+        //         // });
+        //       },
+        //     ),
+        //     // Positioned(
+        //     //   top: 0,
+        //     //   child: Container(
+        //     //     decoration: const BoxDecoration(color: Colors.red),
+        //     //     child: Column(
+        //     //       children: genderList.map((String gender) {
+        //     //         return PopupMenuItem<String>(
+        //     //           value: gender,
+        //     //           child: Text(gender),
+        //     //         );
+        //     //       }).toList(),
+        //     //     ),
+        //     //   ),
+        //     // )
+        //   ],
+        // ),
 
         //DATE OF BIRTH
         CustomLabelTextField(

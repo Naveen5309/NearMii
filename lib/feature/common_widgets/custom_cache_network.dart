@@ -51,9 +51,20 @@ class CustomCacheNetworkImage extends StatelessWidget {
         : Container(
             width: width,
             height: height,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
             alignment: Alignment.center,
             child: img.contains(".svg")
-                ? SvgPicture.network(
+                ?
+
+                // ClipRRect(
+                //     borderRadius: BorderRadius.circular(15),
+                //     child: SvgPicture.asset(
+                //       img,
+                //       fit: BoxFit.cover,
+                //     ),
+                //   )
+
+                SvgPicture.network(
                     img,
                     placeholderBuilder: (context) => const Icon(Icons.error),
                     // placeholderBuilder: (context) => const Icon(Icons.error),

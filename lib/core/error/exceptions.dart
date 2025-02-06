@@ -3,30 +3,32 @@ part of '../network/http_service.dart';
 class AuthenticationException implements Exception {
   String? message;
 
-  AuthenticationException(String? _message) {
-    message = _message;
+  AuthenticationException(String? message) {
+    message = message;
   }
 }
+
 class InactivatedException implements Exception {
   String? message;
 
-  InactivatedException(String? _message) {
-    message = _message;
+  InactivatedException(String? message) {
+    message = message;
   }
 }
+
 class SomeWentWrongException implements Exception {
   String? message;
 
-  SomeWentWrongException(String? _message) {
-    message = _message;
+  SomeWentWrongException(String? message) {
+    message = message;
   }
 }
 
 class SubscriptionException implements Exception {
   String? message;
 
-  SubscriptionException(String? _message) {
-    message = _message;
+  SubscriptionException(String? message) {
+    message = message;
   }
 }
 // Connecting timed out [0ms]
@@ -34,14 +36,14 @@ class SubscriptionException implements Exception {
 class ConnectingTimedOut implements Exception {
   String? message;
 
-  ConnectingTimedOut(String? _message) {
-    message = _message;
+  ConnectingTimedOut(String? message) {
+    message = message;
   }
 }
 
 abstract class RepoResponseStatus {
   static const int error = 500;
-  static const int status =1;
+  static const int status = 1;
   static const int success = 200;
   static const int authentication = 401;
   // static const int subscriptionExpire = 0;
@@ -55,18 +57,17 @@ dynamic responseChecker(Response<dynamic> response) {
       : (response.data);
 }
 
-ResponseWrapper<T> getSuccessResponseWrapper<T>(ResponseWrapper response) => ResponseWrapper(
-  status: response.status,
-  data: response.data,
-  statusCode: response.statusCode,
-  message: response.message,
-
-);
-
+ResponseWrapper<T> getSuccessResponseWrapper<T>(ResponseWrapper response) =>
+    ResponseWrapper(
+      status: response.status,
+      data: response.data,
+      statusCode: response.statusCode,
+      message: response.message,
+    );
 
 ResponseWrapper<T> getFailedResponseWrapper<T>(dynamic e, {dynamic response}) =>
     ResponseWrapper(
-      status: false,
+      status: "error",
       message: e.toString(),
       data: response,
     );
@@ -86,20 +87,20 @@ class GeneralModel {
   });
 
   factory GeneralModel.fromJson(Map<String, dynamic> json) => GeneralModel(
-    message: json['message'] as String?,
-    statusCode: json['status_code'] as int?,
-    status: json['status'] as bool?,
-    data: json['data'],
-    // errors: json["errors"] == null ? null : Errors.fromJson(json["errors"]),
-  );
+        message: json['message'] as String?,
+        statusCode: json['status_code'] as int?,
+        status: json['status'] as bool?,
+        data: json['data'],
+        // errors: json["errors"] == null ? null : Errors.fromJson(json["errors"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    'message': message,
-    'status': status,
-    'data': data,
-    'statusCode': statusCode,
-    // "errors": errors?.toJson(),
-  };
+        'message': message,
+        'status': status,
+        'data': data,
+        'statusCode': statusCode,
+        // "errors": errors?.toJson(),
+      };
 }
 
 String exceptionHandler({
@@ -112,7 +113,7 @@ String exceptionHandler({
       bloc: "AuthenticationException in =>$functionName",
     );
     return e.message ?? e.toString();
-  }  else if (e is SomeWentWrongException) {
+  } else if (e is SomeWentWrongException) {
     blocLog(
       msg: e.message ?? e.toString(),
       bloc: "SomeWentWrongException in ==>$functionName",

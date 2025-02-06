@@ -1,7 +1,7 @@
 part 'data_response.g.dart';
 
 class ResponseWrapper<TModel> {
-  bool? status;
+  String? status;
   int? statusCode;
   String? message;
   TModel? data;

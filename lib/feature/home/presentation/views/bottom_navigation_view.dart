@@ -1,7 +1,6 @@
-import 'dart:ui';
 import 'package:NearMii/feature/common_widgets/custom_profile_widget.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/history_view.dart';
-import 'package:NearMii/feature/home/presentation/provider/onboard_provider.dart';
+import 'package:NearMii/feature/home/presentation/provider/bottom_nav_provider.dart';
 import 'package:NearMii/feature/home/presentation/views/home_page_view.dart';
 import 'package:NearMii/feature/notification/presentation/notification_view.dart';
 import 'package:NearMii/feature/setting/presentation/setting_view.dart';
@@ -73,71 +72,63 @@ class BottomNavigationView extends ConsumerWidget {
                         ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // HOME
-                        Expanded(
-                          child: navItems(
-                            onTap: () {
-                              ref.read(selectedIndex.notifier).state = 0;
-                            },
-                            ref: ref,
-                            isSelected: indexSelected == 0,
-                            context: context,
-                            index: 0,
-                            icon: indexSelected == 0
-                                ? Assets.icSelectedHome
-                                : Assets.icUnselectedHome,
-                          ),
+                        navItems(
+                          onTap: () {
+                            ref.read(selectedIndex.notifier).state = 0;
+                          },
+                          ref: ref,
+                          isSelected: indexSelected == 0,
+                          context: context,
+                          index: 0,
+                          icon: indexSelected == 0
+                              ? Assets.icSelectedHome
+                              : Assets.icUnselectedHome,
                         ),
                         // HISTORY
-                        Expanded(
-                          child: navItems(
-                            onTap: () {
-                              ref.read(selectedIndex.notifier).state = 1;
-                            },
-                            ref: ref,
-                            isSelected: indexSelected == 1,
-                            context: context,
-                            index: 1,
-                            icon: indexSelected == 1
-                                ? Assets.icSelectedClock
-                                : Assets.icUnselectedClock,
-                          ),
+                        navItems(
+                          onTap: () {
+                            ref.read(selectedIndex.notifier).state = 1;
+                          },
+                          ref: ref,
+                          isSelected: indexSelected == 1,
+                          context: context,
+                          index: 1,
+                          icon: indexSelected == 1
+                              ? Assets.icSelectedClock
+                              : Assets.icUnselectedClock,
                         ),
 
 //PROFILE
                         const CustomProfileWidget(),
                         // NOTIFICATION
 
-                        Expanded(
-                          child: navItems(
-                            onTap: () {
-                              ref.read(selectedIndex.notifier).state = 2;
-                            },
-                            ref: ref,
-                            isSelected: indexSelected == 2,
-                            context: context,
-                            index: 2,
-                            icon: indexSelected == 2
-                                ? Assets.icSelectedNotification
-                                : Assets.icUnselectedNotification,
-                          ),
+                        navItems(
+                          onTap: () {
+                            ref.read(selectedIndex.notifier).state = 2;
+                          },
+                          ref: ref,
+                          isSelected: indexSelected == 2,
+                          context: context,
+                          index: 2,
+                          icon: indexSelected == 2
+                              ? Assets.icSelectedNotification
+                              : Assets.icUnselectedNotification,
                         ),
                         // SETTINGS
-                        Expanded(
-                          child: navItems(
-                            onTap: () {
-                              ref.read(selectedIndex.notifier).state = 3;
-                            },
-                            ref: ref,
-                            isSelected: indexSelected == 3,
-                            context: context,
-                            index: 3,
-                            icon: indexSelected == 3
-                                ? Assets.icSelectedSetting
-                                : Assets.icUnselectedSetting,
-                          ),
+                        navItems(
+                          onTap: () {
+                            ref.read(selectedIndex.notifier).state = 3;
+                          },
+                          ref: ref,
+                          isSelected: indexSelected == 3,
+                          context: context,
+                          index: 3,
+                          icon: indexSelected == 3
+                              ? Assets.icSelectedSetting
+                              : Assets.icUnselectedSetting,
                         ),
                       ],
                     ),

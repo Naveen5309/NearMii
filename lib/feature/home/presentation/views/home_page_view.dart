@@ -6,6 +6,7 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_map_view_icon.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
+import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,34 +95,42 @@ class HomePageView extends ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: context.height * .62,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: 15,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return CustomProfileCard(
-                      profileImage:
-                          'https://picsum.photos/250?image=9', // Replace with actual image
-                      name: "Robert Fox",
-                      designation: "Senior Developer",
-                      distance: "50 meters away",
-                      onUnlockTap: () {
-                        print("Unlock Now Clicked!");
-                      },
-                    );
-                  },
-                ),
-              )
+              ref.watch(isMapView)
+                  ? Image.asset(Assets.icHomePngBg)
+                  : SizedBox(
+                      height: context.height * .62,
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: 15,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return CustomProfileCard(
+                            profileImage:
+                                'https://picsum.photos/250?image=9', // Replace with actual image
+                            name: "Robert Fox",
+                            designation: "Senior Developer",
+                            distance: "50 meters away",
+                            onUnlockTap: () {
+                              print("Unlock Now Clicked!");
+                            },
+                          );
+                        },
+                      ),
+                    )
             ],
           ),
           Positioned(
               right: 0,
               bottom: 100.h,
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CustomMapViewIcon(),
+              child: InkWell(
+                onTap: () {
+                  ref.read(isMapView.notifier).state =
+                      !ref.read(isMapView.notifier).state;
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomMapViewIcon(),
+                ),
               ))
         ],
       ),

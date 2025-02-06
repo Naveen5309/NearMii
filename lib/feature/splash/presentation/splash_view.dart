@@ -42,7 +42,7 @@ class _SplashViewState extends ConsumerState<SplashView>
     await Future.delayed(const Duration(seconds: 3), () {
       // Navigate to the next screen (replace with your next screen logic)
       if (mounted) {
-        offAllNamed(context, Routes.bottomNavBar);
+        offAllNamed(context, Routes.onboard);
       }
     });
   }

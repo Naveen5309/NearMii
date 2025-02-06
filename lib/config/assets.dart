@@ -130,7 +130,7 @@ class Assets {
   static const String icMap = 'assets/icons/map.svg';
   static const String icSearch = 'assets/icons/search.svg';
   static const String icUserWhite = 'assets/icons/user_white.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String icProfileBg = 'assets/images/profile_bg.png';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';

@@ -26,6 +26,10 @@ final bottomNavIndexProvider = Provider.autoDispose<HomeUseCase>((ref) {
   return HomeUseCaseImpl(repository: repository);
 });
 
+//IS MAP VIEW
+final isMapView =
+    StateProvider.autoDispose<bool>((ref) => false, name: "isMapView");
+
 final getPreferenceProvider =
     FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
   final getUserHomeCase = ref.watch(homeUseCaseProvider);

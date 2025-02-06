@@ -6,7 +6,8 @@ import 'state_notifiers/login_notifiers.dart';
 import 'states/auth_states.dart';
 
 // Define a Provider for AuthDataSource
-final authDataProvider = Provider.autoDispose<AuthDataSource>((ref) => AuthDataSourceImpl());
+final authDataProvider =
+    Provider.autoDispose<AuthDataSource>((ref) => AuthDataSourceImpl());
 
 // Define a Provider for AuthRepository
 final authRepoProvider = Provider.autoDispose<AuthRepository>((ref) {
@@ -21,7 +22,8 @@ final authUseCaseProvider = Provider.autoDispose<AuthUseCase>((ref) {
 });
 
 // Define a StateNotifierProvider for LoginNotifier
-final loginProvider = StateNotifierProvider.autoDispose<LoginNotifier, LoginState>((ref) {
+final loginProvider =
+    StateNotifierProvider.autoDispose<LoginNotifier, AuthState>((ref) {
   final authUseCase = ref.watch(authUseCaseProvider);
   return LoginNotifier(authUseCase: authUseCase);
 });

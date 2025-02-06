@@ -12,7 +12,7 @@ ResponseWrapper<TModel> _$ResponseWrapperFromJson<TModel>(
 ) =>
     ResponseWrapper<TModel>(
       statusCode: json['statusCode'] as int?,
-      status: json['status'] as bool?,
+      status: json['status'] as String?,
       message: json['message'] as String?,
       data: _$nullableGenericFromJson(json['data'], fromJsonTModel),
     );
