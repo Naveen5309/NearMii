@@ -23,7 +23,7 @@ class RouteGenerator {
       case Routes.home:
         return MaterialPageRoute(builder: (_) => const HomePageView());
       case Routes.bottomNavBar:
-        return MaterialPageRoute(builder: (_) => const BottomNavigationView());
+        return MaterialPageRoute(builder: (_) => BottomNavigationView());
 
       case Routes.onboard:
         return MaterialPageRoute(builder: (_) => const OnboardingView());

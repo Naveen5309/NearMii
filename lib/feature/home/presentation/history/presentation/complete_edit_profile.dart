@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CompleteProfileView extends StatelessWidget {
-  const CompleteProfileView({super.key});
+class CompleteEditProfile extends StatelessWidget {
+  const CompleteEditProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +37,8 @@ class CompleteProfileView extends StatelessWidget {
 
                     // const Text("APPlOGO"),
 
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: SvgPicture.asset(
-                        Assets.icDummyLogo,
-                        // height: 100,
-                        // width: 100,
-                      ),
-                    ),
-
                     AppText(
-                      text: AppString.completeProfile,
+                      text: AppString.editProfileSetting,
                       fontSize: 32.sp,
                     ),
 
@@ -68,14 +59,14 @@ class CompleteProfileView extends StatelessWidget {
 
                     formsFieldsSection(context: context),
                     SizedBox(
-                      height: context.height * .01,
+                      height: context.height * .04,
                     ),
                     //login
                     CommonAppBtn(
                       onTap: () {
                         toNamed(context, Routes.selectSocialMedia);
                       },
-                      title: AppString.next,
+                      title: AppString.update,
                       textSize: 16.sp,
                     ),
 
@@ -94,20 +85,29 @@ class CompleteProfileView extends StatelessWidget {
 
   Widget profileSection() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CustomCacheNetworkImage(
-          img: '',
-          imageRadius: 120,
-          height: 100,
-          width: 100,
+        SizedBox(
+          height: 125,
+          child: Stack(
+            children: [
+              const CustomCacheNetworkImage(
+                img: '', imageRadius: 120, height: 100, width: 100,
+                // CircleAvatar(
+                //   radius: 30.r,
+                //   backgroundImage: NetworkImage(imageUrl),
+                // ),
+              ),
+              Positioned(
+                right: 0,
+                bottom: 15,
+                child: SvgPicture.asset(
+                  Assets.camera,
+                ),
+              ),
+            ],
+          ),
         ),
-        15.horizontalSpace,
-        AppText(
-          text: AppString.uploadImage,
-          color: AppColor.btnColor,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
-        )
       ],
     );
   }
@@ -311,13 +311,6 @@ class CompleteProfileView extends StatelessWidget {
           },
 
           // labelText: AppString.confirmPswd,
-        ),
-
-        //REFERREL CODE
-        CustomLabelTextField(
-          prefixIcon: Assets.icReferrelCode,
-          controller: TextEditingController(),
-          labelText: AppString.enterReferralCode,
         ),
       ],
     );

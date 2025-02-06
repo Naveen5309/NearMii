@@ -32,7 +32,7 @@ class CustomRichTextThreeWidget extends StatelessWidget {
             text: text,
             style: TextStyle(
               fontFamily: Constants.fontFamily,
-              fontSize: 12.sp,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w400,
               color: AppColor.black000000.withOpacity(.44),
             ),
@@ -41,7 +41,7 @@ class CustomRichTextThreeWidget extends StatelessWidget {
             text: " $clickableText",
             style: TextStyle(
               fontFamily: Constants.fontFamily,
-              fontSize: 12.sp,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w500,
               color: AppColor.black000000.withOpacity(.74),
             ),
@@ -51,7 +51,7 @@ class CustomRichTextThreeWidget extends StatelessWidget {
             text: AppString.and,
             style: TextStyle(
               fontFamily: Constants.fontFamily,
-              fontSize: 12.sp,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w400,
               color: AppColor.black000000.withOpacity(.44),
             ),
