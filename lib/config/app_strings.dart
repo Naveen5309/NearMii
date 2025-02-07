@@ -123,7 +123,7 @@ abstract final class AppString {
   static const String notification = "Notifications";
   static const String cancel = "Cancel";
   static const String save = "Save";
-  //  static const String localDirectory="appname";
+  static const String done = "Done";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
@@ -141,6 +141,9 @@ abstract final class AppString {
   //  static const String socialMedia="Social Media";
   static const String contactInformation = "Contact information";
   static const String portfolio = "Portfolio";
+  static const String setRadius = "Set Radius";
+  static const String meter = "50 M";
+  //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

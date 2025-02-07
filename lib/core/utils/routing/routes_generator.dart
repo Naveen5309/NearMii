@@ -3,6 +3,13 @@ import 'package:NearMii/feature/auth/presentation/views/complete_profile_view.da
 import 'package:NearMii/feature/auth/presentation/views/forgot_password_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/login_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/onboard_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/change_password_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/complete_edit_profile.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/deleted_detail_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
 import 'package:NearMii/feature/home/presentation/views/bottom_navigation_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/select_social_media_view.dart';
@@ -43,6 +50,20 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const CompleteProfileView());
       case Routes.selectSocialMedia:
         return MaterialPageRoute(builder: (_) => const SelectSocialMediaView());
+      case Routes.profile:
+        return MaterialPageRoute(builder: (_) => const ProfileCard());
+      case Routes.editProfile:
+        return MaterialPageRoute(builder: (_) => const CompleteEditProfile());
+      case Routes.setRadius:
+        return MaterialPageRoute(builder: (_) => const RadiusScreen());
+      case Routes.termsAndConditions:
+        return MaterialPageRoute(builder: (_) => const TermsConditionView());
+      case Routes.contactUs:
+        return MaterialPageRoute(builder: (_) => const ContactUsView());
+      case Routes.changePassword:
+        return MaterialPageRoute(builder: (_) => const ChangePasswordView());
+      case Routes.deleteAccount:
+        return MaterialPageRoute(builder: (_) => const DeletedDetailView());
 
 //SIGN UP
       case Routes.signUp:

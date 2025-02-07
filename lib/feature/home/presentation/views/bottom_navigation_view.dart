@@ -1,3 +1,4 @@
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_widget.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/history_view.dart';
 import 'package:NearMii/feature/home/presentation/provider/bottom_nav_provider.dart';
@@ -102,7 +103,11 @@ class BottomNavigationView extends ConsumerWidget {
                         ),
 
 //PROFILE
-                        const CustomProfileWidget(),
+                        GestureDetector(
+                            onTap: () {
+                              toNamed(context, Routes.profile);
+                            },
+                            child: const CustomProfileWidget()),
                         // NOTIFICATION
 
                         navItems(

@@ -13,6 +13,15 @@ class Routes {
   static const String addSocialProfile = '/addSocialProfile';
   static const String selectSocialMedia = '/selectSocialMedia';
   static const String bottomNavBar = '/bottomNavBar';
-  // static const String onboard = '/onboard';
-  // static const String onboard = '/onboard';
+  static const String profile = '/profile';
+  static const String editProfile = '/editProfile';
+  static const String setRadius = '/setRadius';
+
+  static const String termsAndConditions = '/termsAndConditions';
+
+  static const String contactUs = '/contactUs';
+
+  static const String changePassword = '/changePassword';
+
+  static const String deleteAccount = '/deleteAccount';
 }

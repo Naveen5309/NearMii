@@ -65,7 +65,7 @@ class CommonAppBtnState extends State<CommonAppBtn> {
       onTap: (widget.loading ?? false) ? null : widget.onTap,
       child: Container(
         width: widget.width ?? context.width,
-        height: widget.height ?? 65,
+        height: widget.height ?? 60,
         margin: widget.margin,
         decoration: BoxDecoration(
           color: widget.backGroundColor ?? AppColor.appThemeColor,

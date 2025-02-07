@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
@@ -22,8 +20,9 @@ class CompleteEditProfile extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        backgroundColor: AppColor.primary,
         body: BgImageContainer(
-            bgImage: Assets.loginBg,
+            bgImage: Assets.authBg,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: context.width * .05),
               child: SingleChildScrollView(
@@ -31,7 +30,13 @@ class CompleteEditProfile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: totalHeight,
+                      height: totalHeight * 0.6,
+                    ),
+                    GestureDetector(
+                        onTap: () => back(context),
+                        child: SvgPicture.asset(Assets.leftArrow)),
+                    SizedBox(
+                      height: 18.h,
                     ),
                     //Logo
 
@@ -91,12 +96,19 @@ class CompleteEditProfile extends StatelessWidget {
           height: 125,
           child: Stack(
             children: [
-              const CustomCacheNetworkImage(
-                img: '', imageRadius: 120, height: 100, width: 100,
-                // CircleAvatar(
-                //   radius: 30.r,
-                //   backgroundImage: NetworkImage(imageUrl),
-                // ),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.greenC5EDD9,
+                ),
+                padding: const EdgeInsets.all(5),
+                child: const CustomCacheNetworkImage(
+                  img: '', imageRadius: 120, height: 100, width: 100,
+                  // CircleAvatar(
+                  //   radius: 30.r,
+                  //   backgroundImage: NetworkImage(imageUrl),
+                  // ),
+                ),
               ),
               Positioned(
                 right: 0,
