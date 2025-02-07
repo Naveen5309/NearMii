@@ -10,22 +10,27 @@ class CustomMapViewIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100.0), color: AppColor.btnColor),
-      child: Row(
-        children: [
-          SvgPicture.asset(Assets.icMap),
-          5.horizontalSpace,
-          AppText(
-            text: AppString.mapView,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.primary,
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100.0),
+              color: AppColor.btnColor),
+          child: Row(
+            children: [
+              SvgPicture.asset(Assets.icMap),
+              5.horizontalSpace,
+              AppText(
+                text: AppString.mapView,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColor.primary,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

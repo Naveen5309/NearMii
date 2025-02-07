@@ -4,12 +4,15 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomAppbarWidget extends StatelessWidget {
   final String title;
+  final bool backButton;
   const CustomAppbarWidget({
     super.key,
     required this.title,
+    this.backButton = false,
   });
 
   @override
@@ -22,7 +25,7 @@ class CustomAppbarWidget extends StatelessWidget {
           image: AssetImage(Assets.icHomePngBg),
         ),
       ),
-      // height: MediaQuery.sizeOf(context).height * 0.2,
+// height: MediaQuery.sizeOf(context).height * 0.2,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
         child: Column(
@@ -33,11 +36,35 @@ class CustomAppbarWidget extends StatelessWidget {
                   MediaQuery.of(navigatorKey.currentState!.context).padding.top,
             ),
             10.verticalSpace,
-            AppText(
-              text: title,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColor.primary,
+            SizedBox(
+              width: context.width,
+              child: Stack(
+                children: [
+                  if (backButton)
+                    Positioned(
+                      left: 0,
+                      child: GestureDetector(
+                        onTap: () => back(context),
+                        child: SvgPicture.asset(
+                          Assets.icBackBtn,
+                          colorFilter: const ColorFilter.mode(
+                            AppColor.primary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: AppText(
+                      text: title,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.primary,
+                    ),
+                  ),
+                ],
+              ),
             ),
             5.verticalSpace,
           ],

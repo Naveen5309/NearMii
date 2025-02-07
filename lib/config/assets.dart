@@ -2,7 +2,7 @@
 class Assets {
   Assets._();
 
-  static const String addCard = 'assets/icons/add_card.png';
+  static const String addCard = 'assets/icons/add.svg';
   static const String addFriendlogo =
       'assets/settings_icons/add_friendlogo.svg';
   static const String anouncement = 'assets/settings_icons/anouncement.png';
@@ -30,8 +30,7 @@ class Assets {
       'assets/settings_icons/contact_message.svg';
   static const String contactUs = 'assets/settings_icons/contact_us.png';
   static const String cvvLogo = 'assets/icons/cvv_logo.svg';
-  static const String deleteAccount =
-      'assets/settings_icons/delete_account.png';
+  static const String deleteAccount = 'assets/icons/deleted_account.svg';
   static const String electronics = 'assets/icons/electronics.svg';
   static const String email = 'assets/icons/email.svg';
   static const String global = 'assets/settings_icons/global.svg';
@@ -132,8 +131,8 @@ class Assets {
   static const String icUserWhite = 'assets/icons/user_white.svg';
   static const String icProfileBg = 'assets/images/profile_bg.png';
   static const String icCloseCircle = 'assets/icons/close-circle.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String leftArrow = 'assets/icons/left.svg';
+  static const String map = 'assets/images/map.png';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
@@ -155,7 +154,7 @@ class Assets {
   static const String icSubject = 'assets/icons/subject.svg';
   static const String icCheck = 'assets/icons/check.svg';
   static const String camera = 'assets/icons/camera.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String add = 'assets/icons/add_icon.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
 }

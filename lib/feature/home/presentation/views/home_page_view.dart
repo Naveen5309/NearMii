@@ -32,7 +32,7 @@ class HomePageView extends ConsumerWidget {
                   ),
                 ),
 
-                height: MediaQuery.sizeOf(context).height * 0.31,
+                height: MediaQuery.sizeOf(context).height * 0.32,
                 // color: Colors.green,
                 child: Padding(
                   padding:
@@ -96,7 +96,12 @@ class HomePageView extends ConsumerWidget {
                 ),
               ),
               ref.watch(isMapView)
-                  ? Image.asset(Assets.icHomePngBg)
+                  ? Image.asset(
+                      Assets.map,
+                      height: context.height * .62,
+                      width: context.width,
+                      fit: BoxFit.cover,
+                    )
                   : SizedBox(
                       height: context.height * .62,
                       child: ListView.builder(
@@ -116,13 +121,14 @@ class HomePageView extends ConsumerWidget {
                           );
                         },
                       ),
-                    )
+                    ),
+              // Image.asset(Assets.map)
             ],
           ),
           Positioned(
               right: 0,
               bottom: 100.h,
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () {
                   ref.read(isMapView.notifier).state =
                       !ref.read(isMapView.notifier).state;

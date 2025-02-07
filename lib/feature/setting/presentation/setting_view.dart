@@ -1,8 +1,10 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dotted_box.dart';
 import 'package:NearMii/feature/common_widgets/custombtn.dart';
@@ -11,6 +13,9 @@ import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/change_password_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/complete_edit_profile.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/deleted_detail_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,109 +26,115 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff00C565),
-        // title: AppText(text: AppString.settings),
-        centerTitle: true,
-      ),
+      backgroundColor: AppColor.primary,
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
-          child: Column(
-            children: [
-              ProfileWidget(
-                imageUrl: '',
-                name: "Cameron Williamson",
-                points: 124,
-                isVip: true,
-                model: SubscriptionModel(Points: 221, daysLeft: 11),
-              ),
-              28.verticalSpace,
-              dottedContainer(
-                  context, SubscriptionModel(Points: 0, daysLeft: 27)),
-              35.verticalSpace,
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(
+          children: [
+            const CustomAppbarWidget(
+              title: AppString.settings,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
+              child: Column(
                 children: [
-                  AppText(
-                    fontFamily: Constants.fontFamily,
-                    text: AppString.settings,
-                    color: AppColor.black000000,
-                    fontWeight: FontWeight.w500,
+                  ProfileWidget(
+                    imageUrl: '',
+                    name: "Cameron Williamson",
+                    points: 124,
+                    isVip: true,
+                    model: SubscriptionModel(Points: 221, daysLeft: 11),
                   ),
+                  28.verticalSpace,
+                  dottedContainer(
+                      context, SubscriptionModel(Points: 0, daysLeft: 27)),
+                  35.verticalSpace,
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      AppText(
+                        fontFamily: Constants.fontFamily,
+                        text: AppString.settings,
+                        color: AppColor.black000000,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
+                  8.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconPerson,
+                    title: AppString.editProfile,
+                    subtitle: AppString.updateProfile,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.editProfile),
+                  ),
+                  10.verticalSpace,
+                  const CustomTile(
+                    leadingIcon: Assets.add,
+                    title: AppString.inviteFriends,
+                    subtitle: AppString.get15points,
+                    trailingIcon: Assets.iconArrowRight,
+                  ),
+                  10.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconSetRadius,
+                    title: AppString.setRadius,
+                    subtitle: AppString.meter,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.setRadius),
+                  ),
+                  10.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconCheckBox,
+                    title: AppString.termsAndConditions,
+                    subtitle: AppString.viewOurPolicies,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.termsAndConditions),
+                  ),
+                  10.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconChangePassword,
+                    title: AppString.changePassword,
+                    subtitle: AppString.resetYourPswd,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.changePassword),
+                  ),
+                  10.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconContactUs,
+                    title: AppString.contactUs,
+                    subtitle: AppString.reachOutToSupport,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.contactUs),
+                  ),
+                  10.verticalSpace,
+                  const CustomTile(
+                    leadingIcon: Assets.iconHowItWorks,
+                    title: AppString.howItWorks,
+                    subtitle: AppString.checkHowOur,
+                    trailingIcon: Assets.iconArrowRight,
+                  ),
+                  10.verticalSpace,
+                  CustomTile(
+                    leadingIcon: Assets.iconDelete,
+                    title: AppString.deleteAccount,
+                    subtitle: AppString.deleteYourAccount,
+                    trailingIcon: Assets.iconArrowRight,
+                    onTap: () => toNamed(context, Routes.deleteAccount),
+                  ),
+                  15.verticalSpace,
+                  const CommonAppBtn(
+                    title: AppString.logOut,
+                    textColor: AppColor.redE40505,
+                    height: 60,
+                    borderColor: AppColor.redE40505,
+                    borderWidth: 1,
+                    backGroundColor: AppColor.redF8E2E2,
+                  ),
+                  55.verticalSpace
                 ],
               ),
-              8.verticalSpace,
-              CustomTile(
-                leadingIcon: Assets.iconPerson,
-                title: 'Edit Profile Details',
-                subtitle: 'Update your profile info',
-                trailingIcon: Assets.iconArrowRight,
-                onTap: () => pushTo(context, const CompleteEditProfile()),
-              ),
-              10.verticalSpace,
-              const CustomTile(
-                leadingIcon: Assets.iconChangePassword,
-                title: 'Invite Friends',
-                subtitle: 'Get 15 Points',
-                trailingIcon: Assets.iconArrowRight,
-              ),
-              10.verticalSpace,
-              const CustomTile(
-                leadingIcon: Assets.iconDelete,
-                title: 'Set Radius',
-                subtitle: '50 M',
-                trailingIcon: Assets.iconArrowRight,
-              ),
-              10.verticalSpace,
-              const CustomTile(
-                leadingIcon: Assets.iconCheckBox,
-                title: 'Terms & Conditions',
-                subtitle: 'View our Policies  ',
-                trailingIcon: Assets.iconArrowRight,
-              ),
-              10.verticalSpace,
-              CustomTile(
-                leadingIcon: Assets.iconChangePassword,
-                title: 'Change Password',
-                subtitle: 'Reset your password',
-                trailingIcon: Assets.iconArrowRight,
-                onTap: () => pushTo(context, const ChangePasswordView()),
-              ),
-              10.verticalSpace,
-              CustomTile(
-                leadingIcon: Assets.iconContactUs,
-                title: 'Contact Us',
-                subtitle: 'Reach out to our support team',
-                trailingIcon: Assets.iconArrowRight,
-                onTap: () => pushTo(context, const ContactUsView()),
-              ),
-              10.verticalSpace,
-              const CustomTile(
-                leadingIcon: Assets.iconHowItWorks,
-                title: 'How it works',
-                subtitle: 'Check how our organization works',
-                trailingIcon: Assets.iconArrowRight,
-              ),
-              10.verticalSpace,
-              const CustomTile(
-                leadingIcon: Assets.iconDelete,
-                title: 'Delete Account',
-                subtitle: 'Delete your account',
-                trailingIcon: Assets.iconArrowRight,
-              ),
-              15.verticalSpace,
-              const CommonAppBtn(
-                title: AppString.logOut,
-                textColor: AppColor.redE40505,
-                height: 60,
-                borderColor: AppColor.redE40505,
-                borderWidth: 1,
-                backGroundColor: AppColor.redF8E2E2,
-              ),
-              55.verticalSpace
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
