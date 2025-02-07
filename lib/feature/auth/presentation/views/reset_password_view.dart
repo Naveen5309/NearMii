@@ -19,7 +19,7 @@ class ResetPasswordView extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: BgImageContainer(
-            bgImage: Assets.loginBg,
+            bgImage: Assets.authBg,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: context.width * .06),
               child: Column(
@@ -36,11 +36,11 @@ class ResetPasswordView extends StatelessWidget {
 
                   // const Text("APPlOGO"),
 
-                  SvgPicture.asset(
-                    Assets.appLogo,
-                    height: 20,
-                    width: 20,
-                  ),
+                  // SvgPicture.asset(
+                  //   Assets.appLogo,
+                  //   height: 20,
+                  //   width: 20,
+                  // ),
 
                   AppText(
                     text: AppString.createNewPswd,
@@ -50,7 +50,7 @@ class ResetPasswordView extends StatelessWidget {
                   15.verticalSpace,
                   AppText(
                     text: AppString.enterYourEmailBelow,
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     color: AppColor.grey999,
                   ),
 

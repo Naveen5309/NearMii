@@ -8,16 +8,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class SocialMediaProfile extends StatelessWidget {
   final String icon;
   final String name;
+  final int index;
 
   const SocialMediaProfile({
     super.key,
     required this.icon,
     required this.name,
+    required this.index,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: getCrossAxisAlignment(index),
       children: [
         Container(
           decoration: BoxDecoration(
@@ -33,16 +36,21 @@ class SocialMediaProfile extends StatelessWidget {
           child: CustomCacheNetworkImage(
             img: ApiConstants.socialIconBaseUrl + icon,
             imageRadius: 14,
-            height: 80,
-            width: 80,
+            height: context.width * .16,
+            width: context.width * .16,
+            fit: BoxFit.cover,
           ),
         ),
         5.verticalSpace,
-        AppText(
-          text: name,
-          fontSize: 10.sp,
-          fontWeight: FontWeight.w500,
-          color: AppColor.black000000.withOpacity(.64),
+        Align(
+          // alignment: getAlignment(index),
+          alignment: Alignment.center,
+          child: AppText(
+            text: name,
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColor.black000000.withOpacity(.64),
+          ),
         )
       ],
     );

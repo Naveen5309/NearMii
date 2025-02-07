@@ -12,7 +12,7 @@ String getPlatformModelToJson(GetPlatformModel data) =>
 
 class GetPlatformModel {
   String? status;
-  List<PlatformData>? data;
+  GetPlatformData? data;
 
   GetPlatformModel({
     this.status,
@@ -23,16 +23,53 @@ class GetPlatformModel {
       GetPlatformModel(
         status: json["status"],
         data: json["data"] == null
-            ? []
-            : List<PlatformData>.from(
-                json["data"]!.map((x) => PlatformData.fromJson(x))),
+            ? null
+            : GetPlatformData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": data == null
+        "data": data?.toJson(),
+      };
+}
+
+class GetPlatformData {
+  List<PlatformData>? socialMedia;
+  List<PlatformData>? contactInformation;
+  List<PlatformData>? portfolio;
+
+  GetPlatformData({
+    this.socialMedia,
+    this.contactInformation,
+    this.portfolio,
+  });
+
+  factory GetPlatformData.fromJson(Map<String, dynamic> json) =>
+      GetPlatformData(
+        socialMedia: json["SocialMedia"] == null
             ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
+            : List<PlatformData>.from(
+                json["SocialMedia"]!.map((x) => PlatformData.fromJson(x))),
+        contactInformation: json["Contact information"] == null
+            ? []
+            : List<PlatformData>.from(json["Contact information"]!
+                .map((x) => PlatformData.fromJson(x))),
+        portfolio: json["Portfolio"] == null
+            ? []
+            : List<PlatformData>.from(
+                json["Portfolio"]!.map((x) => PlatformData.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "SocialMedia": socialMedia == null
+            ? []
+            : List<dynamic>.from(socialMedia!.map((x) => x.toJson())),
+        "Contact information": contactInformation == null
+            ? []
+            : List<dynamic>.from(contactInformation!.map((x) => x.toJson())),
+        "Portfolio": portfolio == null
+            ? []
+            : List<dynamic>.from(portfolio!.map((x) => x.toJson())),
       };
 }
 
@@ -44,7 +81,7 @@ class PlatformData {
   int? status;
   DateTime? createdAt;
   DateTime? updatedAt;
-  PlatformCatagory? category;
+  Category? category;
 
   PlatformData({
     this.id,
@@ -71,7 +108,7 @@ class PlatformData {
             : DateTime.parse(json["updated_at"]),
         category: json["category"] == null
             ? null
-            : PlatformCatagory.fromJson(json["category"]),
+            : Category.fromJson(json["category"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,14 +123,14 @@ class PlatformData {
       };
 }
 
-class PlatformCatagory {
+class Category {
   int? id;
   String? name;
   int? status;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  PlatformCatagory({
+  Category({
     this.id,
     this.name,
     this.status,
@@ -101,8 +138,7 @@ class PlatformCatagory {
     this.updatedAt,
   });
 
-  factory PlatformCatagory.fromJson(Map<String, dynamic> json) =>
-      PlatformCatagory(
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
         status: json["status"],

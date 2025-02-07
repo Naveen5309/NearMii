@@ -5,9 +5,11 @@ import 'package:flutter_svg/svg.dart';
 
 class CommonBackBtn extends StatelessWidget {
   final GestureTapCallback? onTap;
+  final Color? color;
   const CommonBackBtn({
     super.key,
     this.onTap,
+    this.color,
   });
 
   @override
@@ -17,7 +19,11 @@ class CommonBackBtn extends StatelessWidget {
           () {
             back(context);
           },
-      child: SvgPicture.asset(Assets.icBackBtn),
+      child: SvgPicture.asset(
+        Assets.icBackBtn,
+        colorFilter:
+            ColorFilter.mode(color ?? AppColor.btnColor, BlendMode.srcIn),
+      ),
     );
   }
 }

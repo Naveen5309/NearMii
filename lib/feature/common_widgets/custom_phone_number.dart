@@ -3,6 +3,7 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_countries_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomPhoneNumber extends StatefulWidget {
@@ -75,7 +76,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
       context: context,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(12),
           height:
               MediaQuery.of(context).size.height * 0.8, // 90% of screen height
           child: Padding(
@@ -141,7 +142,10 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(50),
-          border: Border.all(color: Colors.green.withOpacity(0.4)),
+          border: Border.all(
+              color: textEditHasFocus
+                  ? AppColor.appThemeColor
+                  : AppColor.green173E01.withOpacity(.4)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Row(
@@ -204,6 +208,9 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: TextField(
+                  keyboardType: TextInputType.phone,
+                  maxLength: 15,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   readOnly: widget.readOnly ?? false,
                   focusNode: _focusNode,
                   controller: widget.controller,
@@ -211,6 +218,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                   style:
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                   decoration: InputDecoration(
+                    counterText: '',
                     border: InputBorder.none,
                     hintText: widget.labelText,
                     hintStyle: TextStyle(

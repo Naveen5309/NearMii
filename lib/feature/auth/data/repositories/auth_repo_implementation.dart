@@ -8,7 +8,7 @@ import '../models/user_model.dart';
 abstract class AuthRepository {
   Future<Either<Failure, UserModel?>> doLogin(
       {required Map<String, dynamic> body});
-  Future<Either<Failure, List<PlatformData>?>> getPlatform();
+  Future<Either<Failure, GetPlatformData>> getPlatform();
 }
 
 class AuthRepoImpl implements AuthRepository {
@@ -32,7 +32,7 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, List<PlatformData>?>> getPlatform() async {
+  Future<Either<Failure, GetPlatformData>> getPlatform() async {
     try {
       final data = await dataSource.getPlatformApi();
       if (data?.status == "success") {

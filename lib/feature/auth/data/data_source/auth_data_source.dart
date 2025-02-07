@@ -41,26 +41,31 @@ class AuthDataSourceImpl extends AuthDataSource {
 
 //GET PLATFORM
   @override
-  Future<ResponseWrapper<List<PlatformData>>?> getPlatformApi() async {
+  Future<ResponseWrapper<GetPlatformData>> getPlatformApi() async {
     try {
-      final dataResponse = await Getters.getHttpService
-          .request<List<PlatformData>?>(
+      final dataResponse =
+          await Getters.getHttpService.request<GetPlatformData>(
               url: ApiConstants.getPlatform,
-              fromJson: (json) => (json as List<dynamic>) // Ensure it's a list
-                  .map((item) =>
-                      PlatformData.fromJson(item as Map<String, dynamic>))
-                  .toList(),
+              fromJson: (json) {
+                log("json in data source :-> $json");
+
+                // Ensure the response is a map and correctly map it to GetPlatformData
+                if (json is Map<String, dynamic>) {
+                  return GetPlatformData.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              },
               requestType: RequestType.post);
+
       if (dataResponse.status == "success") {
         log("success called");
-        // PlatformData model = dataResponse.data!;
-
         return getSuccessResponseWrapper(dataResponse);
       } else {
         return getFailedResponseWrapper(dataResponse.message,
             response: dataResponse.data);
       }
     } catch (e) {
+      log("error called in get platform api");
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "getPlatformApi",

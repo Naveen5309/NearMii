@@ -19,7 +19,7 @@ class ForgotPasswordView extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: BgImageContainer(
-            bgImage: Assets.loginBg,
+            bgImage: Assets.authBg,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: context.width * .06),
               child: Column(

@@ -138,9 +138,9 @@ abstract final class AppString {
   static const String subject = "Subject";
   static const String message = "Message";
   static const String editProfileSetting = "Edit Profile";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  //  static const String socialMedia="Social Media";
+  static const String contactInformation = "Contact information";
+  static const String portfolio = "Portfolio";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

@@ -19,55 +19,55 @@ class CustomBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(20), // Top left and right radius
               ),
-              border: Border(
-                top: BorderSide(
-                  color: AppColor.primary, // Border color
-                  width: 1.0, // Border width
-                ),
-                left: BorderSide(
-                  color: AppColor.primary, // Border color
-                  width: 1.0, // Border width
-                ),
-                right: BorderSide(
-                  color: AppColor.primary, // Border color
-                  width: 1.0, // Border width
-                ),
-              ),
+              // border: Border(
+              //   top: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              //   left: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              //   right: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              // ),
             ),
             padding: contentPadding ??
                 EdgeInsets.symmetric(
-                    vertical: context.height * .03,
+                    vertical: context.height * .01,
                     horizontal: context.width * .05),
             child: content,
           )
         : BackdropFilter(
             filter: ImageFilter.blur(
-              sigmaX: 5,
-              sigmaY: 5,
+              sigmaX: 1,
+              sigmaY: 1,
             ),
             child: Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(20), // Top left and right radius
                 ),
-                border: Border(
-                  top: BorderSide(
-                    color: AppColor.primary, // Border color
-                    width: 1.0, // Border width
-                  ),
-                  left: BorderSide(
-                    color: AppColor.primary, // Border color
-                    width: 1.0, // Border width
-                  ),
-                  right: BorderSide(
-                    color: AppColor.primary, // Border color
-                    width: 1.0, // Border width
-                  ),
-                ),
+                // border: Border(
+                //   top: BorderSide(
+                //     color: AppColor.primary, // Border color
+                //     width: 1.0, // Border width
+                //   ),
+                //   left: BorderSide(
+                //     color: AppColor.primary, // Border color
+                //     width: 1.0, // Border width
+                //   ),
+                //   right: BorderSide(
+                //     color: AppColor.primary, // Border color
+                //     width: 1.0, // Border width
+                //   ),
+                // ),
               ),
               padding: contentPadding ??
                   EdgeInsets.symmetric(
-                      vertical: context.height * .03,
+                      vertical: context.height * .02,
                       horizontal: context.width * .05),
               child: content,
             ),
@@ -98,6 +98,7 @@ void showCustomBottomSheet(
                   color: color)
               : const BoxDecoration(
                   color: AppColor.primary,
+
                   // gradient: LinearGradient(
                   //   colors: AppColor.splashGradientColor,
                   //   begin: Alignment.topCenter,

@@ -193,7 +193,7 @@ class SignUpView extends StatelessWidget {
           controller: TextEditingController(),
           labelText: AppString.confirmPswd,
           suffixIcon: Assets.icEyeOff,
-        )
+        ),
       ],
     );
   }

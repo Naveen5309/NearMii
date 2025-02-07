@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
@@ -50,10 +52,15 @@ class ApiProvider {
         body: map,
         useFormData: useFormData,
       );
-      var parsedData =
-          (response.data).containsKey('data') && response.data["data"] != null
-              ? _dataParser<T>(response.data["data"], fromJson)
-              : null;
+
+      log("api response is :-> ${response.data["data"]}");
+      var parsedData = (response.data["data"] is Map<String, dynamic>)
+          ? _dataParser<T>(
+              response.data, fromJson) // Pass the whole JSON response
+          : null;
+
+      log("parsedData data :-> $parsedData");
+
       var dataResponse = ResponseWrapper<T>(
         message: response.data["message"] ?? '',
         status: response.data["status"],

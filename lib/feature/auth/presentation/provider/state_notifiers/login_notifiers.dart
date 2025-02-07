@@ -19,7 +19,10 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final emailController = TextEditingController();
   final referralController = TextEditingController();
 
-  List<PlatformData> platformDataList = [];
+  List<PlatformData> socialMediaList = [];
+  List<PlatformData> contactList = [];
+
+  List<PlatformData> portfolioList = [];
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
 
@@ -66,9 +69,14 @@ class LoginNotifier extends StateNotifier<AuthState> {
             error: error.message, authType: AuthType.socialMedia);
       }, (result) {
         log("result is:-> $result");
+        socialMediaList = result.socialMedia ?? [];
+        portfolioList = result.portfolio ?? [];
+        contactList = result.contactInformation ?? [];
+
+        log("result is 15:-> $socialMediaList");
 
         // Update the list and notify UI by updating state
-        platformDataList = result ?? [];
+        // platformDataList = result ?? [];
         return const AuthApiSuccess(
           authType: AuthType.socialMedia,
         );

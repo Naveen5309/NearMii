@@ -146,3 +146,27 @@ List<String> genderList = [
   "Male",
   "FeMale",
 ];
+
+String formatDOB(DateTime dob) {
+  return '${dob.day.toString().padLeft(2, '0')}/${dob.month.toString().padLeft(2, '0')}/${dob.year}';
+}
+
+CrossAxisAlignment getCrossAxisAlignment(int index) {
+  if (index % 3 == 0) {
+    return CrossAxisAlignment.start;
+  } else if (index % 3 == 1) {
+    return CrossAxisAlignment.center;
+  } else {
+    return CrossAxisAlignment.end;
+  }
+}
+
+Alignment getAlignment(int index) {
+  if (index % 3 == 0) {
+    return Alignment.centerLeft;
+  } else if (index % 3 == 1) {
+    return Alignment.center;
+  } else {
+    return Alignment.centerRight;
+  }
+}

@@ -9,7 +9,7 @@ abstract class AuthUseCase {
   Future<Either<Failure, UserModel?>> callLogin(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, List<PlatformData>?>> getPlatform();
+  Future<Either<Failure, GetPlatformData>> getPlatform();
 }
 
 class AuthUseCaseImpl implements AuthUseCase {
@@ -27,7 +27,7 @@ class AuthUseCaseImpl implements AuthUseCase {
   }
 
   @override
-  Future<Either<Failure, List<PlatformData>?>> getPlatform() async {
+  Future<Either<Failure, GetPlatformData>> getPlatform() async {
     final result = await repository.getPlatform();
     return result.fold((l) => Left(l), (r) {
       return Right(r);

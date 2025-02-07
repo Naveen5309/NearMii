@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -10,7 +8,6 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
-import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
 import 'package:flutter/material.dart';
@@ -38,12 +35,12 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   @override
   Widget build(BuildContext context) {
     // final authState = ref.watch(loginProvider);
-    final loginState = ref.watch(loginProvider);
-    final loginNotifier = ref.read(loginProvider.notifier);
+    ref.watch(loginProvider);
+    final loginNotifier = ref.watch(loginProvider.notifier);
+
     ref.listen(
       loginProvider,
       (previous, next) {
-        log("current state is:-> $next");
         if (next is AuthApiLoading && next.authType == AuthType.socialMedia) {
           showDialog(
             context: context,
@@ -51,7 +48,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
               return Center(
                 child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(100.0),
                       color: AppColor.primary,
                     ),
                     child: const Padding(
@@ -79,70 +76,90 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: context.width * .05),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: totalHeight,
-                  ),
+              child: Consumer(builder:
+                  (BuildContext context, WidgetRef ref, Widget? child) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: totalHeight,
+                    ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const CommonBackBtn(),
-                      AppText(
-                        text: AppString.skip,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                      )
-                    ],
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const CommonBackBtn(),
+                        InkWell(
+                          onTap: () {
+                            offAllNamed(context, Routes.bottomNavBar);
+                          },
+                          child: AppText(
+                            text: AppString.skip,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    ),
 
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
-                  //Logo
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+                    //Logo
 
-                  //ADD SOCIAL PROFILES TEXT
+                    //ADD SOCIAL PROFILES TEXT
 
-                  AppText(
-                    text: AppString.addSocialProfiles,
-                    fontSize: 32.sp,
-                  ),
+                    AppText(
+                      text: AppString.addSocialProfiles,
+                      fontSize: 32.sp,
+                    ),
 
-                  15.verticalSpace,
-                  AppText(
-                    text: "Lorem ipsum dolor sit amet consectetur. Massa.",
-                    fontSize: 14.sp,
-                    color: AppColor.grey999,
-                  ),
+                    15.verticalSpace,
+                    AppText(
+                      text: "Lorem ipsum dolor sit amet consectetur. Massa.",
+                      fontSize: 14.sp,
+                      color: AppColor.grey999,
+                    ),
 
-                  //SEARCH FIELD
-                  const CustomSearchBarWidget(),
+                    //SEARCH FIELD
+                    const CustomSearchBarWidget(),
 
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return CustomSocialGridview(
-                        title: "Social Media",
-                        socialMedia: loginNotifier.platformDataList ?? [],
-                      );
-                    },
-                  ),
+                    //SOCIAL MEDIA
 
-                  //login
-                  CommonAppBtn(
-                    onTap: () {
-                      offAllNamed(context, Routes.login);
-                    },
-                    title: AppString.next,
-                    textSize: 16.sp,
-                  ),
+                    CustomSocialGridview(
+                      title: AppString.socialMedia,
+                      socialMedia: loginNotifier.socialMediaList,
+                    ),
 
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
-                ],
-              ),
+                    //CONTACT INFORMATION
+
+                    CustomSocialGridview(
+                      title: AppString.contactInformation,
+                      socialMedia: loginNotifier.contactList,
+                    ),
+
+                    //PORTFOLIO
+
+                    CustomSocialGridview(
+                      title: AppString.portfolio,
+                      socialMedia: loginNotifier.portfolioList,
+                    ),
+
+                    //login
+                    CommonAppBtn(
+                      onTap: () {
+                        offAllNamed(context, Routes.login);
+                      },
+                      title: AppString.next,
+                      textSize: 16.sp,
+                    ),
+
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+                  ],
+                );
+              }),
             ),
           )),
     );

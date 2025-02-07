@@ -67,6 +67,7 @@ class CustomCacheNetworkImage extends StatelessWidget {
                 SvgPicture.network(
                     img,
                     placeholderBuilder: (context) => const Icon(Icons.error),
+                    fit: BoxFit.cover,
                     // placeholderBuilder: (context) => const Icon(Icons.error),
                   )
                 : CachedNetworkImage(
