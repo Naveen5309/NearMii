@@ -121,8 +121,8 @@ abstract final class AppString {
   static const String mapView = "Map View";
   static const String history = "History";
   static const String notification = "Notifications";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  static const String cancel = "Cancel";
+  static const String save = "Save";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

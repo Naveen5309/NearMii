@@ -73,7 +73,7 @@ class CompleteProfileView extends StatelessWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.selectSocialMedia);
+                        toNamed(context, Routes.selectSocialMedia);
                       },
                       title: AppString.next,
                       textSize: 16.sp,

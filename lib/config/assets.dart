@@ -131,7 +131,7 @@ class Assets {
   static const String icSearch = 'assets/icons/search.svg';
   static const String icUserWhite = 'assets/icons/user_white.svg';
   static const String icProfileBg = 'assets/images/profile_bg.png';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String icCloseCircle = 'assets/icons/close-circle.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';
   // static const String icLock = 'assets/icons/lock.svg';

@@ -10,6 +10,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
 import 'package:flutter/material.dart';
@@ -122,8 +123,9 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                   Consumer(
                     builder: (context, ref, child) {
                       return CustomSocialGridview(
-                          title: "Social Media",
-                          socialMedia: loginNotifier.platformDataList ?? []);
+                        title: "Social Media",
+                        socialMedia: loginNotifier.platformDataList ?? [],
+                      );
                     },
                   ),
 

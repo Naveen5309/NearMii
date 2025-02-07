@@ -36,12 +36,6 @@ class ForgotPasswordView extends StatelessWidget {
 
                   // const Text("APPlOGO"),
 
-                  SvgPicture.asset(
-                    Assets.appLogo,
-                    height: 50,
-                    width: 50,
-                  ),
-
                   AppText(
                     text: AppString.didYouForgotYourPswd,
                     fontSize: 32.sp,

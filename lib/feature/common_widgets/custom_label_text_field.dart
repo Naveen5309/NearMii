@@ -10,7 +10,10 @@ class CustomLabelTextField extends StatefulWidget {
   final InputBorder? enableBorder;
   final InputBorder? focusBorder;
   final String? labelText;
-  final String prefixIcon;
+  final String? prefixIcon;
+
+  final Widget? prefixWidget;
+
   final String? suffixIcon;
   final bool? readOnly;
   final VoidCallback? onTapOnSuffixIcon;
@@ -24,10 +27,11 @@ class CustomLabelTextField extends StatefulWidget {
       this.focusBorder,
       this.labelText,
       this.readOnly,
+      this.prefixWidget,
       this.suffixIcon,
       this.onTapOnPrefixIcon,
       this.onTapOnSuffixIcon,
-      required this.prefixIcon});
+      this.prefixIcon});
 
   @override
   _CustomLabelTextFieldState createState() => _CustomLabelTextFieldState();
@@ -159,15 +163,16 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                   onTap: widget.onTapOnPrefixIcon,
                   child: Container(
                     padding: const EdgeInsets.only(left: 15),
-                    child: SvgPicture.asset(
-                      widget.prefixIcon,
-                      colorFilter: ColorFilter.mode(
-                        textEditHasFocus
-                            ? AppColor.green173E01
-                            : AppColor.green173E01.withOpacity(.4),
-                        BlendMode.srcIn,
-                      ),
-                    ),
+                    child: widget.prefixWidget ??
+                        SvgPicture.asset(
+                          widget.prefixIcon!,
+                          colorFilter: ColorFilter.mode(
+                            textEditHasFocus
+                                ? AppColor.green173E01
+                                : AppColor.green173E01.withOpacity(.4),
+                            BlendMode.srcIn,
+                          ),
+                        ),
                   ),
                 ),
               ),
