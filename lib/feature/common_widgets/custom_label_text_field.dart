@@ -18,7 +18,8 @@ class CustomLabelTextField extends StatefulWidget {
   final bool? readOnly;
   final VoidCallback? onTapOnSuffixIcon;
   final VoidCallback? onTapOnPrefixIcon;
-
+  final int? maxLines;
+  final double? radius;
   const CustomLabelTextField(
       {super.key,
       required this.controller,
@@ -31,7 +32,9 @@ class CustomLabelTextField extends StatefulWidget {
       this.suffixIcon,
       this.onTapOnPrefixIcon,
       this.onTapOnSuffixIcon,
-      this.prefixIcon});
+      this.prefixIcon,
+      this.maxLines,
+      this.radius});
 
   @override
   _CustomLabelTextFieldState createState() => _CustomLabelTextFieldState();
@@ -80,6 +83,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
           clipBehavior: Clip.none,
           children: <Widget>[
             TextField(
+              maxLines: widget.maxLines,
               readOnly: widget.readOnly ?? false,
               textAlign: TextAlign.start, // Ensures text aligns on the left
               cursorColor: AppColor.appThemeColor, // Set cursor color here
@@ -108,17 +112,21 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                       )
                     : const SizedBox(),
                 border: widget.border ??
-                    const OutlineInputBorder(
+                    OutlineInputBorder(
                       gapPadding: 0,
-                      borderSide: BorderSide(color: AppColor.appThemeColor),
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      borderSide:
+                          const BorderSide(color: AppColor.appThemeColor),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.radius ?? 50),
+                      ),
                     ),
                 enabledBorder: widget.enableBorder ??
                     OutlineInputBorder(
                       borderSide: BorderSide(
                           color: AppColor.green173E01.withOpacity(.4)),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(50.0)),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.radius ?? 50),
+                      ),
                     ),
                 focusedBorder: widget.focusBorder ??
                     const OutlineInputBorder(
@@ -162,7 +170,9 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                 child: GestureDetector(
                   onTap: widget.onTapOnPrefixIcon,
                   child: Container(
+                    // padding: const EdgeInsets.only(top: 10), // Moves the icon up child: Align( alignment: Alignment.topCenter, child: Icon(Icons.mail, color: _isFocused ? Colors.blue : Colors.grey), ), ),
                     padding: const EdgeInsets.only(left: 15),
+                    alignment: Alignment.centerLeft,
                     child: widget.prefixWidget ??
                         SvgPicture.asset(
                           widget.prefixIcon!,

@@ -32,11 +32,11 @@ class HomePageView extends ConsumerWidget {
                   ),
                 ),
 
-                height: MediaQuery.sizeOf(context).height * 0.29,
+                height: MediaQuery.sizeOf(context).height * 0.31,
                 // color: Colors.green,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

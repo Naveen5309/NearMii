@@ -106,5 +106,3 @@ class _HistoryViewState extends State<HistoryView> {
 //     ),
 //   ];
 // }
-
-

@@ -12,7 +12,7 @@ import '../../../../../config/assets.dart';
 import '../../../../../config/helper.dart';
 
 class BottomNavigationView extends ConsumerWidget {
-  const BottomNavigationView({super.key});
+  BottomNavigationView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,10 +147,10 @@ class BottomNavigationView extends ConsumerWidget {
     );
   }
 
-  final _pageController = const [
-    HomePageView(),
-    HistoryView(),
-    NotificationView(),
+  final _pageController = [
+    const HomePageView(),
+    const HistoryView(),
+    const NotificationView(),
     SettingView()
   ];
 

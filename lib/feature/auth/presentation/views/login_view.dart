@@ -87,7 +87,7 @@ class LoginView extends StatelessWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.login);
+                        offAllNamed(context, Routes.bottomNavBar);
                       },
                       title: AppString.login,
                       textSize: 16.sp,

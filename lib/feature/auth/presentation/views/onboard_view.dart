@@ -174,7 +174,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 ),
 
                 SizedBox(
-                  height: context.height * .05,
+                  height: context.height * .04,
                 )
               ],
             ),
@@ -212,7 +212,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
             color: AppColor.grey999,
           ),
           SizedBox(
-            height: context.height * .02,
+            height: context.height * .01,
           ),
           //Image
           SizedBox(

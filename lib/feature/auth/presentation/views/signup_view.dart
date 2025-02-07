@@ -69,6 +69,7 @@ class SignUpView extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: context.height * .02),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Consumer(
                             builder: (context, ref, child) {
@@ -112,7 +113,7 @@ class SignUpView extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(left: context.width * .02),
                             child: SizedBox(
-                              width: context.width * .83,
+                              width: context.width * .8,
                               child: Wrap(
                                 children: [
                                   CustomRichTextThreeWidget(
