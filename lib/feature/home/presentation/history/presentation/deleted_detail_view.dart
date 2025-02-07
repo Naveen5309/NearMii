@@ -37,7 +37,7 @@ class DeletedDetailView extends StatelessWidget {
                 fontFamily: Constants.fontFamily,
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-                color: AppColor.black000000.withValues(alpha: 0.6),
+                color: AppColor.black000000.withOpacity(0.6),
               ),
               const SizedBox(height: 20),
               CustomLabelTextField(

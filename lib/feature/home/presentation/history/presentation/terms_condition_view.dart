@@ -47,7 +47,7 @@ Widget textSection(BuildContext context) {
             text:
                 'Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam arcu aliquam. Velit eleifend in varius dignissim. Et et donec elit nec. Hac ullamcorper enim diam nunc mattis. At sagittis consequat viverra sit amet consectetur. Urna id commodo quisque semper feugiat. At sagittis et quis porta eget sit sem molestie. Quam praesent a id diam nec a vitae. Nisi donec elit dictum aliquet facilisi. Sodales feugiat odio nibh duis nec. Lobortis sed tellus eget a diam ultricies amet. Turpis arcu massa turpis nunc metus placerat ipsum. Viverra aenean cursus diam ut facilisi lobortis semper eget scelerisque. Et sed elit auctor nibh sed suscipit turpis. Praesent facilisis pellentesque viverra mollis pharetra mollis quam. Massa felis faucibus sed blandit gravida. Id sem orci eget nisi nunc leo enim nec augue. Diam pulvinar ipsum nam malesuada amet aliquam diam. Feugiat egestas commodo maecenas dictumst molestie egestas.',
             fontSize: 12.sp,
-            color: AppColor.black000000.withValues(alpha: 0.6),
+            color: AppColor.black000000.withOpacity(0.6),
             fontWeight: FontWeight.w500),
       ],
     ),

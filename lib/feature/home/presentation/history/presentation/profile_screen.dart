@@ -128,7 +128,7 @@ class _ProfileCardState extends State<ProfileCard> {
                       text: profile!.designation,
                       fontWeight: FontWeight.w500,
                       fontSize: 16.sp,
-                      color: AppColor.whiteFFFFFF.withValues(alpha: .8),
+                      color: AppColor.whiteFFFFFF.withOpacity(.8),
                     ),
                     const SizedBox(height: 20),
                     AppText(
@@ -136,7 +136,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         textAlign: TextAlign.center,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
-                        color: AppColor.whiteFFFFFF.withValues(alpha: .8)),
+                        color: AppColor.whiteFFFFFF.withOpacity(.8)),
                     const SizedBox(height: 20),
                     Wrap(
                       spacing: 8,
@@ -165,15 +165,15 @@ class InfoChip extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(4),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: AppText(
-        color: AppColor.whiteFFFFFF,
-        text: '$label: $value',
-        fontSize: 13.sp,
-      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: AppColor.green34D185,
         // border: BorderSide.none,
+      ),
+      child: AppText(
+        color: AppColor.whiteFFFFFF,
+        text: '$label: $value',
+        fontSize: 13.sp,
       ),
     );
   }
@@ -216,7 +216,7 @@ Widget profileWidget({
       Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: const Color(0xff01C27D).withValues(alpha: 0.1),
+          color: const Color(0xff01C27D).withOpacity(0.1),
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: AppText(
