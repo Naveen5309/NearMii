@@ -41,7 +41,7 @@ class InviteFriendBottomSheet extends StatelessWidget {
                 textAlign: TextAlign.center,
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w400,
-                color: AppColor.black000000.withValues(alpha: .6)),
+                color: AppColor.black000000.withOpacity(.6)),
           ),
           const SizedBox(height: 20),
           CustomTextFieldWidget(
