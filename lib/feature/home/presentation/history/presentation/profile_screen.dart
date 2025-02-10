@@ -4,10 +4,8 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
-import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
-import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
 import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
@@ -118,39 +116,21 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
     );
 
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        children: [
-          //UPPER SECTION
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(
-              left: 12.w,
-              right: 12.w,
-              top: context.height * .1,
-              bottom: context.height * .025,
-            ),
-            decoration: const BoxDecoration(
-              // color: Colors.green,
-              image: DecorationImage(
-                  image: AssetImage(Assets.background), fit: BoxFit.cover),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 10.w),
-                    child: const CommonBackBtn(
-                      color: AppColor.primary,
-                    ),
-                  ),
-                ),
-                15.verticalSpace,
-
-                //PROFILE SECTION
-                Container(
+        body: NestedScrollView(
+      floatHeaderSlivers: true,
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [
+          SliverAppBar(
+            backgroundColor: AppColor.btnColor,
+            snap: true,
+            pinned: true,
+            floating: true,
+            title: Visibility(
+              visible: innerBoxIsScrolled,
+              child: Row(
+                children: [
+                  // PROFILE SECTION
+                  Container(
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Color(0xff69DDA5),
@@ -161,87 +141,157 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                     child: CustomCacheNetworkImage(
                       img: '',
                       imageRadius: 150,
+                      height: 20.w,
+                      width: 20.w,
+                    ),
+                  ),
+                  5.horizontalSpace,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppText(
+                        text: "Brooklyn Simmons",
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.whiteFFFFFF,
+                      ),
+                      AppText(
+                        text: "Designation",
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.whiteFFFFFF.withOpacity(.8),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            expandedHeight: context.height * .5,
+            flexibleSpace: FlexibleSpaceBar(
+              stretchModes: const [StretchMode.zoomBackground],
+              expandedTitleScale: 1,
+              collapseMode: CollapseMode.none,
+              centerTitle: true,
+              title: Column(
+                mainAxisSize: MainAxisSize
+                    .min, // Ensures column takes only necessary space
+                children: [
+                  SizedBox(height: context.height * .14),
+                  Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xff69DDA5),
+                    ),
+                    padding: const EdgeInsets.all(5),
+                    child: CustomCacheNetworkImage(
+                      img: '',
+                      imageRadius: 150,
                       height: 95.w,
                       width: 95.w,
-                    )),
-                10.verticalSpace,
-
-                //NAME
-                AppText(
-                  color: AppColor.whiteFFFFFF,
-                  text: profile!.name,
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                5.verticalSpace,
-
-                //DESIGNATION
-                AppText(
-                  text: profile!.designation,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: AppColor.whiteFFFFFF.withOpacity(.8),
-                ),
-                25.verticalSpace,
-
-                //DESCRIPTION
-
-                AppText(
+                    ),
+                  ),
+                  10.verticalSpace,
+                  AppText(
+                    color: AppColor.whiteFFFFFF,
+                    text: profile!.name,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  5.verticalSpace,
+                  AppText(
+                    text: profile!.designation,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.sp,
+                    color: AppColor.whiteFFFFFF.withOpacity(.8),
+                  ),
+                  25.verticalSpace,
+                  AppText(
                     text: profile!.description,
                     textAlign: TextAlign.center,
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
-                    color: AppColor.whiteFFFFFF.withOpacity(.8)),
-                20.verticalSpace,
-
-                //CHIPS
-
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  runSpacing: 8,
-                  spacing: 6,
-                  children: [
-                    InfoChip(label: 'Social', value: profile!.social),
-                    InfoChip(label: 'Contact', value: profile!.contact),
-                    InfoChip(label: 'Portfolio', value: profile!.portfolio),
-                    InfoChip(label: 'Finance', value: profile!.finance),
-                    InfoChip(label: 'Business', value: profile!.business),
-                  ],
+                    color: AppColor.whiteFFFFFF.withOpacity(.8),
+                  ),
+                  20.verticalSpace,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    runSpacing: 8,
+                    spacing: 6,
+                    children: [
+                      InfoChip(label: 'Social', value: profile!.social),
+                      InfoChip(label: 'Contact', value: profile!.contact),
+                      InfoChip(label: 'Portfolio', value: profile!.portfolio),
+                      InfoChip(label: 'Finance', value: profile!.finance),
+                      InfoChip(label: 'Business', value: profile!.business),
+                    ],
+                  ),
+                ],
+              ),
+              background: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.only(
+                  left: 12.w,
+                  right: 12.w,
+                  top: context.height * .1,
+                  bottom: context.height * .025,
                 ),
-              ],
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Assets.background),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
             ),
           ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (_, int index) {
+                return Column(
+                  children: [
+                    //SEARCH FIELD
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: context.width * .05,
+                          vertical: context.height * .02),
+                      child: const CustomSearchBarWidget(),
+                    ),
 
-          //SEARCH FIELD
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: context.width * .05,
-                vertical: context.height * .02),
-            child: const CustomSearchBarWidget(),
-          ),
+                    //HIDE ALL
 
-          //HIDE ALL
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: context.width * .05,
+                          vertical: context.height * .02),
+                      child: hideAllSection(),
+                    ),
 
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: context.width * .05,
-                vertical: context.height * .02),
-            child: hideAllSection(),
-          ),
+                    //SOCIAL MEDIA
 
-          //Social media
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ProfileGridView(
+                        title: AppString.socialMedia,
+                        socialMedia: loginNotifier.socialMediaList,
+                      ),
+                    ),
+                  ],
+                );
 
-          //SOCIAL MEDIA
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ProfileGridView(
-              title: AppString.socialMedia,
-              socialMedia: loginNotifier.socialMediaList,
+                // ListTile(
+                //   leading: Container(
+                //       padding: const EdgeInsets.all(8),
+                //       width: 100,
+                //       child: const Placeholder()),
+                //   title: Text('Place ${index + 1}', textScaleFactor: 2),
+                // );
+              },
+              childCount: 1,
             ),
           ),
-        ],
-      ),
+        ];
+      },
+      body: const SizedBox(),
     ));
   }
 }
@@ -274,20 +324,6 @@ Widget hideAllSection() {
       ToggleSwitchBtn(
         onToggled: (isToggled) {},
       ),
-
-      // SizedBox(
-      //   height: 30, //set desired REAL HEIGHT
-      //   width: 50, //set desired REAL WIDTH
-      //   child: Transform.scale(
-      //     transformHitTests: false,
-      //     scale: .8,
-      //     child: CupertinoSwitch(
-      //       value: true,
-      //       onChanged: (value) {},
-      //       activeColor: Colors.green,
-      //     ),
-      //   ),
-      // ),
     ],
   );
 }

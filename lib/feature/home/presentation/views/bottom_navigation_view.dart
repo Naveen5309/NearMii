@@ -106,6 +106,13 @@ class BottomNavigationView extends ConsumerWidget {
                         GestureDetector(
                             onTap: () {
                               toNamed(context, Routes.profile);
+
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           const NewProfileScreen(),
+                              //     ));
                             },
                             child: const CustomProfileWidget()),
                         // NOTIFICATION

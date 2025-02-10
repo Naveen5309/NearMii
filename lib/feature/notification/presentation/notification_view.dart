@@ -15,7 +15,6 @@ class NotificationView extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColor.primary,
       body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             const CustomAppbarWidget(
@@ -34,39 +33,43 @@ class NotificationView extends ConsumerWidget {
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w500,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: Column(
-                                children: [
-                                  CustomTile(
-                                    isHistory: false,
-                                    type: "search",
-                                    onTap: () {},
-                                    time: "1h ago",
-                                    title: "20 People near you",
-                                    leadingIcon: "",
-                                    subtitle: 'Check out their profile.',
-                                  ),
-                                  CustomTile(
-                                    isHistory: false,
-                                    type: "",
-                                    onTap: () {},
-                                    time: "1h ago",
-                                    title: "Someone viewed your profile",
-                                    leadingIcon: "",
-                                    subtitle: 'Check out their profile.',
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                      SizedBox(
+                        height: context.height * .7,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Column(
+                                  children: [
+                                    CustomTile(
+                                      isHistory: false,
+                                      type: "search",
+                                      onTap: () {},
+                                      time: "1h ago",
+                                      title: "20 People near you",
+                                      leadingIcon: "",
+                                      subtitle: 'Check out their profile.',
+                                    ),
+                                    CustomTile(
+                                      isHistory: false,
+                                      type: "",
+                                      onTap: () {},
+                                      time: "1h ago",
+                                      title: "Someone viewed your profile",
+                                      leadingIcon: "",
+                                      subtitle: 'Check out their profile.',
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],

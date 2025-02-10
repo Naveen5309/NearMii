@@ -141,13 +141,16 @@ class SettingView extends StatelessWidget {
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
-                    child: const CommonAppBtn(
+                    child: CommonAppBtn(
                       title: AppString.logOut,
                       textColor: AppColor.redE40505,
                       height: 60,
                       borderColor: AppColor.redE40505,
                       borderWidth: 1,
                       backGroundColor: AppColor.redF8E2E2,
+                      onTap: () {
+                        offAllNamed(context, Routes.login);
+                      },
                     ),
                   ),
                   90.verticalSpace
