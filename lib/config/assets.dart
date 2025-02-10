@@ -133,8 +133,11 @@ class Assets {
   static const String icCloseCircle = 'assets/icons/close-circle.svg';
   static const String leftArrow = 'assets/icons/left.svg';
   static const String map = 'assets/images/map.png';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String shareIcon = 'assets/icons/share_icon.svg';
+  static const String searchNotication = 'assets/icons/search_notification.svg';
+  static const String locationNotification =
+      'assets/icons/location_notification.svg';
+
   // static const String icLock = 'assets/icons/lock.svg';
   static const String iconContactUs = 'assets/icons/contact_us.svg';
   static const String iconBackButton = "assets/icons/back_arrow.svg";

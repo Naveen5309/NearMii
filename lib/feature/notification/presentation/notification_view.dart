@@ -34,38 +34,39 @@ class NotificationView extends ConsumerWidget {
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w500,
                       ),
-                      Container(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            color: AppColor.grey999.withOpacity(.5),
-                            spreadRadius: 0, // No spread
-                            blurRadius: 7, // Soft blur
-                            offset:
-                                const Offset(0, 5), // Shadow only at the bottom
-                          ),
-                        ], color: AppColor.primary),
-                        height: context.height * .45,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            itemCount: 15,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: CustomTile(
-                                  isHistory: false,
-                                  onTap: () {},
-                                  time: "1h ago",
-                                  title: "20 People near you",
-                                  leadingIcon: '',
-                                  subtitle: 'Check out their profile.',
-                                ),
-                              );
-                            },
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Column(
+                                children: [
+                                  CustomTile(
+                                    isHistory: false,
+                                    type: "search",
+                                    onTap: () {},
+                                    time: "1h ago",
+                                    title: "20 People near you",
+                                    leadingIcon: "",
+                                    subtitle: 'Check out their profile.',
+                                  ),
+                                  CustomTile(
+                                    isHistory: false,
+                                    type: "",
+                                    onTap: () {},
+                                    time: "1h ago",
+                                    title: "Someone viewed your profile",
+                                    leadingIcon: "",
+                                    subtitle: 'Check out their profile.',
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
