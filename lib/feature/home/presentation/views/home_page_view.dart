@@ -32,7 +32,7 @@ class HomePageView extends ConsumerWidget {
                   ),
                 ),
 
-                height: MediaQuery.sizeOf(context).height * 0.32,
+                height: MediaQuery.sizeOf(context).height * 0.29,
                 // color: Colors.green,
                 child: Padding(
                   padding:
@@ -125,19 +125,19 @@ class HomePageView extends ConsumerWidget {
               // Image.asset(Assets.map)
             ],
           ),
-          Positioned(
-              right: 0,
-              bottom: 100.h,
-              child: GestureDetector(
-                onTap: () {
-                  ref.read(isMapView.notifier).state =
-                      !ref.read(isMapView.notifier).state;
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CustomMapViewIcon(),
-                ),
-              ))
+          // Positioned(
+          //     right: 0,
+          //     bottom: 100.h,
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         ref.read(isMapView.notifier).state =
+          //             !ref.read(isMapView.notifier).state;
+          //       },
+          //       child: const Padding(
+          //         padding: EdgeInsets.all(8.0),
+          //         child: CustomMapViewIcon(),
+          //       ),
+          //     ))
         ],
       ),
     );

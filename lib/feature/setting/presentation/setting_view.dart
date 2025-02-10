@@ -48,16 +48,20 @@ class SettingView extends StatelessWidget {
                   dottedContainer(
                       context, SubscriptionModel(Points: 0, daysLeft: 27)),
                   35.verticalSpace,
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      AppText(
+
+                  //SETTING TEXT
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 11.w),
+                      child: AppText(
                         fontFamily: Constants.fontFamily,
                         text: AppString.settings,
                         color: AppColor.black000000,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w500,
                       ),
-                    ],
+                    ),
                   ),
                   8.verticalSpace,
                   CustomTile(
@@ -68,11 +72,12 @@ class SettingView extends StatelessWidget {
                     onTap: () => toNamed(context, Routes.editProfile),
                   ),
                   10.verticalSpace,
-                  const CustomTile(
+                  CustomTile(
                     leadingIcon: Assets.add,
                     title: AppString.inviteFriends,
                     subtitle: AppString.get15points,
                     trailingIcon: Assets.iconArrowRight,
+                    onTap: () {},
                   ),
                   10.verticalSpace,
                   CustomTile(
@@ -107,6 +112,8 @@ class SettingView extends StatelessWidget {
                     onTap: () => toNamed(context, Routes.contactUs),
                   ),
                   10.verticalSpace,
+
+                  //HOW IT WORKS
                   const CustomTile(
                     leadingIcon: Assets.iconHowItWorks,
                     title: AppString.howItWorks,
@@ -122,15 +129,21 @@ class SettingView extends StatelessWidget {
                     onTap: () => toNamed(context, Routes.deleteAccount),
                   ),
                   15.verticalSpace,
-                  const CommonAppBtn(
-                    title: AppString.logOut,
-                    textColor: AppColor.redE40505,
-                    height: 60,
-                    borderColor: AppColor.redE40505,
-                    borderWidth: 1,
-                    backGroundColor: AppColor.redF8E2E2,
+
+                  //LOGOUT BUTTON
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
+                    child: const CommonAppBtn(
+                      title: AppString.logOut,
+                      textColor: AppColor.redE40505,
+                      height: 60,
+                      borderColor: AppColor.redE40505,
+                      borderWidth: 1,
+                      backGroundColor: AppColor.redF8E2E2,
+                    ),
                   ),
-                  55.verticalSpace
+                  90.verticalSpace
                 ],
               ),
             ),
@@ -203,7 +216,7 @@ Widget dottedContainer(BuildContext context, SubscriptionModel model) {
     child: Container(
       padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
       width: context.width * 0.9,
-      height: 80.h,
+      height: 70.h,
       child: Row(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [

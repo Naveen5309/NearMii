@@ -1,9 +1,19 @@
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
+import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
+import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
+import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
+import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -31,20 +41,24 @@ class ProfileModel {
   });
 }
 
-class ProfileCard extends StatefulWidget {
+class ProfileCard extends ConsumerStatefulWidget {
   const ProfileCard({super.key});
 
   @override
-  _ProfileCardState createState() => _ProfileCardState();
+  ConsumerState<ProfileCard> createState() => _ProfileCardState();
 }
 
-class _ProfileCardState extends State<ProfileCard> {
+class _ProfileCardState extends ConsumerState<ProfileCard> {
   ProfileModel? profile;
 
   @override
   void initState() {
     super.initState();
     fetchProfileData();
+    Future.microtask(() {
+      final notifier = ref.read(loginProvider.notifier);
+      notifier.getSocialPlatform();
+    });
   }
 
   void fetchProfileData() {
@@ -67,91 +81,215 @@ class _ProfileCardState extends State<ProfileCard> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(loginProvider);
+    final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.listen(
+      loginProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.socialMedia) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess &&
+            next.authType == AuthType.socialMedia) {
+          // toast(msg: AppString.loginSuccess, isError: false);
+          back(context);
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is AuthApiFailed &&
+            next.authType == AuthType.socialMedia) {
+          back(context);
+          // toast(msg: next.error);
+        }
+      },
+    );
+
     return Scaffold(
-        body: profile == null
-            ? const CircularProgressIndicator()
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                // height: context.height / .2,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 65),
-                decoration: BoxDecoration(
-                  // color: Colors.green,
-                  image: const DecorationImage(
-                      image: AssetImage(Assets.background), fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      spreadRadius: 2,
+        body: SingleChildScrollView(
+      child: Column(
+        children: [
+          //UPPER SECTION
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.only(
+              left: 12.w,
+              right: 12.w,
+              top: context.height * .1,
+              bottom: context.height * .025,
+            ),
+            decoration: const BoxDecoration(
+              // color: Colors.green,
+              image: DecorationImage(
+                  image: AssetImage(Assets.background), fit: BoxFit.cover),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10.w),
+                    child: const CommonBackBtn(
+                      color: AppColor.primary,
                     ),
-                  ],
+                  ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                15.verticalSpace,
+
+                //PROFILE SECTION
+                Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xff69DDA5),
+                    ),
+                    padding: const EdgeInsets.all(5),
+
+                    //profile pic
+                    child: CustomCacheNetworkImage(
+                      img: '',
+                      imageRadius: 150,
+                      height: 95.w,
+                      width: 95.w,
+                    )),
+                10.verticalSpace,
+
+                //NAME
+                AppText(
+                  color: AppColor.whiteFFFFFF,
+                  text: profile!.name,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                5.verticalSpace,
+
+                //DESIGNATION
+                AppText(
+                  text: profile!.designation,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                  color: AppColor.whiteFFFFFF.withOpacity(.8),
+                ),
+                25.verticalSpace,
+
+                //DESCRIPTION
+
+                AppText(
+                    text: profile!.description,
+                    textAlign: TextAlign.center,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.whiteFFFFFF.withOpacity(.8)),
+                20.verticalSpace,
+
+                //CHIPS
+
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  runSpacing: 8,
+                  spacing: 6,
                   children: [
-                    const Row(
-                      children: [
-                        CommonBackBtn(
-                          color: AppColor.primary,
-                        ),
-                      ],
-                    ),
-                    15.verticalSpace,
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xff69DDA5),
-                      ),
-                      padding: const EdgeInsets.all(5),
-                      child: Container(
-                        width: 80.w,
-                        height: 80.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(profile!.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    AppText(
-                      color: AppColor.whiteFFFFFF,
-                      text: profile!.name,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    AppText(
-                      text: profile!.designation,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
-                      color: AppColor.whiteFFFFFF.withOpacity(.8),
-                    ),
-                    const SizedBox(height: 20),
-                    AppText(
-                        text: profile!.description,
-                        textAlign: TextAlign.center,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.whiteFFFFFF.withOpacity(.8)),
-                    const SizedBox(height: 20),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        InfoChip(label: 'Social', value: profile!.social),
-                        InfoChip(label: 'Contact', value: profile!.contact),
-                        InfoChip(label: 'Portfolio', value: profile!.portfolio),
-                        InfoChip(label: 'Finance', value: profile!.finance),
-                        InfoChip(label: 'Business', value: profile!.business),
-                      ],
-                    ),
+                    InfoChip(label: 'Social', value: profile!.social),
+                    InfoChip(label: 'Contact', value: profile!.contact),
+                    InfoChip(label: 'Portfolio', value: profile!.portfolio),
+                    InfoChip(label: 'Finance', value: profile!.finance),
+                    InfoChip(label: 'Business', value: profile!.business),
                   ],
                 ),
-              ));
+              ],
+            ),
+          ),
+
+          //SEARCH FIELD
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: context.width * .05,
+                vertical: context.height * .02),
+            child: const CustomSearchBarWidget(),
+          ),
+
+          //HIDE ALL
+
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: context.width * .05,
+                vertical: context.height * .02),
+            child: hideAllSection(),
+          ),
+
+          //Social media
+
+          //SOCIAL MEDIA
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ProfileGridView(
+              title: AppString.socialMedia,
+              socialMedia: loginNotifier.socialMediaList,
+            ),
+          ),
+        ],
+      ),
+    ));
   }
+}
+
+// HIDE ALL SECTION
+
+Widget hideAllSection() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText(
+            text: AppString.hideAll,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+          ),
+          AppText(
+            text: "Lorem ipsum dolor sit amet consectetur.",
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            color: AppColor.grey999,
+          ),
+        ],
+      ),
+
+      //SWITCH BUTTON
+
+      ToggleSwitchBtn(
+        onToggled: (isToggled) {},
+      ),
+
+      // SizedBox(
+      //   height: 30, //set desired REAL HEIGHT
+      //   width: 50, //set desired REAL WIDTH
+      //   child: Transform.scale(
+      //     transformHitTests: false,
+      //     scale: .8,
+      //     child: CupertinoSwitch(
+      //       value: true,
+      //       onChanged: (value) {},
+      //       activeColor: Colors.green,
+      //     ),
+      //   ),
+      // ),
+    ],
+  );
 }
 
 class InfoChip extends StatelessWidget {
@@ -164,16 +302,32 @@ class InfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(4),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: AppColor.green34D185,
+        color: AppColor.whiteFFFFFF.withOpacity(.2),
         // border: BorderSide.none,
       ),
-      child: AppText(
-        color: AppColor.whiteFFFFFF,
-        text: '$label: $value',
-        fontSize: 13.sp,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          //LABEL
+          AppText(
+            color: AppColor.whiteFFFFFF,
+            text: '$label: ',
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+          ),
+
+          //VALUE
+
+          AppText(
+            color: AppColor.whiteFFFFFF,
+            text: value,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w700,
+          ),
+        ],
       ),
     );
   }

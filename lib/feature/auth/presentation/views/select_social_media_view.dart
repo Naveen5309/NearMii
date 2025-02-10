@@ -70,6 +70,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
         }
       },
     );
+
     return Scaffold(
       body: BgImageContainer(
           bgImage: Assets.icProfileBg,
