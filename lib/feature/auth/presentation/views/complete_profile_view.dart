@@ -136,6 +136,13 @@ class CompleteProfileView extends ConsumerWidget {
           controller: TextEditingController(),
           labelText: AppString.designation,
         ),
+        //Bio
+        CustomLabelTextField(
+          prefixIcon: Assets.icCheck,
+          controller: TextEditingController(),
+          labelText: AppString.bio,
+        ),
+
         //phone number
 
         Padding(

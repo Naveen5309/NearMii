@@ -158,6 +158,6 @@ class Assets {
   static const String icCheck = 'assets/icons/check.svg';
   static const String camera = 'assets/icons/camera.svg';
   static const String add = 'assets/icons/add_icon.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
-  // static const String icLock = 'assets/icons/lock.svg';
+  static const String checkTrue = 'assets/icons/check_true.svg';
+  static const String checkFalse = 'assets/icons/check_false.svg';
 }

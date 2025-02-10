@@ -141,6 +141,13 @@ class CompleteEditProfile extends StatelessWidget {
           controller: TextEditingController(),
           labelText: AppString.designation,
         ),
+        //Bio
+        CustomLabelTextField(
+          prefixIcon: Assets.icCheck,
+          controller: TextEditingController(),
+          labelText: AppString.bio,
+        ),
+
         //phone number
 
         CustomPhoneNumber(

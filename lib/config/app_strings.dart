@@ -144,7 +144,7 @@ abstract final class AppString {
   static const String setRadius = "Set Radius";
   static const String meter = "50 M";
   static const String inviteFriend = "Invite Friend & Earn Points";
-  //  static const String localDirectory="appname";
+  static const String bio = "Bio";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
