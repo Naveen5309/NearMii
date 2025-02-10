@@ -24,4 +24,5 @@ class Routes {
   static const String changePassword = '/changePassword';
 
   static const String deleteAccount = '/deleteAccount';
+  static const String share = '/share';
 }

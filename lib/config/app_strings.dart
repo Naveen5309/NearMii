@@ -124,7 +124,7 @@ abstract final class AppString {
   static const String cancel = "Cancel";
   static const String save = "Save";
   static const String done = "Done";
-  //  static const String localDirectory="appname";
+  static const String copyReferralCode = "Copy Referral Code";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   static const String saveText = "Save";
@@ -143,7 +143,7 @@ abstract final class AppString {
   static const String portfolio = "Portfolio";
   static const String setRadius = "Set Radius";
   static const String meter = "50 M";
-  //  static const String localDirectory="appname";
+  static const String inviteFriend = "Invite Friend & Earn Points";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

@@ -156,7 +156,7 @@ class BottomNavigationView extends ConsumerWidget {
     const HomePageView(),
     const HistoryView(),
     const NotificationView(),
-    SettingView()
+    const SettingView()
   ];
 
   Widget navItems(

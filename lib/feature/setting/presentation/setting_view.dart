@@ -15,6 +15,7 @@ import 'package:NearMii/feature/home/presentation/history/presentation/complete_
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/share_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,11 +69,25 @@ class SettingView extends StatelessWidget {
                     onTap: () => toNamed(context, Routes.editProfile),
                   ),
                   10.verticalSpace,
-                  const CustomTile(
+                  CustomTile(
                     leadingIcon: Assets.add,
                     title: AppString.inviteFriends,
                     subtitle: AppString.get15points,
                     trailingIcon: Assets.iconArrowRight,
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      builder: (context) {
+                        return InviteFriendBottomSheet(
+                          title: AppString.inviteFriend,
+                          subtitle:
+                              "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
+                        );
+                      },
+                    ),
                   ),
                   10.verticalSpace,
                   CustomTile(
