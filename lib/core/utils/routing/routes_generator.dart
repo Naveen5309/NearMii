@@ -46,7 +46,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const AuthView());
 
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => const LoginView());
+        return MaterialPageRoute(builder: (_) => LoginView());
       case Routes.forgetPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
       case Routes.otpVerify:

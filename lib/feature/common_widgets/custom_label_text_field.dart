@@ -13,6 +13,7 @@ class CustomLabelTextField extends StatefulWidget {
   final String? prefixIcon;
   final Widget? prefixWidget;
 
+  final bool? isObscure;
   final String? suffixIcon;
   final bool? readOnly;
   final VoidCallback? onTapOnSuffixIcon;
@@ -37,7 +38,8 @@ class CustomLabelTextField extends StatefulWidget {
       this.prefixIcon,
       this.maxLines,
       this.onTap,
-      this.radius});
+      this.radius,
+      this.isObscure});
 
   @override
   _CustomLabelTextFieldState createState() => _CustomLabelTextFieldState();
@@ -81,11 +83,13 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
         clipBehavior: Clip.none,
         children: [
           TextField(
+            obscureText: widget.isObscure ?? false,
+            obscuringCharacter: "*",
             onTapOutside: (event) {
               _focusNode.unfocus();
             },
             onTap: widget.onTap,
-            maxLines: widget.maxLines,
+            maxLines: widget.maxLines ?? 1,
             readOnly: widget.readOnly ?? false,
             textAlign: TextAlign.start, // Ensures text aligns on the left
             cursorColor: AppColor.appThemeColor, // Set cursor color here

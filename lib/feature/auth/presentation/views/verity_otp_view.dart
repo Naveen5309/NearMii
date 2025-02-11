@@ -2,19 +2,24 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 
-class VerityOtpView extends StatelessWidget {
+class VerityOtpView extends ConsumerWidget {
   const VerityOtpView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final otpValidatorNotifier = ref.watch(loginProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -70,6 +75,8 @@ class VerityOtpView extends StatelessWidget {
                   ),
 
                   Pinput(
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    controller: otpValidatorNotifier.otpController,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     focusedPinTheme: PinTheme(
@@ -161,7 +168,11 @@ class VerityOtpView extends StatelessWidget {
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      toNamed(context, Routes.resetPassword);
+                      final isValidOtp = otpValidatorNotifier.validateOtp();
+                      print(isValidOtp);
+                      if (isValidOtp) {
+                        toNamed(context, Routes.resetPassword);
+                      }
                     },
                     title: AppString.submit,
                     textSize: 16.sp,

@@ -9,6 +9,7 @@ abstract class HiveConst {
   static const String authToken = 'authToken';
   static const String isProfileComplete = 'isProfileComplete';
 
+  static const String isLogin = 'isLogin';
 }
 
 abstract class LocalStorage {
@@ -21,6 +22,8 @@ abstract class LocalStorage {
   String? getToken();
 
   Future<void> saveToken(String token);
+  Future<void> saveIsLogin(bool isLogin);
+
   Future<void> saveIsProfileComplete(int isComplete);
   int? getIsProfileComplete();
 }
@@ -32,13 +35,11 @@ class HiveStorageImp extends LocalStorage {
     required this.userBox,
   });
 
-
   @override
   Future<void> saveToken(String token) async {
     await userBox.put(HiveConst.authToken, token);
     printLog("==============saveToken==========");
   }
-
 
   @override
   String? getToken() {
@@ -72,8 +73,8 @@ class HiveStorageImp extends LocalStorage {
   }
 
   @override
-  Future<void> saveIsProfileComplete(int isComplete)async {
-   await userBox.put(HiveConst.isProfileComplete, isComplete);
+  Future<void> saveIsProfileComplete(int isComplete) async {
+    await userBox.put(HiveConst.isProfileComplete, isComplete);
   }
 
   @override
@@ -82,5 +83,8 @@ class HiveStorageImp extends LocalStorage {
     return isComplete;
   }
 
-
+  @override
+  Future<void> saveIsLogin(bool isLogin) async {
+    await userBox.put(HiveConst.isLogin, isLogin);
+  }
 }

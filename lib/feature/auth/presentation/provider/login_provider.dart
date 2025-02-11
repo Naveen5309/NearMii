@@ -27,3 +27,8 @@ final loginProvider =
   final authUseCase = ref.watch(authUseCaseProvider);
   return LoginNotifier(authUseCase: authUseCase);
 });
+
+final isPswdVisible =
+    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
+final isConfirmPswdVisible =
+    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");

@@ -1,20 +1,24 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
-class ForgotPasswordView extends StatelessWidget {
+class ForgotPasswordView extends ConsumerWidget {
   const ForgotPasswordView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final forgetPasswordNotifier = ref.watch(loginProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -54,12 +58,17 @@ class ForgotPasswordView extends StatelessWidget {
 
                   //Field forms
 
-                  formsFieldsSection(),
+                  formsFieldsSection(forgetPasswordNotifier),
                   const Spacer(),
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      toNamed(context, Routes.otpVerify);
+                      final isForget =
+                          forgetPasswordNotifier.validateForgetPassword();
+                      print(isForget);
+                      if (isForget) {
+                        toNamed(context, Routes.otpVerify);
+                      }
                     },
                     title: AppString.send,
                     textSize: 16.sp,
@@ -75,13 +84,13 @@ class ForgotPasswordView extends StatelessWidget {
     );
   }
 
-  Widget formsFieldsSection() {
+  Widget formsFieldsSection(LoginNotifier forgetPasswordNotifier) {
     return Column(
       children: [
         //EMAIL ADDRESS
         CustomLabelTextField(
           prefixIcon: Assets.icUser,
-          controller: TextEditingController(),
+          controller: forgetPasswordNotifier.emailController,
           labelText: AppString.emailAddress,
         ),
       ],

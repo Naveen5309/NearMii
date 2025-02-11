@@ -9,14 +9,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
+    return const ScreenUtilInit(
+      designSize: Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,36 +46,40 @@ class HomeScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 5),
                       child: AppText(
                           text: "Report",
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w700),
                     ),
-                    CustomBottomSheet(
+                    const CustomBottomSheet(
                       title: AppString.theyArePretending,
                       check: true,
                     ),
-                    CustomBottomSheet(
+                    const CustomBottomSheet(
                       title: AppString.theyAreUnderTheAge,
                       check: false,
                     ),
-                    CustomBottomSheet(
+                    const CustomBottomSheet(
                       title: AppString.violenceAndDangerous,
                       check: false,
                     ),
-                    CustomBottomSheet(
+                    const CustomBottomSheet(
                       title: AppString.hateSpeech,
                       check: false,
                     ),
-                    CustomBottomSheet(
+                    const CustomBottomSheet(
                       title: AppString.nudity,
                       check: false,
+                    ),
+                    const SizedBox(
+                      height: 12,
                     ),
                     Row(
                       children: [
                         const SizedBox(
-                          width: 15,
+                          width: 5,
                         ),
                         AppText(
                             text: "Something Else",
@@ -84,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                       enableBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      maxLines: 4,
+                      minLines: 2,
                       fillColor: AppColor.whiteF0F5FE,
                       hintText: "Lorem ipsum dolor sit......",
                     ),
@@ -105,7 +113,8 @@ class CustomBottomSheet extends StatelessWidget {
   final String title;
   final bool check;
 
-  CustomBottomSheet({
+  const CustomBottomSheet({
+    super.key,
     required this.title,
     required this.check,
   });
@@ -113,7 +122,7 @@ class CustomBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(7),
+      padding: const EdgeInsets.all(5),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),

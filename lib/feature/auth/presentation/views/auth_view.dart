@@ -24,7 +24,10 @@ class AuthView extends StatelessWidget {
                 height: totalHeight,
               ),
               //Logo
-              SizedBox(height: 25.h),
+
+              SizedBox(
+                height: context.height * 0.05,
+              ),
               // const Text("APPlOGO"),
 
               Padding(
