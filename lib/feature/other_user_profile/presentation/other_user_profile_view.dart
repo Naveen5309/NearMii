@@ -1,5 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer';
-
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -15,21 +16,19 @@ import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
 
-class MyProfileView extends ConsumerStatefulWidget {
-  const MyProfileView({super.key});
+class OtherUserProfileView extends ConsumerStatefulWidget {
+  const OtherUserProfileView({super.key});
 
   @override
-  ConsumerState<MyProfileView> createState() => _MyProfileViewState();
+  ConsumerState<OtherUserProfileView> createState() =>
+      _OtherUserProfileViewState();
 }
 
-class _MyProfileViewState extends ConsumerState<MyProfileView> {
+class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
   ProfileModel? profile;
 
   @override
@@ -42,6 +41,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     });
   }
 
+//FETCH PROFILE DATA
   void fetchProfileData() {
     // Simulating data fetch from an API or database
     setState(() {
@@ -128,11 +128,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             // ),
             // collapsedBarHeight: 60,
             animationDuration: const Duration(milliseconds: 1),
-            onCollapseStateChanged: (isCollapsed, scrollingOffset, maxExtent) {
-              log("isCollapsed $isCollapsed");
-              log("scrollingOffset $scrollingOffset");
-              log("maxExtent $maxExtent");
-            },
+            onCollapseStateChanged:
+                (isCollapsed, scrollingOffset, maxExtent) {},
             collapsedBackgroundColor: AppColor.btnColor,
             expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
             backdropWidget: Container(
@@ -204,7 +201,6 @@ Widget appBarWidgetSection({required BuildContext context}) {
 }
 
 //BOTTOM SECTION
-
 Widget bottomSection(
     {required LoginNotifier loginNotifier, required BuildContext context}) {
   return Container(
@@ -214,12 +210,11 @@ Widget bottomSection(
       padding: EdgeInsets.symmetric(horizontal: context.width * .04),
       child: Column(children: [
         const CustomSearchBarWidget(),
-        hideAllSection(),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ProfileGridView(
-            isMyProfile: true,
             title: AppString.socialMedia,
+            isMyProfile: false,
             socialMedia: loginNotifier.socialMediaList,
           ),
         )
@@ -229,7 +224,6 @@ Widget bottomSection(
 }
 
 //PROFILE SECTION
-
 Widget profileSection(
     {required BuildContext context, required ProfileModel profile}) {
   return Column(
@@ -237,21 +231,36 @@ Widget profileSection(
           MainAxisSize.min, // Ensures column takes only necessary space
       children: [
         SizedBox(height: context.height * .1),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              back(context);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: context.width * .05),
-              child: SvgPicture.asset(
-                Assets.icBackBtn,
-                colorFilter:
-                    const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            InkWell(
+              onTap: () {
+                back(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: context.width * .05),
+                child: SvgPicture.asset(
+                  Assets.icBackBtn,
+                  colorFilter:
+                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                ),
               ),
             ),
-          ),
+            InkWell(
+              onTap: () {
+                //OPEN REPORT
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: context.width * .05),
+                child: SvgPicture.asset(
+                  Assets.icMore,
+                  colorFilter:
+                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(height: context.height * .02),
         Container(

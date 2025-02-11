@@ -75,12 +75,10 @@ void pushRemoveUtil(BuildContext context, Widget widget) {
   );
 }
 
-void offAllNamed(BuildContext context, String routesName) {
+void offAllNamed(BuildContext context, String routesName, {Object? args}) {
   Navigator.pushNamedAndRemoveUntil(
-    context,
-    routesName,
-    (Route<dynamic> route) => false,
-  );
+      context, routesName, (Route<dynamic> route) => false,
+      arguments: args);
 }
 
 void toNamed(BuildContext context, String routesName, {Object? args}) {

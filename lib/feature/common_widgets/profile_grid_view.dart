@@ -8,7 +8,6 @@ import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
-import 'package:NearMii/feature/common_widgets/social_media_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,11 +15,13 @@ import 'package:flutter_svg/svg.dart';
 class ProfileGridView extends StatelessWidget {
   final String title;
   final List<PlatformData> socialMedia;
+  final bool isMyProfile;
 
   const ProfileGridView({
     super.key,
     required this.title,
     required this.socialMedia,
+    required this.isMyProfile,
   });
 
   @override
@@ -76,101 +77,102 @@ class ProfileGridView extends StatelessWidget {
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
                         onTap: () {
-                          showCustomBottomSheet(
-                            context: context,
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    AppText(
-                                      text: socialMedia[pIndex].name ?? '',
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    InkWell(
-                                        borderRadius: BorderRadius.circular(50),
-                                        onTap: () {
-                                          back(context);
-                                        },
-                                        child: SvgPicture.asset(
-                                            Assets.icCloseCircle))
-                                  ],
-                                ),
-                                // 10.verticalSpace,
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: context.height * .03),
-                                  child: CustomLabelTextField(
-                                      labelText: " https://youtube/username",
-                                      controller: TextEditingController(),
-                                      prefixWidget: CustomCacheNetworkImage(
-                                          img: ApiConstants.socialIconBaseUrl +
-                                              socialMedia[pIndex].icon!,
-                                          width: 25,
-                                          height: 25,
-                                          imageRadius: 10)),
-                                ),
-
-                                /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: context.height * .02),
-                                  child: Row(
+                          isMyProfile
+                              ? showCustomBottomSheet(
+                                  context: context,
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      //GO BACK
-                                      Expanded(
-                                        child: CommonAppBtn(
-                                          textColor: AppColor.btnColor,
-                                          backGroundColor: AppColor
-                                              .green00C56524
-                                              .withOpacity(.14),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          title: AppString.cancel,
-                                          width: context.width,
-                                        ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text:
+                                                socialMedia[pIndex].name ?? '',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              onTap: () {
+                                                back(context);
+                                              },
+                                              child: SvgPicture.asset(
+                                                  Assets.icCloseCircle))
+                                        ],
                                       ),
-                                      10.horizontalSpace,
+                                      // 10.verticalSpace,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: context.height * .03),
+                                        child: CustomLabelTextField(
+                                            labelText:
+                                                " https://youtube/username",
+                                            controller: TextEditingController(),
+                                            prefixWidget:
+                                                CustomCacheNetworkImage(
+                                                    img: ApiConstants
+                                                            .socialIconBaseUrl +
+                                                        socialMedia[pIndex]
+                                                            .icon!,
+                                                    width: 25,
+                                                    height: 25,
+                                                    imageRadius: 10)),
+                                      ),
 
-                                      //SEND INVITE
-                                      Expanded(
-                                        child: CommonAppBtn(
-                                          onTap: () {
-                                            // Navigator.pop(context);
-                                            // Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //       builder: (context) =>
-                                            //           const TravellersListView(),
-                                            //     ));
-                                          },
-                                          title: AppString.save,
-                                          width: context.width,
+                                      /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: context.height * .02),
+                                        child: Row(
+                                          children: [
+                                            //GO BACK
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                textColor: AppColor.btnColor,
+                                                backGroundColor: AppColor
+                                                    .green00C56524
+                                                    .withOpacity(.14),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                title: AppString.cancel,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                            10.horizontalSpace,
+
+                                            //SEND INVITE
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                onTap: () {},
+                                                title: AppString.save,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
+                                      10.verticalSpace,
                                     ],
                                   ),
-                                ),
-                                10.verticalSpace,
-                              ],
-                            ),
-                          );
+                                )
+                              : null;
                         },
                         child: ProfileSocialMedia(
+                          isMyProfile: isMyProfile,
                           index: pIndex,
                           icon: socialMedia[pIndex].icon ?? '',
                           name: socialMedia[pIndex].name ?? '',
                         ));
                   },
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, // 3 columns
-                    crossAxisSpacing: 20,
+                    crossAxisSpacing: isMyProfile ? 50 : 56,
                     mainAxisSpacing: 20,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: isMyProfile ? .6 : .7,
                   ),
                 ))
           ],

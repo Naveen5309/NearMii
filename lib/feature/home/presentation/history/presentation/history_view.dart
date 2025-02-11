@@ -1,4 +1,5 @@
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_history_tile.dart';
@@ -53,14 +54,17 @@ class _HistoryViewState extends State<HistoryView> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           itemCount: 15,
                           itemBuilder: (context, index) {
-                            return const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5),
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
                               child: CustomTile(
                                 isHistory: true,
                                 time: "1h ago",
                                 title: "NAME",
                                 leadingIcon: '',
                                 subtitle: 'Designation',
+                                onTap: () {
+                                  toNamed(context, Routes.otherUserProfile);
+                                },
                               ),
                             );
                           },

@@ -32,6 +32,7 @@ dependencies:
   cached_network_image: ^3.4.1
   dropdown_button2: ^2.3.9
   syncfusion_flutter_sliders: ^27.2.5
+  sliver_snap: ^2.0.0
 
 dev_dependencies:
   flutter_test:

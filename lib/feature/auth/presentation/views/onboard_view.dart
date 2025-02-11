@@ -13,7 +13,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
-  const OnboardingView({super.key});
+  final bool? isFromSetting;
+  const OnboardingView({super.key, this.isFromSetting = false});
 
   @override
   ConsumerState<OnboardingView> createState() => _OnboardingViewState();
@@ -163,7 +164,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                           ref.read(onboardIndicatorIndex.notifier).state = 2;
                           controller.jumpToPage(2);
                         } else {
-                          offAllNamed(context, Routes.auth);
+                          if (widget.isFromSetting!) {
+                            back(context);
+                          } else {
+                            offAllNamed(context, Routes.auth);
+                          }
                         }
                       },
                       title: onboardIndex != 2

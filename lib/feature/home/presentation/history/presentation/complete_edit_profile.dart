@@ -1,9 +1,9 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
@@ -69,7 +69,9 @@ class CompleteEditProfile extends StatelessWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        toNamed(context, Routes.selectSocialMedia);
+                        showCustomBottomSheet(
+                            context: context,
+                            content: updateSuccessWidget(context: context));
                       },
                       title: AppString.update,
                       textSize: 16.sp,
@@ -86,6 +88,51 @@ class CompleteEditProfile extends StatelessWidget {
     );
   }
 
+  //Update succcess bottom sheet CONTENT
+
+  Widget updateSuccessWidget({required BuildContext context}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SvgPicture.asset(Assets.bottomNav),
+        //logo
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: context.height * .05),
+          child: SvgPicture.asset(Assets.icSuccess),
+        ),
+
+        //profile update success
+
+        AppText(
+          text: AppString.profileUpdateSuccess,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w500,
+        ),
+
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: context.height * .02),
+          child: AppText(
+              textAlign: TextAlign.center,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColor.grey999,
+              text:
+                  "Lorem ipsum dolor sit amet consectetur. Semper\nvel interdum et posuere venenatis."),
+        ),
+
+        //Button
+
+        CommonAppBtn(
+          title: AppString.continu,
+          textSize: 16.sp,
+          onTap: () {
+            back(context);
+          },
+        )
+      ],
+    );
+  }
+
   //PROFILE SECTION
 
   Widget profileSection() {
@@ -97,7 +144,7 @@ class CompleteEditProfile extends StatelessWidget {
           child: Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColor.greenC5EDD9,
                 ),

@@ -121,11 +121,14 @@ class SettingView extends StatelessWidget {
                   10.verticalSpace,
 
                   //HOW IT WORKS
-                  const CustomTile(
+                  CustomTile(
                     leadingIcon: Assets.iconHowItWorks,
                     title: AppString.howItWorks,
                     subtitle: AppString.checkHowOur,
                     trailingIcon: Assets.iconArrowRight,
+                    onTap: () {
+                      toNamed(context, Routes.onboard, args: true);
+                    },
                   ),
                   10.verticalSpace,
                   CustomTile(

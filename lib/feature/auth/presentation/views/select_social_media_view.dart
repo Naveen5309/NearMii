@@ -149,7 +149,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.login);
+                        offAllNamed(context, Routes.bottomNavBar);
                       },
                       title: AppString.next,
                       textSize: 16.sp,

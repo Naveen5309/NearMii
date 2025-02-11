@@ -76,11 +76,10 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(color: Colors.white),
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Stack(
         clipBehavior: Clip.none,
-        children: <Widget>[
+        children: [
           TextField(
             onTapOutside: (event) {
               _focusNode.unfocus();

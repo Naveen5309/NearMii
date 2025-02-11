@@ -41,7 +41,7 @@ class _ToggleSwitchBtnState extends State<ToggleSwitchBtn> {
         curve: Curves.easeOut,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: isToggled ? Colors.grey.shade300 : AppColor.btnColor,
+          color: isToggled ? AppColor.greyD4D4D4 : AppColor.btnColor,
         ),
         child: Container(
           width: size - innerPadding * 2,

@@ -16,6 +16,7 @@ import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart
 import 'package:NearMii/feature/auth/presentation/views/select_social_media_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/signup_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/verity_otp_view.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/other_user_profile_view.dart';
 import 'package:NearMii/feature/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import '../../../feature/home/presentation/views/home_page_view.dart';
@@ -34,7 +35,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => BottomNavigationView());
 
       case Routes.onboard:
-        return MaterialPageRoute(builder: (_) => const OnboardingView());
+        final args = settings.arguments as bool;
+
+        return MaterialPageRoute(
+            builder: (_) => OnboardingView(
+                  isFromSetting: args,
+                ));
 
       case Routes.auth:
         return MaterialPageRoute(builder: (_) => const AuthView());
@@ -52,7 +58,10 @@ class RouteGenerator {
       case Routes.selectSocialMedia:
         return MaterialPageRoute(builder: (_) => const SelectSocialMediaView());
       case Routes.profile:
-        return MaterialPageRoute(builder: (_) => const ProfileCard());
+        return MaterialPageRoute(builder: (_) => const MyProfileView());
+
+      case Routes.otherUserProfile:
+        return MaterialPageRoute(builder: (_) => const OtherUserProfileView());
       case Routes.editProfile:
         return MaterialPageRoute(builder: (_) => const CompleteEditProfile());
       case Routes.setRadius:

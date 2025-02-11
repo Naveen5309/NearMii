@@ -10,13 +10,14 @@ class ProfileSocialMedia extends StatelessWidget {
   final String icon;
   final String name;
   final int index;
+  final bool isMyProfile;
 
-  const ProfileSocialMedia({
-    super.key,
-    required this.icon,
-    required this.name,
-    required this.index,
-  });
+  const ProfileSocialMedia(
+      {super.key,
+      required this.icon,
+      required this.name,
+      required this.index,
+      required this.isMyProfile});
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +54,15 @@ class ProfileSocialMedia extends StatelessWidget {
             color: AppColor.black000000.withOpacity(.64),
           ),
         ),
-        ToggleSwitchBtn(
-          onToggled: (bool isToggled) {},
-        )
+        10.verticalSpace,
+        isMyProfile
+            ? Align(
+                alignment: Alignment.center,
+                child: ToggleSwitchBtn(
+                  onToggled: (bool isToggled) {},
+                ),
+              )
+            : const SizedBox()
       ],
     );
   }

@@ -28,7 +28,9 @@ class CustomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      borderRadius: BorderRadius.circular(10.0),
+      onTap: onTap,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: isHistory == true
@@ -42,14 +44,14 @@ class CustomTile extends StatelessWidget {
                 ? Assets.searchNotication
                 : Assets.locationNotification),
 
-//Name
+        //Name
         title: AppText(
           text: title,
           fontSize: 14.sp,
           fontWeight: FontWeight.w500,
         ),
 
-//DESIGNATION
+        //DESIGNATION
         subtitle: AppText(
           text: subtitle,
           fontSize: 12.sp,

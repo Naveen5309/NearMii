@@ -17,6 +17,8 @@ class Routes {
   static const String editProfile = '/editProfile';
   static const String setRadius = '/setRadius';
 
+  static const String otherUserProfile = '/otherUserProfile';
+
   static const String termsAndConditions = '/termsAndConditions';
 
   static const String contactUs = '/contactUs';
