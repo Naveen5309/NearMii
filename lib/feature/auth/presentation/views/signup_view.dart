@@ -1,6 +1,8 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
@@ -12,11 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SignUpView extends StatelessWidget {
+class SignUpView extends ConsumerWidget {
   const SignUpView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signUpNotifier = ref.watch(signupProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -62,7 +66,7 @@ class SignUpView extends StatelessWidget {
 
                     //Field forms
 
-                    formsFieldsSection(),
+                    formsFieldsSection(signUpNotifier),
 
                     Padding(
                       padding:
@@ -73,7 +77,10 @@ class SignUpView extends StatelessWidget {
                         children: [
                           Consumer(
                             builder: (context, ref, child) {
+                              final isTrue = ref.watch(checkPrivacy);
+
                               return
+
                                   // final check = ref.watch(checkPrivacy);
                                   // return GestureDetector(
                                   //   onTap: () {
@@ -81,33 +88,42 @@ class SignUpView extends StatelessWidget {
                                   //         !ref.read(checkPrivacy.notifier).state;
                                   //   },
                                   //   child:
-                                  Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 1.0,
-                                          color: AppColor.btnColor,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                        color: AppColor.btnColor,
-                                      ),
-                                      child:
-                                          //  check
-                                          //     ?
+                                  GestureDetector(
+                                onTap: () {
+                                  ref.read(checkPrivacy.notifier).state =
+                                      !isTrue;
+                                },
+                                child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1.0,
+                                        color: isTrue
+                                            ? AppColor.btnColor
+                                            : AppColor.black000000),
+                                    borderRadius: BorderRadius.circular(4.0),
+                                    color: isTrue
+                                        ? AppColor.btnColor
+                                        : AppColor.whiteFFFFFF,
+                                  ),
+                                  child: isTrue
+                                      ? Center(
+                                          child: Icon(
+                                            Icons.check_sharp,
+                                            color: AppColor.primary,
+                                            size: 16
+                                                .sp, // Adjust icon size to fit nicely in the box.
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                  //  check
+                                  //     ?
 
-                                          Center(
-                                        child: Icon(
-                                          Icons.check_sharp,
-                                          color: AppColor.primary,
-                                          size: 16
-                                              .sp, // Adjust icon size to fit nicely in the box.
-                                        ),
-                                      )
-                                      // : const SizedBox()
-                                      // );
-                                      );
+                                  // : const SizedBox()
+                                  // );
+                                ),
+                              );
                             },
                           ),
                           Padding(
@@ -134,7 +150,17 @@ class SignUpView extends StatelessWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.completeProfile);
+                        final isLogin = signUpNotifier.validateSignUp();
+
+                        if (isLogin) {
+                          signUpNotifier.saveIsLogin().then(
+                            (value) {
+                              if (context.mounted) {
+                                offAllNamed(context, Routes.completeProfile);
+                              }
+                            },
+                          );
+                        }
                       },
                       title: AppString.signUp,
                       textSize: 16.sp,
@@ -169,30 +195,47 @@ class SignUpView extends StatelessWidget {
   }
 
 //FORMS FIELDS SECTION
-  Widget formsFieldsSection() {
+  Widget formsFieldsSection(SignupNotifiers signUpNotifier) {
     return Column(
       children: [
         //EMAIL ADDRESS
         CustomLabelTextField(
           prefixIcon: Assets.icUser,
-          controller: TextEditingController(),
+          controller: signUpNotifier.emailController,
           labelText: AppString.emailAddress,
         ),
 
         //PASSWORD
-        CustomLabelTextField(
-          prefixIcon: Assets.icLock,
-          controller: TextEditingController(),
-          labelText: AppString.pswd,
-          suffixIcon: Assets.icEye,
-        ),
+        Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          var isVisible = ref.watch(isPswdVisible);
+          return CustomLabelTextField(
+            isObscure: isVisible,
+            onTapOnSuffixIcon: () {
+              ref.read(isPswdVisible.notifier).state = !isVisible;
+            },
+            prefixIcon: Assets.icLock,
+            controller: signUpNotifier.pswdController,
+            labelText: AppString.pswd,
+            suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
+          );
+        }),
 
         //CONFIRM PASSWORD
-        CustomLabelTextField(
-          prefixIcon: Assets.icLock,
-          controller: TextEditingController(),
-          labelText: AppString.confirmPswd,
-          suffixIcon: Assets.icEyeOff,
+        Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            var isVisible = ref.watch(isPswdConfirmVisible);
+            print("isVisible===>$isVisible");
+            return CustomLabelTextField(
+              onTapOnSuffixIcon: () {
+                ref.read(isPswdConfirmVisible.notifier).state = !isVisible;
+              },
+              isObscure: isVisible,
+              prefixIcon: Assets.icLock,
+              controller: signUpNotifier.confirmPswdController,
+              labelText: AppString.confirmPswd,
+              suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+            );
+          },
         ),
       ],
     );

@@ -1,20 +1,25 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_rich_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends ConsumerWidget {
   const LoginView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -61,7 +66,7 @@ class LoginView extends StatelessWidget {
 
                     //FORMS FIELDS
 
-                    formsFieldsSection(),
+                    formsFieldsSection(loginNotifier),
 
                     //FORGOT PASSWORD
 
@@ -87,7 +92,11 @@ class LoginView extends StatelessWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        offAllNamed(context, Routes.bottomNavBar);
+                        final isLogin = loginNotifier.validateLogin();
+                        print(isLogin);
+                        if (isLogin) {
+                          offAllNamed(context, Routes.bottomNavBar);
+                        }
                       },
                       title: AppString.login,
                       textSize: 16.sp,
@@ -122,20 +131,20 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget formsFieldsSection() {
+  Widget formsFieldsSection(LoginNotifier loginNotifier) {
     return Column(
       children: [
         //EMAIL ADDRESS
         CustomLabelTextField(
           prefixIcon: Assets.icUser,
-          controller: TextEditingController(),
+          controller: loginNotifier.emailController,
           labelText: AppString.emailAddress,
         ),
 
         //PASSWORD
         CustomLabelTextField(
           prefixIcon: Assets.icLock,
-          controller: TextEditingController(),
+          controller: loginNotifier.passwordController,
           labelText: AppString.pswd,
           suffixIcon: Assets.icEye,
         )

@@ -1,20 +1,25 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ResetPasswordView extends StatelessWidget {
+class ResetPasswordView extends ConsumerWidget {
   const ResetPasswordView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final validateCreateNewPassword = ref.watch(loginProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -60,13 +65,18 @@ class ResetPasswordView extends StatelessWidget {
 
                   //Field forms
 
-                  formsFieldsSection(),
+                  formsFieldsSection(validateCreateNewPassword),
                   const Spacer(),
 
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      offAllNamed(context, Routes.login);
+                      final isNewPassword =
+                          validateCreateNewPassword.validateCreateNewPassword();
+                      print(isNewPassword);
+                      if (isNewPassword) {
+                        offAllNamed(context, Routes.login);
+                      }
                     },
                     title: AppString.submit,
                     textSize: 16.sp,
@@ -83,20 +93,20 @@ class ResetPasswordView extends StatelessWidget {
   }
 
 //FORMS FIELDS SECTION
-  Widget formsFieldsSection() {
+  Widget formsFieldsSection(LoginNotifier validateCreateNewPassword) {
     return Column(
       children: [
         //NEW PASSWORD
         CustomLabelTextField(
           prefixIcon: Assets.icLock,
-          controller: TextEditingController(),
+          controller: validateCreateNewPassword.passwordController,
           labelText: AppString.newPswd,
         ),
 
         //CONFIRM PASSWORD
         CustomLabelTextField(
           prefixIcon: Assets.icLock,
-          controller: TextEditingController(),
+          controller: validateCreateNewPassword.confirmPasswordController,
           labelText: AppString.confirmPswd,
         )
       ],

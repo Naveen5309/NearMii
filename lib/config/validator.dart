@@ -1,5 +1,6 @@
-import 'helper.dart';
+import 'package:NearMii/config/app_utils.dart';
 
+import 'helper.dart';
 
 class Validator {
   static final Validator _singleton = Validator._internal();
@@ -13,19 +14,144 @@ class Validator {
   static Validator get instance => _singleton;
 
   var error = "";
-
+//sign up
   bool signUpValidator({
-    required String phoneNumber,
+    required String email,
+    required String password,
+    required String confirmPassword,
   }) {
+    if (email.isEmpty) {
+      error = AppString.pleaseEnterEmailAddress;
+      return false;
+    } else if (!Utils.emailValidation(email)) {
+      error = AppString.pleaseEnterValidEmailAddress;
+      return false;
+    } else if (password.isEmpty) {
+      error = AppString.pleaseEnterPassword;
+      return false;
+    } else if (checkPassword(password)) {
+      error = AppString.passwordShouldBe;
+      return false;
+    } else if (confirmPassword.isEmpty) {
+      error = AppString.pleaseEnterConfirmPassword;
+      return false;
+    } else if (password != confirmPassword) {
+      error = AppString.passwordMismatch;
+      return false;
+    }
+    return true;
+  }
+
+// cpmplete profile
+  bool completeProfileValidator({
+    required String phoneNumber,
+    required String fullName,
+    required String dob,
+    required String designation,
+    required String gender,
+  }) {
+    if (fullName.isEmpty) {
+      error = AppString.pleaseEnterName;
+      return false;
+    }
+    if (designation.isEmpty) {
+      error = AppString.pleaseEnterDesignation;
+      return false;
+    }
+
     if (phoneNumber.isEmpty) {
-      error = AppString.appName;
+      error = AppString.validNumber;
       return false;
     } else if (phoneNumber.length < 6 || phoneNumber.length > 12) {
-      error = AppString.appName;
+      error = AppString.validPhoneNumber;
       return false;
-    } else {
-      return true;
     }
+    if (gender.isEmpty) {
+      error = AppString.pleaseEnterGender;
+      return false;
+    }
+
+    if (dob.isEmpty) {
+      error = AppString.pleaseEnterDob;
+      return false;
+    }
+
+    return true;
+  }
+
+  // login
+  bool loginValidator({
+    required String email,
+    required String password,
+  }) {
+    if (email.isEmpty) {
+      error = AppString.pleaseEnterEmailAddress;
+      return false;
+    } else if (!Utils.emailValidation(email)) {
+      error = AppString.pleaseEnterValidEmailAddress;
+      return false;
+    }
+
+    if (password.isEmpty) {
+      error = AppString.pleaseEnterPassword;
+      return false;
+    } else if (checkPassword(password)) {
+      error = AppString.passwordShouldBe;
+      return false;
+    }
+
+    return true;
+  }
+
+  // forget Password
+  bool forgetPasswordValidator({
+    required String email,
+  }) {
+    if (email.isEmpty) {
+      error = AppString.pleaseEnterEmailAddress;
+      return false;
+    } else if (!Utils.emailValidation(email)) {
+      error = AppString.pleaseEnterValidEmailAddress;
+      return false;
+    }
+
+    return true;
+  }
+
+//otp
+  bool otpValidator({
+    required String otp,
+  }) {
+    if (otp.isEmpty) {
+      error = AppString.pleaseEnterOtp;
+      return false;
+    } else if (otp.length != 4) {
+      error = AppString.invalidOtp;
+      return false;
+    }
+
+    return true;
+  }
+
+  //Create New Password
+  bool createNewPasswordValidation({
+    required String password,
+    required String confirmPassword,
+  }) {
+    if (password.isEmpty) {
+      error = AppString.pleaseEnterPassword;
+      return false;
+    } else if (checkPassword(password)) {
+      error = AppString.passwordShouldBe;
+      return false;
+    } else if (confirmPassword.isEmpty) {
+      error = AppString.pleaseEnterConfirmPassword;
+      return false;
+    } else if (password != confirmPassword) {
+      error = AppString.passwordMismatch;
+      return false;
+    }
+    return true;
   }
 
   bool checkPassword(String password) {

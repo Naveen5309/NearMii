@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:flutter/foundation.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/helpers/all_getter.dart';
@@ -11,13 +12,14 @@ import '../states/auth_states.dart';
 
 class LoginNotifier extends StateNotifier<AuthState> {
   final AuthUseCase authUseCase;
-  final phoneController =
-      TextEditingController(text: kDebugMode ? "9876543210" : "");
-  final otpController = TextEditingController(text: kDebugMode ? "1234" : "");
+  final phoneController = TextEditingController();
+  final otpController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final referralController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   List<PlatformData> socialMediaList = [];
   List<PlatformData> contactList = [];
@@ -25,6 +27,54 @@ class LoginNotifier extends StateNotifier<AuthState> {
   List<PlatformData> portfolioList = [];
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
+  //VALIDATE SIGN UP
+  bool validateLogin() {
+    bool isValid = Validator().loginValidator(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+  //VALIDATE Forget Password
+  bool validateForgetPassword() {
+    bool isValid =
+        Validator().forgetPasswordValidator(email: emailController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+//VALIDATE Forget Password
+  bool validateOtp() {
+    bool isValid = Validator().otpValidator(otp: otpController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+  //VALIDATE Create New Password
+  bool validateCreateNewPassword() {
+    bool isValid = Validator().createNewPasswordValidation(
+        password: passwordController.text.trim(),
+        confirmPassword: confirmPasswordController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
 
 //LOGIN
   Future<void> login() async {

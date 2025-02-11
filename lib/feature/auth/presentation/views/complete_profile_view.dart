@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
-import 'package:NearMii/feature/auth/presentation/provider/auth_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
@@ -22,6 +20,8 @@ class CompleteProfileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final createProfileNotifier = ref.watch(signupProvider.notifier);
+
     final signupPro = ref.watch(signupProvider.notifier);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -71,14 +71,19 @@ class CompleteProfileView extends ConsumerWidget {
                     //Field forms
 
                     formsFieldsSection(
-                        context: context, signupNotifiers: signupPro),
+                        context: context, createProfileNotifier: signupPro),
                     SizedBox(
                       height: context.height * .01,
                     ),
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        toNamed(context, Routes.selectSocialMedia);
+                        final isComplete =
+                            createProfileNotifier.validateProfile();
+                        print(isComplete);
+                        if (isComplete) {
+                          toNamed(context, Routes.selectSocialMedia);
+                        }
                       },
                       title: AppString.next,
                       textSize: 16.sp,
@@ -120,26 +125,26 @@ class CompleteProfileView extends ConsumerWidget {
 //FORMS FIELDS SECTION
   Widget formsFieldsSection(
       {required BuildContext context,
-      required SignupNotifiers signupNotifiers}) {
+      required SignupNotifiers createProfileNotifier}) {
     return Column(
       children: [
         //FULL NAME
         CustomLabelTextField(
           prefixIcon: Assets.icUser,
-          controller: TextEditingController(),
+          controller: createProfileNotifier.fullNameController,
           labelText: AppString.fullName,
         ),
 
         //DESIGNATION
         CustomLabelTextField(
           prefixIcon: Assets.icDesignation,
-          controller: TextEditingController(),
+          controller: createProfileNotifier.designationController,
           labelText: AppString.designation,
         ),
         //Bio
         CustomLabelTextField(
           prefixIcon: Assets.icCheck,
-          controller: TextEditingController(),
+          controller: createProfileNotifier.bioController,
           labelText: AppString.bio,
         ),
 
@@ -149,7 +154,7 @@ class CompleteProfileView extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CustomPhoneNumber(
             prefixIcon: Assets.icGender,
-            controller: TextEditingController(),
+            controller: createProfileNotifier.phoneController,
             labelText: AppString.phoneNumber,
           ),
         ),
@@ -159,19 +164,19 @@ class CompleteProfileView extends ConsumerWidget {
           customBtn: IgnorePointer(
             child: CustomLabelTextField(
               prefixIcon: Assets.icGender,
-              controller: signupNotifiers.genderController,
+              controller: createProfileNotifier.genderController,
               suffixIcon: Assets.icArrowDown,
               labelText: AppString.gender,
               readOnly: true,
             ),
           ),
           hint: "Gender",
-          value: signupNotifiers.genderController.text.isEmpty
+          value: createProfileNotifier.genderController.text.isEmpty
               ? "Male"
-              : signupNotifiers.genderController.text,
+              : createProfileNotifier.genderController.text,
           dropdownItems: genderList,
           onChanged: (value) {
-            signupNotifiers.genderController.text = value!;
+            createProfileNotifier.genderController.text = value!;
           },
         ),
 
@@ -200,12 +205,12 @@ class CompleteProfileView extends ConsumerWidget {
             );
 
             if (picked != null) {
-              signupNotifiers.dobController.text = formatDOB(picked);
+              createProfileNotifier.dobController.text = formatDOB(picked);
             }
           },
 
           prefixIcon: Assets.icCake,
-          controller: signupNotifiers.dobController,
+          controller: createProfileNotifier.dobController,
           suffixIcon: Assets.icCalender,
           labelText: AppString.dob,
           onTapOnSuffixIcon: () async {
@@ -230,7 +235,7 @@ class CompleteProfileView extends ConsumerWidget {
             );
 
             if (picked != null) {
-              signupNotifiers.dobController.text = formatDOB(picked);
+              createProfileNotifier.dobController.text = formatDOB(picked);
             }
           },
 
@@ -240,7 +245,7 @@ class CompleteProfileView extends ConsumerWidget {
         //REFERREL CODE
         CustomLabelTextField(
           prefixIcon: Assets.icReferrelCode,
-          controller: TextEditingController(),
+          controller: (createProfileNotifier.referralController),
           labelText: AppString.enterReferralCode,
         ),
       ],
