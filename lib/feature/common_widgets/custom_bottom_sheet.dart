@@ -40,37 +40,31 @@ class CustomBottomSheet extends StatelessWidget {
                     horizontal: context.width * .05),
             child: content,
           )
-        : BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 1,
-              sigmaY: 1,
-            ),
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20), // Top left and right radius
-                ),
-                // border: Border(
-                //   top: BorderSide(
-                //     color: AppColor.primary, // Border color
-                //     width: 1.0, // Border width
-                //   ),
-                //   left: BorderSide(
-                //     color: AppColor.primary, // Border color
-                //     width: 1.0, // Border width
-                //   ),
-                //   right: BorderSide(
-                //     color: AppColor.primary, // Border color
-                //     width: 1.0, // Border width
-                //   ),
-                // ),
+        : Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20), // Top left and right radius
               ),
-              padding: contentPadding ??
-                  EdgeInsets.symmetric(
-                      vertical: context.height * .02,
-                      horizontal: context.width * .05),
-              child: content,
+              // border: Border(
+              //   top: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              //   left: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              //   right: BorderSide(
+              //     color: AppColor.primary, // Border color
+              //     width: 1.0, // Border width
+              //   ),
+              // ),
             ),
+            padding: contentPadding ??
+                EdgeInsets.symmetric(
+                    vertical: context.height * .02,
+                    horizontal: context.width * .05),
+            child: content,
           );
   }
 }

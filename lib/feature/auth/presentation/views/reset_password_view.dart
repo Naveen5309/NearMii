@@ -11,7 +11,6 @@ import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ResetPasswordView extends ConsumerWidget {
   const ResetPasswordView({super.key});
@@ -23,6 +22,7 @@ class ResetPasswordView extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
@@ -73,12 +73,12 @@ class ResetPasswordView extends ConsumerWidget {
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      final isNewPassword =
-                          validateCreateNewPassword.validateCreateNewPassword();
-                      print(isNewPassword);
-                      if (isNewPassword) {
-                        offAllNamed(context, Routes.login);
-                      }
+                      // final isNewPassword =
+                      //     validateCreateNewPassword.validateCreateNewPassword();
+                      // print(isNewPassword);
+                      // if (isNewPassword) {
+                      offAllNamed(context, Routes.login);
+                      // }
                     },
                     title: AppString.submit,
                     textSize: 16.sp,

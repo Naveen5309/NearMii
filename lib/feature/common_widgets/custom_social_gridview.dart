@@ -100,9 +100,11 @@ class CustomSocialGridview extends StatelessWidget {
                                 // 10.verticalSpace,
                                 Padding(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: context.height * .03),
+                                      vertical: context.height * .04),
                                   child: CustomLabelTextField(
-                                      labelText: " https://youtube/username",
+                                      labelBckColor: AppColor.primary,
+                                      labelText:
+                                          " https://${socialMedia[pIndex].name}/username",
                                       controller: TextEditingController(),
                                       prefixWidget: CustomCacheNetworkImage(
                                           img: ApiConstants.socialIconBaseUrl +

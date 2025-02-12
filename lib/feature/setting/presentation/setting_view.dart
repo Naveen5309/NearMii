@@ -5,6 +5,7 @@ import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dotted_box.dart';
 import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
@@ -77,20 +78,29 @@ class SettingView extends StatelessWidget {
                         title: AppString.inviteFriends,
                         subtitle: AppString.get15points,
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => showModalBottomSheet(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          builder: (context) {
-                            return const InviteFriendBottomSheet(
+                        onTap: () => showCustomBottomSheet(
+                            context: context,
+                            content: const InviteFriendBottomSheet(
                               title: AppString.inviteFriend,
                               subtitle:
                                   "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
-                            );
-                          },
-                        ),
+                            )),
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   shape: const RoundedRectangleBorder(
+                        //     borderRadius:
+                        //         BorderRadius.vertical(top: Radius.circular(20)),
+                        //   ),
+                        //   builder: (context) {
+                        //     return
+
+                        //      InviteFriendBottomSheet(
+                        //       title: AppString.inviteFriend,
+                        //       subtitle:
+                        //           "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
+                        //     );
+                        //   },
+                        // ),
                       ),
                       10.verticalSpace,
                       CustomTile(

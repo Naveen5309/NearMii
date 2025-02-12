@@ -258,10 +258,10 @@ Widget appBarWidgetSection({required BuildContext context}) {
                           fontWeight: FontWeight.w700),
                     ],
                   ),
-                  CustomTextFieldWidget(
-                    enableBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                  const CustomTextFieldWidget(
+                    // enableBorder: OutlineInputBorder(
+                    //   borderRadius: BorderRadius.circular(20),
+                    // ),
                     minLines: 2,
                     fillColor: AppColor.whiteF0F5FE,
                     hintText: "Lorem ipsum dolor sit......",

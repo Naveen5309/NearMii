@@ -109,7 +109,7 @@ class ProfileGridView extends StatelessWidget {
                                             vertical: context.height * .03),
                                         child: CustomLabelTextField(
                                             labelText:
-                                                " https://youtube/username",
+                                                " https://${socialMedia[pIndex].name}/username",
                                             controller: TextEditingController(),
                                             prefixWidget:
                                                 CustomCacheNetworkImage(
