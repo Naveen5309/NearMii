@@ -150,17 +150,17 @@ class SignUpView extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        final isLogin = signUpNotifier.validateSignUp();
+                        // final isLogin = signUpNotifier.validateSignUp();
 
-                        if (isLogin) {
-                          signUpNotifier.saveIsLogin().then(
-                            (value) {
-                              if (context.mounted) {
-                                offAllNamed(context, Routes.completeProfile);
-                              }
-                            },
-                          );
-                        }
+                        // if (isLogin) {
+                        //   signUpNotifier.saveIsLogin().then(
+                        //     (value) {
+                        //       if (context.mounted) {
+                        offAllNamed(context, Routes.completeProfile);
+                        // }
+                        // },
+                        // );
+                        // }
                       },
                       title: AppString.signUp,
                       textSize: 16.sp,

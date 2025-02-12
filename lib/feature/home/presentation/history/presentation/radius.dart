@@ -162,6 +162,7 @@ class _RadiusScreenState extends State<RadiusScreen> {
           CommonAppBtn(
             title: AppString.saveText,
             width: context.width * 0.9,
+            onTap: () => back(context),
             borderRadius: 50,
             backGroundColor: AppColor.green00C56524,
           ),

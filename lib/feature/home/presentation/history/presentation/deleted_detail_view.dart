@@ -5,15 +5,19 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/setting/presentation/provider/delete_account.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class DeletedDetailView extends StatelessWidget {
+class DeletedDetailView extends ConsumerWidget {
   const DeletedDetailView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final deleteAccountNotifier = ref.watch(deleteAccountProvider.notifier);
+
     return Scaffold(
       appBar: const CustomAppBar(title: AppString.deleteAccount),
       backgroundColor: AppColor.primary,
@@ -43,11 +47,19 @@ class DeletedDetailView extends StatelessWidget {
               CustomLabelTextField(
                 labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icLock,
-                controller: TextEditingController(),
+                controller: deleteAccountNotifier.currentPasswordController,
                 labelText: AppString.currentPassword,
               ),
               const SizedBox(height: 20),
-              const CommonAppBtn(
+              CommonAppBtn(
+                onTap: () {
+                  // final isDeleteAccount =
+                  // deleteAccountNotifier.validateDeleteAccount();
+                  // print(isDeleteAccount);
+                  // if (isDeleteAccount) {
+                  back(context);
+                  // }
+                },
                 title: AppString.done,
               )
             ],

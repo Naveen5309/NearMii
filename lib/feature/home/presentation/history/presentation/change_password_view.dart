@@ -1,6 +1,5 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
@@ -75,12 +74,12 @@ class ChangePasswordView extends ConsumerWidget {
             ),
             CommonAppBtn(
               onTap: () {
-                final isNewPassword =
-                    changePasswordNotifier.validateChangePassword();
-                print(isNewPassword);
-                if (isNewPassword) {
-                  // offAllNamed(context, Routes.login);
-                }
+                // final isNewPassword =
+                //     changePasswordNotifier.validateChangePassword();
+                // print(isNewPassword);
+                // if (isNewPassword) {
+                back(context);
+                // }
               },
               title: AppString.update,
               textColor: AppColor.whiteFFFFFF,

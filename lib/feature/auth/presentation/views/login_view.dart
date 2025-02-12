@@ -92,11 +92,11 @@ class LoginView extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        final isLogin = loginNotifier.validateLogin();
-                        print(isLogin);
-                        if (isLogin) {
-                          offAllNamed(context, Routes.bottomNavBar);
-                        }
+                        // final isLogin = loginNotifier.validateLogin();
+                        // print(isLogin);
+                        // if (isLogin) {
+                        offAllNamed(context, Routes.bottomNavBar);
+                        // }
                       },
                       title: AppString.login,
                       textSize: 16.sp,

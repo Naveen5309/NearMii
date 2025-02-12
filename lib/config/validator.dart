@@ -229,4 +229,40 @@ class Validator {
     }
     return true;
   }
+
+  //  Contact us
+  bool contactUsValidator({
+    required String name,
+    required String email,
+    required String subject,
+    required String message,
+  }) {
+    if (name.isEmpty) {
+      error = AppString.pleaseEnterName;
+      return false;
+    } else if (email.isEmpty) {
+      error = AppString.pleaseEnterEmail;
+      return false;
+    } else if (subject.isEmpty) {
+      error = AppString.pleaseEnterSubject;
+      return false;
+    } else if (message.isEmpty) {
+      error = AppString.pleaseEnterMessage;
+      return false;
+    }
+
+    return true;
+  }
+
+  //Delete Account
+  bool deleteAccountValidation({
+    required String currentPassword,
+  }) {
+    if (currentPassword.isEmpty) {
+      error = AppString.pleaseEnterCurrentPassword;
+      return false;
+    }
+
+    return true;
+  }
 }

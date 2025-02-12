@@ -14,6 +14,10 @@ class SettingNotifier extends StateNotifier<AuthState> {
   final dobController = TextEditingController();
   final bioController = TextEditingController();
   final currentPasswordController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final subjectController = TextEditingController();
+  final messageController = TextEditingController();
 
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -48,6 +52,36 @@ class SettingNotifier extends StateNotifier<AuthState> {
         currentPassword: currentPasswordController.text.trim(),
         newPassword: newPasswordController.text.trim(),
         confirmPassword: confirmPasswordController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+//VALIDATE  Contact us
+  bool validateContactUs() {
+    bool isValid = Validator().contactUsValidator(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      subject: subjectController.text.trim(),
+      message: messageController.text.trim(),
+    );
+
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+  //VALIDATE Delete Account
+  bool validateDeleteAccount() {
+    bool isValid = Validator().deleteAccountValidation(
+      currentPassword: currentPasswordController.text.trim(),
+    );
     if (isValid) {
       return true;
     } else {

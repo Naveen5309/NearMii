@@ -164,7 +164,7 @@ class Assets {
   static const String icSuccess = 'assets/icons/success.svg';
   static const String bottomNav = 'assets/icons/bottom_nav.svg';
   static const String icMore = 'assets/icons/more.svg';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
+  static const String copy = 'assets/icons/copy.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';

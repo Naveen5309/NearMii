@@ -186,6 +186,9 @@ abstract final class AppString {
   static const String pleaseEnterGender = "Please Enter Your Gender";
   static const String validNumber = "Please Enter Your  Phone Number";
   static const String validPhoneNumber = "Please Enter a Valid Phone Number";
+  static const String pleaseEnterEmail = "Please Enter Your email";
+  static const String pleaseEnterSubject = "Please Enter Subject";
+  static const String pleaseEnterMessage = "Please Enter Message";
 }
 
 abstract final class AuthStrings {
