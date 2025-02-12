@@ -1,16 +1,22 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/setting/presentation/provider/change_password_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ChangePasswordView extends StatelessWidget {
+class ChangePasswordView extends ConsumerWidget {
   const ChangePasswordView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final changePasswordNotifier = ref.watch(changePasswordProvider.notifier);
+
     return Scaffold(
       backgroundColor: AppColor.primary,
       appBar: const CustomAppBar(title: AppString.changePassword),
@@ -18,28 +24,64 @@ class ChangePasswordView extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 28),
         child: Column(
           children: [
-            CustomLabelTextField(
-              labelBckColor: AppColor.primary,
-              prefixIcon: Assets.icLock,
-              controller: TextEditingController(),
-              labelText: AppString.currentPassword,
-            ),
-            CustomLabelTextField(
-              labelBckColor: AppColor.primary,
-              prefixIcon: Assets.icLock,
-              controller: TextEditingController(),
-              labelText: AppString.newPswd,
-            ),
-            CustomLabelTextField(
-              labelBckColor: AppColor.primary,
-              prefixIcon: Assets.icLock,
-              controller: TextEditingController(),
-              labelText: AppString.confirmPswd,
-            ),
+            Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              var isVisible = ref.watch(isCurrentPasswordVisible);
+              return CustomLabelTextField(
+                onTapOnSuffixIcon: () {
+                  ref.read(isCurrentPasswordVisible.notifier).state =
+                      !isVisible;
+                },
+                isObscure: isVisible,
+                labelBckColor: AppColor.primary,
+                prefixIcon: Assets.icLock,
+                controller: changePasswordNotifier.currentPasswordController,
+                labelText: AppString.currentPassword,
+                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+              );
+            }),
+            Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              var isVisible = ref.watch(isNewPswdVisible);
+              return CustomLabelTextField(
+                onTapOnSuffixIcon: () {
+                  ref.read(isNewPswdVisible.notifier).state = !isVisible;
+                },
+                isObscure: isVisible,
+                labelBckColor: AppColor.primary,
+                prefixIcon: Assets.icLock,
+                controller: changePasswordNotifier.newPasswordController,
+                labelText: AppString.newPswd,
+                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+              );
+            }),
+            Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              var isVisible = ref.watch(isConfirmPswdVisible);
+              return CustomLabelTextField(
+                onTapOnSuffixIcon: () {
+                  ref.read(isConfirmPswdVisible.notifier).state = !isVisible;
+                },
+                isObscure: isVisible,
+                labelBckColor: AppColor.primary,
+                prefixIcon: Assets.icLock,
+                controller: changePasswordNotifier.confirmPasswordController,
+                labelText: AppString.confirmPswd,
+                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+              );
+            }),
             SizedBox(
               height: 33.h,
             ),
-            const CommonAppBtn(
+            CommonAppBtn(
+              onTap: () {
+                final isNewPassword =
+                    changePasswordNotifier.validateChangePassword();
+                print(isNewPassword);
+                if (isNewPassword) {
+                  // offAllNamed(context, Routes.login);
+                }
+              },
               title: AppString.update,
               textColor: AppColor.whiteFFFFFF,
               borderColor: AppColor.appThemeColor,

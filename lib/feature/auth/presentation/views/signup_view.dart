@@ -216,7 +216,7 @@ class SignUpView extends ConsumerWidget {
             prefixIcon: Assets.icLock,
             controller: signUpNotifier.pswdController,
             labelText: AppString.pswd,
-            suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
+            suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
           );
         }),
 

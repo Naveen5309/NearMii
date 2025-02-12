@@ -159,4 +159,74 @@ class Validator {
         (!RegExp(r'(?=.*?\d)').hasMatch(password.trim())) ||
         (!RegExp(r'(?=.*?[!@#\$&*~])').hasMatch(password.trim())));
   }
+
+// cpmplete Edit profile
+  bool completeEditProfileValidator({
+    required String phoneNumber,
+    required String fullName,
+    required String dob,
+    required String designation,
+    required String gender,
+  }) {
+    if (fullName.isEmpty) {
+      error = AppString.pleaseEnterName;
+      return false;
+    }
+    if (designation.isEmpty) {
+      error = AppString.pleaseEnterDesignation;
+      return false;
+    }
+
+    if (phoneNumber.isEmpty) {
+      error = AppString.validNumber;
+      return false;
+    } else if (phoneNumber.length < 6 || phoneNumber.length > 12) {
+      error = AppString.validPhoneNumber;
+      return false;
+    }
+    if (gender.isEmpty) {
+      error = AppString.pleaseEnterGender;
+      return false;
+    }
+
+    if (dob.isEmpty) {
+      error = AppString.pleaseEnterDob;
+      return false;
+    }
+
+    return true;
+  }
+
+  //Change Password
+  bool changePasswordValidation({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) {
+    if (currentPassword.isEmpty) {
+      error = AppString.pleaseEnterCurrentPassword;
+      return false;
+    }
+    //  else if (currentPassword != storedPassword) {
+    //   error = AppString.incorrectCurrentPassword;
+    //   return false;
+    // }
+    else if (newPassword.isEmpty) {
+      error = AppString.pleaseEnterNewPassword;
+      return false;
+    } else if (newPassword == currentPassword) {
+      error = AppString.newPasswordShouldBeDifferent;
+      return false;
+    } else if (checkPassword(newPassword)) {
+      error = AppString.newPasswordShouldBe;
+      return false;
+    } else if (confirmPassword.isEmpty) {
+      error = AppString.pleaseEnterConfirmPassword;
+      return false;
+    } else if (newPassword != confirmPassword) {
+      error = AppString.passwordMismatch;
+      return false;
+    }
+    return true;
+  }
 }

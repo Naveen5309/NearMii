@@ -25,13 +25,13 @@ class ContactUsView extends StatelessWidget {
                 labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icUser,
                 controller: TextEditingController(),
-                labelText: AppString.currentPassword,
+                labelText: AppString.name,
               ),
               CustomLabelTextField(
                 labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icSms,
                 controller: TextEditingController(),
-                labelText: AppString.newPswd,
+                labelText: AppString.email,
               ),
               CustomLabelTextField(
                 labelBckColor: AppColor.primary,

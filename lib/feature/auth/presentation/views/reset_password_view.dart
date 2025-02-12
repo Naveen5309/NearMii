@@ -97,18 +97,34 @@ class ResetPasswordView extends ConsumerWidget {
     return Column(
       children: [
         //NEW PASSWORD
-        CustomLabelTextField(
-          prefixIcon: Assets.icLock,
-          controller: validateCreateNewPassword.passwordController,
-          labelText: AppString.newPswd,
-        ),
+        Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          var isVisible = ref.watch(isPswdVisible);
+          return CustomLabelTextField(
+            onTapOnSuffixIcon: () {
+              ref.read(isPswdVisible.notifier).state = !isVisible;
+            },
+            isObscure: isVisible,
+            prefixIcon: Assets.icLock,
+            controller: validateCreateNewPassword.passwordController,
+            labelText: AppString.newPswd,
+            suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+          );
+        }),
 
         //CONFIRM PASSWORD
-        CustomLabelTextField(
-          prefixIcon: Assets.icLock,
-          controller: validateCreateNewPassword.confirmPasswordController,
-          labelText: AppString.confirmPswd,
-        )
+        Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          var isVisible = ref.watch(isPswdVisible);
+          return CustomLabelTextField(
+            onTapOnSuffixIcon: () {
+              ref.read(isPswdVisible.notifier).state = !isVisible;
+            },
+            isObscure: isVisible,
+            prefixIcon: Assets.icLock,
+            controller: validateCreateNewPassword.confirmPasswordController,
+            labelText: AppString.confirmPswd,
+            suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+          );
+        })
       ],
     );
   }

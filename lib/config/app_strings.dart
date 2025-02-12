@@ -149,6 +149,8 @@ abstract final class AppString {
   //  static const String localDirectory="Lorem ipsum dolor sit amet consectetur. Semper vel interdum et posuere venenatis.";
   // static const String report = "Report";
   //  static const String localDirectory="appname";
+  static const String name = "Name";
+  static const String email = "Email";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
@@ -165,10 +167,17 @@ abstract final class AppString {
       'Please Enter Valid Email Address';
 
   static const pleaseEnterPassword = 'Please Enter Password';
+  static const pleaseEnterNewPassword = 'Please Enter New Password';
+
+  static const newPasswordShouldBeDifferent =
+      'New Password should be Different from Current Password';
+
   static const pleaseEnterCurrentPassword =
       'Please Enter Your Current Password';
   static const passwordShouldBe =
       'Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
+  static const newPasswordShouldBe =
+      'New Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
   static const passwordMismatch =
       'confirm password didn\'t match with password you enter';
   static const pleaseEnterConfirmPassword = 'Please Enter Confirm Password';
