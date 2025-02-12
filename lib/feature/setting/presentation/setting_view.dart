@@ -9,7 +9,7 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dotted_box.dart';
 import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
-import 'package:NearMii/feature/home/presentation/history/presentation/share_view.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';

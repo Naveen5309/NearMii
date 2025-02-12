@@ -2,7 +2,7 @@ import 'package:NearMii/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:NearMii/feature/auth/data/repositories/auth_repo_implementation.dart';
 import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
-import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting.dart';
+import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a Provider for AuthDataSource

@@ -159,7 +159,7 @@ class SignUpView extends ConsumerWidget {
                         //     (value) {
                         //       if (context.mounted) {
                         offAllNamed(context, Routes.completeProfile);
-                        //   }
+                        // }
                         // },
                         // );
                         // }

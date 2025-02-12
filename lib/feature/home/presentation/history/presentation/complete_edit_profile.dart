@@ -9,7 +9,7 @@ import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/setting/presentation/provider/edit_profile_provider.dart';
-import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting.dart';
+import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,14 +76,14 @@ class CompleteEditProfile extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        final isComplete =
-                            editProfileNotifier.validateEditProfile();
-                        print(isComplete);
-                        if (isComplete) {
-                          showCustomBottomSheet(
-                              context: context,
-                              content: updateSuccessWidget(context: context));
-                        }
+                        // final isComplete =
+                        //     editProfileNotifier.validateEditProfile();
+                        // print(isComplete);
+                        // if (isComplete) {
+                        showCustomBottomSheet(
+                            context: context,
+                            content: updateSuccessWidget(context: context));
+                        // }
                       },
                       title: AppString.update,
                       textSize: 16.sp,

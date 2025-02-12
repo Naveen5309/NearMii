@@ -22,15 +22,8 @@ final authUseCaseProvider = Provider.autoDispose<AuthUseCase>((ref) {
 });
 
 // Define a StateNotifierProvider for SignupNotifier
-final changePasswordProvider =
+final contactUsProvider =
     StateNotifierProvider.autoDispose<SettingNotifier, AuthState>((ref) {
   final authUseCase = ref.watch(authUseCaseProvider);
   return SettingNotifier(authUseCase: authUseCase);
 });
-final isPswdConfirmVisible = StateProvider.autoDispose<bool>((ref) => false,
-    name: "isPswdConfirmVisible");
-
-final isNewPswdVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
-final isCurrentPasswordVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "rememberMeProvider");
