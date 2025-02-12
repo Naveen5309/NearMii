@@ -28,15 +28,16 @@ class CustomProfileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 11),
+      margin:
+          EdgeInsets.symmetric(horizontal: context.width * .05, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
+            color: AppColor.green173E01.withOpacity(0.06),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
           ),
         ],
       ),

@@ -31,7 +31,7 @@ class AuthView extends StatelessWidget {
               // const Text("APPlOGO"),
 
               Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
+                padding: const EdgeInsets.only(bottom: 18.0),
                 child: SvgPicture.asset(
                   Assets.icDummyLogo,
                   // height: 100,
@@ -123,7 +123,7 @@ class AuthView extends StatelessWidget {
       children: [
         //GOOGLE
         customSocialMediaBtn(
-          icon: Assets.google,
+          icon: Assets.icGoogle2,
           text: AppString.signInWithGoogle,
           context: context,
         ),
@@ -131,10 +131,10 @@ class AuthView extends StatelessWidget {
         //FACEBOOK
         Padding(
           padding: EdgeInsets.symmetric(
-            vertical: context.height * .05,
+            vertical: context.height * .03,
           ),
           child: customSocialMediaBtn(
-            icon: Assets.fb,
+            icon: Assets.icFb2,
             text: AppString.singInWithFb,
             context: context,
           ),
@@ -142,7 +142,7 @@ class AuthView extends StatelessWidget {
 
         //APPLE
         customSocialMediaBtn(
-          icon: Assets.apple,
+          icon: Assets.icApple2,
           text: AppString.singInWithApple,
           context: context,
         ),
@@ -167,19 +167,27 @@ class AuthView extends StatelessWidget {
       {required String icon,
       required String text,
       required BuildContext context}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SvgPicture.asset(icon),
-        10.horizontalSpace,
-        AppText(
-          text: text,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: AppColor.green173E01,
+    return Container(
+      width: context.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50), color: AppColor.primary),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(icon),
+            10.horizontalSpace,
+            AppText(
+              text: text,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColor.green173E01,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -53,7 +53,7 @@ abstract final class AppString {
   static const String didntReceicedOtp = "Didn't received the OTP?";
   static const String resendOtp = "Resend OTP";
   static const String submit = "Submit";
-  static const String createNewPswd = "Create new password";
+  static const String createNewPswd = "Create New Password";
   static const String enterY =
       "Enter your email below to recover your password";
   static const String newPswd = "New password";

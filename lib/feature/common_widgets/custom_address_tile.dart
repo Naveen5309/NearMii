@@ -18,8 +18,7 @@ class LocationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: 65.h,
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: AppColor.primary,
         borderRadius: BorderRadius.circular(110), // Smooth rounded corners

@@ -34,7 +34,7 @@ class _ToggleSwitchBtnState extends State<ToggleSwitchBtn> {
       },
       child: AnimatedContainer(
         height: size,
-        width: size * 1.8,
+        width: size * 2,
         padding: EdgeInsets.all(innerPadding),
         alignment: isToggled ? Alignment.centerLeft : Alignment.centerRight,
         duration: const Duration(milliseconds: 300),

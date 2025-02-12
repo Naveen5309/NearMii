@@ -140,7 +140,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColor.greyFAFAFA,
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
               color: textEditHasFocus
@@ -219,6 +219,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                   decoration: InputDecoration(
                     counterText: '',
+                    fillColor: AppColor.greyFAFAFA,
                     border: InputBorder.none,
                     hintText: widget.labelText,
                     hintStyle: TextStyle(

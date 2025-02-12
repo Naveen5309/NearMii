@@ -39,7 +39,7 @@ class _RadiusScreenState extends State<RadiusScreen> {
             alignment: Alignment.center,
             children: [
               SizedBox(
-                height: context.height * 0.65,
+                height: context.height * 0.6,
                 width: context.width,
                 child: Image.asset(
                   Assets.imsMap,
@@ -65,11 +65,11 @@ class _RadiusScreenState extends State<RadiusScreen> {
             ],
           ),
 
-          13.verticalSpace,
+          30.verticalSpace,
+
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 22,
-            ),
+            padding: EdgeInsets.symmetric(
+                horizontal: 22, vertical: context.height * .01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -165,7 +165,7 @@ class _RadiusScreenState extends State<RadiusScreen> {
             borderRadius: 50,
             backGroundColor: AppColor.green00C56524,
           ),
-          4.verticalSpace,
+          10.verticalSpace,
         ],
       ),
     );

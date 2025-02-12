@@ -20,144 +20,153 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primary,
+      backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             const CustomAppbarWidget(
               title: AppString.settings,
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
-              child: Column(
-                children: [
-                  ProfileWidget(
-                    imageUrl: '',
-                    name: "Cameron Williamson",
-                    points: 124,
-                    isVip: true,
-                    model: SubscriptionModel(Points: 221, daysLeft: 11),
-                  ),
-                  28.verticalSpace,
-                  dottedContainer(
-                      context, SubscriptionModel(Points: 0, daysLeft: 27)),
-                  35.verticalSpace,
-
-                  //SETTING TEXT
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 11.w),
-                      child: AppText(
-                        fontFamily: Constants.fontFamily,
-                        text: AppString.settings,
-                        color: AppColor.black000000,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
+            SizedBox(
+              height: context.height * .85,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
+                  child: Column(
+                    children: [
+                      ProfileWidget(
+                        imageUrl: '',
+                        name: "Cameron Williamson",
+                        points: 124,
+                        isVip: true,
+                        model: SubscriptionModel(Points: 221, daysLeft: 11),
                       ),
-                    ),
-                  ),
-                  8.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconPerson,
-                    title: AppString.editProfile,
-                    subtitle: AppString.updateProfile,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.editProfile),
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.add,
-                    title: AppString.inviteFriends,
-                    subtitle: AppString.get15points,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
+                      28.verticalSpace,
+                      dottedContainer(
+                          context, SubscriptionModel(Points: 0, daysLeft: 27)),
+                      35.verticalSpace,
+
+                      //SETTING TEXT
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 11.w),
+                          child: AppText(
+                            fontFamily: Constants.fontFamily,
+                            text: AppString.settings,
+                            color: AppColor.black000000,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
-                      builder: (context) {
-                        return const InviteFriendBottomSheet(
-                          title: AppString.inviteFriend,
-                          subtitle:
-                              "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
-                        );
-                      },
-                    ),
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconSetRadius,
-                    title: AppString.setRadius,
-                    subtitle: AppString.meter,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.setRadius),
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconCheckBox,
-                    title: AppString.termsAndConditions,
-                    subtitle: AppString.viewOurPolicies,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.termsAndConditions),
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconChangePassword,
-                    title: AppString.changePassword,
-                    subtitle: AppString.resetYourPswd,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.changePassword),
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconContactUs,
-                    title: AppString.contactUs,
-                    subtitle: AppString.reachOutToSupport,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.contactUs),
-                  ),
-                  10.verticalSpace,
+                      8.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconPerson,
+                        title: AppString.editProfile,
+                        subtitle: AppString.updateProfile,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => toNamed(context, Routes.editProfile),
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.add,
+                        title: AppString.inviteFriends,
+                        subtitle: AppString.get15points,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (context) {
+                            return const InviteFriendBottomSheet(
+                              title: AppString.inviteFriend,
+                              subtitle:
+                                  "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
+                            );
+                          },
+                        ),
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconSetRadius,
+                        title: AppString.setRadius,
+                        subtitle: AppString.meter,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => toNamed(context, Routes.setRadius),
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconCheckBox,
+                        title: AppString.termsAndConditions,
+                        subtitle: AppString.viewOurPolicies,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () =>
+                            toNamed(context, Routes.termsAndConditions),
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconChangePassword,
+                        title: AppString.changePassword,
+                        subtitle: AppString.resetYourPswd,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => toNamed(context, Routes.changePassword),
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconContactUs,
+                        title: AppString.contactUs,
+                        subtitle: AppString.reachOutToSupport,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => toNamed(context, Routes.contactUs),
+                      ),
+                      10.verticalSpace,
 
-                  //HOW IT WORKS
-                  CustomTile(
-                    leadingIcon: Assets.iconHowItWorks,
-                    title: AppString.howItWorks,
-                    subtitle: AppString.checkHowOur,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () {
-                      toNamed(context, Routes.onboard, args: true);
-                    },
-                  ),
-                  10.verticalSpace,
-                  CustomTile(
-                    leadingIcon: Assets.iconDelete,
-                    title: AppString.deleteAccount,
-                    subtitle: AppString.deleteYourAccount,
-                    trailingIcon: Assets.iconArrowRight,
-                    onTap: () => toNamed(context, Routes.deleteAccount),
-                  ),
-                  15.verticalSpace,
+                      //HOW IT WORKS
+                      CustomTile(
+                        leadingIcon: Assets.iconHowItWorks,
+                        title: AppString.howItWorks,
+                        subtitle: AppString.checkHowOur,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () {
+                          toNamed(context, Routes.onboard, args: true);
+                        },
+                      ),
+                      10.verticalSpace,
+                      CustomTile(
+                        leadingIcon: Assets.iconDelete,
+                        title: AppString.deleteAccount,
+                        subtitle: AppString.deleteYourAccount,
+                        trailingIcon: Assets.iconArrowRight,
+                        onTap: () => toNamed(context, Routes.deleteAccount),
+                      ),
+                      15.verticalSpace,
 
-                  //LOGOUT BUTTON
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
-                    child: CommonAppBtn(
-                      title: AppString.logOut,
-                      textColor: AppColor.redE40505,
-                      height: 60,
-                      borderColor: AppColor.redE40505,
-                      borderWidth: 1,
-                      backGroundColor: AppColor.redF8E2E2,
-                      onTap: () {
-                        offAllNamed(context, Routes.login);
-                      },
-                    ),
+                      //LOGOUT BUTTON
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 11.w, vertical: 8.h),
+                        child: CommonAppBtn(
+                          title: AppString.logOut,
+                          textColor: AppColor.redE40505,
+                          height: 60,
+                          borderColor: AppColor.redE40505,
+                          borderWidth: 1,
+                          backGroundColor: AppColor.redF8E2E2,
+                          onTap: () {
+                            offAllNamed(context, Routes.login);
+                          },
+                        ),
+                      ),
+                      90.verticalSpace
+                    ],
                   ),
-                  90.verticalSpace
-                ],
+                ),
               ),
             ),
           ],
@@ -227,6 +236,10 @@ Widget dottedContainer(BuildContext context, SubscriptionModel model) {
   return CommonDottedBorder(
     borderRadius: 20,
     child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppColor.primary,
+      ),
       padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
       width: context.width * 0.9,
       height: 70.h,

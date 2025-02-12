@@ -26,7 +26,9 @@ class ResetPasswordView extends ConsumerWidget {
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .06),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * .06,
+                  vertical: context.height * .05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -60,7 +62,7 @@ class ResetPasswordView extends ConsumerWidget {
                   ),
 
                   SizedBox(
-                    height: context.height * .05,
+                    height: context.height * .03,
                   ),
 
                   //Field forms

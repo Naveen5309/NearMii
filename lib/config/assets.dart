@@ -96,6 +96,11 @@ class Assets {
   static const String icAppBg2 = 'assets/images/app_bg2.png';
   static const String icLock = 'assets/icons/lock.svg';
   static const String icFbSingle = 'assets/icons/fb_single.svg';
+
+  static const String icFb2 = 'assets/icons/fb2.svg';
+  static const String icGoogle2 = 'assets/icons/google2.svg';
+  static const String icApple2 = 'assets/icons/apple2.svg';
+
   static const String icBackBtn = 'assets/icons/back_btn.svg';
   static const String icDummyUser = 'assets/icons/dummy_user.svg';
   static const String icGender = 'assets/icons/gender.svg';

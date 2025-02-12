@@ -16,7 +16,7 @@ class DeletedDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: AppString.deleteAccount),
-      backgroundColor: AppColor.primary,
+      backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 130),

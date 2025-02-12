@@ -17,24 +17,22 @@ class ContactUsView extends StatelessWidget {
       backgroundColor: AppColor.primary,
       appBar: const CustomAppBar(title: AppString.contactUs),
       body: Container(
+        color: AppColor.greyFAFAFA,
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 28),
         child: SingleChildScrollView(
           child: Column(
             children: [
               CustomLabelTextField(
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icUser,
                 controller: TextEditingController(),
                 labelText: AppString.name,
               ),
               CustomLabelTextField(
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icSms,
                 controller: TextEditingController(),
                 labelText: AppString.email,
               ),
               CustomLabelTextField(
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icSubject,
                 controller: TextEditingController(),
                 labelText: AppString.subject,

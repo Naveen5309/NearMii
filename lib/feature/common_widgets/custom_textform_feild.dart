@@ -77,7 +77,7 @@ class _CustomLabelTextFieldState extends State<CustomTextformFeild> {
         _focusNode.unfocus();
       },
       child: Container(
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: AppColor.greyFAFAFA),
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Stack(
           clipBehavior: Clip.none,
@@ -152,7 +152,7 @@ class _CustomLabelTextFieldState extends State<CustomTextformFeild> {
                 },
                 child: Container(
                   padding: const EdgeInsets.only(left: 3, right: 3),
-                  color: AppColor.primary,
+                  color: AppColor.greyFAFAFA,
                   child: AppText(
                     text: widget.labelText ?? '',
                     color: textEditHasFocus

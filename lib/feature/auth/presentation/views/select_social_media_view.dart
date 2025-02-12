@@ -72,6 +72,20 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
     );
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton:
+          //login
+          Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: context.width * .05, vertical: context.height * .01),
+        child: CommonAppBtn(
+          onTap: () {
+            offAllNamed(context, Routes.bottomNavBar);
+          },
+          title: AppString.next,
+          textSize: 16.sp,
+        ),
+      ),
       body: BgImageContainer(
           bgImage: Assets.icProfileBg,
           child: Padding(
@@ -115,12 +129,13 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       fontSize: 32.sp,
                     ),
 
-                    15.verticalSpace,
+                    10.verticalSpace,
                     AppText(
                       text: "Lorem ipsum dolor sit amet consectetur. Massa.",
                       fontSize: 14.sp,
                       color: AppColor.grey999,
                     ),
+                    15.verticalSpace,
 
                     //SEARCH FIELD
                     const CustomSearchBarWidget(),
@@ -144,15 +159,6 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     CustomSocialGridview(
                       title: AppString.portfolio,
                       socialMedia: loginNotifier.portfolioList,
-                    ),
-
-                    //login
-                    CommonAppBtn(
-                      onTap: () {
-                        offAllNamed(context, Routes.bottomNavBar);
-                      },
-                      title: AppString.next,
-                      textSize: 16.sp,
                     ),
 
                     SizedBox(

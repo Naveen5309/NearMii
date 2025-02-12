@@ -18,7 +18,7 @@ class ChangePasswordView extends ConsumerWidget {
     final changePasswordNotifier = ref.watch(changePasswordProvider.notifier);
 
     return Scaffold(
-      backgroundColor: AppColor.primary,
+      backgroundColor: AppColor.greyf9f9f9,
       appBar: const CustomAppBar(title: AppString.changePassword),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 28),
@@ -33,7 +33,6 @@ class ChangePasswordView extends ConsumerWidget {
                       !isVisible;
                 },
                 isObscure: isVisible,
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.currentPasswordController,
                 labelText: AppString.currentPassword,
@@ -48,7 +47,6 @@ class ChangePasswordView extends ConsumerWidget {
                   ref.read(isNewPswdVisible.notifier).state = !isVisible;
                 },
                 isObscure: isVisible,
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.newPasswordController,
                 labelText: AppString.newPswd,
@@ -63,7 +61,6 @@ class ChangePasswordView extends ConsumerWidget {
                   ref.read(isConfirmPswdVisible.notifier).state = !isVisible;
                 },
                 isObscure: isVisible,
-                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.confirmPasswordController,
                 labelText: AppString.confirmPswd,

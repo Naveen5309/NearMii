@@ -11,18 +11,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackPress;
 
-  const CustomAppBar({Key? key, required this.title, this.onBackPress})
-      : super(key: key);
+  const CustomAppBar({super.key, required this.title, this.onBackPress});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
-      leadingWidth: 68,
+      leadingWidth: 55,
       backgroundColor: Colors.white,
       elevation: 0,
       centerTitle: true,

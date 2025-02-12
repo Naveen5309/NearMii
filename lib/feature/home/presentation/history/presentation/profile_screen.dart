@@ -108,7 +108,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             decoration: BoxDecoration(
                 // color: AppColor.primary,
                 borderRadius: BorderRadius.circular(100),
-                color: AppColor.primary),
+                color: AppColor.green00C56524),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: SvgPicture.asset(Assets.icAddBtn),
@@ -210,13 +210,17 @@ Widget appBarWidgetSection({required BuildContext context}) {
 Widget bottomSection(
     {required LoginNotifier loginNotifier, required BuildContext context}) {
   return Container(
-    color: AppColor.primary,
+    color: AppColor.greyf9f9f9,
     width: context.width,
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: context.width * .04),
+      padding: EdgeInsets.symmetric(
+          horizontal: context.width * .04, vertical: context.width * .01),
       child: Column(children: [
         const CustomSearchBarWidget(),
-        hideAllSection(),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: hideAllSection(),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ProfileGridView(
@@ -338,6 +342,7 @@ Widget hideAllSection() {
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
+          5.verticalSpace,
           AppText(
             text: "Lorem ipsum dolor sit amet consectetur.",
             fontSize: 12.sp,

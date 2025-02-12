@@ -1,3 +1,4 @@
+import 'package:NearMii/config/helper.dart';
 import 'package:flutter/material.dart';
 
 class CustomPhoneNumberField extends StatelessWidget {
@@ -48,6 +49,7 @@ class CustomPhoneNumberField extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Phone number",
+                fillColor: AppColor.greyFAFAFA,
                 hintStyle: TextStyle(color: Colors.green.shade300),
               ),
             ),

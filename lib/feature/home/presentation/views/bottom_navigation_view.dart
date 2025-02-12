@@ -20,7 +20,8 @@ class BottomNavigationView extends ConsumerWidget {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18),
+        padding: EdgeInsets.symmetric(
+            vertical: context.height * .015, horizontal: 18),
         child: Stack(
           children: [
             ClipRRect(

@@ -146,7 +146,9 @@ class SignUpView extends ConsumerWidget {
                         ],
                       ),
                     ),
-
+                    SizedBox(
+                      height: context.height * .01,
+                    ),
                     //login
                     CommonAppBtn(
                       onTap: () {
@@ -245,13 +247,16 @@ class SignUpView extends ConsumerWidget {
 //SOCIAL MEDIA SECTION
 
 Widget socialMediaSection() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      SvgPicture.asset(Assets.icFbSingle),
-      SvgPicture.asset(Assets.google),
-      SvgPicture.asset(Assets.apple),
-    ],
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 25),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SvgPicture.asset(Assets.icFbSingle),
+        SvgPicture.asset(Assets.google),
+        SvgPicture.asset(Assets.apple),
+      ],
+    ),
   );
 }
 

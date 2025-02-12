@@ -29,10 +29,12 @@ class HomePageView extends ConsumerWidget {
               ),
             ),
 
-            height: MediaQuery.sizeOf(context).height * 0.29,
+            height: context.height * 0.29,
             // color: Colors.green,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * 0.05,
+                  vertical: context.height * 0.01),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -81,7 +83,7 @@ class HomePageView extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(
-                    height: context.height * .05,
+                    height: context.height * .04,
                   ),
                   const LocationCard(
                     location: "Philadelphia",
@@ -99,7 +101,7 @@ class HomePageView extends ConsumerWidget {
                   fit: BoxFit.cover,
                 )
               : SizedBox(
-                  height: context.height * .68,
+                  height: context.height * .69,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     itemCount: 15,
