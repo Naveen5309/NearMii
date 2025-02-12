@@ -123,23 +123,26 @@ class CustomTextFieldWidget extends StatelessWidget {
             filled: true,
             isDense: isDense,
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            border: border ??
-                const OutlineInputBorder(
-                  gapPadding: 0,
-                  borderSide: BorderSide(color: AppColor.appThemeColor),
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                ),
-            enabledBorder: enableBorder ??
-                const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.appThemeColor),
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                ),
-            focusedBorder: focusBorder ??
-                const OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: AppColor.appThemeColor, width: 1.5),
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                ),
+            // border: border ??
+            //     const OutlineInputBorder(
+            //       gapPadding: 0,
+            //       borderSide: BorderSide(color: AppColor.appThemeColor),
+            //       borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            //     ),
+            // enabledBorder: enableBorder ??
+            //     const OutlineInputBorder(
+            //       borderSide: BorderSide(color: AppColor.appThemeColor),
+            //       borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            //     ),
+            // focusedBorder: focusBorder ??
+            //     const OutlineInputBorder(
+            //       borderSide:
+            //           BorderSide(color: AppColor.appThemeColor, width: 1.5),
+            //       borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            //     ),
+            enabledBorder: InputBorder.none,
+            border: InputBorder.none, // Removes the default underline
+            focusedBorder: InputBorder.none,
             floatingLabelStyle: TextStyle(
                 color: AppColor.appThemeColor,
                 fontSize: 12.sp,

@@ -63,12 +63,12 @@ class ForgotPasswordView extends ConsumerWidget {
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      final isForget =
-                          forgetPasswordNotifier.validateForgetPassword();
-                      print(isForget);
-                      if (isForget) {
-                        toNamed(context, Routes.otpVerify);
-                      }
+                      // final isForget =
+                      //     forgetPasswordNotifier.validateForgetPassword();
+                      // print(isForget);
+                      // if (isForget) {
+                      toNamed(context, Routes.otpVerify);
+                      // }
                     },
                     title: AppString.send,
                     textSize: 16.sp,

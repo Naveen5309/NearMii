@@ -99,14 +99,16 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     );
 
     return Scaffold(
+        backgroundColor: AppColor.primary,
         floatingActionButton: InkWell(
           onTap: () {
             toNamed(context, Routes.selectSocialMedia);
           },
           child: Container(
             decoration: BoxDecoration(
+                // color: AppColor.primary,
                 borderRadius: BorderRadius.circular(100),
-                color: AppColor.btnColor),
+                color: AppColor.primary),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: SvgPicture.asset(Assets.icAddBtn),

@@ -1,6 +1,9 @@
+import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/common_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
+import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:developer';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -99,20 +102,20 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
     );
 
     return Scaffold(
-        floatingActionButton: InkWell(
-          onTap: () {
-            toNamed(context, Routes.selectSocialMedia);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: AppColor.btnColor),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SvgPicture.asset(Assets.icAddBtn),
-            ),
-          ),
-        ),
+        // floatingActionButton: InkWell(
+        //   onTap: () {
+        //     toNamed(context, Routes.selectSocialMedia);
+        //   },
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(100),
+        //         color: AppColor.btnColor),
+        //     child: Padding(
+        //       padding: const EdgeInsets.all(10.0),
+        //       child: SvgPicture.asset(Assets.icAddBtn),
+        //     ),
+        //   ),
+        // ),
         body: SliverSnap(
             stretch: true,
             scrollBehavior: const CupertinoScrollBehavior(),
@@ -195,7 +198,104 @@ Widget appBarWidgetSection({required BuildContext context}) {
             color: AppColor.whiteFFFFFF.withOpacity(.8),
           ),
         ],
-      )
+      ),
+      const Spacer(),
+      PopupMenuButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4), // Adjust the radius as needed
+        ),
+        position: PopupMenuPosition.under,
+        padding: EdgeInsets.zero,
+        onSelected: (value) {
+          showCustomBottomSheet(
+              context: context,
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(Assets.reportNavClose),
+                  15.verticalSpace,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 4, vertical: context.height * .02),
+                    child: AppText(
+                        text: AppString.report,
+                        fontSize: 20.sp,
+                        color: AppColor.black1A1C1E,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const CustomReportTile(
+                    title: AppString.theyArePretending,
+                    check: true,
+                  ),
+                  const CustomReportTile(
+                    title: AppString.theyAreUnderTheAge,
+                    check: false,
+                  ),
+                  const CustomReportTile(
+                    title: AppString.violenceAndDangerous,
+                    check: false,
+                  ),
+                  const CustomReportTile(
+                    title: AppString.hateSpeech,
+                    check: false,
+                  ),
+                  const CustomReportTile(
+                    title: AppString.nudity,
+                    check: false,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      AppText(
+                          text: "Something Else",
+                          fontSize: 14.sp,
+                          color: AppColor.black1A1C1E,
+                          fontWeight: FontWeight.w700),
+                    ],
+                  ),
+                  CustomTextFieldWidget(
+                    enableBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    minLines: 2,
+                    fillColor: AppColor.whiteF0F5FE,
+                    hintText: "Lorem ipsum dolor sit......",
+                  ),
+                  5.verticalSpace,
+                  CommonAppBtn(
+                    title: AppString.submit,
+                    onTap: () {
+                      back(context);
+                    },
+                  ),
+                  10.verticalSpace
+                ],
+              ));
+        },
+        itemBuilder: (BuildContext bc) {
+          return [
+            const PopupMenuItem(
+                value: AppString.report,
+                child: AppText(
+                  text: AppString.report,
+                  color: AppColor.redFF3B30,
+                )),
+          ];
+        },
+        child: Padding(
+          padding: EdgeInsets.only(right: context.width * .05),
+          child: SvgPicture.asset(
+            Assets.icMore,
+            colorFilter:
+                const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+          ),
+        ),
+      ),
     ],
   );
 }
@@ -247,9 +347,93 @@ Widget profileSection(
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                //OPEN REPORT
+            PopupMenuButton(
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(4), // Adjust the radius as needed
+              ),
+              position: PopupMenuPosition.under,
+              padding: EdgeInsets.zero,
+              onSelected: (value) {
+                showCustomBottomSheet(
+                    context: context,
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(Assets.reportNavClose),
+                        15.verticalSpace,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4, vertical: context.height * .02),
+                          child: AppText(
+                              text: AppString.report,
+                              fontSize: 20.sp,
+                              color: AppColor.black1A1C1E,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        const CustomReportTile(
+                          title: AppString.theyArePretending,
+                          check: true,
+                        ),
+                        const CustomReportTile(
+                          title: AppString.theyAreUnderTheAge,
+                          check: false,
+                        ),
+                        const CustomReportTile(
+                          title: AppString.violenceAndDangerous,
+                          check: false,
+                        ),
+                        const CustomReportTile(
+                          title: AppString.hateSpeech,
+                          check: false,
+                        ),
+                        const CustomReportTile(
+                          title: AppString.nudity,
+                          check: false,
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            AppText(
+                                text: "Something Else",
+                                fontSize: 14.sp,
+                                color: AppColor.black1A1C1E,
+                                fontWeight: FontWeight.w700),
+                          ],
+                        ),
+                        CustomTextFieldWidget(
+                          enableBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          minLines: 2,
+                          fillColor: AppColor.whiteF0F5FE,
+                          hintText: "Lorem ipsum dolor sit......",
+                        ),
+                        5.verticalSpace,
+                        CommonAppBtn(
+                          title: AppString.submit,
+                          onTap: () {
+                            back(context);
+                          },
+                        ),
+                        10.verticalSpace
+                      ],
+                    ));
+              },
+              itemBuilder: (BuildContext bc) {
+                return [
+                  const PopupMenuItem(
+                      value: AppString.report,
+                      child: AppText(
+                        text: AppString.report,
+                        color: AppColor.redFF3B30,
+                      )),
+                ];
               },
               child: Padding(
                 padding: EdgeInsets.only(right: context.width * .05),

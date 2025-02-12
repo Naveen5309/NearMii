@@ -27,8 +27,8 @@ abstract final class AppColor {
   static const Color whiteF0F5FE = Color(0xffF0F5FE);
   static const Color greyD4D4D4 = Color(0xffD4D4D4);
   static const Color greyf9f9f9 = Color(0xfff9f9f9);
-  // static const Color whiteFFFFFF = Color(0xffFFFFFF);
-  // static const Color whiteFFFFFF = Color(0xffFFFFFF);
+  static const Color redFF3B30 = Color(0xffFF3B30);
+  static const Color black272727 = Color(0xff272727);
   // static const Color whiteFFFFFF = Color(0xffFFFFFF);
   // static const Color whiteFFFFFF = Color(0xffFFFFFF);
   // static const Color whiteFFFFFF = Color(0xffFFFFFF);
