@@ -8,15 +8,20 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
+import 'package:NearMii/feature/setting/presentation/provider/edit_profile_provider.dart';
+import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CompleteEditProfile extends StatelessWidget {
+class CompleteEditProfile extends ConsumerWidget {
   const CompleteEditProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final editProfileNotifier = ref.watch(editProfileProvider.notifier);
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -56,22 +61,29 @@ class CompleteEditProfile extends StatelessWidget {
 
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: context.height * .04),
+                          EdgeInsets.symmetric(vertical: context.height * .02),
                       child: profileSection(),
                     ),
 
                     //Field forms
 
-                    formsFieldsSection(context: context),
+                    formsFieldsSection(
+                        context: context,
+                        editProfileNotifier: editProfileNotifier),
                     SizedBox(
                       height: context.height * .04,
                     ),
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        showCustomBottomSheet(
-                            context: context,
-                            content: updateSuccessWidget(context: context));
+                        final isComplete =
+                            editProfileNotifier.validateEditProfile();
+                        print(isComplete);
+                        if (isComplete) {
+                          showCustomBottomSheet(
+                              context: context,
+                              content: updateSuccessWidget(context: context));
+                        }
                       },
                       title: AppString.update,
                       textSize: 16.sp,
@@ -172,181 +184,84 @@ class CompleteEditProfile extends StatelessWidget {
   }
 
 //FORMS FIELDS SECTION
-  Widget formsFieldsSection({required BuildContext context}) {
+  Widget formsFieldsSection(
+      {required BuildContext context,
+      required SettingNotifier editProfileNotifier}) {
     return Column(
       children: [
         //FULL NAME
         CustomLabelTextField(
           prefixIcon: Assets.icUser,
-          controller: TextEditingController(),
+          controller: editProfileNotifier.fullNameController,
           labelText: AppString.fullName,
         ),
 
         //DESIGNATION
         CustomLabelTextField(
           prefixIcon: Assets.icDesignation,
-          controller: TextEditingController(),
+          controller: editProfileNotifier.designationController,
           labelText: AppString.designation,
-        ),
-        //Bio
-        CustomLabelTextField(
-          prefixIcon: Assets.icCheck,
-          controller: TextEditingController(),
-          labelText: AppString.bio,
         ),
 
         //phone number
 
         CustomPhoneNumber(
           prefixIcon: Assets.icGender,
-          controller: TextEditingController(),
+          controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,
         ),
-
-        // DropdownButtonFormField2<String>(
-        //   isExpanded: true,
-        //   decoration: InputDecoration(
-        //     contentPadding: const EdgeInsets.symmetric(vertical: 16),
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(100),
-        //     ),
-        //     // Add more decoration..
-        //   ),
-        //   hint: const Text(
-        //     'Gender',
-        //     style: TextStyle(fontSize: 14),
-        //   ),
-        //   items: genderList
-        //       .map((item) => DropdownMenuItem<String>(
-        //             value: item,
-        //             child: Text(
-        //               item,
-        //               style: TextStyle(
-        //                 fontSize: 14.sp,
-        //               ),
-        //             ),
-        //           ))
-        //       .toList(),
-        //   validator: (value) {
-        //     if (value == null) {
-        //       return 'Please select gender.';
-        //     }
-        //     return null;
-        //   },
-        //   onChanged: (value) {
-        //     //Do something when selected item is changed.
-        //   },
-        //   onSaved: (value) {
-        //     // selectedValue = value.toString();
-        //   },
-        //   buttonStyleData: const ButtonStyleData(
-        //     padding: EdgeInsets.only(right: 8),
-        //   ),
-        //   iconStyleData: const IconStyleData(
-        //     icon: Icon(
-        //       Icons.arrow_drop_down,
-        //       color: Colors.black45,
-        //     ),
-        //     iconSize: 24,
-        //   ),
-        //   dropdownStyleData: DropdownStyleData(
-        //     decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(15),
-        //     ),
-        //   ),
-        //   menuItemStyleData: const MenuItemStyleData(
-        //     padding: EdgeInsets.symmetric(horizontal: 16),
-        //   ),
-        // ),
-
-        // //PHONE NUMBER
-        // CustomDropdownButton(
-        //   buttonWidth: context.width,
-        //   // dropdownDecoration:
-        //   //     BoxDecoration(borderRadius: BorderRadius.circular(100)),
-        //   dropdownItems: const ["one", "two"],
-        //   hint: "Gender",
-        //   onChanged: (val) {},
-        //   value: "one",
-        //   icon: SvgPicture.asset(Assets.icArrowDown),
-        // ),
-        // const CustomPhoneNumberField(),
-
-        // CustomLabelTextField(
-        //   prefixIcon: Assets.icLock,
-        //   controller: TextEditingController(),
-        //   labelText: AppString.phoneNumber,
-        // ),
 
         CustomDropdownButton(
           customBtn: IgnorePointer(
             child: CustomLabelTextField(
               prefixIcon: Assets.icGender,
-              controller: TextEditingController(),
+              controller: editProfileNotifier.genderController,
               suffixIcon: Assets.icArrowDown,
               labelText: AppString.gender,
               readOnly: true,
             ),
           ),
           hint: "Gender",
-          value: "Male",
+          value: editProfileNotifier.genderController.text.isEmpty
+              ? "Male"
+              : editProfileNotifier.genderController.text,
           dropdownItems: genderList,
-          onChanged: (value) {},
+          onChanged: (value) {
+            editProfileNotifier.genderController.text = value!;
+          },
         ),
-        //GENDER
-        // Stack(
-        //   children: [
-        //     CustomLabelTextField(
-        //       prefixIcon: Assets.icGender,
-        //       controller: TextEditingController(),
-        //       suffixIcon: Assets.icArrowDown,
-        //       labelText: AppString.gender,
-        //       readOnly: true,
-        //       onTapOnSuffixIcon: () {
-        //         // log("on click on gender suffix icon");
-
-        //         // showMenu(
-        //         //   context: context,
-        //         //   position: const RelativeRect.fromLTRB(
-        //         //       100, 400, 100, 0), // Adjust position
-        //         //   items: genderList.map((String gender) {
-        //         //     return PopupMenuItem<String>(
-        //         //       value: gender,
-        //         //       child: Text(gender),
-        //         //     );
-        //         //   }).toList(),
-        //         // ).then((value) {
-        //         //   if (value != null) {
-        //         //     // setState(() {
-        //         //     //   selectedGender = value;
-        //         //     // });
-        //         //   }
-        //         // });
-        //       },
-        //     ),
-        //     // Positioned(
-        //     //   top: 0,
-        //     //   child: Container(
-        //     //     decoration: const BoxDecoration(color: Colors.red),
-        //     //     child: Column(
-        //     //       children: genderList.map((String gender) {
-        //     //         return PopupMenuItem<String>(
-        //     //           value: gender,
-        //     //           child: Text(gender),
-        //     //         );
-        //     //       }).toList(),
-        //     //     ),
-        //     //   ),
-        //     // )
-        //   ],
-        // ),
 
         //DATE OF BIRTH
         CustomLabelTextField(
           readOnly: true,
+          onTap: () async {
+            final DateTime? picked = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1970, 8),
+              lastDate: DateTime.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: Colors.green, // Header background color
+                    hintColor: Colors.green, // Accent color
+                    colorScheme: const ColorScheme.light(
+                        primary: Colors.green), // Active date color
+                    buttonTheme: const ButtonThemeData(
+                        textTheme: ButtonTextTheme.primary),
+                  ),
+                  child: child!,
+                );
+              },
+            );
+
+            if (picked != null) {
+              editProfileNotifier.dobController.text = formatDOB(picked);
+            }
+          },
 
           prefixIcon: Assets.icCake,
-          controller: TextEditingController(),
+          controller: editProfileNotifier.dobController,
           suffixIcon: Assets.icCalender,
           labelText: AppString.dob,
           onTapOnSuffixIcon: () async {
@@ -369,11 +284,10 @@ class CompleteEditProfile extends StatelessWidget {
                 );
               },
             );
-            // if (picked != null && picked != selectedDate) {
-            //   // setState(() {
-            //   //   selectedDate = picked;
-            //   // });
-            // }
+
+            if (picked != null) {
+              editProfileNotifier.dobController.text = formatDOB(picked);
+            }
           },
 
           // labelText: AppString.confirmPswd,
