@@ -73,12 +73,12 @@ class ResetPasswordView extends ConsumerWidget {
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      final isNewPassword =
-                          validateCreateNewPassword.validateCreateNewPassword();
-                      print(isNewPassword);
-                      if (isNewPassword) {
-                        offAllNamed(context, Routes.login);
-                      }
+                      // final isNewPassword =
+                      //     validateCreateNewPassword.validateCreateNewPassword();
+                      // print(isNewPassword);
+                      // if (isNewPassword) {
+                      offAllNamed(context, Routes.login);
+                      // }
                     },
                     title: AppString.submit,
                     textSize: 16.sp,
