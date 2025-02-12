@@ -168,11 +168,11 @@ class VerityOtpView extends ConsumerWidget {
                   //login
                   CommonAppBtn(
                     onTap: () {
-                      final isValidOtp = otpValidatorNotifier.validateOtp();
-                      print(isValidOtp);
-                      if (isValidOtp) {
-                        toNamed(context, Routes.resetPassword);
-                      }
+                      // final isValidOtp = otpValidatorNotifier.validateOtp();
+                      // print(isValidOtp);
+                      // if (isValidOtp) {
+                      toNamed(context, Routes.resetPassword);
+                      // }
                     },
                     title: AppString.submit,
                     textSize: 16.sp,

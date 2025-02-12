@@ -124,7 +124,7 @@ abstract final class AppString {
   static const String cancel = "Cancel";
   static const String save = "Save";
   static const String done = "Done";
-  static const String copyReferralCode = "Copy Referral Code";
+  static const String copyReferralCode = "Share Referral Code";
   static const String pleaseEnterOtp = "Please Enter Otp";
   static const String invalidOtp = "Invalid Otp Please check Your Opt";
   static const String saveText = "Save";
@@ -147,7 +147,7 @@ abstract final class AppString {
   static const String bio = "Bio";
   static const String profileUpdateSuccess = "Profile Updated Successfully ";
   //  static const String localDirectory="Lorem ipsum dolor sit amet consectetur. Semper vel interdum et posuere venenatis.";
-  //  static const String localDirectory="appname";
+  // static const String report = "Report";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

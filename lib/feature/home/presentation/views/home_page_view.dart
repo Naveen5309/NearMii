@@ -3,7 +3,6 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
-import 'package:NearMii/feature/common_widgets/custom_map_view_icon.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
@@ -20,124 +19,106 @@ class HomePageView extends ConsumerWidget {
     // final getPreference = ref.watch(getPreferenceProvider);
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(Assets.icHomePngBg),
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(Assets.icHomePngBg),
+              ),
+            ),
+
+            height: MediaQuery.sizeOf(context).height * 0.29,
+            // color: Colors.green,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: totalHeight -
+                        MediaQuery.of(navigatorKey.currentState!.context)
+                            .padding
+                            .top,
                   ),
-                ),
-
-                height: MediaQuery.sizeOf(context).height * 0.29,
-                // color: Colors.green,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  15.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        height: totalHeight -
-                            MediaQuery.of(navigatorKey.currentState!.context)
-                                .padding
-                                .top,
-                      ),
-                      15.verticalSpace,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //WELCOME BACK TEXT
-                              AppText(
-                                text: AppString.welcomeBack,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.primary.withOpacity(.8),
-                              ),
-                              5.verticalSpace,
-                              //NAME
-
-                              AppText(
-                                text: "Brooklyn Simmons",
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.primary,
-                              ),
-                            ],
+                          //WELCOME BACK TEXT
+                          AppText(
+                            text: AppString.welcomeBack,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.primary.withOpacity(.8),
                           ),
-                          Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: AppColor.primary.withOpacity(.16),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const CustomCacheNetworkImage(
-                                  height: 45,
-                                  width: 45,
-                                  img: "https://picsum.photos/250?image=9",
-                                  imageRadius: 40)),
+                          5.verticalSpace,
+                          //NAME
+
+                          AppText(
+                            text: "Brooklyn Simmons",
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.primary,
+                          ),
                         ],
                       ),
-                      SizedBox(
-                        height: context.height * .05,
-                      ),
-                      const LocationCard(
-                        location: "Philadelphia",
-                        address: "Preston Rd. Inglewood, Maine",
-                      ),
+                      Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColor.primary.withOpacity(.16),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const CustomCacheNetworkImage(
+                              height: 45,
+                              width: 45,
+                              img: "https://picsum.photos/250?image=9",
+                              imageRadius: 40)),
                     ],
                   ),
-                ),
+                  SizedBox(
+                    height: context.height * .05,
+                  ),
+                  const LocationCard(
+                    location: "Philadelphia",
+                    address: "Preston Rd. Inglewood, Maine",
+                  ),
+                ],
               ),
-              ref.watch(isMapView)
-                  ? Image.asset(
-                      Assets.map,
-                      height: context.height * .62,
-                      width: context.width,
-                      fit: BoxFit.cover,
-                    )
-                  : SizedBox(
-                      height: context.height * .62,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: 15,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return CustomProfileCard(
-                            profileImage:
-                                'https://picsum.photos/250?image=9', // Replace with actual image
-                            name: "Robert Fox",
-                            designation: "Senior Developer",
-                            distance: "50 meters away",
-                            onUnlockTap: () {
-                              print("Unlock Now Clicked!");
-                            },
-                          );
-                        },
-                      ),
-                    ),
-              // Image.asset(Assets.map)
-            ],
+            ),
           ),
-          // Positioned(
-          //     right: 0,
-          //     bottom: 100.h,
-          //     child: GestureDetector(
-          //       onTap: () {
-          //         ref.read(isMapView.notifier).state =
-          //             !ref.read(isMapView.notifier).state;
-          //       },
-          //       child: const Padding(
-          //         padding: EdgeInsets.all(8.0),
-          //         child: CustomMapViewIcon(),
-          //       ),
-          //     ))
+          ref.watch(isMapView)
+              ? Image.asset(
+                  Assets.map,
+                  height: context.height * .62,
+                  width: context.width,
+                  fit: BoxFit.cover,
+                )
+              : SizedBox(
+                  height: context.height * .68,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: 15,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return CustomProfileCard(
+                        profileImage:
+                            'https://picsum.photos/250?image=9', // Replace with actual image
+                        name: "Robert Fox",
+                        designation: "Senior Developer",
+                        distance: "50 meters away",
+                        onUnlockTap: () {
+                          print("Unlock Now Clicked!");
+                        },
+                      );
+                    },
+                  ),
+                ),
+          // Image.asset(Assets.map)
         ],
       ),
     );

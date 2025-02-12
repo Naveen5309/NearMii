@@ -78,12 +78,12 @@ class CompleteProfileView extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        final isComplete =
-                            createProfileNotifier.validateProfile();
-                        print(isComplete);
-                        if (isComplete) {
-                          toNamed(context, Routes.selectSocialMedia);
-                        }
+                        // final isComplete =
+                        //     createProfileNotifier.validateProfile();
+                        // print(isComplete);
+                        // if (isComplete) {
+                        toNamed(context, Routes.selectSocialMedia);
+                        // }
                       },
                       title: AppString.next,
                       textSize: 16.sp,

@@ -49,6 +49,11 @@ class InviteFriendBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(50.0)),
               borderSide: BorderSide(color: AppColor.green42B002, width: 1.5),
             ),
+            // suffixIcon: SvgPicture.asset(
+            //   Assets.icCopy,
+            //   height: 50,
+            //   width: 50,
+            // ),
             prefixIcon: SvgPicture.asset(Assets.shareIcon),
           ),
           20.verticalSpace,
