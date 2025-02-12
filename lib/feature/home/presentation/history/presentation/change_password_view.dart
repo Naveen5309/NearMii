@@ -19,16 +19,19 @@ class ChangePasswordView extends StatelessWidget {
         child: Column(
           children: [
             CustomLabelTextField(
+              labelBckColor: AppColor.primary,
               prefixIcon: Assets.icLock,
               controller: TextEditingController(),
               labelText: AppString.currentPassword,
             ),
             CustomLabelTextField(
+              labelBckColor: AppColor.primary,
               prefixIcon: Assets.icLock,
               controller: TextEditingController(),
               labelText: AppString.newPswd,
             ),
             CustomLabelTextField(
+              labelBckColor: AppColor.primary,
               prefixIcon: Assets.icLock,
               controller: TextEditingController(),
               labelText: AppString.confirmPswd,

@@ -22,16 +22,19 @@ class ContactUsView extends StatelessWidget {
           child: Column(
             children: [
               CustomLabelTextField(
+                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icUser,
                 controller: TextEditingController(),
                 labelText: AppString.currentPassword,
               ),
               CustomLabelTextField(
+                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icSms,
                 controller: TextEditingController(),
                 labelText: AppString.newPswd,
               ),
               CustomLabelTextField(
+                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icSubject,
                 controller: TextEditingController(),
                 labelText: AppString.subject,

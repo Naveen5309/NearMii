@@ -12,6 +12,7 @@ class CustomLabelTextField extends StatefulWidget {
   final String? labelText;
   final String? prefixIcon;
   final Widget? prefixWidget;
+  final Color? labelBckColor;
 
   final bool? isObscure;
   final String? suffixIcon;
@@ -36,6 +37,7 @@ class CustomLabelTextField extends StatefulWidget {
       this.onTapOnPrefixIcon,
       this.onTapOnSuffixIcon,
       this.prefixIcon,
+      this.labelBckColor,
       this.maxLines,
       this.onTap,
       this.radius,
@@ -157,7 +159,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
               },
               child: Container(
                 padding: const EdgeInsets.only(left: 3, right: 3),
-                color: AppColor.primary,
+                color: widget.labelBckColor ?? AppColor.greyf9f9f9,
                 child: AppText(
                   text: widget.labelText ?? '',
                   color: textEditHasFocus

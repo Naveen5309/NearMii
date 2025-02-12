@@ -41,6 +41,7 @@ class DeletedDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               CustomLabelTextField(
+                labelBckColor: AppColor.primary,
                 prefixIcon: Assets.icLock,
                 controller: TextEditingController(),
                 labelText: AppString.currentPassword,
