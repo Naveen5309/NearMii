@@ -2,7 +2,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
-import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
@@ -18,7 +18,7 @@ class VerityOtpView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final otpValidatorNotifier = ref.watch(loginProvider.notifier);
+    final otpValidatorNotifier = ref.watch(signupProvider.notifier);
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

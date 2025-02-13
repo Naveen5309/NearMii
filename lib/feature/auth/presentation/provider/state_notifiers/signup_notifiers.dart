@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
@@ -11,6 +15,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final AuthUseCase authUseCase;
   final phoneController = TextEditingController();
   final fullNameController = TextEditingController();
+  final otpController = TextEditingController();
+
   final emailController = TextEditingController();
   final referralController = TextEditingController();
   final pswdController = TextEditingController();
@@ -41,6 +47,17 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     }
   }
 
+//VALIDATE Forget Password
+  bool validateOtp() {
+    bool isValid = Validator().otpValidator(otp: otpController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
   //VALIDATE Create Profile
   bool validateProfile() {
     bool isValid = Validator().completeProfileValidator(
@@ -62,59 +79,100 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     await Getters.getLocalStorage.saveIsLogin(true);
   }
 
-// //LOGIN
-//   Future<void> login() async {
-//     state = const AuthApiLoading(authType: AuthType.login);
-//     try {
-//       if (!(await Getters.networkInfo.isConnected)) {
-//         state = const AuthApiFailed(
-//             error: "No internet connection", authType: AuthType.login);
-//         return;
-//       }
-//       if (await Getters.networkInfo.isSlow) {}
-//       Map<String, dynamic> body = {
-//         "email": "dev@yopmail.com",
-//         "password": "Pass@123",
-//         "device_type": "android",
-//         "device_token": "No Token",
-//       };
-//       final result = await authUseCase.callLogin(body: body);
-//       state = result.fold((error) {
-//         return AuthApiFailed(error: error.message, authType: AuthType.login);
-//       }, (result) {
-//         return const AuthApiSuccess(authType: AuthType.login);
-//       });
-//     } catch (e) {
-//       state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
-//     }
-//   }
+//DID YOU FORGOT YOUR PASSWORD
+  Future<void> forgotPassword() async {
+    state = const AuthApiLoading(authType: AuthType.forgotPassword);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.forgotPassword);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "email": emailController.text.trim(),
+      };
+      final result = await authUseCase.forgotPassword(body: body);
+      state = result.fold((error) {
+        log("forgot password error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.forgotPassword);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.forgotPassword);
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.forgotPassword);
+    }
+  }
 
-// //GET SOCIAL PROFILES
-//   Future<void> getSocialPlatform() async {
-//     state = const AuthApiLoading(authType: AuthType.socialMedia);
-//     try {
-//       if (!(await Getters.networkInfo.isConnected)) {
-//         state = const AuthApiFailed(
-//             error: "No internet connection", authType: AuthType.socialMedia);
-//         return;
-//       }
+// VERIFY OTP
+  Future<void> verifyOtp() async {
+    state = const AuthApiLoading(authType: AuthType.otpVerify);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.otpVerify);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "email": emailController.text.trim(),
+        "otp": otpController.text.trim(),
+      };
+      final result = await authUseCase.otpVerify(body: body);
+      state = result.fold((error) {
+        log("verifyOtp error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.otpVerify);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.otpVerify);
+      });
+    } catch (e) {
+      state = AuthApiFailed(error: e.toString(), authType: AuthType.otpVerify);
+    }
+  }
 
-//       final result = await authUseCase.getPlatform();
-//       state = result.fold((error) {
-//         return AuthApiFailed(
-//             error: error.message, authType: AuthType.socialMedia);
-//       }, (result) {
-//         log("result is:-> $result");
-
-//         // Update the list and notify UI by updating state
-//         platformDataList = result ?? [];
-//         return const AuthApiSuccess(
-//           authType: AuthType.socialMedia,
-//         );
-//       });
-//     } catch (e) {
-//       state =
-//           AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
-//     }
-//   }
+// RESET PASSWORD
+  Future<void> resetPassword() async {
+    state = const AuthApiLoading(authType: AuthType.resetPassword);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.resetPassword);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "email": emailController.text.trim(),
+        "password": pswdController.text.trim(),
+      };
+      final result = await authUseCase.resetPassword(body: body);
+      state = result.fold((error) {
+        log("resetPassword error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.resetPassword);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.resetPassword);
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.resetPassword);
+    }
+  }
 }

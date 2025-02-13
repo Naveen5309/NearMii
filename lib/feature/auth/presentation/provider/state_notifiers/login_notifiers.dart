@@ -15,7 +15,6 @@ import '../states/auth_states.dart';
 class LoginNotifier extends StateNotifier<AuthState> {
   final AuthUseCase authUseCase;
   final phoneController = TextEditingController();
-  final otpController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -75,17 +74,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
   bool validateForgetPassword() {
     bool isValid =
         Validator().forgetPasswordValidator(email: emailController.text.trim());
-    if (isValid) {
-      return true;
-    } else {
-      toast(msg: Validator().error, isError: true);
-      return false;
-    }
-  }
-
-//VALIDATE Forget Password
-  bool validateOtp() {
-    bool isValid = Validator().otpValidator(otp: otpController.text.trim());
     if (isValid) {
       return true;
     } else {

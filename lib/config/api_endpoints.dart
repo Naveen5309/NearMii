@@ -16,9 +16,9 @@ abstract final class ApiConstants {
   static const String changePassword = "$baseUrl/changePassword";
   static const String deleteHistory = "$baseUrl/deleteHistory";
   static const String logout = "$baseUrl/logout";
-  // static const String completeProfile = "$baseUrl/completeProfile";
-  // static const String completeProfile = "$baseUrl/completeProfile";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  static const String resetPassword = "$baseUrl/resetPassword";
+  static const String verifyOtp = "$baseUrl/verifyOtp";
+  static const String forgetPassword = "$baseUrl/forgetPassword";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

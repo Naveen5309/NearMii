@@ -9,6 +9,15 @@ abstract class AuthUseCase {
   Future<Either<Failure, UserModel?>> callLogin(
       {required Map<String, dynamic> body});
 
+  Future<Either<Failure, dynamic>> forgotPassword(
+      {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> otpVerify(
+      {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> resetPassword(
+      {required Map<String, dynamic> body});
+
   Future<Either<Failure, GetPlatformData>> getPlatform();
 
   Future<Either<Failure, dynamic>> logOut();
@@ -23,6 +32,33 @@ class AuthUseCaseImpl implements AuthUseCase {
   Future<Either<Failure, UserModel?>> callLogin(
       {required Map<String, dynamic> body}) async {
     final result = await repository.doLogin(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> forgotPassword(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.forgotPassword(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> otpVerify(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.otpVerify(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> resetPassword(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.resetPassword(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });
