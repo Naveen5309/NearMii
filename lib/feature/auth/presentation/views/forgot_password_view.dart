@@ -25,61 +25,85 @@ class ForgotPasswordView extends ConsumerWidget {
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .06),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: totalHeight - AppBar().preferredSize.height,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: context.height * .05),
-                    child: const CommonBackBtn(),
-                  ),
-                  //Logo
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * .06,
+                  vertical: context.height * .05),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: totalHeight - AppBar().preferredSize.height,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: context.height * .05),
+                      child: const CommonBackBtn(),
+                    ),
+                    //Logo
 
-                  // const Text("APPlOGO"),
+                    // const Text("APPlOGO"),
 
-                  AppText(
-                    text: AppString.didYouForgotYourPswd,
-                    fontSize: 32.sp,
-                  ),
+                    AppText(
+                      text: AppString.didYouForgotYourPswd,
+                      fontSize: 32.sp,
+                    ),
 
-                  15.verticalSpace,
-                  AppText(
-                    text: AppString.enterYourEmailBelow,
-                    fontSize: 13.sp,
-                    color: AppColor.grey999,
-                  ),
+                    15.verticalSpace,
+                    AppText(
+                      text: AppString.enterYourEmailBelow,
+                      fontSize: 13.sp,
+                      color: AppColor.grey999,
+                    ),
 
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
 
-                  //Field forms
+                    //Field forms
 
-                  formsFieldsSection(forgetPasswordNotifier),
-                  const Spacer(),
-                  //login
-                  CommonAppBtn(
-                    onTap: () {
-                      // final isForget =
-                      //     forgetPasswordNotifier.validateForgetPassword();
-                      // print(isForget);
-                      // if (isForget) {
-                      toNamed(context, Routes.otpVerify);
-                      // }
-                    },
-                    title: AppString.send,
-                    textSize: 16.sp,
-                  ),
+                    formsFieldsSection(forgetPasswordNotifier),
+                    // const Spacer(),
+                    // //login
+                    // CommonAppBtn(
+                    //   onTap: () {
+                    //     // final isForget =
+                    //     //     forgetPasswordNotifier.validateForgetPassword();
+                    //     // print(isForget);
+                    //     // if (isForget) {
+                    //     toNamed(context, Routes.otpVerify);
+                    //     // }
+                    //   },
+                    //   title: AppString.send,
+                    //   textSize: 16.sp,
+                    // ),
 
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
-                ],
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+                  ],
+                ),
               ),
             )),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(
+            left: context.width * .06,
+            right: context.width * .06,
+            top: context.width * .06,
+            bottom: context.width * .03,
+          ),
+          child: CommonAppBtn(
+            onTap: () {
+              // final isValidOtp = otpValidatorNotifier.validateOtp();
+              // print(isValidOtp);
+              // if (isValidOtp) {
+              toNamed(context, Routes.otpVerify);
+              // }
+            },
+            title: AppString.send,
+            textSize: 16.sp,
+          ),
+        ),
       ),
     );
   }

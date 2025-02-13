@@ -93,7 +93,7 @@ class _HistoryViewState extends State<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "NAME",
+                                                title: "Robert Fox",
                                                 leadingIcon: '',
                                                 subtitle: 'Designation',
                                                 onTap: () {
@@ -155,7 +155,7 @@ class _HistoryViewState extends State<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "NAME",
+                                                title: "Courtney Henry",
                                                 leadingIcon: '',
                                                 subtitle: 'Designation',
                                                 onTap: () {
@@ -216,7 +216,7 @@ class _HistoryViewState extends State<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "NAME",
+                                                title: "Wade Warren",
                                                 leadingIcon: '',
                                                 subtitle: 'Designation',
                                                 onTap: () {

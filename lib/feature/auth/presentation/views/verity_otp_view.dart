@@ -23,10 +23,13 @@ class VerityOtpView extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .06),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * .06,
+                  vertical: context.height * .05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -164,19 +167,7 @@ class VerityOtpView extends ConsumerWidget {
 
                   //Field forms
 
-                  const Spacer(),
                   //login
-                  CommonAppBtn(
-                    onTap: () {
-                      // final isValidOtp = otpValidatorNotifier.validateOtp();
-                      // print(isValidOtp);
-                      // if (isValidOtp) {
-                      toNamed(context, Routes.resetPassword);
-                      // }
-                    },
-                    title: AppString.submit,
-                    textSize: 16.sp,
-                  ),
 
                   SizedBox(
                     height: context.height * .05,
@@ -184,6 +175,26 @@ class VerityOtpView extends ConsumerWidget {
                 ],
               ),
             )),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(
+            left: context.width * .06,
+            right: context.width * .06,
+            top: context.width * .06,
+            bottom: context.width * .03,
+          ),
+          child: CommonAppBtn(
+            onTap: () {
+              // final isValidOtp = otpValidatorNotifier.validateOtp();
+              // print(isValidOtp);
+              // if (isValidOtp) {
+              toNamed(context, Routes.resetPassword);
+              // }
+            },
+            title: AppString.submit,
+            textSize: 16.sp,
+          ),
+        ),
       ),
     );
   }

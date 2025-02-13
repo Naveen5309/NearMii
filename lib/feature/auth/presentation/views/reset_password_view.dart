@@ -22,74 +22,96 @@ class ResetPasswordView extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: context.width * .06,
                   vertical: context.height * .05),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: totalHeight - AppBar().preferredSize.height,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: context.height * .05),
-                    child: const CommonBackBtn(),
-                  ),
-                  //Logo
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: totalHeight - AppBar().preferredSize.height,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: context.height * .05),
+                      child: const CommonBackBtn(),
+                    ),
+                    //Logo
 
-                  // const Text("APPlOGO"),
+                    // const Text("APPlOGO"),
 
-                  // SvgPicture.asset(
-                  //   Assets.appLogo,
-                  //   height: 20,
-                  //   width: 20,
-                  // ),
+                    // SvgPicture.asset(
+                    //   Assets.appLogo,
+                    //   height: 20,
+                    //   width: 20,
+                    // ),
 
-                  AppText(
-                    text: AppString.createNewPswd,
-                    fontSize: 32.sp,
-                  ),
+                    AppText(
+                      text: AppString.createNewPswd,
+                      fontSize: 32.sp,
+                    ),
 
-                  15.verticalSpace,
-                  AppText(
-                    text: AppString.enterYourEmailBelow,
-                    fontSize: 13.sp,
-                    color: AppColor.grey999,
-                  ),
+                    15.verticalSpace,
+                    AppText(
+                      text: AppString.enterYourEmailBelow,
+                      fontSize: 13.sp,
+                      color: AppColor.grey999,
+                    ),
 
-                  SizedBox(
-                    height: context.height * .03,
-                  ),
+                    SizedBox(
+                      height: context.height * .03,
+                    ),
 
-                  //Field forms
+                    //Field forms
 
-                  formsFieldsSection(validateCreateNewPassword),
-                  const Spacer(),
+                    formsFieldsSection(validateCreateNewPassword),
+                    // const Spacer(),
 
-                  //login
-                  CommonAppBtn(
-                    onTap: () {
-                      // final isNewPassword =
-                      //     validateCreateNewPassword.validateCreateNewPassword();
-                      // print(isNewPassword);
-                      // if (isNewPassword) {
-                      offAllNamed(context, Routes.login);
-                      // }
-                    },
-                    title: AppString.submit,
-                    textSize: 16.sp,
-                  ),
+                    // //login
+                    // CommonAppBtn(
+                    //   onTap: () {
+                    //     // final isNewPassword =
+                    //     //     validateCreateNewPassword.validateCreateNewPassword();
+                    //     // print(isNewPassword);
+                    //     // if (isNewPassword) {
+                    //     offAllNamed(context, Routes.login);
+                    //     // }
+                    //   },
+                    //   title: AppString.submit,
+                    //   textSize: 16.sp,
+                    // ),
 
-                  SizedBox(
-                    height: context.height * .05,
-                  ),
-                ],
+                    SizedBox(
+                      height: context.height * .05,
+                    ),
+                  ],
+                ),
               ),
             )),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(
+            left: context.width * .06,
+            right: context.width * .06,
+            top: context.width * .06,
+            bottom: context.width * .03,
+          ),
+          child: CommonAppBtn(
+            onTap: () {
+              // final isValidOtp = otpValidatorNotifier.validateOtp();
+              // print(isValidOtp);
+              // if (isValidOtp) {
+              toNamed(context, Routes.login);
+              // }
+            },
+            title: AppString.submit,
+            textSize: 16.sp,
+          ),
+        ),
       ),
     );
   }

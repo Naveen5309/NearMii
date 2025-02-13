@@ -10,6 +10,7 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
+import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,12 +142,13 @@ class CompleteProfileView extends ConsumerWidget {
           controller: createProfileNotifier.designationController,
           labelText: AppString.designation,
         ),
-        //Bio
-        CustomLabelTextField(
-          prefixIcon: Assets.icCheck,
-          controller: createProfileNotifier.bioController,
-          labelText: AppString.bio,
-        ),
+
+        // CustomLabelTextField(
+
+        //   prefixIcon: Assets.icCheck,
+        //   controller: createProfileNotifier.bioController,
+        //   labelText: AppString.bio,
+        // ),
 
         //phone number
 
@@ -240,6 +242,16 @@ class CompleteProfileView extends ConsumerWidget {
           },
 
           // labelText: AppString.confirmPswd,
+        ),
+
+        //Bio
+
+        CustomTextformFeild(
+          radius: 19,
+          prefixIcon: Assets.icCheck,
+          controller: createProfileNotifier.bioController,
+          labelText: AppString.bio,
+          maxLines: 5,
         ),
 
         //REFERREL CODE

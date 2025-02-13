@@ -8,6 +8,7 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
+import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
 import 'package:NearMii/feature/setting/presentation/provider/edit_profile_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting_notifier.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class CompleteEditProfile extends ConsumerWidget {
         body: BgImageContainer(
             bgImage: Assets.authBg,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * .05,
+                  vertical: context.width * .05),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,6 +304,16 @@ class CompleteEditProfile extends ConsumerWidget {
           },
 
           // labelText: AppString.confirmPswd,
+        ),
+
+        //Bio
+
+        CustomTextformFeild(
+          radius: 19,
+          prefixIcon: Assets.icCheck,
+          controller: editProfileNotifier.bioController,
+          labelText: AppString.bio,
+          maxLines: 5,
         ),
       ],
     );

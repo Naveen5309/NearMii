@@ -116,7 +116,11 @@ class LoginNotifier extends StateNotifier<AuthState> {
             error: AppString.noInternetConnection, authType: AuthType.login);
         return;
       }
-      if (await Getters.networkInfo.isSlow) {}
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
       Map<String, dynamic> body = {
         "email": emailController.text.trim(),
         "password": passwordController.text.trim(),
