@@ -18,9 +18,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final otpController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
-  final emailController = TextEditingController();
+  final emailController = TextEditingController(text: "testing@gmail.com");
   final referralController = TextEditingController();
-  final passwordController = TextEditingController();
+  final passwordController = TextEditingController(text: "lokesh@123");
   final confirmPasswordController = TextEditingController();
 
   List<PlatformData> socialMediaList = [];
@@ -166,6 +166,31 @@ class LoginNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
+    }
+  }
+
+//LOG OUT
+
+  //LOGOUT
+  Future<void> logOutApi() async {
+    state = const AuthApiLoading(authType: AuthType.logOut);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection, authType: AuthType.logOut);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {}
+      // Map<String, dynamic> body = {};
+      final result = await authUseCase.logOut();
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return AuthApiFailed(error: error.message, authType: AuthType.logOut);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.logOut);
+      });
+    } catch (e) {
+      state = AuthApiFailed(error: e.toString(), authType: AuthType.logOut);
     }
   }
 }

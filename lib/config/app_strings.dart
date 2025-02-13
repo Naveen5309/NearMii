@@ -87,6 +87,8 @@ abstract final class AppString {
   static const String somethingElse = "Something else";
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
+  static const String logoutSuccess = "You are Logged Out";
+
   static const String editProfile = "Edit Profile Details";
   static const String inviteFriends = "Invite Friends";
   static const String termsAndConditions = "Terms & Conditions";

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-
 import '../../config/helper.dart';
 import '../../feature/auth/data/models/user_model.dart';
 
@@ -23,6 +22,7 @@ abstract class LocalStorage {
 
   Future<void> saveToken(String token);
   Future<void> saveIsLogin(bool isLogin);
+  bool? getIsLogin();
 
   Future<void> saveIsProfileComplete(int isComplete);
   int? getIsProfileComplete();
@@ -81,6 +81,12 @@ class HiveStorageImp extends LocalStorage {
   int? getIsProfileComplete() {
     final isComplete = userBox.get(HiveConst.isProfileComplete);
     return isComplete;
+  }
+
+  @override
+  bool? getIsLogin() {
+    final isLogin = userBox.get(HiveConst.isLogin);
+    return isLogin;
   }
 
   @override

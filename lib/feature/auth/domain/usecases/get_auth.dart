@@ -10,6 +10,8 @@ abstract class AuthUseCase {
       {required Map<String, dynamic> body});
 
   Future<Either<Failure, GetPlatformData>> getPlatform();
+
+  Future<Either<Failure, dynamic>> logOut();
 }
 
 class AuthUseCaseImpl implements AuthUseCase {
@@ -29,6 +31,15 @@ class AuthUseCaseImpl implements AuthUseCase {
   @override
   Future<Either<Failure, GetPlatformData>> getPlatform() async {
     final result = await repository.getPlatform();
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+//LOGOUT
+  @override
+  Future<Either<Failure, dynamic>> logOut() async {
+    final result = await repository.logOut();
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

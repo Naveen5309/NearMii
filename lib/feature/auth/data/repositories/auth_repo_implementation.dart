@@ -11,6 +11,7 @@ abstract class AuthRepository {
   Future<Either<Failure, UserModel?>> doLogin(
       {required Map<String, dynamic> body});
   Future<Either<Failure, GetPlatformData>> getPlatform();
+  Future<Either<Failure, dynamic>> logOut();
 }
 
 class AuthRepoImpl implements AuthRepository {
@@ -38,6 +39,22 @@ class AuthRepoImpl implements AuthRepository {
   Future<Either<Failure, GetPlatformData>> getPlatform() async {
     try {
       final data = await dataSource.getPlatformApi();
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+//LOG OUT
+
+  @override
+  Future<Either<Failure, dynamic>> logOut() async {
+    try {
+      final data = await dataSource.logOutApi();
       if (data?.status == "success") {
         return Right(data?.data);
       } else {

@@ -1,25 +1,70 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dotted_box.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SettingView extends StatelessWidget {
+class SettingView extends ConsumerWidget {
   const SettingView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.watch(loginProvider);
+    // final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.listen(
+      loginProvider,
+      (previous, next) async {
+        if (next is AuthApiLoading && next.authType == AuthType.logOut) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
+          toast(msg: AppString.logoutSuccess, isError: false);
+
+          await Getters.getLocalStorage.saveIsLogin(false);
+
+          // back(context);
+          offAllNamed(context, Routes.login);
+        } else if (next is AuthApiFailed && next.authType == AuthType.logOut) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
+
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
@@ -169,7 +214,9 @@ class SettingView extends StatelessWidget {
                           borderWidth: 1,
                           backGroundColor: AppColor.redF8E2E2,
                           onTap: () {
-                            offAllNamed(context, Routes.login);
+                            final notifier = ref.read(loginProvider.notifier);
+                            notifier.getSocialPlatform();
+                            // offAllNamed(context, Routes.login);
                           },
                         ),
                       ),
@@ -184,110 +231,110 @@ class SettingView extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget ProfileWidget({
-  required String imageUrl,
-  required String name,
-  required int points,
-  required bool isVip,
-  required SubscriptionModel model,
-}) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Stack(
-        children: [
-          CustomCacheNetworkImage(
-            img: imageUrl, imageRadius: 70, height: 70, width: 70,
-            // CircleAvatar(
-            //   radius: 30.r,
-            //   backgroundImage: NetworkImage(imageUrl),
-            // ),
-          ),
-          if (isVip)
-            Positioned(
-              right: 0,
-              bottom: -1,
-              child: SvgPicture.asset(
-                Assets.imgVip,
-              ),
+  Widget ProfileWidget({
+    required String imageUrl,
+    required String name,
+    required int points,
+    required bool isVip,
+    required SubscriptionModel model,
+  }) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            CustomCacheNetworkImage(
+              img: imageUrl, imageRadius: 70, height: 70, width: 70,
+              // CircleAvatar(
+              //   radius: 30.r,
+              //   backgroundImage: NetworkImage(imageUrl),
+              // ),
             ),
-        ],
-      ),
-      SizedBox(height: 10.h),
-      AppText(
-        text: name,
-        fontFamily: Constants.fontFamily,
-        fontSize: 24.sp,
-        color: AppColor.black000000,
-        fontWeight: FontWeight.w700,
-      ),
-      SizedBox(height: 10.h),
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          color: const Color(0xff01C27D).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20.r),
+            if (isVip)
+              Positioned(
+                right: 0,
+                bottom: -1,
+                child: SvgPicture.asset(
+                  Assets.imgVip,
+                ),
+              ),
+          ],
         ),
-        child: AppText(
-          text: "${model.Points} Points",
-          color: const Color(0xff01C27D),
+        SizedBox(height: 10.h),
+        AppText(
+          text: name,
           fontFamily: Constants.fontFamily,
-          fontSize: 15.sp,
-          fontWeight: FontWeight.w500,
+          fontSize: 24.sp,
+          color: AppColor.black000000,
+          fontWeight: FontWeight.w700,
+        ),
+        SizedBox(height: 10.h),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: const Color(0xff01C27D).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: AppText(
+            text: "${model.Points} Points",
+            color: const Color(0xff01C27D),
+            fontFamily: Constants.fontFamily,
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget dottedContainer(BuildContext context, SubscriptionModel model) {
+    return CommonDottedBorder(
+      borderRadius: 20,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppColor.primary,
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
+        width: context.width * 0.9,
+        height: 70.h,
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(Assets.iconVip),
+            SizedBox(width: 10.w),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppText(
+                  fontFamily: Constants.fontFamily,
+                  text: AppString.subscription,
+                  color: AppColor.black000000,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                2.verticalSpace,
+                AppText(
+                  fontFamily: Constants.fontFamily,
+                  text: AppString.pricePerMonth,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.grey21203F.withOpacity(.5),
+                ),
+              ],
+            ),
+            const Spacer(),
+            AppText(
+              fontFamily: Constants.fontFamily,
+              text: "${model.daysLeft} days left",
+              color: const Color(0xff00C565),
+              fontSize: 12.sp,
+            ),
+          ],
         ),
       ),
-    ],
-  );
-}
-
-Widget dottedContainer(BuildContext context, SubscriptionModel model) {
-  return CommonDottedBorder(
-    borderRadius: 20,
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: AppColor.primary,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 8.h),
-      width: context.width * 0.9,
-      height: 70.h,
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(Assets.iconVip),
-          SizedBox(width: 10.w),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppText(
-                fontFamily: Constants.fontFamily,
-                text: AppString.subscription,
-                color: AppColor.black000000,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-              ),
-              2.verticalSpace,
-              AppText(
-                fontFamily: Constants.fontFamily,
-                text: AppString.pricePerMonth,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColor.grey21203F.withOpacity(.5),
-              ),
-            ],
-          ),
-          const Spacer(),
-          AppText(
-            fontFamily: Constants.fontFamily,
-            text: "${model.daysLeft} days left",
-            color: const Color(0xff00C565),
-            fontSize: 12.sp,
-          ),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 }

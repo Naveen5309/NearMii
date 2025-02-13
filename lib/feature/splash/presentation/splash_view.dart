@@ -1,5 +1,6 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,17 +32,36 @@ class _SplashViewState extends ConsumerState<SplashView>
     // _controller.forward();
   }
 
+  //CHECK LOGIN
+
+  Future<bool> checkLogin() async {
+    bool isLogin = Getters.getLocalStorage.getIsLogin() ?? false;
+    return isLogin;
+  }
+
   @override
   void dispose() {
     // _controller.dispose();
     super.dispose();
   }
 
-  void _navigateToNextScreen() async {
+  void _navigateToNextScreen() {
+    // Store mounted state before async call
+    final isMounted = context.mounted;
+
     // Simulate a delay for the splash screen
-    await Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
+      // Check if the widget is still mounted
+      if (!isMounted) return;
+
       // Navigate to the next screen (replace with your next screen logic)
-      if (mounted) {
+      bool isLogin = await checkLogin();
+
+      if (!isMounted) return;
+
+      if (isLogin) {
+        offAllNamed(context, Routes.bottomNavBar, args: false);
+      } else {
         offAllNamed(context, Routes.onboard, args: false);
       }
     });

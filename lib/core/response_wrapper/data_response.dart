@@ -5,8 +5,15 @@ class ResponseWrapper<TModel> {
   int? statusCode;
   String? message;
   TModel? data;
+  String? token;
 
-  ResponseWrapper({this.status, this.statusCode, this.message, this.data});
+  ResponseWrapper({
+    this.status,
+    this.statusCode,
+    this.message,
+    this.data,
+    this.token,
+  });
 
   factory ResponseWrapper.fromJson(
     Map<String, dynamic> json,
