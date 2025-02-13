@@ -1,1 +1,9 @@
-enum AuthType { login, signup, socialMedia, completeProfile }
+enum AuthType {
+  login,
+  signup,
+  socialMedia,
+  completeProfile,
+  forgotPassword,
+  otpVerify,
+  resetPassword
+}

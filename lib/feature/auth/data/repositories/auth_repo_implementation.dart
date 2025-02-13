@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 
 import '../../../../core/error/failure.dart';
@@ -21,6 +23,7 @@ class AuthRepoImpl implements AuthRepository {
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.logInUser(body: body);
+
       if (data?.status == "success") {
         return Right(data?.data);
       } else {

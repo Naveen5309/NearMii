@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
@@ -40,6 +42,35 @@ class LoginNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  // //--------> LOGIN API <--------- //
+  // Future<void> login() async {
+  //   state = const AuthApiLoading(authType: AuthType.login);
+  //   try {
+  //     if (!(await Getters.networkInfo.isConnected)) {
+  //       state = const AuthApiFailed(
+  //           error: "No internet connection", authType: AuthType.login);
+  //       return;
+  //     }
+  //     if (await Getters.networkInfo.isSlow) {
+  //       toast(msg: AppString.networkSlow);
+  //     }
+  //     Map<String, dynamic> body = {
+  //       "email": emailController.text.trim(),
+  //       "password": passwordController.text.trim(),
+  //       "device_token": "device token goes here",
+  //       "device_type": Platform.isIOS ? "ios" : "android",
+  //     };
+  //     final result = await authUseCase.callLogin(body: body);
+  //     state = result.fold((error) {
+  //       return AuthApiFailed(error: error.message, authType: AuthType.login);
+  //     }, (result) {
+  //       return const AuthApiSuccess(authType: AuthType.login);
+  //     });
+  //   } catch (e) {
+  //     state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
+  //   }
+  // }
+
   //VALIDATE Forget Password
   bool validateForgetPassword() {
     bool isValid =
@@ -77,23 +108,24 @@ class LoginNotifier extends StateNotifier<AuthState> {
   }
 
 //LOGIN
-  Future<void> login() async {
+  Future<void> loginApi() async {
     state = const AuthApiLoading(authType: AuthType.login);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const AuthApiFailed(
-            error: "No internet connection", authType: AuthType.login);
+            error: AppString.noInternetConnection, authType: AuthType.login);
         return;
       }
       if (await Getters.networkInfo.isSlow) {}
       Map<String, dynamic> body = {
-        "email": "dev@yopmail.com",
-        "password": "Pass@123",
-        "device_type": "android",
+        "email": emailController.text.trim(),
+        "password": passwordController.text.trim(),
+        "device_type": Platform.isAndroid ? "android" : "ios",
         "device_token": "No Token",
       };
       final result = await authUseCase.callLogin(body: body);
       state = result.fold((error) {
+        log("login error:${error.message} ");
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
         return const AuthApiSuccess(authType: AuthType.login);

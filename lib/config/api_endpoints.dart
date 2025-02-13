@@ -8,6 +8,24 @@ abstract final class ApiConstants {
 
   static const String baseUrl = "$url/api/users";
   static const String login = "$baseUrl/login";
+  static const String register = "$baseUrl/register";
+
+  static const String completeProfile = "$baseUrl/completeProfile";
+  static const String socialLogin = "$baseUrl/socialLogin";
+  static const String deleteAccount = "$baseUrl/deleteAccount";
+  static const String changePassword = "$baseUrl/changePassword";
+  static const String deleteHistory = "$baseUrl/deleteHistory";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String completeProfile = "$baseUrl/completeProfile";
+
   static const String getPlatform = "$baseUrl/getPlatform";
 
   static const String preferences = "$baseUrl/get/preferences";

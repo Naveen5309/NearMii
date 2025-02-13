@@ -1,7 +1,6 @@
 import 'package:NearMii/feature/auth/data/data_source/auth_data_source.dart';
 import 'package:NearMii/feature/auth/data/repositories/auth_repo_implementation.dart';
 import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
-import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

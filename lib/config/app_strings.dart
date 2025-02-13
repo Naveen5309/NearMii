@@ -30,6 +30,7 @@ abstract final class AppString {
   static const String signUp = "Sign up";
 
   static const String signIn = "Sign in";
+  static const String networkSlow = "Network is slow";
 
   static const String iHaveAnAccount = "I have an account";
   static const String or = "or";
@@ -67,6 +68,8 @@ abstract final class AppString {
   static const String gender = "Gender";
   static const String dob = "Date of birth";
   static const String next = "Next";
+  static const String loginSuccess = "You are logged in successfully";
+
   static const String addSocialProfiles = "Add Social Profiles";
   static const String searchHere = "Search here";
   static const String socialMedia = "Social Media";
@@ -151,7 +154,7 @@ abstract final class AppString {
   //  static const String localDirectory="appname";
   static const String name = "Name";
   static const String email = "Email";
-  //  static const String localDirectory="appname";
+  static const String noInternetConnection = "No internet connection";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

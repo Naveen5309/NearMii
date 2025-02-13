@@ -68,9 +68,12 @@ class ApiProvider {
       );
       return dataResponse;
     } catch (err, c) {
-      functionLog(msg: "t>>>>>>>>$err", fun: "requestData");
+      functionLog(msg: "t>>>>>>>>err$err", fun: "requestData");
       functionLog(msg: "t>>>>>>>>$c", fun: "requestData");
       if (err is DioException) {
+        log("error type is:-> ${err.type}");
+        log("error type is:-> $err");
+
         if (err.type == DioExceptionType.receiveTimeout ||
             err.type == DioExceptionType.connectionTimeout) {
           return ResponseWrapper(
@@ -85,6 +88,12 @@ class ApiProvider {
         } else if (err.response != null && (err.response?.statusCode == 401)) {
           throw ResponseWrapper(
               statusCode: 0, message: "Authentication Failed", status: "error");
+        } else if ((err.type == DioExceptionType.badResponse) &&
+            (err.response?.statusCode == 400)) {
+          return ResponseWrapper(
+              statusCode: 0,
+              message: err.response?.data["message"] ?? "Something went wrong",
+              status: "error");
         }
       }
       final res = (err as dynamic).response;

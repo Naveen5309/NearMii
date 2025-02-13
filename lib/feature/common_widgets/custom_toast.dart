@@ -12,7 +12,7 @@ void toast({required String msg, bool isError = true}) {
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                  color: AppColor.primary,
+                  color: isError ? Colors.red : Colors.green,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -34,11 +34,12 @@ void toast({required String msg, bool isError = true}) {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: isError
-                              ? Colors.red.withOpacity(0.2)
-                              : Colors.green.withOpacity(0.2),
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.primary
+                            //  isError
+                            //     ? Colors.red.withOpacity(0.2)
+                            //     : Colors.green.withOpacity(0.2),
+                            ),
                         child: Icon(
                           isError ? Icons.error : Icons.done_all,
                           color: isError ? Colors.red : Colors.green,
@@ -47,12 +48,14 @@ void toast({required String msg, bool isError = true}) {
                       xWidth(10),
                       Flexible(
                         child: AppText(
-                          text: msg,
-                          textAlign: TextAlign.center,
-                          fontSize: 15,
-                          fontFamily: AppString.fontFamily,
-                          color: isError ? Colors.red : Colors.green,
-                        ),
+                            text: msg,
+                            textAlign: TextAlign.center,
+                            fontSize: 15,
+                            fontFamily: AppString.fontFamily,
+                            color: AppColor.primary
+
+                            // isError ? Colors.red : Colors.green,
+                            ),
                       ),
                       xWidth(10),
                     ],

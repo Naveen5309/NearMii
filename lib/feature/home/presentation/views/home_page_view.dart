@@ -6,18 +6,44 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
+import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HomePageView extends ConsumerWidget {
+class HomePageView extends ConsumerStatefulWidget {
   const HomePageView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final getPreference = ref.watch(getPreferenceProvider);
+  ConsumerState<HomePageView> createState() => _HomePageViewState();
+}
 
+class _HomePageViewState extends ConsumerState<HomePageView> {
+  // late AnimationController _controller;
+  // late Animation _animation;
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        showDialog(
+          context: context,
+          builder: (context) => const VIPMembershipDialog(),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
@@ -30,7 +56,9 @@ class HomePageView extends ConsumerWidget {
             ),
 
             height: context.height * 0.29,
-            // color: Colors.green,
+
+// color: Colors.green,
+
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: context.width * 0.05,
@@ -51,15 +79,18 @@ class HomePageView extends ConsumerWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //WELCOME BACK TEXT
+//WELCOME BACK TEXT
+
                           AppText(
                             text: AppString.welcomeBack,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColor.primary.withOpacity(.8),
                           ),
+
                           5.verticalSpace,
-                          //NAME
+
+//NAME
 
                           AppText(
                             text: "Brooklyn Simmons",
@@ -93,6 +124,7 @@ class HomePageView extends ConsumerWidget {
               ),
             ),
           ),
+
           ref.watch(isMapView)
               ? Image.asset(
                   Assets.map,
@@ -110,9 +142,13 @@ class HomePageView extends ConsumerWidget {
                       return CustomProfileCard(
                         profileImage:
                             'https://picsum.photos/250?image=9', // Replace with actual image
+
                         name: "Robert Fox",
+
                         designation: "Senior Developer",
+
                         distance: "50 meters away",
+
                         onUnlockTap: () {
                           print("Unlock Now Clicked!");
                         },
@@ -120,7 +156,8 @@ class HomePageView extends ConsumerWidget {
                     },
                   ),
                 ),
-          // Image.asset(Assets.map)
+
+// Image.asset(Assets.map)
         ],
       ),
     );

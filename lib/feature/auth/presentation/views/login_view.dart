@@ -1,13 +1,16 @@
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_rich_text.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +22,40 @@ class LoginView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.watch(loginProvider);
+    // final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.listen(
+      loginProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.login) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess && next.authType == AuthType.login) {
+          toast(msg: AppString.loginSuccess, isError: false);
+          // back(context);
+          toNamed(context, Routes.bottomNavBar);
+        } else if (next is AuthApiFailed && next.authType == AuthType.login) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -92,11 +129,13 @@ class LoginView extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        // final isLogin = loginNotifier.validateLogin();
-                        // print(isLogin);
-                        // if (isLogin) {
-                        offAllNamed(context, Routes.bottomNavBar);
-                        // }
+                        final isLogin = loginNotifier.validateLogin();
+                        print(isLogin);
+                        if (isLogin) {
+                          loginNotifier.loginApi();
+
+                          // offAllNamed(context, Routes.bottomNavBar);
+                        }
                       },
                       title: AppString.login,
                       textSize: 16.sp,

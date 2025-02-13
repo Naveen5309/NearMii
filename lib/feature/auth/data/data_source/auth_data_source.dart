@@ -22,12 +22,18 @@ class AuthDataSourceImpl extends AuthDataSource {
         url: ApiConstants.login,
         fromJson: (json) => UserModel.fromJson(json),
       );
-      if (dataResponse.status == true) {
+
+      log("data source is :-> $dataResponse");
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
         UserModel model = dataResponse.data!;
-        await Getters.getLocalStorage.saveLoginUser(model.user!);
-        await Getters.getLocalStorage.saveToken(model.token ?? "");
+        log("user data is:-> $model");
+
+        // await Getters.getLocalStorage.saveLoginUser(model);
+        // await Getters.getLocalStorage.saveToken(model.token ?? "");
         return getSuccessResponseWrapper(dataResponse);
       } else {
+        log("else called: ${dataResponse.message} ");
         return getFailedResponseWrapper(dataResponse.message,
             response: dataResponse.data);
       }
