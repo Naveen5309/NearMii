@@ -1,5 +1,6 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,11 +39,17 @@ class _SplashViewState extends ConsumerState<SplashView>
   }
 
   void _navigateToNextScreen() async {
+    final bool? isOnboarded = Getters.getLocalStorage.getFirstOnboard();
+
     // Simulate a delay for the splash screen
     await Future.delayed(const Duration(seconds: 3), () {
-      // Navigate to the next screen (replace with your next screen logic)
-      if (mounted) {
-        offAllNamed(context, Routes.onboard, args: false);
+      if (isOnboarded == true) {
+        if (mounted) {
+          offAllNamed(context, Routes.auth);
+        } else {
+          Getters.getLocalStorage.saveFirstIn(true);
+          offAllNamed(context, Routes.onboard, args: false);
+        }
       }
     });
   }

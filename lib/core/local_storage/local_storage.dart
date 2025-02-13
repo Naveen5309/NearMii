@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-
 import '../../config/helper.dart';
 import '../../feature/auth/data/models/user_model.dart';
 
@@ -8,14 +7,17 @@ abstract class HiveConst {
   static const String userData = 'userData';
   static const String authToken = 'authToken';
   static const String isProfileComplete = 'isProfileComplete';
+  static const String isOnboard = 'isOnboard';
 
   static const String isLogin = 'isLogin';
 }
 
 abstract class LocalStorage {
   Future<bool> saveLoginUser(UserModel userModel);
+  Future<void> saveFirstIn(bool isOnboard);
 
   UserModel? getLoginUser();
+  bool? getFirstOnboard();
 
   Future<void> clearAllBox();
 
@@ -86,5 +88,16 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> saveIsLogin(bool isLogin) async {
     await userBox.put(HiveConst.isLogin, isLogin);
+  }
+
+  @override
+  bool? getFirstOnboard() {
+    final onboard = userBox.get(HiveConst.isOnboard);
+    return onboard;
+  }
+
+  @override
+  Future<void> saveFirstIn(bool isOnboard) async {
+    await userBox.put(HiveConst.isOnboard, isOnboard);
   }
 }
