@@ -18,9 +18,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final otpController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
-  final emailController = TextEditingController(text: "testing@gmail.com");
+  final emailController = TextEditingController();
   final referralController = TextEditingController();
-  final passwordController = TextEditingController(text: "lokesh@123");
+  final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   List<PlatformData> socialMediaList = [];

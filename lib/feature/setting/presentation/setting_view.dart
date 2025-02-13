@@ -214,9 +214,9 @@ class SettingView extends ConsumerWidget {
                           borderWidth: 1,
                           backGroundColor: AppColor.redF8E2E2,
                           onTap: () {
-                            final notifier = ref.read(loginProvider.notifier);
-                            notifier.getSocialPlatform();
-                            // offAllNamed(context, Routes.login);
+                            // final notifier = ref.read(loginProvider.notifier);
+                            // notifier.getSocialPlatform();
+                            offAllNamed(context, Routes.login);
                           },
                         ),
                       ),

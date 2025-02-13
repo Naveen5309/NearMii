@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
@@ -39,6 +41,15 @@ class _SplashViewState extends ConsumerState<SplashView>
     return isLogin;
   }
 
+  //CHECK is ONBOARD
+
+  Future<bool> checkIsOnBoard() async {
+    bool isFirstOnboard = Getters.getLocalStorage.getFirstOnboard() ?? true;
+
+    log("is first onboard:-> $isFirstOnboard");
+    return isFirstOnboard;
+  }
+
   @override
   void dispose() {
     // _controller.dispose();
@@ -56,13 +67,16 @@ class _SplashViewState extends ConsumerState<SplashView>
 
       // Navigate to the next screen (replace with your next screen logic)
       bool isLogin = await checkLogin();
+      bool isFirstOnboard = await checkIsOnBoard();
 
       if (!isMounted) return;
 
       if (isLogin) {
         offAllNamed(context, Routes.bottomNavBar, args: false);
-      } else {
+      } else if (isFirstOnboard) {
         offAllNamed(context, Routes.onboard, args: false);
+      } else {
+        offAllNamed(context, Routes.auth, args: false);
       }
     });
   }

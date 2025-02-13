@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/onboard_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -70,7 +71,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                   alignment: Alignment.topRight,
                   child: InkWell(
                     onTap: () {
-                      offAllNamed(context, Routes.auth);
+                      Getters.getLocalStorage.saveFirstIn(false).then(
+                        (value) {
+                          offAllNamed(context, Routes.auth);
+                        },
+                      );
                     },
                     child: Padding(
                       padding: EdgeInsets.only(
@@ -167,7 +172,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                           if (widget.isFromSetting!) {
                             back(context);
                           } else {
-                            offAllNamed(context, Routes.auth);
+                            Getters.getLocalStorage.saveFirstIn(false).then(
+                              (value) {
+                                offAllNamed(context, Routes.auth);
+                              },
+                            );
                           }
                         }
                       },

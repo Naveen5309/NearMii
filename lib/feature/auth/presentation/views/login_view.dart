@@ -129,13 +129,13 @@ class LoginView extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        final isLogin = loginNotifier.validateLogin();
-                        print(isLogin);
-                        if (isLogin) {
-                          loginNotifier.loginApi();
+                        // final isLogin = loginNotifier.validateLogin();
+                        // print(isLogin);
+                        // if (isLogin) {
+                        //   loginNotifier.loginApi();
 
-                          // offAllNamed(context, Routes.bottomNavBar);
-                        }
+                        offAllNamed(context, Routes.bottomNavBar);
+                        // }
                       },
                       title: AppString.login,
                       textSize: 16.sp,
@@ -192,7 +192,7 @@ class LoginView extends ConsumerWidget {
               prefixIcon: Assets.icLock,
               controller: loginNotifier.passwordController,
               labelText: AppString.pswd,
-              suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+              suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
             );
           },
         )
