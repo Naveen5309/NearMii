@@ -2,13 +2,19 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 class InviteFriendBottomSheet extends StatelessWidget {
   final String title;
   final String subtitle;
+  final String _copy = "Copy Me";
+  final String text = '';
+  final String link = '';
 
   const InviteFriendBottomSheet(
       {super.key, required this.title, required this.subtitle});
@@ -54,7 +60,11 @@ class InviteFriendBottomSheet extends StatelessWidget {
           20.verticalSpace,
           CommonAppBtn(
             backGroundColor: AppColor.appThemeColor,
-            onTap: () {},
+            onTap: () {
+              _onShare(
+                context,
+              );
+            },
             title: AppString.copyReferralCode,
             textSize: 16.sp,
           ),
@@ -79,14 +89,28 @@ Widget customTextField() {
         const SizedBox(width: 8),
         const Expanded(
           child: TextField(
+            readOnly: true,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintStyle: TextStyle(color: AppColor.black000000),
             ),
           ),
         ),
-        SvgPicture.asset(Assets.copy)
+        GestureDetector(
+          onTap: () {
+            Clipboard.setData(const ClipboardData(text: "fff"));
+            toast(msg: "Text Copied to clipboard", isError: false);
+          },
+          child: SvgPicture.asset(Assets.copy),
+        )
       ],
     ),
   );
+}
+
+void _onShare(BuildContext context) async {
+  final box = context.findRenderObject() as RenderBox?;
+  await Share.share("text",
+      subject: "link",
+      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
 }
