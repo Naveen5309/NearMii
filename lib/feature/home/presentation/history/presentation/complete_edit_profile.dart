@@ -60,8 +60,7 @@ class CompleteEditProfile extends ConsumerWidget {
                     ),
 
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: context.height * .02),
+                      padding: EdgeInsets.only(top: context.height * .02),
                       child: profileSection(),
                     ),
 
@@ -195,6 +194,9 @@ class CompleteEditProfile extends ConsumerWidget {
           controller: editProfileNotifier.fullNameController,
           labelText: AppString.fullName,
         ),
+        SizedBox(
+          height: context.height * 0.002,
+        ),
 
         //DESIGNATION
         CustomLabelTextField(
@@ -202,13 +204,18 @@ class CompleteEditProfile extends ConsumerWidget {
           controller: editProfileNotifier.designationController,
           labelText: AppString.designation,
         ),
-
+        SizedBox(
+          height: context.height * 0.014,
+        ),
         //phone number
 
         CustomPhoneNumber(
           prefixIcon: Assets.icGender,
           controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,
+        ),
+        SizedBox(
+          height: context.height * 0.018,
         ),
 
         CustomDropdownButton(
@@ -229,6 +236,9 @@ class CompleteEditProfile extends ConsumerWidget {
           onChanged: (value) {
             editProfileNotifier.genderController.text = value!;
           },
+        ),
+        SizedBox(
+          height: context.height * 0.005,
         ),
 
         //DATE OF BIRTH

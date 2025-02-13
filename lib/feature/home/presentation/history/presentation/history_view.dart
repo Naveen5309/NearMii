@@ -26,7 +26,7 @@ class _HistoryViewState extends State<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primary,
+      backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -34,45 +34,211 @@ class _HistoryViewState extends State<HistoryView> {
             const CustomAppbarWidget(
               title: AppString.history,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .07),
-              child: Column(
-                children: [
-                  const CustomSearchBarWidget(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            SizedBox(
+              height: context.height * .9,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
                     children: [
-                      AppText(
-                        text: AppString.recent,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      const CustomSearchBarWidget(),
                       SizedBox(
-                        height: context.height * .7,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          itemCount: 15,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: CustomTile(
-                                isHistory: true,
-                                time: "1h ago",
-                                title: "NAME",
-                                leadingIcon: '',
-                                subtitle: 'Designation',
-                                onTap: () {
-                                  toNamed(context, Routes.otherUserProfile);
-                                },
+                        height: context.height * .81,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.grey999.withOpacity(.5),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: AppColor.primary),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 11),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: AppText(
+                                          text: AppString.recent,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        child: ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3),
+                                          itemCount: 4,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: CustomTile(
+                                                isHistory: true,
+                                                time: "1h ago",
+                                                title: "NAME",
+                                                leadingIcon: '',
+                                                subtitle: 'Designation',
+                                                onTap: () {
+                                                  toNamed(context,
+                                                      Routes.otherUserProfile);
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            );
-                          },
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.grey999.withOpacity(.5),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: AppColor.primary),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 11),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: AppText(
+                                          text: AppString.lastWeek,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        child: ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3),
+                                          itemCount: 4,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: CustomTile(
+                                                isHistory: true,
+                                                time: "1h ago",
+                                                title: "NAME",
+                                                leadingIcon: '',
+                                                subtitle: 'Designation',
+                                                onTap: () {
+                                                  toNamed(context,
+                                                      Routes.otherUserProfile);
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColor.grey999.withOpacity(.5),
+                                        spreadRadius: 0,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: AppColor.primary),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 11),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: AppText(
+                                          text: AppString.lastMonth,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        child: ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 3),
+                                          itemCount: 4,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: CustomTile(
+                                                isHistory: true,
+                                                time: "1h ago",
+                                                title: "NAME",
+                                                leadingIcon: '',
+                                                subtitle: 'Designation',
+                                                onTap: () {
+                                                  toNamed(context,
+                                                      Routes.otherUserProfile);
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ],

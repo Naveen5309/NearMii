@@ -13,74 +13,266 @@ class NotificationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColor.primary,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const CustomAppbarWidget(
-              title: AppString.notification,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-              child: Column(
-                children: [
-                  const CustomSearchBarWidget(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppText(
-                        text: AppString.recent,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      SizedBox(
-                        height: context.height * .7,
+        backgroundColor: AppColor.greyf9f9f9,
+        body: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              const CustomAppbarWidget(
+                title: AppString.notification,
+              ),
+              SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: context.width * .9,
+                        child: const CustomSearchBarWidget()),
+                    SizedBox(
+                      height: context.height * .81,
+                      child: SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Column(
-                                  children: [
-                                    CustomTile(
-                                      isHistory: false,
-                                      type: "search",
-                                      onTap: () {},
-                                      time: "1h ago",
-                                      title: "20 People near you",
-                                      leadingIcon: "",
-                                      subtitle: 'Check out their profile.',
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  // height: context.height * .45,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.recent,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 1),
+                                          itemCount: 2,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 1),
+                                                child: Column(
+                                                  children: [
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "search",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "20 People near you",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "Someone viewed your profile",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                  ],
+                                                ));
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                    CustomTile(
-                                      isHistory: false,
-                                      type: "",
-                                      onTap: () {},
-                                      time: "1h ago",
-                                      title: "Someone viewed your profile",
-                                      leadingIcon: "",
-                                      subtitle: 'Check out their profile.',
+                                  )),
+                              Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 18),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  // height: context.height * .45,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.lastWeek,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 1),
+                                          itemCount: 2,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 1),
+                                                child: Column(
+                                                  children: [
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "search",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "20 People near you",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "Someone viewed your profile",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                  ],
+                                                ));
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
+                                  )),
+                              Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  // height: context.height * .45,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.lastMonth,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 1),
+                                          itemCount: 2,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 1),
+                                                child: Column(
+                                                  children: [
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "search",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "20 People near you",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                    CustomTile(
+                                                      isHistory: false,
+                                                      type: "",
+                                                      onTap: () {},
+                                                      time: "1h ago",
+                                                      title:
+                                                          "Someone viewed your profile",
+                                                      leadingIcon: "",
+                                                      subtitle:
+                                                          'Check out their profile.',
+                                                    ),
+                                                  ],
+                                                ));
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
   }
 }
 
