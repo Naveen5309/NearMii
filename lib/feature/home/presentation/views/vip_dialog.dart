@@ -24,27 +24,40 @@ class VIPMembershipDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: SvgPicture.asset(
-                  Assets.icCloseCircle,
-                  colorFilter: const ColorFilter.mode(
-                    AppColor.primary,
-                    BlendMode.srcIn,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  width: 50,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 18.0),
+                  child: SvgPicture.asset(
+                    Assets.iconVip,
+                    width: 58,
+                    height: 58,
                   ),
                 ),
-                onPressed: () => back(context),
-              ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: SvgPicture.asset(
+                      Assets.icCloseCircle,
+                      colorFilter: const ColorFilter.mode(
+                        AppColor.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    onPressed: () => back(context),
+                  ),
+                ),
+              ],
             ),
-            SvgPicture.asset(
-              Assets.iconVip,
-              width: 58,
-              height: 58,
-            ),
+
             const SizedBox(height: 10),
             AppText(
-              text: "VIP Membership",
+              text: AppString.vipMembership,
               fontSize: 28.sp,
               fontWeight: FontWeight.w500,
               color: AppColor.whiteFFFFFF,
@@ -54,6 +67,8 @@ class VIPMembershipDialog extends StatelessWidget {
               text:
                   "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec.",
               textAlign: TextAlign.center,
+              lineHeight: 1.2,
+              fontWeight: FontWeight.w400,
               color: AppColor.whiteFFFFFF,
               fontSize: 12.sp,
             ),
@@ -89,7 +104,7 @@ class VIPMembershipDialog extends StatelessWidget {
                     children: List.generate(
                       4,
                       (index) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
                           children: [
                             const Icon(
