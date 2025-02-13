@@ -30,7 +30,10 @@ final signupProvider =
 final isPswdConfirmVisible = StateProvider.autoDispose<bool>((ref) => false,
     name: "isPswdConfirmVisible");
 
-final isPswdVisible =
+final isPswdVisibleSignUp =
     StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
 final checkPrivacy =
     StateProvider.autoDispose<bool>((ref) => false, name: "rememberMeProvider");
+
+final isConfirmPswdVisibleSignUp =
+    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");

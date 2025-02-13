@@ -16,7 +16,6 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final phoneController = TextEditingController();
   final fullNameController = TextEditingController();
   final otpController = TextEditingController();
-
   final emailController = TextEditingController();
   final referralController = TextEditingController();
   final pswdController = TextEditingController();
@@ -173,6 +172,18 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     } catch (e) {
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.resetPassword);
+    }
+  }
+
+  //VALIDATE Forget Password
+  bool validateForgetPassword() {
+    bool isValid =
+        Validator().forgetPasswordValidator(email: emailController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
     }
   }
 }

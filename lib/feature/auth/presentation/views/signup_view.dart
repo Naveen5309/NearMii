@@ -209,11 +209,11 @@ class SignUpView extends ConsumerWidget {
 
         //PASSWORD
         Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          var isVisible = ref.watch(isPswdVisible);
+          var isVisible = ref.watch(isPswdVisibleSignUp);
           return CustomLabelTextField(
             isObscure: isVisible,
             onTapOnSuffixIcon: () {
-              ref.read(isPswdVisible.notifier).state = !isVisible;
+              ref.read(isPswdVisibleSignUp.notifier).state = !isVisible;
             },
             prefixIcon: Assets.icLock,
             controller: signUpNotifier.pswdController,

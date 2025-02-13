@@ -1,13 +1,18 @@
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +22,40 @@ class ResetPasswordView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final validateCreateNewPassword = ref.watch(loginProvider.notifier);
+    final validateCreateNewPassword = ref.watch(signupProvider.notifier);
+
+    ref.listen(
+      signupProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.resetPassword) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess &&
+            next.authType == AuthType.resetPassword) {
+          toast(msg: AppString.loginSuccess, isError: false);
+          // back(context);
+          toNamed(context, Routes.resetPassword);
+        } else if (next is AuthApiFailed &&
+            next.authType == AuthType.resetPassword) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -117,19 +155,19 @@ class ResetPasswordView extends ConsumerWidget {
   }
 
 //FORMS FIELDS SECTION
-  Widget formsFieldsSection(LoginNotifier validateCreateNewPassword) {
+  Widget formsFieldsSection(SignupNotifiers validateCreateNewPassword) {
     return Column(
       children: [
         //NEW PASSWORD
         Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          var isVisible = ref.watch(isPswdVisible);
+          var isVisible = ref.watch(isPswdVisibleSignUp);
           return CustomLabelTextField(
             onTapOnSuffixIcon: () {
-              ref.read(isPswdVisible.notifier).state = !isVisible;
+              ref.read(isPswdVisibleSignUp.notifier).state = !isVisible;
             },
             isObscure: isVisible,
             prefixIcon: Assets.icLock,
-            controller: validateCreateNewPassword.passwordController,
+            controller: validateCreateNewPassword.pswdController,
             labelText: AppString.newPswd,
             suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
           );
@@ -137,14 +175,14 @@ class ResetPasswordView extends ConsumerWidget {
 
         //CONFIRM PASSWORD
         Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          var isVisible = ref.watch(isPswdVisible);
+          var isVisible = ref.watch(isConfirmPswdVisibleSignUp);
           return CustomLabelTextField(
             onTapOnSuffixIcon: () {
               ref.read(isPswdVisible.notifier).state = !isVisible;
             },
             isObscure: isVisible,
             prefixIcon: Assets.icLock,
-            controller: validateCreateNewPassword.confirmPasswordController,
+            controller: validateCreateNewPassword.confirmPswdController,
             labelText: AppString.confirmPswd,
             suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
           );

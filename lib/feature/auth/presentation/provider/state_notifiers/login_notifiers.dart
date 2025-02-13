@@ -70,18 +70,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
   //   }
   // }
 
-  //VALIDATE Forget Password
-  bool validateForgetPassword() {
-    bool isValid =
-        Validator().forgetPasswordValidator(email: emailController.text.trim());
-    if (isValid) {
-      return true;
-    } else {
-      toast(msg: Validator().error, isError: true);
-      return false;
-    }
-  }
-
   //VALIDATE Create New Password
   bool validateCreateNewPassword() {
     bool isValid = Validator().createNewPasswordValidation(
