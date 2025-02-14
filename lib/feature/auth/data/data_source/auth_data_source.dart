@@ -10,6 +10,8 @@ import '../models/user_model.dart';
 abstract class AuthDataSource {
   Future<ResponseWrapper?> logInUser(
       {required Map<String, dynamic> body, required bool isSocial});
+
+  Future<ResponseWrapper?> signUpApi({required Map<String, dynamic> body});
   Future<ResponseWrapper?> forgotPassword({required Map<String, dynamic> body});
 
   Future<ResponseWrapper?> otpVerify({required Map<String, dynamic> body});
@@ -20,6 +22,7 @@ abstract class AuthDataSource {
 }
 
 class AuthDataSourceImpl extends AuthDataSource {
+//LOGIN API
   @override
   Future<ResponseWrapper<UserModel>?> logInUser({
     required Map<String, dynamic> body,
@@ -60,6 +63,48 @@ class AuthDataSourceImpl extends AuthDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "userLogin",
+      ));
+    }
+  }
+
+//SIGN UP API
+  @override
+  Future<ResponseWrapper<UserModel>?> signUpApi({
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<UserModel>(
+          body: body,
+          url: ApiConstants.register,
+          fromJson: (json) {
+            log("json in data source :-> $json");
+
+            // Ensure the response is a map and correctly map it to GetPlatformData
+            if (json is Map<String, dynamic>) {
+              return UserModel.fromJson(json["data"]);
+            }
+            throw Exception("Unexpected API response format");
+          });
+
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+        UserModel model = dataResponse.data!;
+        log("user data is:-> $model");
+        log("user data is:-> ${dataResponse.token}");
+        log("user data is:-> $dataResponse");
+
+        await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "signUpApi",
       ));
     }
   }

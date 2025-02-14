@@ -11,6 +11,10 @@ abstract class AuthUseCase {
     required bool isSocial,
   });
 
+  Future<Either<Failure, UserModel?>> signUp({
+    required Map<String, dynamic> body,
+  });
+
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
 
@@ -36,6 +40,17 @@ class AuthUseCaseImpl implements AuthUseCase {
     required bool isSocial,
   }) async {
     final result = await repository.doLogin(body: body, isSocial: isSocial);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+//SIGN UP
+  @override
+  Future<Either<Failure, UserModel?>> signUp({
+    required Map<String, dynamic> body,
+  }) async {
+    final result = await repository.signUp(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

@@ -11,6 +11,10 @@ abstract class AuthRepository {
     required bool isSocial,
   });
 
+  Future<Either<Failure, UserModel?>> signUp({
+    required Map<String, dynamic> body,
+  });
+
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> otpVerify(
@@ -33,6 +37,24 @@ class AuthRepoImpl implements AuthRepository {
   }) async {
     try {
       final data = await dataSource.logInUser(body: body, isSocial: isSocial);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+// ----->>>  SIGN UP   <<<----
+  @override
+  Future<Either<Failure, UserModel?>> signUp({
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      final data = await dataSource.signUpApi(body: body);
 
       if (data?.status == "success") {
         return Right(data?.data);

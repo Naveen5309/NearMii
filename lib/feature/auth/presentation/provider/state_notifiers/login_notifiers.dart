@@ -122,6 +122,41 @@ class LoginNotifier extends StateNotifier<AuthState> {
     }
   }
 
+// SIGN UP
+  Future<void> signUpApi() async {
+    state = const AuthApiLoading(authType: AuthType.signup);
+    try {
+      String token = await FirebaseMessaging.instance.getToken() ?? '';
+
+      log("fcm token is :-> $token");
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection, authType: AuthType.signup);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "email": emailController.text.trim(),
+        "password": passwordController.text.trim(),
+        "device_type": Platform.isAndroid ? "android" : "ios",
+        "device_token": token,
+      };
+      final result = await authUseCase.callLogin(body: body, isSocial: false);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return AuthApiFailed(error: error.message, authType: AuthType.signup);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.signup);
+      });
+    } catch (e) {
+      state = AuthApiFailed(error: e.toString(), authType: AuthType.signup);
+    }
+  }
+
 //GET SOCIAL PROFILES
   Future<void> getSocialPlatform() async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);

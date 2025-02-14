@@ -45,7 +45,7 @@ class ForgotPasswordView extends ConsumerWidget {
           );
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.forgotPassword) {
-          toast(msg: AppString.loginSuccess, isError: false);
+          toast(msg: AppString.otpVerifySuccess, isError: false);
           // back(context);
           toNamed(context, Routes.otpVerify);
         } else if (next is AuthApiFailed &&
