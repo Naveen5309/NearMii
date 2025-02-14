@@ -1,13 +1,20 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
+import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingNotifier extends StateNotifier<AuthState> {
-  final AuthUseCase authUseCase;
+class SettingNotifier extends StateNotifier<SettingStates> {
+  final SettingUsecases settingUseCase;
   final phoneController = TextEditingController();
   final fullNameController = TextEditingController();
   final referralController = TextEditingController();
@@ -28,7 +35,7 @@ class SettingNotifier extends StateNotifier<AuthState> {
 
   List<PlatformData> platformDataList = [];
 
-  SettingNotifier({required this.authUseCase}) : super(AuthInitial());
+  SettingNotifier({required this.settingUseCase}) : super(SettingInitial());
 
   //VALIDATE Edit Profile
   bool validateEditProfile() {
@@ -87,6 +94,43 @@ class SettingNotifier extends StateNotifier<AuthState> {
     } else {
       toast(msg: Validator().error, isError: true);
       return false;
+    }
+  }
+
+  //Contact US
+  Future<void> contactUSApi() async {
+    state = const SettingApiLoading(settingType: Setting.contactUs);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection,
+            settingType: Setting.contactUs);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "name": nameController.text.trim(),
+        "email": emailController.text.trim(),
+        "subject": subjectController.text.trim(),
+        "message": messageController.text.trim(),
+        "device_type": Platform.isAndroid ? "android" : "ios",
+        "device_token": "No Token",
+      };
+      final result = await settingUseCase.callContactUs(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.contactUs);
+      }, (result) {
+        return const SettingApiSuccess(settingType: Setting.contactUs);
+      });
+    } catch (e) {
+      state =
+          SettingApiFailed(error: e.toString(), settingType: Setting.contactUs);
     }
   }
 }
