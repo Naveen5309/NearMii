@@ -79,7 +79,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //DID YOU FORGOT YOUR PASSWORD
-  Future<void> forgotPassword() async {
+  Future<void> forgotPasswordApi() async {
     state = const AuthApiLoading(authType: AuthType.forgotPassword);
     try {
       if (!(await Getters.networkInfo.isConnected)) {

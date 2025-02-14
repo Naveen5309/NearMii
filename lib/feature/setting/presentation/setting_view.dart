@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
@@ -16,6 +18,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -130,22 +133,6 @@ class SettingView extends ConsumerWidget {
                               subtitle:
                                   "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
                             )),
-                        // showModalBottomSheet(
-                        //   context: context,
-                        //   shape: const RoundedRectangleBorder(
-                        //     borderRadius:
-                        //         BorderRadius.vertical(top: Radius.circular(20)),
-                        //   ),
-                        //   builder: (context) {
-                        //     return
-
-                        //      InviteFriendBottomSheet(
-                        //       title: AppString.inviteFriend,
-                        //       subtitle:
-                        //           "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
-                        //     );
-                        //   },
-                        // ),
                       ),
                       10.verticalSpace,
                       CustomTile(
@@ -213,11 +200,25 @@ class SettingView extends ConsumerWidget {
                           borderColor: AppColor.redE40505,
                           borderWidth: 1,
                           backGroundColor: AppColor.redF8E2E2,
-                          onTap: () {
-                            // final notifier = ref.read(loginProvider.notifier);
-                            // notifier.getSocialPlatform();
-                            offAllNamed(context, Routes.login);
-                          },
+
+                          onTap: () => showCustomBottomSheet(
+                              context: context,
+                              content: LogoutConfirmationView(
+                                confirm: () {
+                                  final notifier =
+                                      ref.read(loginProvider.notifier);
+                                  notifier.logOutApi();
+                                },
+                                onCancel: () {
+                                  back(context);
+                                },
+                              )),
+                          // onTap: () {
+                          //   log("logOut called");
+                          //   // final notifier = ref.read(loginProvider.notifier);
+                          //   // notifier.getSocialPlatform();
+                          //   // offAllNamed(context, Routes.login);
+                          // },
                         ),
                       ),
                       90.verticalSpace

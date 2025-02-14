@@ -155,6 +155,7 @@ class ProfileGridView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
+
                                       10.verticalSpace,
                                     ],
                                   ),

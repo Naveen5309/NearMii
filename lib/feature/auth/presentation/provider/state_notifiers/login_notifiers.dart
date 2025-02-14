@@ -1,13 +1,17 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/user_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../../core/helpers/all_getter.dart';
 import '../../../domain/usecases/get_auth.dart';
 import '../states/auth_states.dart';
@@ -87,6 +91,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
   Future<void> loginApi() async {
     state = const AuthApiLoading(authType: AuthType.login);
     try {
+      String token = await FirebaseMessaging.instance.getToken() ?? '';
+
+      log("fcm token is :-> $token");
       if (!(await Getters.networkInfo.isConnected)) {
         state = const AuthApiFailed(
             error: AppString.noInternetConnection, authType: AuthType.login);
@@ -101,9 +108,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
         "email": emailController.text.trim(),
         "password": passwordController.text.trim(),
         "device_type": Platform.isAndroid ? "android" : "ios",
-        "device_token": "No Token",
+        "device_token": token,
       };
-      final result = await authUseCase.callLogin(body: body);
+      final result = await authUseCase.callLogin(body: body, isSocial: false);
       state = result.fold((error) {
         log("login error:${error.message} ");
         return AuthApiFailed(error: error.message, authType: AuthType.login);
@@ -151,7 +158,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
 //LOG OUT
 
-  //LOGOUT
+  //LOGOUT API
   Future<void> logOutApi() async {
     state = const AuthApiLoading(authType: AuthType.logOut);
     try {
@@ -171,6 +178,122 @@ class LoginNotifier extends StateNotifier<AuthState> {
       });
     } catch (e) {
       state = AuthApiFailed(error: e.toString(), authType: AuthType.logOut);
+    }
+  }
+
+  // //SOCIAL LOGIN
+
+  Future<UserModel?> signInWithGoogle(BuildContext context) async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+      }
+      final result = await googleSignIn.signIn();
+      if (result != null) {
+        final googleAuth = await result.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        log("social credential :-> $credential");
+        return _signInWithCredential(credential,
+            socialType: "google",
+            userName: result.displayName,
+            email: result.email);
+      }
+      return null;
+    } catch (e, s) {
+      blocLog(
+        msg: 'Google sign-in error: $e',
+        bloc: "AuthServices",
+      );
+      return null;
+    }
+  }
+
+  Future<UserModel?> _signInWithCredential(OAuthCredential oauthCredential,
+      {String? userName, String? email, required String socialType}) async {
+    try {
+      Utils.showLoader();
+      final userCredential = await _signInWithFirebase(oauthCredential);
+
+      // log("user credentails :-> ${userCredential?.user?.uid}");
+      final authUser = userCredential?.user;
+      if (authUser != null) {
+        await socialLoginApi(
+          socialId: authUser.uid,
+          socialType: socialType,
+        );
+        // await _updateUserProfile(authUser, userName);
+        // final updatedUser = FirebaseAuth.instance.currentUser;
+        // Utils.hideLoader();
+        // return _buildUserModel(
+        //     updatedUser, authUser, email, socialType, userName);
+      } else {
+        Utils.hideLoader();
+        return null;
+      }
+    } catch (e, s) {
+      Utils.hideLoader();
+      blocLog(
+        msg: 'Sign-in with credential error: $e',
+        bloc: "AuthServices",
+      );
+      return null;
+    }
+    return null;
+  }
+
+  Future<UserCredential?> _signInWithFirebase(
+      OAuthCredential oauthCredential) async {
+    try {
+      return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+    } catch (e, s) {
+      blocLog(
+        msg: 'Firebase sign-in error: $e',
+        bloc: "AuthServices",
+      );
+      rethrow;
+    }
+  }
+
+  //LOGIN
+  Future<void> socialLoginApi({
+    required String socialId,
+    required String socialType,
+  }) async {
+    state = const AuthApiLoading(authType: AuthType.login);
+    try {
+      String token = await FirebaseMessaging.instance.getToken() ?? '';
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection, authType: AuthType.login);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "social_id": socialId.trim(),
+        "social_type": socialType,
+        "device_type": Platform.isAndroid ? "android" : "ios",
+        "device_token": token,
+      };
+      final result = await authUseCase.callLogin(body: body, isSocial: true);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return AuthApiFailed(error: error.message, authType: AuthType.login);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.login);
+      });
+    } catch (e) {
+      state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
     }
   }
 }

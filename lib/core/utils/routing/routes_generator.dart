@@ -9,7 +9,6 @@ import 'package:NearMii/feature/home/presentation/history/presentation/contact_u
 import 'package:NearMii/feature/home/presentation/history/presentation/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
-import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
 import 'package:NearMii/feature/home/presentation/views/bottom_navigation_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart';
@@ -46,7 +45,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const AuthView());
 
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => LoginView());
+        return MaterialPageRoute(builder: (_) => const LoginView());
       case Routes.forgetPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
       case Routes.otpVerify:

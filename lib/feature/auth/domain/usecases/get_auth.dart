@@ -6,8 +6,10 @@ import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repo_implementation.dart';
 
 abstract class AuthUseCase {
-  Future<Either<Failure, UserModel?>> callLogin(
-      {required Map<String, dynamic> body});
+  Future<Either<Failure, UserModel?>> callLogin({
+    required Map<String, dynamic> body,
+    required bool isSocial,
+  });
 
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
@@ -29,9 +31,11 @@ class AuthUseCaseImpl implements AuthUseCase {
   AuthUseCaseImpl({required this.repository});
 
   @override
-  Future<Either<Failure, UserModel?>> callLogin(
-      {required Map<String, dynamic> body}) async {
-    final result = await repository.doLogin(body: body);
+  Future<Either<Failure, UserModel?>> callLogin({
+    required Map<String, dynamic> body,
+    required bool isSocial,
+  }) async {
+    final result = await repository.doLogin(body: body, isSocial: isSocial);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

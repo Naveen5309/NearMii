@@ -45,7 +45,7 @@ class DeletedDetailView extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
               CustomLabelTextField(
-                labelBckColor: AppColor.primary,
+                labelBckColor: AppColor.greyf9f9f9,
                 prefixIcon: Assets.icLock,
                 controller: deleteAccountNotifier.currentPasswordController,
                 labelText: AppString.currentPassword,

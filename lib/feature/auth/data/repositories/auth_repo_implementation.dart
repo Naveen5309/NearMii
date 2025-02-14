@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 
 import '../../../../core/error/failure.dart';
@@ -8,8 +6,10 @@ import '../data_source/auth_data_source.dart';
 import '../models/user_model.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, UserModel?>> doLogin(
-      {required Map<String, dynamic> body});
+  Future<Either<Failure, UserModel?>> doLogin({
+    required Map<String, dynamic> body,
+    required bool isSocial,
+  });
 
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
@@ -27,10 +27,12 @@ class AuthRepoImpl implements AuthRepository {
   AuthRepoImpl({required this.dataSource});
 
   @override
-  Future<Either<Failure, UserModel?>> doLogin(
-      {required Map<String, dynamic> body}) async {
+  Future<Either<Failure, UserModel?>> doLogin({
+    required Map<String, dynamic> body,
+    required bool isSocial,
+  }) async {
     try {
-      final data = await dataSource.logInUser(body: body);
+      final data = await dataSource.logInUser(body: body, isSocial: isSocial);
 
       if (data?.status == "success") {
         return Right(data?.data);

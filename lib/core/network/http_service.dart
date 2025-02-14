@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
@@ -62,10 +61,10 @@ class ApiProvider {
       log("parsedData data :-> $parsedData");
 
       var dataResponse = ResponseWrapper<T>(
-        message: response.data["message"] ?? '',
-        status: response.data["status"],
-        data: parsedData,
-      );
+          message: response.data["message"] ?? '',
+          status: response.data["status"],
+          data: parsedData,
+          token: response.data["token"] ?? '');
       return dataResponse;
     } catch (err, c) {
       functionLog(msg: "t>>>>>>>>err$err", fun: "requestData");

@@ -131,11 +131,10 @@ class ForgotPasswordView extends ConsumerWidget {
           ),
           child: CommonAppBtn(
             onTap: () {
-              final isValidOtp =
-                  forgetPasswordNotifier.validateForgetPassword();
-              print(isValidOtp);
-              if (isValidOtp) {
-                forgetPasswordNotifier.forgotPassword();
+              final isForget = forgetPasswordNotifier.validateForgetPassword();
+              print(isForget);
+              if (isForget) {
+                forgetPasswordNotifier.forgotPasswordApi();
                 // toNamed(context, Routes.otpVerify);
               }
             },

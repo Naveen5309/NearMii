@@ -1,10 +1,12 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -118,35 +120,45 @@ class AuthView extends StatelessWidget {
   //Social media section
 
   Widget socialMediaSection({required BuildContext context}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        //GOOGLE
-        customSocialMediaBtn(
-          icon: Assets.icGoogle2,
-          text: AppString.signInWithGoogle,
-          context: context,
-        ),
+    return Consumer(
+      builder: (context, ref, child) {
+        final loginNotifier = ref.watch(loginProvider.notifier);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //GOOGLE
+            customSocialMediaBtn(
+              onTap: () {
+                loginNotifier.signInWithGoogle(context);
+              },
+              icon: Assets.icGoogle2,
+              text: AppString.signInWithGoogle,
+              context: context,
+            ),
 
-        //FACEBOOK
-        Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: context.height * .03,
-          ),
-          child: customSocialMediaBtn(
-            icon: Assets.icFb2,
-            text: AppString.singInWithFb,
-            context: context,
-          ),
-        ),
+            //FACEBOOK
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: context.height * .03,
+              ),
+              child: customSocialMediaBtn(
+                onTap: () {},
+                icon: Assets.icFb2,
+                text: AppString.singInWithFb,
+                context: context,
+              ),
+            ),
 
-        //APPLE
-        customSocialMediaBtn(
-          icon: Assets.icApple2,
-          text: AppString.singInWithApple,
-          context: context,
-        ),
-      ],
+            //APPLE
+            customSocialMediaBtn(
+              onTap: () {},
+              icon: Assets.icApple2,
+              text: AppString.singInWithApple,
+              context: context,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -166,26 +178,30 @@ class AuthView extends StatelessWidget {
   Widget customSocialMediaBtn(
       {required String icon,
       required String text,
+      required VoidCallback onTap,
       required BuildContext context}) {
-    return Container(
-      width: context.width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50), color: AppColor.primary),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(icon),
-            10.horizontalSpace,
-            AppText(
-              text: text,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColor.green173E01,
-            ),
-          ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: context.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50), color: AppColor.primary),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(icon),
+              10.horizontalSpace,
+              AppText(
+                text: text,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: AppColor.green173E01,
+              ),
+            ],
+          ),
         ),
       ),
     );

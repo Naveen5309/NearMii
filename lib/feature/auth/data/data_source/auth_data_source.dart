@@ -8,7 +8,8 @@ import '../../../../core/response_wrapper/data_response.dart';
 import '../models/user_model.dart';
 
 abstract class AuthDataSource {
-  Future<ResponseWrapper?> logInUser({required Map<String, dynamic> body});
+  Future<ResponseWrapper?> logInUser(
+      {required Map<String, dynamic> body, required bool isSocial});
   Future<ResponseWrapper?> forgotPassword({required Map<String, dynamic> body});
 
   Future<ResponseWrapper?> otpVerify({required Map<String, dynamic> body});
@@ -20,12 +21,14 @@ abstract class AuthDataSource {
 
 class AuthDataSourceImpl extends AuthDataSource {
   @override
-  Future<ResponseWrapper<UserModel>?> logInUser(
-      {required Map<String, dynamic> body}) async {
+  Future<ResponseWrapper<UserModel>?> logInUser({
+    required Map<String, dynamic> body,
+    required bool isSocial,
+  }) async {
     try {
       final dataResponse = await Getters.getHttpService.request<UserModel>(
           body: body,
-          url: ApiConstants.login,
+          url: isSocial ? ApiConstants.socialLogin : ApiConstants.login,
           fromJson: (json) {
             log("json in data source :-> $json");
 
@@ -41,6 +44,7 @@ class AuthDataSourceImpl extends AuthDataSource {
         UserModel model = dataResponse.data!;
         log("user data is:-> $model");
         log("user data is:-> ${dataResponse.token}");
+        log("user data is:-> $dataResponse");
 
         await Getters.getLocalStorage.saveLoginUser(model);
         await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
@@ -60,6 +64,7 @@ class AuthDataSourceImpl extends AuthDataSource {
     }
   }
 
+//FORGOT PASSWORD API
   @override
   Future<ResponseWrapper<dynamic>?> forgotPassword(
       {required Map<String, dynamic> body}) async {
@@ -70,18 +75,17 @@ class AuthDataSourceImpl extends AuthDataSource {
           fromJson: (json) {
             log("json in data source :-> $json");
 
+            return json;
+
             // Ensure the response is a map and correctly map it to GetPlatformData
-            if (json is Map<String, dynamic>) {
-              return UserModel.fromJson(json["data"]);
-            }
-            throw Exception("Unexpected API response format");
+            // if (json is Map<String, dynamic>) {
+            //   return UserModel.fromJson(json["data"]);
+            // }
+            // throw Exception("Unexpected API response format");
           });
 
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
-        UserModel model = dataResponse.data!;
-        log("user data is:-> $model");
-        log("user data is:-> ${dataResponse.token}");
 
         return getSuccessResponseWrapper(dataResponse);
       } else {
@@ -92,11 +96,12 @@ class AuthDataSourceImpl extends AuthDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "userLogin",
+        functionName: "forgotPassword",
       ));
     }
   }
 
+//OTP VERIFY API
   @override
   Future<ResponseWrapper<dynamic>?> otpVerify(
       {required Map<String, dynamic> body}) async {
@@ -106,19 +111,17 @@ class AuthDataSourceImpl extends AuthDataSource {
           url: ApiConstants.verifyOtp,
           fromJson: (json) {
             log("json in data source :-> $json");
+            return json;
 
-            // Ensure the response is a map and correctly map it to GetPlatformData
-            if (json is Map<String, dynamic>) {
-              return UserModel.fromJson(json["data"]);
-            }
-            throw Exception("Unexpected API response format");
+            // // Ensure the response is a map and correctly map it to GetPlatformData
+            // if (json is Map<String, dynamic>) {
+            //   return UserModel.fromJson(json["data"]);
+            // }
+            // throw Exception("Unexpected API response format");
           });
 
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
-        UserModel model = dataResponse.data!;
-        log("user data is:-> $model");
-        log("user data is:-> ${dataResponse.token}");
 
         return getSuccessResponseWrapper(dataResponse);
       } else {
@@ -129,11 +132,12 @@ class AuthDataSourceImpl extends AuthDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "userLogin",
+        functionName: "otpVerify",
       ));
     }
   }
 
+//RESET PASSWORD
   @override
   Future<ResponseWrapper<dynamic>?> resetPassword(
       {required Map<String, dynamic> body}) async {
@@ -144,22 +148,11 @@ class AuthDataSourceImpl extends AuthDataSource {
           fromJson: (json) {
             log("json in data source :-> $json");
 
-            // Ensure the response is a map and correctly map it to GetPlatformData
-            if (json is Map<String, dynamic>) {
-              return UserModel.fromJson(json["data"]);
-            }
-            throw Exception("Unexpected API response format");
+            return json;
           });
 
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
-        UserModel model = dataResponse.data!;
-        log("user data is:-> $model");
-        log("user data is:-> ${dataResponse.token}");
-
-        await Getters.getLocalStorage.saveLoginUser(model);
-        await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
-        await Getters.getLocalStorage.saveIsLogin(true);
 
         return getSuccessResponseWrapper(dataResponse);
       } else {
@@ -170,7 +163,7 @@ class AuthDataSourceImpl extends AuthDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "userLogin",
+        functionName: "resetPassword",
       ));
     }
   }
@@ -209,24 +202,22 @@ class AuthDataSourceImpl extends AuthDataSource {
     }
   }
 
-//  --->> LOGOUT <<---
+//  --->> LOGOUT  API<<---
   @override
   Future<ResponseWrapper<dynamic>> logOutApi() async {
+    var token = Getters.getLocalStorage.getToken();
+
+    log("token :$token");
     try {
       final dataResponse = await Getters.getHttpService.request<dynamic>(
           url: ApiConstants.logout,
           fromJson: (json) {
             log("json in data source :-> $json");
-
-            // Ensure the response is a map and correctly map it to GetPlatformData
-            // if (json is Map<String, dynamic>) {
-            //   return GetPlatformData.fromJson(json["data"]);
-            // }
-            // throw Exception("Unexpected API response format");
           },
           requestType: RequestType.post);
 
       if (dataResponse.status == "success") {
+        await Getters.getLocalStorage.clearAllBox();
         log("success called");
         return getSuccessResponseWrapper(dataResponse);
       } else {

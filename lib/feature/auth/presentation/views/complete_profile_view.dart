@@ -21,7 +21,7 @@ class CompleteProfileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final createProfileNotifier = ref.watch(signupProvider.notifier);
+    // final createProfileNotifier = ref.watch(signupProvider.notifier);
 
     final signupPro = ref.watch(signupProvider.notifier);
     return GestureDetector(

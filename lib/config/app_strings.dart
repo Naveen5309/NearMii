@@ -157,7 +157,7 @@ abstract final class AppString {
   static const String name = "Name";
   static const String email = "Email";
   static const String noInternetConnection = "No internet connection";
-  //  static const String localDirectory="appname";
+  static const String areYouSureLogOut = "Are you sure you want to \nLogout?";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

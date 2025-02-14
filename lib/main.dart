@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:NearMii/firebase_options.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +16,26 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
+
+  if (Platform.isAndroid) {
+    await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform, name: "Nearmii")
+        .then((value) async {
+      // final NotificationService service = NotificationService();
+      // await service.initNotification();
+      // await service.initPushNotificationListeners();
+    });
+  } else {
+    await Firebase.initializeApp(
+      name: "Nearmii",
+      options: DefaultFirebaseOptions.currentPlatform,
+    ).then((value) async {
+      // final NotificationService service = NotificationService();
+      // await service.initNotification();
+      // await service.initPushNotificationListeners();
+    });
+  }
+
   await AppInjector.init(
     appRunner: () =>
         runApp(ProviderScope(observers: [MyObserver()], child: const MyApp())),
@@ -30,6 +52,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
+        navigatorObservers: [BotToastNavigatorObserver()],
         navigatorKey: navigatorKey,
         title: AppString.appName,
         debugShowCheckedModeBanner: false,

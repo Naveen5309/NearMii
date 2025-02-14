@@ -41,7 +41,7 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> saveToken(String token) async {
     await userBox.put(HiveConst.authToken, token);
-    printLog("==============saveToken==========");
+    printLog("==============saveToken==========> $token ");
   }
 
   @override

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1062687805374",
+    "project_id": "nearmii-ad7b9",
+    "storage_bucket": "nearmii-ad7b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062687805374:android:9a2aeeb9582d767dacf3ef",
+        "android_client_info": {
+          "package_name": "com.near.nearme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062687805374-rf5g3op032vl7oo08p4ii0gqajft0a0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.near.nearme",
+            "certificate_hash": "5d297f80ef20d5c09fbc71476b80e64da0400386"
+          }
+        },
+        {
+          "client_id": "1062687805374-c646o4q8vpgkv34m4fc0j3chhuig46eo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfzVGkiRYKr3kfjPOilGear6iGhrJhWRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062687805374-c646o4q8vpgkv34m4fc0j3chhuig46eo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1062687805374-kip3naduu2vvj6fl6apa9cmh83oohmaj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.riverpodBoilerplateFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

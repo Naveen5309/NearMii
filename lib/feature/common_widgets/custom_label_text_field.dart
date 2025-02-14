@@ -151,8 +151,16 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 200),
-            left: textEditHasFocus || !isTextFieldEmpty ? 14 : 40,
-            top: textEditHasFocus || !isTextFieldEmpty ? -8 : 22,
+            left: textEditHasFocus ||
+                    !isTextFieldEmpty ||
+                    widget.controller.text.trim().isNotEmpty
+                ? 14
+                : 40,
+            top: textEditHasFocus ||
+                    !isTextFieldEmpty ||
+                    widget.controller.text.trim().isNotEmpty
+                ? -8
+                : 22,
             child: InkWell(
               onTap: () {
                 _focusNode.requestFocus();

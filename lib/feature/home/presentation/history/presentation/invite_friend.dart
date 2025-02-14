@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 class InviteFriendBottomSheet extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String _copy = "Copy Me";
   final String text = '';
   final String link = '';
 
