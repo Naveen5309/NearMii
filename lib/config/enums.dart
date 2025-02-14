@@ -9,3 +9,8 @@ enum AuthType {
   otpVerify,
   resetPassword,
 }
+
+enum Setting {
+  contactUs,
+  deleteAccount,
+}
