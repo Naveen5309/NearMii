@@ -30,14 +30,15 @@ class SettingApiSuccess extends SettingStates {
     required this.settingType,
   });
   @override
-  List<Object> get props => [];
+  List<Object> get props => [settingType];
 }
 
 class SettingApiFailed extends SettingStates {
   final String error;
+  final Setting settingType;
 
-  const SettingApiFailed({required this.error, required Setting settingType});
+  const SettingApiFailed({required this.error, required this.settingType});
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, settingType];
 }

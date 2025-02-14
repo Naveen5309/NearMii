@@ -117,6 +117,7 @@ class ApiProvider {
     required Map<String, dynamic> body,
   }) async {
     final headerToken = Injector.getHeaderToken();
+
     if (requestType == RequestType.get) {
       return _dio.get(
         fullUrl,
