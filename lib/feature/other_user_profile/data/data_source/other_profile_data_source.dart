@@ -26,11 +26,14 @@ class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
                 log("json in data source :-> $json");
 
                 if (json is Map<String, dynamic>) {
+                  var myData = OtherUserProfileModel.fromJson(json["data"]);
+
+                  log("mydata is :-. ${myData.name}");
                   return OtherUserProfileModel.fromJson(json["data"]);
                 }
                 throw Exception("Unexpected API response format");
               });
-      print("dataResponse===>$dataResponse");
+      print("dataResponse===>${dataResponse.data!.name}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 

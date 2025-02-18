@@ -24,12 +24,12 @@ class OtherUserProfileModel {
   dynamic gender;
   dynamic dob;
   dynamic otp;
-  int? isProfile;
+  dynamic isProfile;
   String? token;
-  int? points;
+  dynamic points;
   dynamic deviceType;
   dynamic deviceToken;
-  int? status;
+  dynamic status;
   DateTime? createdAt;
   DateTime? updatedAt;
 

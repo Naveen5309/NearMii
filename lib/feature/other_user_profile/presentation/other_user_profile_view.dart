@@ -1,25 +1,24 @@
+import 'dart:developer';
+
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/other_user_profile_provider.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
-import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
-import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
 import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
-import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -42,7 +41,7 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        final notifier = ref.read(otherUserProfile.notifier);
+        final notifier = ref.read(otherUserProfileProvider.notifier);
         notifier.otherUserProfileApi(widget.id ?? '');
       },
     );
@@ -69,13 +68,14 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.watch(loginProvider);
-    final otherUserData = ref.watch(otherUserProfile.notifier);
+    ref.watch(otherUserProfileProvider);
+    final otherUserData = ref.watch(otherUserProfileProvider.notifier);
 
     ref.listen(
-      loginProvider,
+      otherUserProfileProvider,
       (previous, next) {
         if (next is OtherUserProfileApiLoading) {
+          log("other user loading is called");
           showDialog(
             context: context,
             builder: (context) {
@@ -94,10 +94,10 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
           );
         } else if (next is OtherUserProfileApiSuccess) {
           // toast(msg: AppString.loginSuccess, isError: false);
+
           back(context);
           // toNamed(context, Routes.bottomNavBar);
-        } else if (next is AuthApiFailed &&
-            next.authType == AuthType.socialMedia) {
+        } else if (next is OtherUserProfileApiFailed) {
           back(context);
           // toast(msg: next.error);
         }
@@ -119,9 +119,9 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
       //     ),
       //   ),
       // ),
-      body: otherUserData.profile != null
+      body: otherUserData.profile == null
           ? Center(
-              child: Text("Loading data"),
+              child: Text("Loading data1 ${otherUserData.profile?.name}"),
             )
           : SliverSnap(
               stretch: true,
@@ -156,10 +156,10 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
                   ? appBarWidgetSection(
                       context: context,
                       otherUserProfileData: otherUserData.profile!)
-                  : SizedBox(
+                  : const SizedBox(
                       child: Text("loading"),
                     ),
-              body: Text("No data")
+              body: const Text("No data")
 
               //  bottomSection(loginNotifier: loginNotifier, context: context),
               ),
