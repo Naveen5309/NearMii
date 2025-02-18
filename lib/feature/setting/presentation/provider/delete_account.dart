@@ -28,8 +28,8 @@ final settingUseCaseProvider = Provider.autoDispose<SettingUsecases>((ref) {
 // Define a StateNotifierProvider for SignupNotifier
 final deleteAccountProvider =
     StateNotifierProvider.autoDispose<SettingNotifier, SettingStates>((ref) {
-  final authUseCase = ref.watch(settingUseCaseProvider);
-  return SettingNotifier(settingUseCase: authUseCase);
+  final settingUseCase = ref.watch(settingUseCaseProvider);
+  return SettingNotifier(settingUseCase: settingUseCase);
 });
 
 final isCurrentPasswordVisible =

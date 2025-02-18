@@ -2,7 +2,7 @@ import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/other_user_profile/data/repository/other_user_profile_repository.dart';
-import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
+import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 
 abstract class OtherUserProfileUsecases {
   Future<Either<Failure, OtherUserProfileModel>> callOtherUserProfile(

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
+import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';

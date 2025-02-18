@@ -5,6 +5,11 @@ import 'package:NearMii/feature/setting/data/repossitories/setting_repo.dart';
 abstract class SettingUsecases {
   Future<Either<Failure, dynamic>> callContactUs(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> callDeleteAccount(
+      {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> callRadius(
+      {required Map<String, dynamic> body});
 }
 
 class SettingUseCaseImpl implements SettingUsecases {
@@ -16,6 +21,24 @@ class SettingUseCaseImpl implements SettingUsecases {
   Future<Either<Failure, dynamic>> callContactUs(
       {required Map<String, dynamic> body}) async {
     final result = await repository.contactUs(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> callDeleteAccount(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.isdeleteAccount(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> callRadius(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.isRadius(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

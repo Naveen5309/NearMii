@@ -6,7 +6,7 @@ import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/data/domain/other_user_profile_usecases.dart';
-import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
+import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
