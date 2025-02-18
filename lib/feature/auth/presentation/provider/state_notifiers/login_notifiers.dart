@@ -113,6 +113,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
       final result = await authUseCase.callLogin(body: body, isSocial: false);
       state = result.fold((error) {
         log("login error:${error.message} ");
+
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
         return const AuthApiSuccess(authType: AuthType.login);

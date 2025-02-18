@@ -60,7 +60,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MyProfileView());
 
       case Routes.otherUserProfile:
-        return MaterialPageRoute(builder: (_) => const OtherUserProfileView());
+        final args = settings.arguments as String;
+
+        return MaterialPageRoute(
+            builder: (_) => OtherUserProfileView(
+                  id: args,
+                ));
       case Routes.editProfile:
         return MaterialPageRoute(builder: (_) => const CompleteEditProfile());
       case Routes.setRadius:

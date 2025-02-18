@@ -2,12 +2,14 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
+import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/provider/other_user_profile_provider.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -24,7 +26,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
 
 class OtherUserProfileView extends ConsumerStatefulWidget {
-  const OtherUserProfileView({super.key});
+  final String id;
+  const OtherUserProfileView({super.key, required this.id});
 
   @override
   ConsumerState<OtherUserProfileView> createState() =>
@@ -32,46 +35,47 @@ class OtherUserProfileView extends ConsumerStatefulWidget {
 }
 
 class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
-  ProfileModel? profile;
-
+  @override
   @override
   void initState() {
     super.initState();
-    fetchProfileData();
-    Future.microtask(() {
-      final notifier = ref.read(loginProvider.notifier);
-      notifier.getSocialPlatform();
-    });
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final notifier = ref.read(otherUserProfile.notifier);
+        notifier.otherUserProfileApi(widget.id ?? '');
+      },
+    );
   }
 
 //FETCH PROFILE DATA
   void fetchProfileData() {
     // Simulating data fetch from an API or database
-    setState(() {
-      profile = ProfileModel(
-        name: 'Brooklyn Simmons',
-        designation: 'Designation',
-        imageUrl: 'https://picsum.photos/250?image=9',
-        description:
-            'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
-        social: '10',
-        contact: '04',
-        portfolio: '10',
-        finance: '06',
-        business: '06',
-      );
-    });
+    // setState(() {
+    //   profile = ProfileModel(
+    //     name: 'Brooklyn Simmons',
+    //     designation: 'Designation',
+    //     imageUrl: 'https://picsum.photos/250?image=9',
+    //     description:
+    //         'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
+    //     social: '10',
+    //     contact: '04',
+    //     portfolio: '10',
+    //     finance: '06',
+    //     business: '06',
+    //   );
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(loginProvider);
-    final loginNotifier = ref.watch(loginProvider.notifier);
+    // ref.watch(loginProvider);
+    final otherUserData = ref.watch(otherUserProfile.notifier);
 
     ref.listen(
       loginProvider,
       (previous, next) {
-        if (next is AuthApiLoading && next.authType == AuthType.socialMedia) {
+        if (next is OtherUserProfileApiLoading) {
           showDialog(
             context: context,
             builder: (context) {
@@ -88,8 +92,7 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
               );
             },
           );
-        } else if (next is AuthApiSuccess &&
-            next.authType == AuthType.socialMedia) {
+        } else if (next is OtherUserProfileApiSuccess) {
           // toast(msg: AppString.loginSuccess, isError: false);
           back(context);
           // toNamed(context, Routes.bottomNavBar);
@@ -102,59 +105,73 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
     );
 
     return Scaffold(
-        // floatingActionButton: InkWell(
-        //   onTap: () {
-        //     toNamed(context, Routes.selectSocialMedia);
-        //   },
-        //   child: Container(
-        //     decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(100),
-        //         color: AppColor.btnColor),
-        //     child: Padding(
-        //       padding: const EdgeInsets.all(10.0),
-        //       child: SvgPicture.asset(Assets.icAddBtn),
-        //     ),
-        //   ),
-        // ),
-        body: SliverSnap(
-            stretch: true,
-            scrollBehavior: const CupertinoScrollBehavior(),
-            pinned: true,
-            animationCurve: Curves.easeInOutCubicEmphasized,
-            // bottom: const PreferredSize(
-            //   preferredSize: Size.fromHeight(100),
-            //   child: Icon(
-            //     Icons.directions_boat,
-            //     color: Colors.blue,
-            //     size: 45,
-            //   ),
-            // ),
-            // collapsedBarHeight: 60,
-            animationDuration: const Duration(milliseconds: 1),
-            onCollapseStateChanged:
-                (isCollapsed, scrollingOffset, maxExtent) {},
-            collapsedBackgroundColor: AppColor.btnColor,
-            expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-            backdropWidget: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.background),
-                  fit: BoxFit.fill,
+      // floatingActionButton: InkWell(
+      //   onTap: () {
+      //     toNamed(context, Routes.selectSocialMedia);
+      //   },
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(100),
+      //         color: AppColor.btnColor),
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(10.0),
+      //       child: SvgPicture.asset(Assets.icAddBtn),
+      //     ),
+      //   ),
+      // ),
+      body: otherUserData.profile != null
+          ? Center(
+              child: Text("Loading data"),
+            )
+          : SliverSnap(
+              stretch: true,
+              scrollBehavior: const CupertinoScrollBehavior(),
+              pinned: true,
+              animationCurve: Curves.easeInOutCubicEmphasized,
+              // bottom: const PreferredSize(
+              //   preferredSize: Size.fromHeight(100),
+              //   child: Icon(
+              //     Icons.directions_boat,
+              //     color: Colors.blue,
+              //     size: 45,
+              //   ),
+              // ),
+              // collapsedBarHeight: 60,
+              animationDuration: const Duration(milliseconds: 1),
+              onCollapseStateChanged:
+                  (isCollapsed, scrollingOffset, maxExtent) {},
+              collapsedBackgroundColor: AppColor.btnColor,
+              expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+              backdropWidget: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Assets.background),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            expandedContentHeight: context.height * .55,
-            expandedContent:
-                profileSection(context: context, profile: profile!),
-            collapsedContent: appBarWidgetSection(context: context),
-            body:
-                bottomSection(loginNotifier: loginNotifier, context: context)));
+              expandedContentHeight: context.height * .55,
+              expandedContent: profileSection(context: context),
+              collapsedContent: otherUserData.profile != null
+                  ? appBarWidgetSection(
+                      context: context,
+                      otherUserProfileData: otherUserData.profile!)
+                  : SizedBox(
+                      child: Text("loading"),
+                    ),
+              body: Text("No data")
+
+              //  bottomSection(loginNotifier: loginNotifier, context: context),
+              ),
+    );
   }
 }
 
 //APP BAR WIDGET SECTION
 
-Widget appBarWidgetSection({required BuildContext context}) {
+Widget appBarWidgetSection(
+    {required BuildContext context,
+    required OtherUserProfileModel otherUserProfileData}) {
   return Row(
     children: [
       GestureDetector(
@@ -186,13 +203,13 @@ Widget appBarWidgetSection({required BuildContext context}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: "Brooklyn Simmons",
+            text: otherUserProfileData.name ?? '',
             fontSize: 18.sp,
             fontWeight: FontWeight.w500,
             color: AppColor.whiteFFFFFF,
           ),
           AppText(
-            text: "Designation",
+            text: otherUserProfileData.designation ?? '',
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: AppColor.whiteFFFFFF.withOpacity(.8),
@@ -325,7 +342,7 @@ Widget bottomSection(
 
 //PROFILE SECTION
 Widget profileSection(
-    {required BuildContext context, required ProfileModel profile}) {
+    {required BuildContext context, OtherUserProfileModel? profile}) {
   return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures column takes only necessary space
@@ -463,36 +480,36 @@ Widget profileSection(
         10.verticalSpace,
         AppText(
           color: AppColor.whiteFFFFFF,
-          text: profile.name,
+          text: profile?.name ?? "",
           fontSize: 20.sp,
           fontWeight: FontWeight.w500,
         ),
         5.verticalSpace,
         AppText(
-          text: profile.designation,
+          text: profile?.designation ?? '',
           fontWeight: FontWeight.w500,
           fontSize: 16.sp,
           color: AppColor.whiteFFFFFF.withOpacity(.8),
         ),
         25.verticalSpace,
         AppText(
-          text: profile.description,
+          text: profile?.bio ?? "",
           textAlign: TextAlign.center,
           fontSize: 12.sp,
           fontWeight: FontWeight.w400,
           color: AppColor.whiteFFFFFF.withOpacity(.8),
         ),
         20.verticalSpace,
-        Wrap(
+        const Wrap(
           alignment: WrapAlignment.center,
           runSpacing: 8,
           spacing: 6,
           children: [
-            InfoChip(label: 'Social', value: profile.social),
-            InfoChip(label: 'Contact', value: profile.contact),
-            InfoChip(label: 'Portfolio', value: profile.portfolio),
-            InfoChip(label: 'Finance', value: profile.finance),
-            InfoChip(label: 'Business', value: profile.business),
+            InfoChip(label: 'Social', value: ''),
+            InfoChip(label: 'Contact', value: ''),
+            InfoChip(label: 'Portfolio', value: ''),
+            InfoChip(label: 'Finance', value: ''),
+            InfoChip(label: 'Business', value: ''),
           ],
         )
       ]);

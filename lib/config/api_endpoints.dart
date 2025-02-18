@@ -9,7 +9,7 @@ abstract final class ApiConstants {
   static const String baseUrl = "$url/api/users";
   static const String login = "$baseUrl/login";
   static const String register = "$baseUrl/register";
-
+  static const String otherUserProfile = "$baseUrl/profile";
   static const String completeProfile = "$baseUrl/completeProfile";
   static const String socialLogin = "$baseUrl/socialLogin";
   static const String deleteAccount = "$baseUrl/deleteAccount";
@@ -23,7 +23,7 @@ abstract final class ApiConstants {
   static const String updateProfile = "$baseUrl/updateProfile";
   static const String report = "$baseUrl/report";
   static const String getHistory = "$baseUrl/history";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  // static const String getsocialprofile = "$baseUrl/getsocialprofile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

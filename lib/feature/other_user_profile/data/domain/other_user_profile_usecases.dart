@@ -1,0 +1,37 @@
+import 'package:NearMii/core/error/failure.dart';
+import 'package:NearMii/core/utils/dartz/either.dart';
+import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/other_user_profile/data/repository/other_user_profile_repository.dart';
+import 'package:NearMii/feature/other_user_profile/other_user_profile_model.dart';
+
+abstract class OtherUserProfileUsecases {
+  Future<Either<Failure, OtherUserProfileModel>> callOtherUserProfile(
+      {required Map<String, dynamic> body});
+
+  Future<Either<Failure, PlatformData>> getPlatformApi(
+      {required Map<String, dynamic> body});
+}
+
+class OtherUserProfileUseCaseImpl implements OtherUserProfileUsecases {
+  final OtherUserProfileRepository repository;
+
+  OtherUserProfileUseCaseImpl({required this.repository});
+
+  @override
+  Future<Either<Failure, OtherUserProfileModel>> callOtherUserProfile(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.otherUserProfile(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, PlatformData>> getPlatformApi(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.getPlatform(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+}

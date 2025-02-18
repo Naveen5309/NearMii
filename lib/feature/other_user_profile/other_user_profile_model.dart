@@ -1,45 +1,16 @@
-// To parse this JSON data, do
-//
-//     final loginResponseModel = loginResponseModelFromJson(jsonString);
-
-import 'dart:convert';
-
-LoginResponseModel loginResponseModelFromJson(String str) =>
-    LoginResponseModel.fromJson(json.decode(str));
-
-String loginResponseModelToJson(LoginResponseModel data) =>
-    json.encode(data.toJson());
-
-class LoginResponseModel {
+class Model {
   String? status;
   String? message;
-  UserModel? user;
-  String? token;
+  OtherUserProfileModel? data;
 
-  LoginResponseModel({
+  Model({
     this.status,
     this.message,
-    this.user,
-    this.token,
+    this.data,
   });
-
-  factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
-      LoginResponseModel(
-        status: json["status"],
-        message: json["message"],
-        user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
-        token: json["token"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "user": user?.toJson(),
-        "token": token,
-      };
 }
 
-class UserModel {
+class OtherUserProfileModel {
   int? id;
   String? name;
   String? email;
@@ -58,11 +29,11 @@ class UserModel {
   int? points;
   dynamic deviceType;
   dynamic deviceToken;
-  dynamic status;
+  int? status;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  UserModel({
+  OtherUserProfileModel({
     this.id,
     this.name,
     this.email,
@@ -85,8 +56,8 @@ class UserModel {
     this.createdAt,
     this.updatedAt,
   });
-
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory OtherUserProfileModel.fromJson(Map<String, dynamic> json) =>
+      OtherUserProfileModel(
         id: json["id"],
         name: json["name"],
         email: json["email"],

@@ -14,3 +14,5 @@ enum Setting {
   contactUs,
   deleteAccount,
 }
+
+enum otherProfile { otherUserProfile }
