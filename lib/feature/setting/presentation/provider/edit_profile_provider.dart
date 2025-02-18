@@ -1,7 +1,3 @@
-import 'package:NearMii/feature/auth/data/data_source/auth_data_source.dart';
-import 'package:NearMii/feature/auth/data/repositories/auth_repo_implementation.dart';
-import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
-import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/setting/data/data_source/setting_data_source.dart';
 import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
 import 'package:NearMii/feature/setting/data/repossitories/setting_repo.dart';

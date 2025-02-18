@@ -1,10 +1,10 @@
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_widget.dart';
-import 'package:NearMii/feature/home/presentation/history/presentation/history_view.dart';
+import 'package:NearMii/feature/history/presentation/view/history_view.dart';
 import 'package:NearMii/feature/home/presentation/provider/bottom_nav_provider.dart';
 import 'package:NearMii/feature/home/presentation/views/home_page_view.dart';
-import 'package:NearMii/feature/notification/presentation/notification_view.dart';
-import 'package:NearMii/feature/setting/presentation/setting_view.dart';
+import 'package:NearMii/feature/notification/presentation/view/notification_view.dart';
+import 'package:NearMii/feature/setting/presentation/view/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';

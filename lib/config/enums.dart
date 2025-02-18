@@ -10,9 +10,4 @@ enum AuthType {
   resetPassword,
 }
 
-enum Setting {
-  contactUs,
-  deleteAccount,
-}
-
-enum otherProfile { otherUserProfile }
+enum Setting { contactUs, deleteAccount, radius }

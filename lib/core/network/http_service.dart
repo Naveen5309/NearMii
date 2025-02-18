@@ -53,10 +53,9 @@ class ApiProvider {
       );
 
       log("api response is :-> ${response.data["data"]}");
-      var parsedData = (response.data["data"] is Map<String, dynamic>)
-          ? _dataParser<T>(
+      var parsedData = _dataParser<T>(
               response.data, fromJson) // Pass the whole JSON response
-          : null;
+          ;
 
       log("parsedData data :-> $parsedData");
 

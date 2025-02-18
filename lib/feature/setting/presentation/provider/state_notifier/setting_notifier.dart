@@ -6,7 +6,6 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
@@ -131,6 +130,67 @@ class SettingNotifier extends StateNotifier<SettingStates> {
     } catch (e) {
       state =
           SettingApiFailed(error: e.toString(), settingType: Setting.contactUs);
+    }
+  }
+
+  //Delete Account
+  Future<void> deleteAccountApi() async {
+    state = const SettingApiLoading(settingType: Setting.deleteAccount);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection,
+            settingType: Setting.deleteAccount);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "password": currentPasswordController.text.trim(),
+      };
+      final result = await settingUseCase.callDeleteAccount(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.deleteAccount);
+      }, (result) {
+        return const SettingApiSuccess(settingType: Setting.deleteAccount);
+      });
+    } catch (e) {
+      state = SettingApiFailed(
+          error: e.toString(), settingType: Setting.deleteAccount);
+    }
+  }
+
+  //Radius
+  Future<void> radiusApi() async {
+    state = const SettingApiLoading(settingType: Setting.radius);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection, settingType: Setting.radius);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {};
+      final result = await settingUseCase.callRadius(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.radius);
+      }, (result) {
+        return const SettingApiSuccess(settingType: Setting.radius);
+      });
+    } catch (e) {
+      state =
+          SettingApiFailed(error: e.toString(), settingType: Setting.radius);
     }
   }
 }

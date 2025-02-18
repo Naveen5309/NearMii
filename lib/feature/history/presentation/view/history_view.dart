@@ -4,27 +4,36 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_history_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
+import 'package:NearMii/feature/history/presentation/provider/history_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HistoryView extends StatefulWidget {
+class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
 
   @override
-  State<HistoryView> createState() => _HistoryViewState();
+  ConsumerState<HistoryView> createState() => _HistoryViewState();
 }
 
-class _HistoryViewState extends State<HistoryView> {
+class _HistoryViewState extends ConsumerState<HistoryView> {
   // late Future<List<TileModel>> tiles;
 
   @override
   void initState() {
     super.initState();
-    // tiles = fetchTilesFromBackend();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final notifier = ref.read(historyProvider.notifier);
+        notifier.historyApi();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(historyProvider);
+    final history = ref.watch(historyProvider.notifier);
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
@@ -84,8 +93,11 @@ class _HistoryViewState extends State<HistoryView> {
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
-                                          itemCount: 4,
+                                          itemCount:
+                                              history.historyDataList.length,
                                           itemBuilder: (context, index) {
+                                            var data =
+                                                history.historyDataList[index];
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -93,9 +105,11 @@ class _HistoryViewState extends State<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "Robert Fox",
+                                                title: data.profile?.name ?? "",
                                                 leadingIcon: '',
-                                                subtitle: 'Designation',
+                                                subtitle:
+                                                    data.profile?.designation ??
+                                                        "",
                                                 onTap: () {
                                                   toNamed(context,
                                                       Routes.otherUserProfile,

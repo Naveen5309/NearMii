@@ -6,7 +6,7 @@ import 'package:NearMii/feature/auth/presentation/views/onboard_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/change_password_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/complete_edit_profile.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
-import 'package:NearMii/feature/home/presentation/history/presentation/deleted_detail_view.dart';
+import 'package:NearMii/feature/setting/presentation/view/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
@@ -15,7 +15,7 @@ import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart
 import 'package:NearMii/feature/auth/presentation/views/select_social_media_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/signup_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/verity_otp_view.dart';
-import 'package:NearMii/feature/other_user_profile/presentation/other_user_profile_view.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/view/other_user_profile_view.dart';
 import 'package:NearMii/feature/splash/presentation/splash_view.dart';
 import 'package:flutter/material.dart';
 import '../../../feature/home/presentation/views/home_page_view.dart';
