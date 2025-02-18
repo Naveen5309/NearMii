@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
@@ -69,26 +70,27 @@ class AuthDataSourceImpl extends AuthDataSource {
 
 //SIGN UP API
   @override
-  Future<ResponseWrapper<UserModel>?> signUpApi({
+  Future<ResponseWrapper<UserRegisterData>?> signUpApi({
     required Map<String, dynamic> body,
   }) async {
     try {
-      final dataResponse = await Getters.getHttpService.request<UserModel>(
-          body: body,
-          url: ApiConstants.register,
-          fromJson: (json) {
-            log("json in data source :-> $json");
+      final dataResponse =
+          await Getters.getHttpService.request<UserRegisterData>(
+              body: body,
+              url: ApiConstants.register,
+              fromJson: (json) {
+                log("json in data source :-> $json");
 
-            // Ensure the response is a map and correctly map it to GetPlatformData
-            if (json is Map<String, dynamic>) {
-              return UserModel.fromJson(json["data"]);
-            }
-            throw Exception("Unexpected API response format");
-          });
+                // Ensure the response is a map and correctly map it to GetPlatformData
+                if (json is Map<String, dynamic>) {
+                  return UserRegisterData.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              });
 
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
-        UserModel model = dataResponse.data!;
+        UserRegisterData model = dataResponse.data!;
         log("user data is:-> $model");
         log("user data is:-> ${dataResponse.token}");
         log("user data is:-> $dataResponse");

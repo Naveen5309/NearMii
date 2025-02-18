@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 
 import 'helper.dart';
@@ -20,6 +22,7 @@ class Validator {
     required String password,
     required String confirmPassword,
   }) {
+    log("email entered is :-> $email");
     if (email.isEmpty) {
       error = AppString.pleaseEnterEmailAddress;
       return false;

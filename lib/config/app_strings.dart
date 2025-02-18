@@ -69,6 +69,9 @@ abstract final class AppString {
   static const String dob = "Date of birth";
   static const String next = "Next";
   static const String loginSuccess = "You are logged in successfully";
+  static const String resetPswdSuccessfully = "Password reset successfully";
+
+  static const String otpVerified = "OTP Verified successfully";
 
   static const String addSocialProfiles = "Add Social Profiles";
   static const String searchHere = "Search here";
@@ -159,6 +162,11 @@ abstract final class AppString {
   static const String noInternetConnection = "No internet connection";
   static const String areYouSureLogOut = "Are you sure you want to \nLogout?";
   static const String otpVerifySuccess = "Otp sent successfully";
+  static const String acceptTermsAndConditions = "Accept Terms & Conditions";
+  static const String signupSuccess = "Signup Success";
+  static const String chooseImage = "Choose image source";
+  static const String camera = "Camera";
+  static const String gallery = "Gallery";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
@@ -167,6 +175,17 @@ abstract final class AppString {
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+
   static const pleaseEnterEmailAddress = 'Please Enter Email Address';
   static const pleaseEnterValidEmailAddress =
       'Please Enter Valid Email Address';

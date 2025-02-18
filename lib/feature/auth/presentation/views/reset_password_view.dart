@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -45,9 +47,9 @@ class ResetPasswordView extends ConsumerWidget {
           );
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.resetPassword) {
-          toast(msg: AppString.loginSuccess, isError: false);
+          toast(msg: AppString.resetPswdSuccessfully, isError: false);
           // back(context);
-          toNamed(context, Routes.resetPassword);
+          offAllNamed(context, Routes.login);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.resetPassword) {
           back(context);
@@ -139,11 +141,14 @@ class ResetPasswordView extends ConsumerWidget {
           ),
           child: CommonAppBtn(
             onTap: () {
-              // final isValidOtp = otpValidatorNotifier.validateOtp();
+              log("on click on create new pswd btn");
+              final isValidOtp =
+                  validateCreateNewPassword.validateResetPassword();
               // print(isValidOtp);
-              // if (isValidOtp) {
-              toNamed(context, Routes.login);
-              // }
+              if (isValidOtp) {
+                validateCreateNewPassword.resetPassword();
+                // toNamed(context, Routes.login);
+              }
             },
             title: AppString.submit,
             textSize: 16.sp,

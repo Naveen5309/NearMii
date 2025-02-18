@@ -48,32 +48,42 @@ class AuthApiFailed extends AuthState {
   List<Object> get props => [error, authType];
 }
 
-///****** Sinup States *******************
-@immutable
-sealed class SignUpState extends Equatable {
-  const SignUpState();
-}
-
-class SignupInitial extends SignUpState {
+class PickImageState extends AuthState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class SinupApiLoading extends SignUpState {
-  @override
-  List<Object> get props => [];
-}
+// ///****** Sinup States *******************
+// @immutable
+// sealed class SignUpState extends Equatable {
+//   const SignUpState();
+// }
 
-class SinupSuccess extends SignUpState {
-  @override
-  List<Object> get props => [];
-}
+// class SignupInitial extends SignUpState {
+//   @override
+//   List<Object> get props => [];
+// }
 
-class SinupFailed extends SignUpState {
-  final String error;
+// class SinupApiLoading extends SignUpState {
+//   @override
+//   List<Object> get props => [];
+// }
 
-  const SinupFailed({required this.error});
+// class SinupSuccess extends SignUpState {
+//   @override
+//   List<Object> get props => [];
+// }
 
-  @override
-  List<Object> get props => [error];
-}
+// class SinupFailed extends SignUpState {
+//   final String error;
+
+//   const SinupFailed({required this.error});
+
+//   @override
+//   List<Object> get props => [error];
+// }
+
+// class PickImageState extends SignUpState {
+//   @override
+//   List<Object?> get props => [];
+// }

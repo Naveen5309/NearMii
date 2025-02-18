@@ -1,14 +1,17 @@
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_rich_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_rich_text_three_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +23,40 @@ class SignUpView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signUpNotifier = ref.watch(signupProvider.notifier);
+
+    ref.watch(signupProvider);
+    // final loginNotifier = ref.watch(loginProvider.notifier);
+
+    ref.listen(
+      signupProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.signup) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess && next.authType == AuthType.signup) {
+          toast(msg: AppString.signupSuccess, isError: false);
+          // back(context);
+          toNamed(context, Routes.completeProfile);
+        } else if (next is AuthApiFailed && next.authType == AuthType.signup) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -149,20 +186,25 @@ class SignUpView extends ConsumerWidget {
                     SizedBox(
                       height: context.height * .01,
                     ),
-                    //login
+                    //Sign up
                     CommonAppBtn(
                       onTap: () {
-                        // final isLogin = signUpNotifier.validateSignUp();
+                        final isValid = signUpNotifier.validateSignUp();
 
-                        // if (isLogin) {
-                        //   signUpNotifier.saveIsLogin().then(
-                        //     (value) {
-                        //       if (context.mounted) {
-                        offAllNamed(context, Routes.completeProfile);
-                        // }
-                        // },
-                        // );
-                        // }
+                        if (isValid) {
+                          if (!ref.read(checkPrivacy.notifier).state) {
+                            toast(
+                                msg: AppString.acceptTermsAndConditions,
+                                isError: true);
+                          } else {
+                            signUpNotifier.registerApi();
+                          }
+                          // signUpNotifier.saveIsLogin().then((value) {
+                          //   if (context.mounted) {
+                          //     // offAllNamed(context, Routes.completeProfile);
+                          //   }
+                          // });
+                        }
                       },
                       title: AppString.signUp,
                       textSize: 16.sp,
@@ -211,9 +253,10 @@ class SignUpView extends ConsumerWidget {
         Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
           var isVisible = ref.watch(isPswdVisibleSignUp);
           return CustomLabelTextField(
-            isObscure: isVisible,
+            isObscure: !isVisible,
             onTapOnSuffixIcon: () {
-              ref.read(isPswdVisibleSignUp.notifier).state = !isVisible;
+              ref.read(isPswdVisibleSignUp.notifier).state =
+                  !ref.read(isPswdVisibleSignUp.notifier).state;
             },
             prefixIcon: Assets.icLock,
             controller: signUpNotifier.pswdController,
@@ -226,12 +269,12 @@ class SignUpView extends ConsumerWidget {
         Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             var isVisible = ref.watch(isPswdConfirmVisible);
-            print("isVisible===>$isVisible");
             return CustomLabelTextField(
               onTapOnSuffixIcon: () {
-                ref.read(isPswdConfirmVisible.notifier).state = !isVisible;
+                ref.read(isPswdConfirmVisible.notifier).state =
+                    !ref.read(isPswdConfirmVisible.notifier).state;
               },
-              isObscure: isVisible,
+              isObscure: !isVisible,
               prefixIcon: Assets.icLock,
               controller: signUpNotifier.confirmPswdController,
               labelText: AppString.confirmPswd,

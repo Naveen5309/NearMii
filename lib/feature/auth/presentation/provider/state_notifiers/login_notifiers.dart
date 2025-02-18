@@ -28,7 +28,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
   List<PlatformData> socialMediaList = [];
   List<PlatformData> contactList = [];
-
   List<PlatformData> portfolioList = [];
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
@@ -220,6 +219,11 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
   Future<UserModel?> signInWithGoogle(BuildContext context) async {
     try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection, authType: AuthType.login);
+      }
+      if (await Getters.networkInfo.isSlow) {}
       GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: ['email'],
       );
@@ -242,9 +246,10 @@ class LoginNotifier extends StateNotifier<AuthState> {
       }
       return null;
     } catch (e, s) {
+      state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
       blocLog(
-        msg: 'Google sign-in error: $e',
-        bloc: "AuthServices",
+        msg: 'Google sign-in error: $e ,$s',
+        bloc: "AuthServices1",
       );
       return null;
     }
@@ -276,7 +281,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
       Utils.hideLoader();
       blocLog(
         msg: 'Sign-in with credential error: $e',
-        bloc: "AuthServices",
+        bloc: "AuthServices2",
       );
       return null;
     }
@@ -290,7 +295,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
     } catch (e, s) {
       blocLog(
         msg: 'Firebase sign-in error: $e',
-        bloc: "AuthServices",
+        bloc: "AuthServices3",
       );
       rethrow;
     }

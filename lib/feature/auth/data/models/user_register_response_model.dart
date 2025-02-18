@@ -1,47 +1,49 @@
 // To parse this JSON data, do
 //
-//     final loginResponseModel = loginResponseModelFromJson(jsonString);
+//     final userRegisterResponseModel = userRegisterResponseModelFromJson(jsonString);
 
 import 'dart:convert';
 
-LoginResponseModel loginResponseModelFromJson(String str) =>
-    LoginResponseModel.fromJson(json.decode(str));
+UserRegisterResponseModel userRegisterResponseModelFromJson(String str) =>
+    UserRegisterResponseModel.fromJson(json.decode(str));
 
-String loginResponseModelToJson(LoginResponseModel data) =>
+String userRegisterResponseModelToJson(UserRegisterResponseModel data) =>
     json.encode(data.toJson());
 
-class LoginResponseModel {
+class UserRegisterResponseModel {
   String? status;
   String? message;
-  UserModel? user;
+  UserRegisterData? data;
   String? token;
 
-  LoginResponseModel({
+  UserRegisterResponseModel({
     this.status,
     this.message,
-    this.user,
+    this.data,
     this.token,
   });
 
-  factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
-      LoginResponseModel(
+  factory UserRegisterResponseModel.fromJson(Map<String, dynamic> json) =>
+      UserRegisterResponseModel(
         status: json["status"],
         message: json["message"],
-        user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
+        data: json["data"] == null
+            ? null
+            : UserRegisterData.fromJson(json["data"]),
         token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "user": user?.toJson(),
+        "data": data?.toJson(),
         "token": token,
       };
 }
 
-class UserModel {
+class UserRegisterData {
   int? id;
-  String? name;
+  dynamic name;
   String? email;
   dynamic emailVerifiedAt;
   dynamic socialId;
@@ -53,16 +55,16 @@ class UserModel {
   dynamic gender;
   dynamic dob;
   dynamic otp;
-  int? isProfile;
+  dynamic isProfile;
   String? token;
-  int? points;
+  dynamic points;
   dynamic deviceType;
   dynamic deviceToken;
   dynamic status;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  UserModel({
+  UserRegisterData({
     this.id,
     this.name,
     this.email,
@@ -86,7 +88,8 @@ class UserModel {
     this.updatedAt,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+  factory UserRegisterData.fromJson(Map<String, dynamic> json) =>
+      UserRegisterData(
         id: json["id"],
         name: json["name"],
         email: json["email"],

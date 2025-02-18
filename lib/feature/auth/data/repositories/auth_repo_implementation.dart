@@ -1,4 +1,5 @@
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/utils/dartz/either.dart';
@@ -11,7 +12,7 @@ abstract class AuthRepository {
     required bool isSocial,
   });
 
-  Future<Either<Failure, UserModel?>> signUp({
+  Future<Either<Failure, UserRegisterData?>> signUp({
     required Map<String, dynamic> body,
   });
 
@@ -50,7 +51,7 @@ class AuthRepoImpl implements AuthRepository {
 
 // ----->>>  SIGN UP   <<<----
   @override
-  Future<Either<Failure, UserModel?>> signUp({
+  Future<Either<Failure, UserRegisterData?>> signUp({
     required Map<String, dynamic> body,
   }) async {
     try {

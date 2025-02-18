@@ -200,7 +200,6 @@ class SettingView extends ConsumerWidget {
                           borderColor: AppColor.redE40505,
                           borderWidth: 1,
                           backGroundColor: AppColor.redF8E2E2,
-
                           onTap: () => showCustomBottomSheet(
                               context: context,
                               content: LogoutConfirmationView(
@@ -213,12 +212,6 @@ class SettingView extends ConsumerWidget {
                                   back(context);
                                 },
                               )),
-                          // onTap: () {
-                          //   log("logOut called");
-                          //   // final notifier = ref.read(loginProvider.notifier);
-                          //   // notifier.getSocialPlatform();
-                          //   // offAllNamed(context, Routes.login);
-                          // },
                         ),
                       ),
                       90.verticalSpace

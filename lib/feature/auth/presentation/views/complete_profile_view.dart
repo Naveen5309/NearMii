@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
@@ -5,7 +7,9 @@ import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart'
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
+import 'package:NearMii/feature/common_widgets/choose_image_widget.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
@@ -15,13 +19,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CompleteProfileView extends ConsumerWidget {
   const CompleteProfileView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final createProfileNotifier = ref.watch(signupProvider.notifier);
+    final createProfileNotifier = ref.watch(signupProvider.notifier);
 
     final signupPro = ref.watch(signupProvider.notifier);
     return GestureDetector(
@@ -66,7 +71,23 @@ class CompleteProfileView extends ConsumerWidget {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: context.height * .04),
-                      child: profileSection(),
+                      child: profileSection(
+                        image: signupPro.image,
+                        onTap: () => showCustomBottomSheet(
+                            context: context,
+                            content: ChooseImageWidget(
+                              onClickOnCamera: () {
+                                createProfileNotifier.pickAndCropImage(
+                                    context: context,
+                                    source: ImageSource.camera);
+                              },
+                              onClickOnGallery: () {
+                                createProfileNotifier.pickAndCropImage(
+                                    context: context,
+                                    source: ImageSource.gallery);
+                              },
+                            )),
+                      ),
                     ),
 
                     //Field forms
@@ -103,21 +124,41 @@ class CompleteProfileView extends ConsumerWidget {
 
   //PROFILE SECTION
 
-  Widget profileSection() {
+  Widget profileSection({
+    required VoidCallback onTap,
+    XFile? image,
+  }) {
     return Row(
       children: [
-        const CustomCacheNetworkImage(
-          img: '',
-          imageRadius: 120,
-          height: 100,
-          width: 100,
-        ),
+        image != null
+            ? Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(120)),
+                height: 100,
+                width: 100,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(120),
+                    child: Image(
+                      image: FileImage(
+                        File(image.path),
+                      ),
+                      fit: BoxFit.cover,
+                    )))
+            : const CustomCacheNetworkImage(
+                img: '',
+                imageRadius: 120,
+                height: 100,
+                width: 100,
+              ),
         15.horizontalSpace,
-        AppText(
-          text: AppString.uploadImage,
-          color: AppColor.btnColor,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w500,
+        InkWell(
+          onTap: onTap,
+          child: AppText(
+            text: AppString.uploadImage,
+            color: AppColor.btnColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+          ),
         )
       ],
     );

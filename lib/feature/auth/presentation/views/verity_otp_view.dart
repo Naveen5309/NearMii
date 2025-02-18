@@ -45,7 +45,7 @@ class VerityOtpView extends ConsumerWidget {
           );
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.otpVerify) {
-          toast(msg: AppString.loginSuccess, isError: false);
+          toast(msg: AppString.otpVerified, isError: false);
           // back(context);
           toNamed(context, Routes.resetPassword);
         } else if (next is AuthApiFailed &&
@@ -221,11 +221,11 @@ class VerityOtpView extends ConsumerWidget {
           ),
           child: CommonAppBtn(
             onTap: () {
-              // final isValidOtp = otpValidatorNotifier.validateOtp();
-              // print(isValidOtp);
-              // if (isValidOtp) {
-              toNamed(context, Routes.resetPassword);
-              // }
+              final isValidOtp = otpValidatorNotifier.validateOtp();
+              if (isValidOtp) {
+                otpValidatorNotifier.verifyOtp();
+                // toNamed(context, Routes.resetPassword);
+              }
             },
             title: AppString.submit,
             textSize: 16.sp,
