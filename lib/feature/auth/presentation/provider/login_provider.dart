@@ -29,6 +29,6 @@ final loginProvider =
 });
 
 final isPswdVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
+    StateProvider.autoDispose<bool>((ref) => true, name: "isPswdVisible");
 final isConfirmPswdVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
+    StateProvider.autoDispose<bool>((ref) => true, name: "isPswdVisible");

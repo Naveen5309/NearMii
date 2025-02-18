@@ -1,15 +1,17 @@
+import 'dart:async';
 import 'dart:developer';
-
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import '../../../domain/usecases/get_auth.dart';
 import '../states/auth_states.dart';
 
@@ -25,6 +27,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final dobController = TextEditingController();
   final bioController = TextEditingController();
 
+  final urlController = TextEditingController();
+
   final designationController = TextEditingController();
 
   final genderController = TextEditingController();
@@ -32,8 +36,41 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   //My Profile Method to upload profile image
   XFile? image;
   String imageUrl = '';
+  List<PlatformData> socialMediaList = [];
+  List<PlatformData> contactList = [];
+  List<PlatformData> portfolioList = [];
+
+  List<int> selectedPlatform = [];
 
   SignupNotifiers({required this.authUseCase}) : super(AuthInitial());
+
+  int secondsRemaining = 30;
+  bool enableResend = false;
+  Timer? timer;
+
+  void startTimer() {
+    // resendOtpApi();
+    timer?.cancel();
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (secondsRemaining != 0) {
+        enableResend = false;
+        secondsRemaining--;
+        if (secondsRemaining == 0) {
+          timer?.cancel();
+          enableResend = true;
+          secondsRemaining = 30;
+        }
+        state = UpdateTimer();
+      } else {
+        enableResend = true;
+        state = UpdateTimer();
+      }
+    });
+  }
+
+  Future<void> cancelTimer() async {
+    timer?.cancel();
+  }
 
   //VALIDATE SIGN UP
   bool validateSignUp() {
@@ -77,9 +114,55 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     }
   }
 
+  //VALIDATE ADD PLATFORM
+  bool validateAddPlatform() {
+    bool isValid =
+        Validator().addPlatformValidator(url: urlController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
   // Save Login credentails if REMEMBER ME TRUE
   Future<void> saveIsLogin() async {
     await Getters.getLocalStorage.saveIsLogin(true);
+  }
+
+//GET SOCIAL PROFILES
+  Future<void> getSocialPlatform() async {
+    state = const AuthApiLoading(authType: AuthType.socialMedia);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: "No internet connection", authType: AuthType.socialMedia);
+        return;
+      }
+
+      final result = await authUseCase.getPlatform();
+      state = result.fold((error) {
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.socialMedia);
+      }, (result) {
+        log("result is:-> $result");
+        socialMediaList = result.socialMedia ?? [];
+        portfolioList = result.portfolio ?? [];
+        contactList = result.contactInformation ?? [];
+
+        log("result is 15:-> $socialMediaList");
+
+        // Update the list and notify UI by updating state
+        // platformDataList = result ?? [];
+        return const AuthApiSuccess(
+          authType: AuthType.socialMedia,
+        );
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
+    }
   }
 
 //DID YOU FORGOT YOUR PASSWORD
@@ -106,11 +189,89 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         return AuthApiFailed(
             error: error.message, authType: AuthType.forgotPassword);
       }, (result) {
+        enableResend = false;
         return const AuthApiSuccess(authType: AuthType.forgotPassword);
       });
     } catch (e) {
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.forgotPassword);
+    }
+  }
+
+// ADD PLATFORM
+  Future<void> addPlatform({required String platformId}) async {
+    state = const AuthApiLoading(authType: AuthType.addPlatform);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.addPlatform);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "platform_id": platformId,
+        "url": urlController.text.trim(),
+      };
+      final result = await authUseCase.addPlatformApi(body: body);
+      state = result.fold((error) {
+        log("forgot password error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.addPlatform);
+      }, (result) {
+        selectedPlatform.add(int.parse(platformId));
+        selectedPlatform = selectedPlatform.toSet().toList();
+        urlController.clear();
+        return const AuthApiSuccess(authType: AuthType.addPlatform);
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.addPlatform);
+    }
+  }
+
+//COMPLETE PROFILE API
+  Future<void> completeProfileApi() async {
+    state = const AuthApiLoading(authType: AuthType.completeProfile);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.completeProfile);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "name": fullNameController.text.trim(),
+        "designation": designationController.text.trim(),
+        "phone_number": phoneController.text.trim(),
+        "gender": genderController.text.trim(),
+        "dob": DateFormat("yyyy/MM/dd")
+            .format(DateFormat("MM/dd/yyyy").parse(dobController.text.trim())),
+        "token": referralController.text.trim(),
+        "bio": bioController.text.trim(),
+      };
+      final result = await authUseCase.completeProfile(
+          body: body, imagePath: image?.path ?? '');
+      state = result.fold((error) {
+        log("forgot password error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.completeProfile);
+      }, (result) {
+        enableResend = false;
+        return const AuthApiSuccess(authType: AuthType.completeProfile);
+      });
+    } catch (e) {
+      state = AuthApiFailed(
+          error: e.toString(), authType: AuthType.completeProfile);
     }
   }
 
@@ -265,7 +426,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         if (croppedFile != null) {
           image = XFile(croppedFile.path); // Store the cropped file
 
-          // state = PickImage();
+          state = PickImageState();
 
           if (kDebugMode) {
             print("Cropped image path: ${croppedFile.path} $state");
@@ -282,5 +443,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     } catch (e) {
       throw Exception("Error: $e");
     }
+  }
+
+  clearSignUpFields() {
+    emailController.clear();
+    pswdController.clear();
+    confirmPswdController.clear();
   }
 }

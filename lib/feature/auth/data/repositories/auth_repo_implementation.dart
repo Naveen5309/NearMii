@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dart';
+import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
@@ -18,6 +20,12 @@ abstract class AuthRepository {
 
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
+
+  Future<Either<Failure, AddPlatformData>> addPlatform(
+      {required Map<String, dynamic> body});
+  Future<Either<Failure, CompleteProfileData>> completeProfile(
+      {required Map<String, dynamic> body, required String imagePath});
+
   Future<Either<Failure, dynamic>> otpVerify(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> resetPassword(
@@ -72,6 +80,39 @@ class AuthRepoImpl implements AuthRepository {
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.forgotPassword(body: body);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddPlatformData>> addPlatform(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.addPlatform(body: body);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CompleteProfileData>> completeProfile(
+      {required Map<String, dynamic> body, required String imagePath}) async {
+    try {
+      final data =
+          await dataSource.completeProfile(body: body, imagePath: imagePath);
 
       if (data?.status == "success") {
         return Right(data?.data);

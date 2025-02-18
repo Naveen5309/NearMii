@@ -136,6 +136,18 @@ class Validator {
     return true;
   }
 
+  //otp
+  bool addPlatformValidator({
+    required String url,
+  }) {
+    if (url.isEmpty) {
+      error = AppString.pleaseEnterLink;
+      return false;
+    }
+
+    return true;
+  }
+
   //Create New Password
   bool createNewPasswordValidation({
     required String password,

@@ -1,4 +1,5 @@
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
@@ -6,11 +7,12 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
-import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
+import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePageView extends ConsumerStatefulWidget {
   const HomePageView({super.key});
@@ -24,17 +26,63 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        builder: (context) => const VIPMembershipDialog(),
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) => const VIPMembershipDialog(),
+      // );
+      var notifier = ref.read(homeProvider.notifier);
+      notifier.getLocation();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
+      ref.watch(homeProvider);
+      var notifier = ref.watch(homeProvider.notifier);
+
       // final getPreference = ref.watch(getPreferenceProvider);
+
+      ref.listen(
+        homeProvider,
+        (previous, next) {
+          if (next is UpdateLocation &&
+              next.locationType == LocationType.loading) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        // color: AppColor.btnColor,
+                        borderRadius: BorderRadius.circular(100)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(Assets.locationAnimation,
+                              backgroundLoading: true,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else if (next is UpdateLocation &&
+              next.locationType == LocationType.updated) {
+            back(context);
+          } else if (next is UpdateLocation &&
+              next.locationType == LocationType.error) {
+            back(context);
+          }
+        },
+      );
 
       return Scaffold(
         body: Column(
@@ -103,9 +151,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                     SizedBox(
                       height: context.height * .04,
                     ),
-                    const LocationCard(
-                      location: "Philadelphia",
-                      address: "Preston Rd. Inglewood, Maine",
+                    LocationCard(
+                      location: notifier.addressName,
+                      address: notifier.location,
                     ),
                   ],
                 ),

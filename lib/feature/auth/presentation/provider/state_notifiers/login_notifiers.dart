@@ -4,7 +4,6 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,10 +24,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final referralController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
-  List<PlatformData> socialMediaList = [];
-  List<PlatformData> contactList = [];
-  List<PlatformData> portfolioList = [];
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
   //VALIDATE SIGN UP
@@ -115,11 +110,19 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
+        clearLoginFields();
         return const AuthApiSuccess(authType: AuthType.login);
       });
     } catch (e) {
       state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
     }
+  }
+
+//CLEAR LOGIN FIELD
+
+  clearLoginFields() {
+    emailController.clear();
+    passwordController.clear();
   }
 
 // SIGN UP
@@ -154,40 +157,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
       });
     } catch (e) {
       state = AuthApiFailed(error: e.toString(), authType: AuthType.signup);
-    }
-  }
-
-//GET SOCIAL PROFILES
-  Future<void> getSocialPlatform() async {
-    state = const AuthApiLoading(authType: AuthType.socialMedia);
-    try {
-      if (!(await Getters.networkInfo.isConnected)) {
-        state = const AuthApiFailed(
-            error: "No internet connection", authType: AuthType.socialMedia);
-        return;
-      }
-
-      final result = await authUseCase.getPlatform();
-      state = result.fold((error) {
-        return AuthApiFailed(
-            error: error.message, authType: AuthType.socialMedia);
-      }, (result) {
-        log("result is:-> $result");
-        socialMediaList = result.socialMedia ?? [];
-        portfolioList = result.portfolio ?? [];
-        contactList = result.contactInformation ?? [];
-
-        log("result is 15:-> $socialMediaList");
-
-        // Update the list and notify UI by updating state
-        // platformDataList = result ?? [];
-        return const AuthApiSuccess(
-          authType: AuthType.socialMedia,
-        );
-      });
-    } catch (e) {
-      state =
-          AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
     }
   }
 

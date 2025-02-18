@@ -71,6 +71,8 @@ abstract final class AppString {
   static const String loginSuccess = "You are logged in successfully";
   static const String resetPswdSuccessfully = "Password reset successfully";
 
+  static const String platformUpdateSuccess = "Platform added";
+
   static const String otpVerified = "OTP Verified successfully";
 
   static const String addSocialProfiles = "Add Social Profiles";
@@ -90,6 +92,9 @@ abstract final class AppString {
   static const String somethingElse = "Something else";
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
+
+  static const String fetchingLocation = "Fetching your location";
+
   static const String logoutSuccess = "You are Logged Out";
 
   static const String editProfile = "Edit Profile Details";
@@ -134,6 +139,9 @@ abstract final class AppString {
   static const String done = "Done";
   static const String copyReferralCode = "Share Referral Code";
   static const String pleaseEnterOtp = "Please Enter Otp";
+
+  static const String pleaseEnterLink = "Please Enter Link";
+
   static const String invalidOtp = "Invalid Otp Please check Your Opt";
   static const String saveText = "Save";
   static const String subscription = "Subscription ";

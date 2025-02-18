@@ -186,7 +186,8 @@ class LoginView extends ConsumerWidget {
             var isVisible = ref.watch(isPswdVisible);
             return CustomLabelTextField(
               onTapOnSuffixIcon: () {
-                ref.read(isPswdVisible.notifier).state = !isVisible;
+                ref.read(isPswdVisible.notifier).state =
+                    !ref.read(isPswdVisible.notifier).state;
               },
               isObscure: isVisible,
               prefixIcon: Assets.icLock,

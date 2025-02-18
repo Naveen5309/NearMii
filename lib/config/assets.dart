@@ -173,8 +173,9 @@ class Assets {
   // static const String checkFalse = 'assets/icons/check_false.svg';
   static const String reportNavClose = 'assets/icons/report_nav_close.svg';
   static const String icCopy = 'assets/icons/copy.svg';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
+  static const String checkBox = 'assets/icons/check_box.svg';
+  static const String locationAnimation =
+      'assets/animation/location_animation.json';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';

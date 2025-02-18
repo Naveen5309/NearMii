@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/home/presentation/provider/state_notifiers/home_notifiers.dart';
+import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/data_source/home_data_source.dart';
 import '../../data/models/preferance_model.dart';
@@ -24,6 +26,13 @@ final homeUseCaseProvider = Provider.autoDispose<HomeUseCase>((ref) {
 final bottomNavIndexProvider = Provider.autoDispose<HomeUseCase>((ref) {
   final repository = ref.watch(homeRepoProvider);
   return HomeUseCaseImpl(repository: repository);
+});
+
+// Define a StateNotifierProvider for LoginNotifier
+final homeProvider =
+    StateNotifierProvider.autoDispose<HomeNotifier, HomeState>((ref) {
+  final homeUseCase = ref.watch(homeUseCaseProvider);
+  return HomeNotifier(homeUseCase: homeUseCase);
 });
 
 //IS MAP VIEW

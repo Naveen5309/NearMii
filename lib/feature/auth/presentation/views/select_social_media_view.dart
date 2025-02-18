@@ -3,6 +3,7 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
@@ -27,7 +28,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      final notifier = ref.read(loginProvider.notifier);
+      final notifier = ref.read(signupProvider.notifier);
       notifier.getSocialPlatform();
     });
   }
@@ -35,8 +36,8 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   @override
   Widget build(BuildContext context) {
     // final authState = ref.watch(loginProvider);
-    ref.watch(loginProvider);
-    final loginNotifier = ref.watch(loginProvider.notifier);
+    ref.watch(signupProvider);
+    final signupPro = ref.watch(signupProvider.notifier);
 
     ref.listen(
       loginProvider,
@@ -144,21 +145,24 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
 
                     CustomSocialGridview(
                       title: AppString.socialMedia,
-                      socialMedia: loginNotifier.socialMediaList,
+                      socialMedia: signupPro.socialMediaList,
+                      notifier: signupPro,
                     ),
 
                     //CONTACT INFORMATION
 
                     CustomSocialGridview(
+                      notifier: signupPro,
                       title: AppString.contactInformation,
-                      socialMedia: loginNotifier.contactList,
+                      socialMedia: signupPro.contactList,
                     ),
 
                     //PORTFOLIO
 
                     CustomSocialGridview(
+                      notifier: signupPro,
                       title: AppString.portfolio,
-                      socialMedia: loginNotifier.portfolioList,
+                      socialMedia: signupPro.portfolioList,
                     ),
 
                     SizedBox(

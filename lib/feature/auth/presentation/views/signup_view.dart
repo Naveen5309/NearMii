@@ -48,6 +48,7 @@ class SignUpView extends ConsumerWidget {
             },
           );
         } else if (next is AuthApiSuccess && next.authType == AuthType.signup) {
+          back(context);
           toast(msg: AppString.signupSuccess, isError: false);
           // back(context);
           toNamed(context, Routes.completeProfile);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -25,6 +27,8 @@ class ForgotPasswordView extends ConsumerWidget {
     ref.listen(
       signupProvider,
       (previous, next) {
+        log("next is :-> $next");
+        forgetPasswordNotifier.cancelTimer();
         if (next is AuthApiLoading &&
             next.authType == AuthType.forgotPassword) {
           showDialog(
@@ -45,8 +49,9 @@ class ForgotPasswordView extends ConsumerWidget {
           );
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.forgotPassword) {
+          back(context);
+
           toast(msg: AppString.otpVerifySuccess, isError: false);
-          // back(context);
           toNamed(context, Routes.otpVerify);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.forgotPassword) {

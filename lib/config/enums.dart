@@ -8,7 +8,10 @@ enum AuthType {
   forgotPassword,
   otpVerify,
   resetPassword,
+  addPlatform,
 }
+
+enum LocationType { loading, updated, error }
 
 enum Setting {
   contactUs,

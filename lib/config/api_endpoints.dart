@@ -19,6 +19,9 @@ abstract final class ApiConstants {
   static const String resetPassword = "$baseUrl/resetPassword";
   static const String verifyOtp = "$baseUrl/verifyOtp";
   static const String forgetPassword = "$baseUrl/forgetPassword";
+
+  static const String addPlatform = "$baseUrl/socialprofile";
+
   static const String contactus = "$baseUrl/contactus";
   static const String updateProfile = "$baseUrl/updateProfile";
   static const String report = "$baseUrl/report";

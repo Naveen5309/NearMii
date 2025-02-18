@@ -53,6 +53,11 @@ class PickImageState extends AuthState {
   List<Object?> get props => [];
 }
 
+class UpdateTimer extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
 // ///****** Sinup States *******************
 // @immutable
 // sealed class SignUpState extends Equatable {

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
@@ -319,7 +320,7 @@ Widget appBarWidgetSection(
 
 //BOTTOM SECTION
 Widget bottomSection(
-    {required LoginNotifier loginNotifier, required BuildContext context}) {
+    {required SignupNotifiers signupNotifier, required BuildContext context}) {
   return Container(
     color: AppColor.primary,
     width: context.width,
@@ -332,7 +333,7 @@ Widget bottomSection(
           child: ProfileGridView(
             title: AppString.socialMedia,
             isMyProfile: false,
-            socialMedia: loginNotifier.socialMediaList,
+            socialMedia: signupNotifier.socialMediaList,
           ),
         )
       ]),

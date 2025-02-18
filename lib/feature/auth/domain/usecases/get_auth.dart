@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dart';
+import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
@@ -18,6 +20,12 @@ abstract class AuthUseCase {
 
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
+
+  Future<Either<Failure, AddPlatformData>> addPlatformApi(
+      {required Map<String, dynamic> body});
+
+  Future<Either<Failure, CompleteProfileData>> completeProfile(
+      {required Map<String, dynamic> body, required String imagePath});
 
   Future<Either<Failure, dynamic>> otpVerify(
       {required Map<String, dynamic> body});
@@ -61,6 +69,25 @@ class AuthUseCaseImpl implements AuthUseCase {
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body}) async {
     final result = await repository.forgotPassword(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, AddPlatformData>> addPlatformApi(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.addPlatform(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, CompleteProfileData>> completeProfile(
+      {required Map<String, dynamic> body, required String imagePath}) async {
+    final result =
+        await repository.completeProfile(body: body, imagePath: imagePath);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

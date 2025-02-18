@@ -1,10 +1,11 @@
 import 'dart:io';
-
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/choose_image_widget.dart';
@@ -15,6 +16,7 @@ import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,7 +30,45 @@ class CompleteProfileView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final createProfileNotifier = ref.watch(signupProvider.notifier);
 
-    final signupPro = ref.watch(signupProvider.notifier);
+    ref.watch(signupProvider);
+
+    ref.listen(
+      signupProvider,
+      (previous, next) {
+        if (next is AuthApiLoading &&
+            next.authType == AuthType.completeProfile) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess &&
+            next.authType == AuthType.completeProfile) {
+          back(context);
+
+          toast(msg: AppString.signupSuccess, isError: false);
+          // back(context);
+          toNamed(context, Routes.selectSocialMedia);
+        } else if (next is AuthApiFailed &&
+            next.authType == AuthType.completeProfile) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
+
+    ref.watch(signupProvider);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -72,7 +112,7 @@ class CompleteProfileView extends ConsumerWidget {
                       padding:
                           EdgeInsets.symmetric(vertical: context.height * .04),
                       child: profileSection(
-                        image: signupPro.image,
+                        image: createProfileNotifier.image,
                         onTap: () => showCustomBottomSheet(
                             context: context,
                             content: ChooseImageWidget(
@@ -93,19 +133,21 @@ class CompleteProfileView extends ConsumerWidget {
                     //Field forms
 
                     formsFieldsSection(
-                        context: context, createProfileNotifier: signupPro),
+                        context: context,
+                        createProfileNotifier: createProfileNotifier),
                     SizedBox(
                       height: context.height * .01,
                     ),
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        // final isComplete =
-                        //     createProfileNotifier.validateProfile();
-                        // print(isComplete);
-                        // if (isComplete) {
-                        toNamed(context, Routes.selectSocialMedia);
-                        // }
+                        FocusScope.of(context).unfocus();
+                        final isComplete =
+                            createProfileNotifier.validateProfile();
+                        if (isComplete) {
+                          createProfileNotifier.completeProfileApi();
+                          // toNamed(context, Routes.selectSocialMedia);
+                        }
                       },
                       title: AppString.next,
                       textSize: 16.sp,

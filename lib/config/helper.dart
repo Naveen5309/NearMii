@@ -140,7 +140,7 @@ double totalHeight =
     MediaQuery.of(navigatorKey.currentState!.context).padding.top +
         AppBar().preferredSize.height;
 
-List<String> genderList = ["Male", "FeMale", "Other"];
+List<String> genderList = ["Male", "Female", "Other"];
 
 String formatDOB(DateTime dob) {
   return '${dob.day.toString().padLeft(2, '0')}/${dob.month.toString().padLeft(2, '0')}/${dob.year}';

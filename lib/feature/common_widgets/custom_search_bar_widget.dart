@@ -27,6 +27,7 @@ class CustomSearchBarWidget extends StatelessWidget {
           ],
           color: AppColor.primary),
       child: TextField(
+        autofocus: false,
         decoration: InputDecoration(
           hintText: AppString.searchHere,
           hintStyle: TextStyle(

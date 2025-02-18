@@ -5,7 +5,9 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
@@ -37,7 +39,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     super.initState();
     fetchProfileData();
     Future.microtask(() {
-      final notifier = ref.read(loginProvider.notifier);
+      final notifier = ref.read(signupProvider.notifier);
       notifier.getSocialPlatform();
     });
   }
@@ -62,8 +64,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(loginProvider);
-    final loginNotifier = ref.watch(loginProvider.notifier);
+    ref.watch(signupProvider);
+    final signUpNotifier = ref.watch(signupProvider.notifier);
 
     ref.listen(
       loginProvider,
@@ -149,8 +151,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             expandedContent:
                 profileSection(context: context, profile: profile!),
             collapsedContent: appBarWidgetSection(context: context),
-            body:
-                bottomSection(loginNotifier: loginNotifier, context: context)));
+            body: bottomSection(
+                signUpNotifier: signUpNotifier, context: context)));
   }
 }
 
@@ -208,7 +210,7 @@ Widget appBarWidgetSection({required BuildContext context}) {
 //BOTTOM SECTION
 
 Widget bottomSection(
-    {required LoginNotifier loginNotifier, required BuildContext context}) {
+    {required SignupNotifiers signUpNotifier, required BuildContext context}) {
   return Container(
     color: AppColor.greyf9f9f9,
     width: context.width,
@@ -226,7 +228,7 @@ Widget bottomSection(
           child: ProfileGridView(
             isMyProfile: true,
             title: AppString.socialMedia,
-            socialMedia: loginNotifier.socialMediaList,
+            socialMedia: signUpNotifier.socialMediaList,
           ),
         )
       ]),
