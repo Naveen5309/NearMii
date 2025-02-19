@@ -5,8 +5,10 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/other_user_profile_provider.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +27,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
 
 class OtherUserProfileView extends ConsumerStatefulWidget {
-  final String id;
-  const OtherUserProfileView({super.key, required this.id});
+  final String? id;
+  final String? reportedUserId;
+  final String? somethingElse;
+
+  const OtherUserProfileView({
+    super.key,
+    required this.id,
+    required this.somethingElse,
+    required this.reportedUserId,
+  });
 
   @override
   ConsumerState<OtherUserProfileView> createState() =>
@@ -43,32 +53,16 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
       (timeStamp) {
         final notifier = ref.read(otherUserProfileProvider.notifier);
         notifier.otherUserProfileApi(widget.id ?? '');
+        // notifier.reportApi(
+        //     widget.reportedUserId ?? '', widget.somethingElse ?? '');
       },
     );
-  }
-
-//FETCH PROFILE DATA
-  void fetchProfileData() {
-    // Simulating data fetch from an API or database
-    // setState(() {
-    //   profile = ProfileModel(
-    //     name: 'Brooklyn Simmons',
-    //     designation: 'Designation',
-    //     imageUrl: 'https://picsum.photos/250?image=9',
-    //     description:
-    //         'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
-    //     social: '10',
-    //     contact: '04',
-    //     portfolio: '10',
-    //     finance: '06',
-    //     business: '06',
-    //   );
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
     ref.watch(otherUserProfileProvider);
+
     final otherUserData = ref.watch(otherUserProfileProvider.notifier);
 
     ref.listen(
@@ -93,32 +87,23 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
             },
           );
         } else if (next is OtherUserProfileApiSuccess) {
-          // toast(msg: AppString.loginSuccess, isError: false);
+          if (context.mounted) {
+            toast(msg: AppString.loginSuccess, isError: false);
+          }
 
           back(context);
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is OtherUserProfileApiFailed) {
-          back(context);
+          if (context.mounted) {
+            back(context);
+          }
+
           // toast(msg: next.error);
         }
       },
     );
 
     return Scaffold(
-      // floatingActionButton: InkWell(
-      //   onTap: () {
-      //     toNamed(context, Routes.selectSocialMedia);
-      //   },
-      //   child: Container(
-      //     decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(100),
-      //         color: AppColor.btnColor),
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(10.0),
-      //       child: SvgPicture.asset(Assets.icAddBtn),
-      //     ),
-      //   ),
-      // ),
       body: otherUserData.profile == null
           ? Center(
               child: Text("Loading data1 ${otherUserData.profile?.name}"),
@@ -168,7 +153,6 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 }
 
 //APP BAR WIDGET SECTION
-
 Widget appBarWidgetSection(
     {required BuildContext context,
     required OtherUserProfileModel otherUserProfileData}) {
@@ -226,73 +210,86 @@ Widget appBarWidgetSection(
         onSelected: (value) {
           showCustomBottomSheet(
               context: context,
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(Assets.reportNavClose),
-                  15.verticalSpace,
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 4, vertical: context.height * .02),
-                    child: AppText(
-                        text: AppString.report,
-                        fontSize: 20.sp,
-                        color: AppColor.black1A1C1E,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const CustomReportTile(
-                    title: AppString.theyArePretending,
-                    check: true,
-                  ),
-                  const CustomReportTile(
-                    title: AppString.theyAreUnderTheAge,
-                    check: false,
-                  ),
-                  const CustomReportTile(
-                    title: AppString.violenceAndDangerous,
-                    check: false,
-                  ),
-                  const CustomReportTile(
-                    title: AppString.hateSpeech,
-                    check: false,
-                  ),
-                  const CustomReportTile(
-                    title: AppString.nudity,
-                    check: false,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
+              content: Consumer(builder:
+                  (BuildContext context, WidgetRef ref, Widget? child) {
+                final reportNotifier = ref.read(reportProvider.notifier);
+                final selectedReason = ref.watch(reportProvider);
+                final TextEditingController textController =
+                    TextEditingController();
+                ref.watch(reportProvider);
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(
-                        width: 5,
+                      SvgPicture.asset(Assets.reportNavClose),
+                      15.verticalSpace,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 4, vertical: context.height * .02),
+                        child: AppText(
+                            text: AppString.report,
+                            fontSize: 20.sp,
+                            color: AppColor.black1A1C1E,
+                            fontWeight: FontWeight.w700),
                       ),
-                      AppText(
-                          text: "Something Else",
-                          fontSize: 14.sp,
-                          color: AppColor.black1A1C1E,
-                          fontWeight: FontWeight.w700),
+                      const CustomReportTile(
+                        title: AppString.theyArePretending,
+                        check: true,
+                      ),
+                      const CustomReportTile(
+                        title: AppString.theyAreUnderTheAge,
+                        check: false,
+                      ),
+                      const CustomReportTile(
+                        title: AppString.violenceAndDangerous,
+                        check: false,
+                      ),
+                      const CustomReportTile(
+                        title: AppString.hateSpeech,
+                        check: false,
+                      ),
+                      const CustomReportTile(
+                        title: AppString.nudity,
+                        check: false,
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          AppText(
+                              text: "Something Else",
+                              fontSize: 14.sp,
+                              color: AppColor.black1A1C1E,
+                              fontWeight: FontWeight.w700),
+                        ],
+                      ),
+                      const CustomTextFieldWidget(
+                        // enableBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(20),
+                        // ),
+                        minLines: 2,
+                        fillColor: AppColor.whiteF0F5FE,
+                        hintText: "Lorem ipsum dolor sit......",
+                      ),
+                      5.verticalSpace,
+                      CommonAppBtn(
+                        title: AppString.submit,
+                        onTap: () {
+                          print("object");
+                          reportNotifier.reportApi(
+                              reportedUserId: '', somethingElse: '');
+                          // back(context);
+                        },
+                      ),
+                      10.verticalSpace
                     ],
                   ),
-                  const CustomTextFieldWidget(
-                    // enableBorder: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(20),
-                    // ),
-                    minLines: 2,
-                    fillColor: AppColor.whiteF0F5FE,
-                    hintText: "Lorem ipsum dolor sit......",
-                  ),
-                  5.verticalSpace,
-                  CommonAppBtn(
-                    title: AppString.submit,
-                    onTap: () {
-                      back(context);
-                    },
-                  ),
-                  10.verticalSpace
-                ],
-              ));
+                );
+              }));
         },
         itemBuilder: (BuildContext bc) {
           return [
@@ -432,12 +429,12 @@ Widget profileSection(
                           hintText: "Lorem ipsum dolor sit......",
                         ),
                         5.verticalSpace,
-                        CommonAppBtn(
-                          title: AppString.submit,
-                          onTap: () {
-                            back(context);
-                          },
-                        ),
+                        // CommonAppBtn(
+                        //   title: AppString.submit,
+                        //   onTap: () {
+                        //     back(context);
+                        //   },
+                        // ),
                         10.verticalSpace
                       ],
                     ));
@@ -513,23 +510,6 @@ Widget profileSection(
           ],
         )
       ]);
-  // background: Container(
-  //   width: MediaQuery.of(context).size.width,
-  //   padding: EdgeInsets.only(
-  //     left: 12.w,
-  //     right: 12.w,
-  //     top: context.height * .1,
-  //     bottom: context.height * .025,
-  //   ),
-  //   decoration: const BoxDecoration(
-  //     image: DecorationImage(
-  //       image: AssetImage(Assets.background),
-  //       fit: BoxFit.fill,
-  //     ),
-  // ),
-  // ),
-  // )
-  // ),
 }
 
 // HIDE ALL SECTION
@@ -655,3 +635,29 @@ Widget profileWidget({
     ],
   );
 }
+
+  // void toggleCheck(int index) {
+  //   state = [
+  //     for (int i = 0; i < state.length; i++)
+  //       if (i == index)
+  //         state[i].copyWith(isChecked: !state[i].isChecked)
+  //       else
+  //         state[i]
+  //   ];
+  // }
+
+  // void uncheckAll() {
+  //   state = state.map((e) => e.copyWith(isChecked: false)).toList();
+  // }
+//  onChanged: (value) {
+//           if (value.isNotEmpty) {
+//             reportNotifier.clearReason(); // Uncheck all if user types
+//           }
+//         },
+        
+//   onTap: () {
+//           reportNotifier.reportApi(
+//             reportedUserId: '',
+//             somethingElse: selectedReason.isEmpty ? textController.text : selectedReason,
+//           );
+//         },

@@ -10,6 +10,8 @@ abstract class OtherUserProfileUsecases {
 
   Future<Either<Failure, PlatformData>> getPlatformApi(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, OtherUserProfileModel>> callReport(
+      {required Map<String, dynamic> body});
 }
 
 class OtherUserProfileUseCaseImpl implements OtherUserProfileUsecases {
@@ -30,6 +32,15 @@ class OtherUserProfileUseCaseImpl implements OtherUserProfileUsecases {
   Future<Either<Failure, PlatformData>> getPlatformApi(
       {required Map<String, dynamic> body}) async {
     final result = await repository.getPlatform(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, OtherUserProfileModel>> callReport(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.report(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

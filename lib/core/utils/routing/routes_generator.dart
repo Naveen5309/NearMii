@@ -60,11 +60,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MyProfileView());
 
       case Routes.otherUserProfile:
-        final args = settings.arguments as String;
+        final args = settings.arguments as dynamic;
 
         return MaterialPageRoute(
             builder: (_) => OtherUserProfileView(
                   id: args,
+                  somethingElse: args,
+                  reportedUserId: '',
                 ));
       case Routes.editProfile:
         return MaterialPageRoute(builder: (_) => const CompleteEditProfile());

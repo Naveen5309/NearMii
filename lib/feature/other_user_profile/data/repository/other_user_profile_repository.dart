@@ -10,6 +10,8 @@ abstract class OtherUserProfileRepository {
 
   Future<Either<Failure, PlatformData>> getPlatform(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, OtherUserProfileModel>> report(
+      {required Map<String, dynamic> body});
 }
 
 class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
@@ -51,6 +53,22 @@ class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
       }
     } catch (e) {
       return Left(ServerFailure(message: "Failed to fetch platform data: $e"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, OtherUserProfileModel>> report(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.getReport(body: body);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 }

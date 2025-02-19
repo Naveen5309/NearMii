@@ -11,6 +11,9 @@ abstract class SettingRepository {
 
   Future<Either<Failure, dynamic>> isRadius(
       {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> isProfileSummary(
+      {required Map<String, dynamic> body});
 }
 
 class SettingRepoImpl implements SettingRepository {
@@ -55,6 +58,22 @@ class SettingRepoImpl implements SettingRepository {
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.radius(body: body);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> isProfileSummary(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.profileSummary(body: body);
 
       if (data?.status == "success") {
         return Right(data?.data);
