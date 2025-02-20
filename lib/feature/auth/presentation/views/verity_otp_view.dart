@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
@@ -46,41 +47,25 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
         if (next is AuthApiLoading &&
             ((next.authType == AuthType.otpVerify) ||
                 (next.authType == AuthType.resendOtp))) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100.0),
-                    color: AppColor.primary,
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(28.0),
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                ),
-              );
-            },
-          );
+          Utils.hideLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.otpVerify) {
           otpValidatorNotifier.clearResetPasswordFields();
-          Navigator.of(context, rootNavigator: true)
-              .pop(); // Close loading dialog if open
+          Utils.hideLoader();
+// Close loading dialog if open
           toast(msg: AppString.otpVerified, isError: false);
           otpValidatorNotifier.cancelTimer();
 
           toNamed(context, Routes.resetPassword);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.otpVerify) {
-          Navigator.of(context, rootNavigator: true)
-              .pop(); // Close loading dialog
+          Utils.hideLoader();
+// Close loading dialog
           toast(msg: next.error);
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.resendOtp) {
-          back(context);
+          Utils.hideLoader();
+
           otpValidatorNotifier.startTimer();
           otpValidatorNotifier.clearOtpFields();
 
@@ -88,7 +73,7 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.resendOtp) {
           Navigator.of(context, rootNavigator: true).pop();
-          back(context);
+          Utils.hideLoader();
 
           toast(msg: next.error);
         }

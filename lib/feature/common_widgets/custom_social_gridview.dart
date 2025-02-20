@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -38,32 +39,18 @@ class CustomSocialGridview extends ConsumerWidget {
       signupProvider,
       (previous, next) {
         if (next is AuthApiLoading && next.authType == AuthType.addPlatform) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.addPlatform) {
-          back(context);
+          Utils.hideLoader();
 
           toast(msg: AppString.platformUpdateSuccess, isError: false);
 
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.addPlatform) {
-          back(context);
+          Utils.hideLoader();
+
           toast(msg: next.error);
         }
       },

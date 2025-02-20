@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -38,33 +39,18 @@ class CompleteProfileView extends ConsumerWidget {
       (previous, next) {
         if (next is AuthApiLoading &&
             next.authType == AuthType.completeProfile) {
-          showDialog(
-            barrierColor: AppColor.black000000.withOpacity(.1),
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.completeProfile) {
-          back(context);
+          Utils.hideLoader();
 
           toast(msg: AppString.signupSuccess, isError: false);
           // back(context);
           toNamed(context, Routes.selectSocialMedia, args: false);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.completeProfile) {
-          back(context);
+          Utils.hideLoader();
+
           toast(msg: next.error);
         }
       },

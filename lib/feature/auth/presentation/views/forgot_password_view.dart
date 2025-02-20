@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -30,31 +31,17 @@ class ForgotPasswordView extends ConsumerWidget {
       (previous, next) {
         if (next is AuthApiLoading &&
             next.authType == AuthType.forgotPassword) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.forgotPassword) {
-          back(context);
+          Utils.hideLoader();
 
           toast(msg: AppString.otpVerifySuccess, isError: false);
           toNamed(context, Routes.otpVerify);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.forgotPassword) {
-          back(context);
+          Utils.hideLoader();
+
           toast(msg: next.error);
         }
       },

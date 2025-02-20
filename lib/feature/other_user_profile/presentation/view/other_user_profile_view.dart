@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
@@ -70,32 +71,18 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
       (previous, next) {
         if (next is OtherUserProfileApiLoading) {
           log("other user loading is called");
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is OtherUserProfileApiSuccess) {
           if (context.mounted) {
             toast(msg: AppString.loginSuccess, isError: false);
           }
 
-          back(context);
+          Utils.hideLoader();
+
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is OtherUserProfileApiFailed) {
           if (context.mounted) {
-            back(context);
+            Utils.hideLoader();
           }
 
           // toast(msg: next.error);

@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -48,30 +49,17 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
       loginProvider,
       (previous, next) {
         if (next is AuthApiLoading && next.authType == AuthType.socialMedia) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.socialMedia) {
           // toast(msg: AppString.loginSuccess, isError: false);
-          back(context);
+          Utils.hideLoader();
+
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.socialMedia) {
-          back(context);
+          Utils.hideLoader();
+
           // toast(msg: next.error);
         }
       },

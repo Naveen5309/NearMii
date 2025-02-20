@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
@@ -38,31 +39,18 @@ class SettingView extends ConsumerWidget {
       loginProvider,
       (previous, next) async {
         if (next is AuthApiLoading && next.authType == AuthType.logOut) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      color: AppColor.primary,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(28.0),
-                      child: CircularProgressIndicator.adaptive(),
-                    )),
-              );
-            },
-          );
+          Utils.showLoader();
         } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
           toast(msg: AppString.logoutSuccess, isError: false);
 
           await Getters.getLocalStorage.clearLoginData();
+          Utils.hideLoader();
 
           // back(context);
           offAllNamed(context, Routes.login);
         } else if (next is AuthApiFailed && next.authType == AuthType.logOut) {
-          back(context);
+          Utils.hideLoader();
+
           toast(msg: next.error);
         }
       },
