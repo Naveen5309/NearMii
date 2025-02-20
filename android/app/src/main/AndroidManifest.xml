@@ -5,6 +5,7 @@
     <application
         android:label="NearMii"
         android:name="${applicationName}"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">
         <activity

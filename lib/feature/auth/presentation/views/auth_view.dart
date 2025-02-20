@@ -1,20 +1,56 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AuthView extends StatelessWidget {
+class AuthView extends ConsumerWidget {
   const AuthView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      loginProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.login) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Center(
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      color: AppColor.primary,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(28.0),
+                      child: CircularProgressIndicator.adaptive(),
+                    )),
+              );
+            },
+          );
+        } else if (next is AuthApiSuccess && next.authType == AuthType.login) {
+          log("login success");
+          toast(msg: AppString.loginSuccess, isError: false);
+          // back(context);
+          offAllNamed(context, Routes.bottomNavBar);
+        } else if (next is AuthApiFailed && next.authType == AuthType.login) {
+          back(context);
+          toast(msg: next.error);
+        }
+      },
+    );
     return Scaffold(
       body: BgImageContainer(
         bgImage: Assets.authBg,
@@ -35,6 +71,8 @@ class AuthView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 18.0),
                 child: SvgPicture.asset(
+                  height: 50,
+
                   Assets.icDummyLogo,
                   // height: 100,
                   // width: 100,
@@ -42,7 +80,6 @@ class AuthView extends StatelessWidget {
               ),
 
               //Title
-
               AppText(
                 text: AppString.fromRealityToReach,
                 fontSize: 26.sp,
@@ -54,7 +91,6 @@ class AuthView extends StatelessWidget {
               ),
 
               //sign up btm
-
               CommonAppBtn(
                 onTap: () {
                   offAllNamed(context, Routes.signUp);
@@ -66,7 +102,6 @@ class AuthView extends StatelessWidget {
               15.verticalSpace,
 
               //I Have an account
-
               CommonAppBtn(
                 borderColor: AppColor.appThemeColor.withOpacity(.15),
                 backGroundColor: AppColor.appThemeColor.withOpacity(.15),

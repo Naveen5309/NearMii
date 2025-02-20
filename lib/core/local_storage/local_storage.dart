@@ -10,6 +10,9 @@ abstract class HiveConst {
   static const String isOnboard = 'isOnboard';
 
   static const String isLogin = 'isLogin';
+  static const String address = 'address';
+
+  static const String location = 'location';
 }
 
 abstract class LocalStorage {
@@ -20,10 +23,17 @@ abstract class LocalStorage {
   bool? getFirstOnboard();
 
   Future<void> clearAllBox();
+  Future<void> clearLoginData();
 
   String? getToken();
+  String? getAddress();
+
+  String? getLocation();
 
   Future<void> saveToken(String token);
+  Future<void> saveAddress(String address);
+  Future<void> saveLocation(String location);
+
   Future<void> saveIsLogin(bool isLogin);
   bool? getIsLogin();
 
@@ -45,9 +55,33 @@ class HiveStorageImp extends LocalStorage {
   }
 
   @override
+  Future<void> saveAddress(String address) async {
+    await userBox.put(HiveConst.address, address);
+    printLog("==============address==========> $address ");
+  }
+
+  @override
+  Future<void> saveLocation(String location) async {
+    await userBox.put(HiveConst.location, location);
+    printLog("==============location==========> $location ");
+  }
+
+  @override
   String? getToken() {
     final authToken = userBox.get(HiveConst.authToken);
     return authToken;
+  }
+
+  @override
+  String? getAddress() {
+    final address = userBox.get(HiveConst.address);
+    return address;
+  }
+
+  @override
+  String? getLocation() {
+    final location = userBox.get(HiveConst.location);
+    return location;
   }
 
   static Future<LocalStorage> init() async => HiveStorageImp(
@@ -73,6 +107,13 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> clearAllBox() async {
     await userBox.clear();
+  }
+
+  @override
+  Future<void> clearLoginData() async {
+    await userBox.delete(HiveConst.isLogin);
+    await userBox.delete(HiveConst.authToken);
+    await userBox.delete(HiveConst.userData);
   }
 
   @override

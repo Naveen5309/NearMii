@@ -70,6 +70,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   Future<void> cancelTimer() async {
     timer?.cancel();
+    enableResend = true;
+    secondsRemaining = 30;
   }
 
   //VALIDATE SIGN UP
@@ -166,13 +168,12 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //DID YOU FORGOT YOUR PASSWORD
-  Future<void> forgotPasswordApi() async {
-    state = const AuthApiLoading(authType: AuthType.forgotPassword);
+  Future<void> forgotPasswordApi({required AuthType authType}) async {
+    state = AuthApiLoading(authType: authType);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
-        state = const AuthApiFailed(
-            error: AppString.noInternetConnection,
-            authType: AuthType.forgotPassword);
+        state = AuthApiFailed(
+            error: AppString.noInternetConnection, authType: authType);
         return;
       }
       if (await Getters.networkInfo.isSlow) {
@@ -186,15 +187,14 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       final result = await authUseCase.forgotPassword(body: body);
       state = result.fold((error) {
         log("forgot password error:${error.message} ");
-        return AuthApiFailed(
-            error: error.message, authType: AuthType.forgotPassword);
+        return AuthApiFailed(error: error.message, authType: authType);
       }, (result) {
         enableResend = false;
-        return const AuthApiSuccess(authType: AuthType.forgotPassword);
+        secondsRemaining = 30;
+        return AuthApiSuccess(authType: authType);
       });
     } catch (e) {
-      state =
-          AuthApiFailed(error: e.toString(), authType: AuthType.forgotPassword);
+      state = AuthApiFailed(error: e.toString(), authType: authType);
     }
   }
 
@@ -394,6 +394,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         log("login error:${error.message} ");
         return AuthApiFailed(error: error.message, authType: AuthType.signup);
       }, (result) {
+        clearSignUpFields();
         return const AuthApiSuccess(authType: AuthType.signup);
       });
     } catch (e) {
@@ -447,6 +448,15 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   clearSignUpFields() {
     emailController.clear();
+    pswdController.clear();
+    confirmPswdController.clear();
+  }
+
+  clearOtpFields() {
+    otpController.clear();
+  }
+
+  clearResetPasswordFields() {
     pswdController.clear();
     confirmPswdController.clear();
   }

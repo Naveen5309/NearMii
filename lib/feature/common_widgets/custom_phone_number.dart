@@ -41,7 +41,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
   bool textEditHasFocus = false;
   bool isTextFieldEmpty = true;
   String selectedCountryCode = "+1"; // Default Country Code
-  String selectedCountryFlag = "🇦🇺"; // Default Country Code
+  String selectedCountryFlag = "🇺🇸"; // Default Country Code
 
   @override
   void initState() {

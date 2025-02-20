@@ -122,7 +122,7 @@ class AuthDataSourceImpl extends AuthDataSource {
   Future<ResponseWrapper<dynamic>?> forgotPassword(
       {required Map<String, dynamic> body}) async {
     try {
-      final dataResponse = await Getters.getHttpService.request<UserModel>(
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
           body: body,
           url: ApiConstants.forgetPassword,
           fromJson: (json) {
@@ -235,7 +235,7 @@ class AuthDataSourceImpl extends AuthDataSource {
   Future<ResponseWrapper<dynamic>?> otpVerify(
       {required Map<String, dynamic> body}) async {
     try {
-      final dataResponse = await Getters.getHttpService.request<UserModel>(
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
           body: body,
           url: ApiConstants.verifyOtp,
           fromJson: (json) {
@@ -271,7 +271,7 @@ class AuthDataSourceImpl extends AuthDataSource {
   Future<ResponseWrapper<dynamic>?> resetPassword(
       {required Map<String, dynamic> body}) async {
     try {
-      final dataResponse = await Getters.getHttpService.request<UserModel>(
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
           body: body,
           url: ApiConstants.resetPassword,
           fromJson: (json) {

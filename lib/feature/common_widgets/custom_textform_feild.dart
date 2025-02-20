@@ -11,6 +11,7 @@ class CustomTextformFeild extends StatefulWidget {
   final InputBorder? focusBorder;
   final String? labelText;
   final String? prefixIcon;
+  final int? maxLength;
 
   final Widget? prefixWidget;
 
@@ -33,6 +34,7 @@ class CustomTextformFeild extends StatefulWidget {
       this.onTapOnPrefixIcon,
       this.onTapOnSuffixIcon,
       this.prefixIcon,
+      this.maxLength,
       this.maxLines,
       this.radius});
 
@@ -83,6 +85,7 @@ class _CustomLabelTextFieldState extends State<CustomTextformFeild> {
           clipBehavior: Clip.none,
           children: <Widget>[
             TextField(
+              maxLength: widget.maxLength ?? 200,
               maxLines: widget.maxLines,
               readOnly: widget.readOnly ?? false,
               textAlign: TextAlign.start, // Ensures text aligns on the left

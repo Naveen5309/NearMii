@@ -23,12 +23,11 @@ class ForgotPasswordView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final forgetPasswordNotifier = ref.watch(signupProvider.notifier);
+    forgetPasswordNotifier.cancelTimer();
 
     ref.listen(
       signupProvider,
       (previous, next) {
-        log("next is :-> $next");
-        forgetPasswordNotifier.cancelTimer();
         if (next is AuthApiLoading &&
             next.authType == AuthType.forgotPassword) {
           showDialog(
@@ -139,7 +138,8 @@ class ForgotPasswordView extends ConsumerWidget {
               final isForget = forgetPasswordNotifier.validateForgetPassword();
               print(isForget);
               if (isForget) {
-                forgetPasswordNotifier.forgotPasswordApi();
+                forgetPasswordNotifier.forgotPasswordApi(
+                    authType: AuthType.forgotPassword);
                 // toNamed(context, Routes.otpVerify);
               }
             },

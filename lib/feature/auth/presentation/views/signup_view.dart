@@ -2,6 +2,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -81,7 +82,7 @@ class SignUpView extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: SvgPicture.asset(
                         Assets.icDummyLogo,
-                        // height: 100,
+                        height: 50,
                         // width: 100,
                       ),
                     ),
@@ -172,8 +173,14 @@ class SignUpView extends ConsumerWidget {
                                 children: [
                                   CustomRichTextThreeWidget(
                                     text: AppString.iAgreeTo,
-                                    onTap: () {},
-                                    onTap2: () {},
+                                    onTap: () {
+                                      toNamed(
+                                          context, Routes.termsAndConditions);
+                                    },
+                                    onTap2: () {
+                                      toNamed(
+                                          context, Routes.termsAndConditions);
+                                    },
                                     clickableText: AppString.termsAndConditions,
                                     clickableText2: AppString.privacyPolicy,
                                   ),
@@ -216,7 +223,15 @@ class SignUpView extends ConsumerWidget {
                     orContinueWith(context: context),
 
                     //social media section
-                    socialMediaSection(),
+                    socialMediaSection(
+                      onTapOnApple: () {},
+                      onTapOnFb: () {},
+                      onTapOnGoogle: () {
+                        final loginNotifier = ref.watch(loginProvider.notifier);
+
+                        loginNotifier.signInWithGoogle(context);
+                      },
+                    ),
                     SizedBox(
                       height: context.height * .05,
                     ),
@@ -290,15 +305,23 @@ class SignUpView extends ConsumerWidget {
 
 //SOCIAL MEDIA SECTION
 
-Widget socialMediaSection() {
+Widget socialMediaSection(
+    {required VoidCallback onTapOnFb,
+    required VoidCallback onTapOnGoogle,
+    required VoidCallback onTapOnApple}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SvgPicture.asset(Assets.icFbSingle),
-        SvgPicture.asset(Assets.google),
-        SvgPicture.asset(Assets.apple),
+        GestureDetector(
+          onTap: onTapOnFb,
+          child: SvgPicture.asset(Assets.icFbSingle),
+        ),
+        GestureDetector(
+            onTap: onTapOnGoogle, child: SvgPicture.asset(Assets.google)),
+        GestureDetector(
+            onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),
       ],
     ),
   );

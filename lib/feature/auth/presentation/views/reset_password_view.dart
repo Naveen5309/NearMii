@@ -4,7 +4,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
-import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -167,13 +167,14 @@ class ResetPasswordView extends ConsumerWidget {
           var isVisible = ref.watch(isPswdVisibleSignUp);
           return CustomLabelTextField(
             onTapOnSuffixIcon: () {
-              ref.read(isPswdVisibleSignUp.notifier).state = !isVisible;
+              ref.read(isPswdVisibleSignUp.notifier).state =
+                  !ref.read(isPswdVisibleSignUp.notifier).state;
             },
             isObscure: isVisible,
             prefixIcon: Assets.icLock,
             controller: validateCreateNewPassword.pswdController,
             labelText: AppString.newPswd,
-            suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+            suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
           );
         }),
 
@@ -182,13 +183,14 @@ class ResetPasswordView extends ConsumerWidget {
           var isVisible = ref.watch(isConfirmPswdVisibleSignUp);
           return CustomLabelTextField(
             onTapOnSuffixIcon: () {
-              ref.read(isPswdVisible.notifier).state = !isVisible;
+              ref.read(isConfirmPswdVisibleSignUp.notifier).state =
+                  !ref.read(isConfirmPswdVisibleSignUp.notifier).state;
             },
             isObscure: isVisible,
             prefixIcon: Assets.icLock,
             controller: validateCreateNewPassword.confirmPswdController,
             labelText: AppString.confirmPswd,
-            suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+            suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
           );
         })
       ],

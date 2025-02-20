@@ -79,7 +79,7 @@ class LoginView extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 12.0),
                       child: SvgPicture.asset(
                         Assets.icDummyLogo,
-                        // height: 100,
+                        height: 50,
                         // width: 100,
                       ),
                     ),
@@ -109,7 +109,13 @@ class LoginView extends ConsumerWidget {
 
                     InkWell(
                       onTap: () {
-                        toNamed(context, Routes.forgetPassword);
+                        loginNotifier.clearLoginFields().then(
+                          (value) {
+                            if (context.mounted) {
+                              toNamed(context, Routes.forgetPassword);
+                            }
+                          },
+                        );
                       },
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -146,7 +152,15 @@ class LoginView extends ConsumerWidget {
                     orContinueWith(context: context),
 
                     //social media section
-                    socialMediaSection(),
+                    socialMediaSection(
+                      onTapOnApple: () {},
+                      onTapOnFb: () {},
+                      onTapOnGoogle: () {
+                        final loginNotifier = ref.watch(loginProvider.notifier);
+
+                        loginNotifier.signInWithGoogle(context);
+                      },
+                    ),
                     SizedBox(
                       height: context.height * .05,
                     ),
@@ -204,13 +218,20 @@ class LoginView extends ConsumerWidget {
 
 //SOCIAL MEDIA SECTION
 
-Widget socialMediaSection() {
+Widget socialMediaSection({
+  required VoidCallback onTapOnFb,
+  required VoidCallback onTapOnGoogle,
+  required VoidCallback onTapOnApple,
+}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      SvgPicture.asset(Assets.icFbSingle),
-      SvgPicture.asset(Assets.google),
-      SvgPicture.asset(Assets.apple),
+      GestureDetector(
+          onTap: onTapOnFb, child: SvgPicture.asset(Assets.icFbSingle)),
+      GestureDetector(
+          onTap: onTapOnGoogle, child: SvgPicture.asset(Assets.google)),
+      GestureDetector(
+          onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),
     ],
   );
 }

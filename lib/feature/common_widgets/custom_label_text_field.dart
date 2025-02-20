@@ -13,6 +13,7 @@ class CustomLabelTextField extends StatefulWidget {
   final String? prefixIcon;
   final Widget? prefixWidget;
   final Color? labelBckColor;
+  final int? maxLength;
 
   final bool? isObscure;
   final String? suffixIcon;
@@ -33,6 +34,7 @@ class CustomLabelTextField extends StatefulWidget {
       this.labelText,
       this.readOnly,
       this.prefixWidget,
+      this.maxLength,
       this.suffixIcon,
       this.onTapOnPrefixIcon,
       this.onTapOnSuffixIcon,
@@ -85,6 +87,8 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
         clipBehavior: Clip.none,
         children: [
           TextField(
+            // maxLength: widget.maxLength ?? 35,
+
             obscureText: widget.isObscure ?? false,
             obscuringCharacter: "*",
             onTapOutside: (event) {

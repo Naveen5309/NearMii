@@ -175,7 +175,8 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                                 subtitle: 'Designation',
                                                 onTap: () {
                                                   toNamed(context,
-                                                      Routes.otherUserProfile);
+                                                      Routes.otherUserProfile,
+                                                      args: "52");
                                                 },
                                               ),
                                             );
@@ -236,7 +237,8 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                                 subtitle: 'Designation',
                                                 onTap: () {
                                                   toNamed(context,
-                                                      Routes.otherUserProfile);
+                                                      Routes.otherUserProfile,
+                                                      args: "52");
                                                 },
                                               ),
                                             );

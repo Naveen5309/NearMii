@@ -120,7 +120,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
 //CLEAR LOGIN FIELD
 
-  clearLoginFields() {
+  Future<void> clearLoginFields() async {
     emailController.clear();
     passwordController.clear();
   }

@@ -30,6 +30,7 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
       var notifier =
           ref.read(signupProvider.notifier); // Initialize the notifier
       notifier.startTimer();
+      notifier.clearOtpFields();
     });
     super.initState();
   }
@@ -44,7 +45,7 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
       (previous, next) {
         if (next is AuthApiLoading &&
             ((next.authType == AuthType.otpVerify) ||
-                (next.authType == AuthType.forgotPassword))) {
+                (next.authType == AuthType.resendOtp))) {
           showDialog(
             context: context,
             barrierDismissible: false,
@@ -65,9 +66,12 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
           );
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.otpVerify) {
+          otpValidatorNotifier.clearResetPasswordFields();
           Navigator.of(context, rootNavigator: true)
               .pop(); // Close loading dialog if open
           toast(msg: AppString.otpVerified, isError: false);
+          otpValidatorNotifier.cancelTimer();
+
           toNamed(context, Routes.resetPassword);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.otpVerify) {
@@ -75,17 +79,15 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
               .pop(); // Close loading dialog
           toast(msg: next.error);
         } else if (next is AuthApiSuccess &&
-            next.authType == AuthType.forgotPassword) {
-          Navigator.of(context, rootNavigator: true).pop();
-          back(context);
+            next.authType == AuthType.resendOtp) {
           back(context);
           otpValidatorNotifier.startTimer();
+          otpValidatorNotifier.clearOtpFields();
 
           toast(msg: AppString.otpVerifySuccess, isError: false);
         } else if (next is AuthApiFailed &&
-            next.authType == AuthType.forgotPassword) {
+            next.authType == AuthType.resendOtp) {
           Navigator.of(context, rootNavigator: true).pop();
-          back(context);
           back(context);
 
           toast(msg: next.error);
@@ -126,7 +128,10 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
                   fontSize: 32.sp,
                 ),
                 15.verticalSpace,
-                Row(
+                Wrap(
+                  spacing: 4.0, // Optional: Adds spacing between elements
+                  runSpacing:
+                      4.0, // Optional: Adds spacing between wrapped lines
                   children: [
                     AppText(
                       text: AppString.enterOtp,
@@ -208,7 +213,8 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
                     GestureDetector(
                       onTap: () {
                         if (otpValidatorNotifier.enableResend) {
-                          otpValidatorNotifier.forgotPasswordApi();
+                          otpValidatorNotifier.forgotPasswordApi(
+                              authType: AuthType.resendOtp);
                         } else {}
                       },
                       child: AppText(

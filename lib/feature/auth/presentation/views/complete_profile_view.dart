@@ -17,6 +17,7 @@ import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/common_widgets/exit_app_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,6 +39,7 @@ class CompleteProfileView extends ConsumerWidget {
         if (next is AuthApiLoading &&
             next.authType == AuthType.completeProfile) {
           showDialog(
+            barrierColor: AppColor.black000000.withOpacity(.1),
             context: context,
             builder: (context) {
               return Center(
@@ -59,7 +61,7 @@ class CompleteProfileView extends ConsumerWidget {
 
           toast(msg: AppString.signupSuccess, isError: false);
           // back(context);
-          toNamed(context, Routes.selectSocialMedia);
+          toNamed(context, Routes.selectSocialMedia, args: false);
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.completeProfile) {
           back(context);
@@ -71,95 +73,109 @@ class CompleteProfileView extends ConsumerWidget {
     ref.watch(signupProvider);
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        body: BgImageContainer(
-            bgImage: Assets.authBg,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: totalHeight,
-                    ),
-                    //Logo
-
-                    // const Text("APPlOGO"),
-
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: SvgPicture.asset(
-                        Assets.icDummyLogo,
-                        // height: 100,
-                        // width: 100,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (!didPop) {
+            bool shouldExit = await showExitConfirmationDialog(context);
+            if (shouldExit) {
+              if (context.mounted) {
+                back(context); // Exit if user confirms
+              }
+            }
+          }
+        },
+        child: Scaffold(
+          body: BgImageContainer(
+              bgImage: Assets.authBg,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: totalHeight,
                       ),
-                    ),
+                      //Logo
 
-                    AppText(
-                      text: AppString.completeProfile,
-                      fontSize: 32.sp,
-                    ),
+                      // const Text("APPlOGO"),
 
-                    15.verticalSpace,
-                    AppText(
-                      text: "Lorem ipsum dolor sit amet consectetur. Massa.",
-                      fontSize: 14.sp,
-                      color: AppColor.grey999,
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: SvgPicture.asset(
+                          Assets.icDummyLogo,
 
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: context.height * .04),
-                      child: profileSection(
-                        image: createProfileNotifier.image,
-                        onTap: () => showCustomBottomSheet(
-                            context: context,
-                            content: ChooseImageWidget(
-                              onClickOnCamera: () {
-                                createProfileNotifier.pickAndCropImage(
-                                    context: context,
-                                    source: ImageSource.camera);
-                              },
-                              onClickOnGallery: () {
-                                createProfileNotifier.pickAndCropImage(
-                                    context: context,
-                                    source: ImageSource.gallery);
-                              },
-                            )),
+                          height: 50,
+                          // width: 100,
+                        ),
                       ),
-                    ),
 
-                    //Field forms
+                      AppText(
+                        text: AppString.completeProfile,
+                        fontSize: 32.sp,
+                      ),
 
-                    formsFieldsSection(
-                        context: context,
-                        createProfileNotifier: createProfileNotifier),
-                    SizedBox(
-                      height: context.height * .01,
-                    ),
-                    //login
-                    CommonAppBtn(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                        final isComplete =
-                            createProfileNotifier.validateProfile();
-                        if (isComplete) {
-                          createProfileNotifier.completeProfileApi();
-                          // toNamed(context, Routes.selectSocialMedia);
-                        }
-                      },
-                      title: AppString.next,
-                      textSize: 16.sp,
-                    ),
+                      15.verticalSpace,
+                      AppText(
+                        text: "Lorem ipsum dolor sit amet consectetur. Massa.",
+                        fontSize: 14.sp,
+                        color: AppColor.grey999,
+                      ),
 
-                    SizedBox(
-                      height: context.height * .05,
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: context.height * .04),
+                        child: profileSection(
+                          image: createProfileNotifier.image,
+                          onTap: () => showCustomBottomSheet(
+                              context: context,
+                              content: ChooseImageWidget(
+                                onClickOnCamera: () {
+                                  createProfileNotifier.pickAndCropImage(
+                                      context: context,
+                                      source: ImageSource.camera);
+                                },
+                                onClickOnGallery: () {
+                                  createProfileNotifier.pickAndCropImage(
+                                      context: context,
+                                      source: ImageSource.gallery);
+                                },
+                              )),
+                        ),
+                      ),
+
+                      //Field forms
+
+                      formsFieldsSection(
+                          context: context,
+                          createProfileNotifier: createProfileNotifier),
+                      SizedBox(
+                        height: context.height * .01,
+                      ),
+                      //login
+                      CommonAppBtn(
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          final isComplete =
+                              createProfileNotifier.validateProfile();
+                          if (isComplete) {
+                            createProfileNotifier.completeProfileApi();
+                            // toNamed(context, Routes.selectSocialMedia);
+                          }
+                        },
+                        title: AppString.next,
+                        textSize: 16.sp,
+                      ),
+
+                      SizedBox(
+                        height: context.height * .05,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )),
+              )),
+        ),
       ),
     );
   }
@@ -214,6 +230,7 @@ class CompleteProfileView extends ConsumerWidget {
       children: [
         //FULL NAME
         CustomLabelTextField(
+          maxLength: 35,
           prefixIcon: Assets.icUser,
           controller: createProfileNotifier.fullNameController,
           labelText: AppString.fullName,
@@ -221,6 +238,7 @@ class CompleteProfileView extends ConsumerWidget {
 
         //DESIGNATION
         CustomLabelTextField(
+          maxLength: 50,
           prefixIcon: Assets.icDesignation,
           controller: createProfileNotifier.designationController,
           labelText: AppString.designation,
@@ -330,6 +348,7 @@ class CompleteProfileView extends ConsumerWidget {
         //Bio
 
         CustomTextformFeild(
+          maxLength: 200,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: createProfileNotifier.bioController,

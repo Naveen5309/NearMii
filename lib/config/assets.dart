@@ -8,6 +8,8 @@ class Assets {
   static const String anouncement = 'assets/settings_icons/anouncement.png';
   static const String appLoading = 'assets/animations/app_loading.json';
   static const String appLogo = 'assets/icons/app_logo.svg';
+  static const String appLogo2 = 'assets/icons/app_logo2.svg';
+
   static const String applePay = 'assets/icons/Apple_Pay.svg';
   static const String arrowForword = 'assets/settings_icons/arrow_forword.svg';
   static const String back = 'assets/icons/back.svg';

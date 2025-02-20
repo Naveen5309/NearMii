@@ -28,6 +28,8 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   void initState() {
     super.initState();
     controller = PageController();
+
+    log("is from setting:-> ${widget.isFromSetting}");
   }
 
   @override
@@ -67,32 +69,43 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
             child: Column(
               children: [
                 //SKIP
-                Align(
-                  alignment: Alignment.topRight,
-                  child: InkWell(
-                    onTap: () {
-                      Getters.getLocalStorage.saveFirstIn(false).then(
-                        (value) {
-                          offAllNamed(context, Routes.auth);
-                        },
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: context.height * .1,
-                          bottom: context.height * .05),
-                      child: ref.watch(onboardIndicatorIndex) != 2
-                          ? AppText(
-                              text: AppString.skip,
-                              fontSize: 14.sp,
-                            )
-                          : const SizedBox(
-                              child: Text(' '),
-                            ),
-                    ),
-                  ),
-                ),
 
+                (!widget.isFromSetting!)
+                    ? Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () {
+                            Getters.getLocalStorage.saveFirstIn(false).then(
+                              (value) {
+                                offAllNamed(context, Routes.auth);
+                              },
+                            );
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: context.height * .1,
+                                bottom: context.height * .05),
+                            child: ((ref.watch(onboardIndicatorIndex) != 2))
+                                ? AppText(
+                                    text: AppString.skip,
+                                    fontSize: 14.sp,
+                                  )
+                                : const SizedBox(
+                                    child: Text(' '),
+                                  ),
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: context.height * .1,
+                              bottom: context.height * .05),
+                          child: const SizedBox(
+                            child: Text(' '),
+                          ),
+                        ),
+                      ),
                 // IMAGE
                 Consumer(
                   builder: (context, ref, child) {
@@ -172,11 +185,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                           if (widget.isFromSetting!) {
                             back(context);
                           } else {
-                            Getters.getLocalStorage.saveFirstIn(false).then(
-                              (value) {
-                                offAllNamed(context, Routes.auth);
-                              },
-                            );
+                            if (widget.isFromSetting!) {
+                            } else {
+                              Getters.getLocalStorage.saveFirstIn(false).then(
+                                (value) {
+                                  offAllNamed(context, Routes.auth);
+                                },
+                              );
+                            }
                           }
                         }
                       },

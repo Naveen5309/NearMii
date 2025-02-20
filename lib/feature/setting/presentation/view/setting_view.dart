@@ -57,7 +57,7 @@ class SettingView extends ConsumerWidget {
         } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
           toast(msg: AppString.logoutSuccess, isError: false);
 
-          await Getters.getLocalStorage.saveIsLogin(false);
+          await Getters.getLocalStorage.clearLoginData();
 
           // back(context);
           offAllNamed(context, Routes.login);

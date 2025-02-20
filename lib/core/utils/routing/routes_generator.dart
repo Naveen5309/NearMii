@@ -55,7 +55,12 @@ class RouteGenerator {
       case Routes.completeProfile:
         return MaterialPageRoute(builder: (_) => const CompleteProfileView());
       case Routes.selectSocialMedia:
-        return MaterialPageRoute(builder: (_) => const SelectSocialMediaView());
+        final args = settings.arguments as bool;
+        return MaterialPageRoute(
+          builder: (_) => SelectSocialMediaView(
+            isFromProfile: args,
+          ),
+        );
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => const MyProfileView());
 

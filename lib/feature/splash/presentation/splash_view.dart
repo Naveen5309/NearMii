@@ -72,11 +72,17 @@ class _SplashViewState extends ConsumerState<SplashView>
       if (!isMounted) return;
 
       if (isLogin) {
-        offAllNamed(context, Routes.bottomNavBar, args: false);
+        if (context.mounted) {
+          offAllNamed(context, Routes.bottomNavBar, args: false);
+        }
       } else if (isFirstOnboard) {
-        offAllNamed(context, Routes.onboard, args: false);
+        if (context.mounted) {
+          offAllNamed(context, Routes.onboard, args: false);
+        }
       } else {
-        offAllNamed(context, Routes.auth, args: false);
+        if (context.mounted) {
+          offAllNamed(context, Routes.auth, args: false);
+        }
       }
     });
   }
@@ -92,7 +98,16 @@ class _SplashViewState extends ConsumerState<SplashView>
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(color: AppColor.appThemeColor),
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: AppColor.splashGradient,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )
+
+                    // color: AppColor.appThemeColor
+
+                    ),
               ),
               SizedBox(
                 // width: MediaQuery.of(context).size.width * 0.5,

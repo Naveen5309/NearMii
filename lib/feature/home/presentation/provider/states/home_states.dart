@@ -42,3 +42,8 @@ class UpdateLocation extends HomeState {
   @override
   List<Object> get props => [locationType];
 }
+
+class UpdateLocation2 extends HomeState {
+  @override
+  List<Object> get props => [];
+}

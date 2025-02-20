@@ -5,6 +5,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
+import 'package:NearMii/feature/common_widgets/exit_app_confirmation.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
@@ -30,8 +31,12 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       //   context: context,
       //   builder: (context) => const VIPMembershipDialog(),
       // );
-      var notifier = ref.read(homeProvider.notifier);
-      notifier.getLocation();
+      var notifier = ref.watch(homeProvider.notifier);
+
+      // if ((notifier.addressName == "No address found") ||
+      //     (notifier.addressName == "Fetching location")) {
+      notifier.checkAddress();
+      // }
     });
   }
 

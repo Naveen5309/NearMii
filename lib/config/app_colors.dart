@@ -40,5 +40,9 @@ abstract final class AppColor {
   static const Color black000000 = Color(0xff000000);
   static const Color btnColor = Color(0xff00C565);
 
+  static const Color green33F597Color = Color(0xff33F597);
+
   static const Color transparent = Colors.transparent;
+
+  static List<Color> splashGradient = [btnColor, green33F597Color];
 }

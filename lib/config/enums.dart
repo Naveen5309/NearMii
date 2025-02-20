@@ -9,6 +9,7 @@ enum AuthType {
   otpVerify,
   resetPassword,
   addPlatform,
+  resendOtp
 }
 
 enum LocationType { loading, updated, error }

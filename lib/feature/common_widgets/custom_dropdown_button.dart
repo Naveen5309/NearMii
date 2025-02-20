@@ -92,7 +92,7 @@ class CustomDropdownButton extends StatelessWidget {
                       child: AppText(
                         text: item,
                         fontSize: 14.sp,
-                        color: AppColor.appThemeColor,
+                        color: AppColor.black000000,
                       )),
                 ))
             .toList(),

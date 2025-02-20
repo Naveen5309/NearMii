@@ -16,7 +16,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SelectSocialMediaView extends ConsumerStatefulWidget {
-  const SelectSocialMediaView({super.key});
+  final bool isFromProfile;
+
+  const SelectSocialMediaView({
+    super.key,
+    required this.isFromProfile,
+  });
 
   @override
   ConsumerState<SelectSocialMediaView> createState() =>
@@ -110,7 +115,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                             offAllNamed(context, Routes.bottomNavBar);
                           },
                           child: AppText(
-                            text: AppString.skip,
+                            text: widget.isFromProfile ? " " : AppString.skip,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),

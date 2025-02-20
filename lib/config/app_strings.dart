@@ -175,7 +175,7 @@ abstract final class AppString {
   static const String chooseImage = "Choose image source";
   static const String camera = "Camera";
   static const String gallery = "Gallery";
-  //  static const String localDirectory="appname";
+  static const String accountDeleted = "Account deleted";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
