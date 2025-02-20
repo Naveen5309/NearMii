@@ -20,6 +20,7 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   final dobController = TextEditingController();
   final bioController = TextEditingController();
   final currentPasswordController = TextEditingController();
+  final reasonController = TextEditingController();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final subjectController = TextEditingController();
@@ -223,6 +224,38 @@ class SettingNotifier extends StateNotifier<SettingStates> {
     } catch (e) {
       state =
           SettingApiFailed(error: e.toString(), settingType: Setting.profile);
+    }
+  }
+
+  //Get Profile
+  Future<void> getProfileApi() async {
+    state = const SettingApiLoading(settingType: Setting.getProfile);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection,
+            settingType: Setting.getProfile);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "password": currentPasswordController.text.trim(),
+      };
+      final result = await settingUseCase.callGetProfile(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.getProfile);
+      }, (result) {
+        return const SettingApiSuccess(settingType: Setting.getProfile);
+      });
+    } catch (e) {
+      state = SettingApiFailed(
+          error: e.toString(), settingType: Setting.getProfile);
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/data/domain/other_user_profile_usecases.dart';
@@ -158,6 +159,42 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
     } catch (e) {
       state = OtherUserProfileApiFailed(
           error: e.toString(), otherUserType: OtherUserType.report);
+    }
+  }
+
+  void updateCheck(int index) {
+    if (state is OtherUserProfileApiSuccess) {
+      final currentState = state as OtherUserProfileApiSuccess;
+
+      if (index < 0 || index >= (currentState.reasons?.length ?? 0)) return;
+
+      final updatedReasons =
+          List<CustomReportTile>.from(currentState.reasons ?? []);
+
+      updatedReasons[index] = CustomReportTile(
+        title: updatedReasons[index].title,
+        check: !updatedReasons[index].check, // ✅ Toggle karein
+        ontap: () => updateCheck(index),
+      );
+
+      // State ko update karein
+      state = OtherUserProfileApiSuccess(
+        otherUserType: currentState.otherUserType,
+        reasons: updatedReasons,
+      );
+    }
+  }
+
+  void clearAllChecks() {
+    if (state is OtherUserProfileApiSuccess) {
+      final currentState = state as OtherUserProfileApiSuccess;
+
+      state = OtherUserProfileApiSuccess(
+        otherUserType: currentState.otherUserType,
+        reasons: currentState.reasons
+            .map((reason) => reason.copyWith(check: false))
+            .toList(),
+      );
     }
   }
 }

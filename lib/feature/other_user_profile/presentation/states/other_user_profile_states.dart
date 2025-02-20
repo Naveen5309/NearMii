@@ -1,4 +1,5 @@
 import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -26,8 +27,10 @@ class OtherUserProfileApiLoading extends OtherUserProfileStates {
 
 class OtherUserProfileApiSuccess extends OtherUserProfileStates {
   final OtherUserType otherUserType;
+  final List<CustomReportTile> reasons;
 
   const OtherUserProfileApiSuccess({
+    this.reasons = const [],
     required this.otherUserType,
   });
 

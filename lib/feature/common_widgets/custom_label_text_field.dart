@@ -14,6 +14,7 @@ class CustomLabelTextField extends StatefulWidget {
   final Widget? prefixWidget;
   final Color? labelBckColor;
   final int? maxLength;
+  final Function(String)? onChanged;
 
   final bool? isObscure;
   final String? suffixIcon;
@@ -43,7 +44,8 @@ class CustomLabelTextField extends StatefulWidget {
       this.maxLines,
       this.onTap,
       this.radius,
-      this.isObscure});
+      this.isObscure,
+      this.onChanged});
 
   @override
   _CustomLabelTextFieldState createState() => _CustomLabelTextFieldState();
@@ -87,6 +89,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
         clipBehavior: Clip.none,
         children: [
           TextField(
+            onChanged: widget.onChanged,
             // maxLength: widget.maxLength ?? 35,
 
             obscureText: widget.isObscure ?? false,

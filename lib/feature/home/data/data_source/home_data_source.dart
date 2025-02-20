@@ -5,22 +5,47 @@ import '../models/preferance_model.dart';
 
 abstract class HomeDataSource {
   Future<ResponseWrapper?> getPreferences();
+  Future<ResponseWrapper?> getHomeData();
 }
-class HomeDataSourceImpl extends HomeDataSource{
 
+class HomeDataSourceImpl extends HomeDataSource {
   @override
-  Future<ResponseWrapper<PreferencesModel>?> getPreferences() async{
+  Future<ResponseWrapper<PreferencesModel>?> getPreferences() async {
     try {
-      final dataResponse = await Getters.getHttpService.request<PreferencesModel>(
+      final dataResponse =
+          await Getters.getHttpService.request<PreferencesModel>(
         url: ApiConstants.preferences,
         requestType: RequestType.get,
         fromJson: (json) => PreferencesModel.fromJson(json),
       );
-      if (dataResponse.status==true) {
-
+      if (dataResponse.status == true) {
         return getSuccessResponseWrapper(dataResponse);
       } else {
-        return getFailedResponseWrapper(dataResponse.message, response:dataResponse.data);
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "userLogin",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<PreferencesModel>?> getHomeData() async {
+    try {
+      final dataResponse =
+          await Getters.getHttpService.request<PreferencesModel>(
+        url: ApiConstants.preferences,
+        requestType: RequestType.get,
+        fromJson: (json) => PreferencesModel.fromJson(json),
+      );
+      if (dataResponse.status == true) {
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
       }
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(

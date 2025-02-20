@@ -31,3 +31,6 @@ final reportProvider = StateNotifierProvider.autoDispose<
   final reportUseCase = ref.watch(otherUserProfileUseCaseProvider);
   return OtherUserProfileNotifier(otherUserProfileUsecases: reportUseCase);
 });
+
+final selectedReportIndex =
+    StateProvider.autoDispose<int>((ref) => 0, name: "selectedReportIndex");

@@ -12,8 +12,8 @@ enum AuthType {
   resendOtp
 }
 
-enum LocationType { loading, updated, error }
+enum LocationType { loading, updated, error, homeData }
 
 enum OtherUserType { otherUserProfile, report }
 
-enum Setting { contactUs, deleteAccount, radius, profile }
+enum Setting { contactUs, deleteAccount, radius, profile, getProfile }

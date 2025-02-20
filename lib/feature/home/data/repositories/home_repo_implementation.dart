@@ -5,8 +5,8 @@ import '../models/preferance_model.dart';
 
 abstract class HomeRepository {
   Future<Either<Failure, PreferencesModel?>> getPreference();
+  Future<Either<Failure, PreferencesModel?>> getHome();
 }
-
 
 class HomeRepoImpl implements HomeRepository {
   final HomeDataSource dataSource;
@@ -17,14 +17,27 @@ class HomeRepoImpl implements HomeRepository {
   Future<Either<Failure, PreferencesModel?>> getPreference() async {
     try {
       final data = await dataSource.getPreferences();
-      if(data?.status==true){
+      if (data?.status == true) {
         return Right(data?.data);
-      }else{
-        return Left(ServerFailure(message: data?.message??""));
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
       }
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }
 
+  @override
+  Future<Either<Failure, PreferencesModel?>> getHome() async {
+    try {
+      final data = await dataSource.getHomeData();
+      if (data?.status == true) {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
 }
