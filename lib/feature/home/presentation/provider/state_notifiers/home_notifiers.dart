@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,5 +98,37 @@ class HomeNotifier extends StateNotifier<HomeState> {
     addressName = Getters.getLocalStorage.getAddress() ?? '';
     location = Getters.getLocalStorage.getLocation() ?? '';
     state = UpdateLocation2();
+  }
+
+  //Get Home Data
+  Future<void> getHomeDataApi() async {
+    state = const HomeApiLoading(locationType: LocationType.homeData);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const HomeApiFailed(
+            error: AppString.noInternetConnection,
+            locationType: LocationType.homeData);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        // "password": currentPasswordController.text.trim(),
+      };
+      final result = await homeUseCase.callGetHome();
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return HomeApiFailed(
+            error: error.message, locationType: LocationType.homeData);
+      }, (result) {
+        return const HomeApiSuccess(locationType: LocationType.homeData);
+      });
+    } catch (e) {
+      state = HomeApiFailed(
+          error: e.toString(), locationType: LocationType.homeData);
+    }
   }
 }

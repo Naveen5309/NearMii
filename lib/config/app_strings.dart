@@ -120,7 +120,7 @@ abstract final class AppString {
   static const String lastWeek = "Last Week";
   static const String lastMonth = "Last Month";
   static const String vipMembership = "VIP Membership";
-  // static const String buyNow = "Buy Now";
+  static const String reason = "Reason";
   static const String skip = "Skip >";
   static const String pswd = "Password";
   static const String dontHaveAnAccount = "Don’t have an account?";
@@ -169,6 +169,9 @@ abstract final class AppString {
   static const String email = "Email";
   static const String noInternetConnection = "No internet connection";
   static const String areYouSureLogOut = "Are you sure you want to \nLogout?";
+  static const String areYouSureDelete =
+      "Are you sure you want to delete your Account?";
+
   static const String otpVerifySuccess = "Otp sent successfully";
   static const String acceptTermsAndConditions = "Accept Terms & Conditions";
   static const String signupSuccess = "Signup Success";

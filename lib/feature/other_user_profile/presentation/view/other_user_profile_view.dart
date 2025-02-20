@@ -201,23 +201,25 @@ Widget appBarWidgetSection(
         ],
       ),
       const Spacer(),
-      PopupMenuButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4), // Adjust the radius as needed
-        ),
-        position: PopupMenuPosition.under,
-        padding: EdgeInsets.zero,
-        onSelected: (value) {
-          showCustomBottomSheet(
-              context: context,
-              content: Consumer(builder:
-                  (BuildContext context, WidgetRef ref, Widget? child) {
-                final reportNotifier = ref.read(reportProvider.notifier);
-                final selectedReason = ref.watch(reportProvider);
-                final TextEditingController textController =
-                    TextEditingController();
-                ref.watch(reportProvider);
-                return SingleChildScrollView(
+      Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final reportNotifier = ref.read(reportProvider.notifier);
+        final somethingTextController = TextEditingController();
+
+        ref.watch(reportProvider);
+        ref.watch(selectedReportIndex);
+
+        int selected = ref.read(selectedReportIndex);
+        return PopupMenuButton(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(4), // Adjust the radius as needed
+          ),
+          position: PopupMenuPosition.under,
+          padding: EdgeInsets.zero,
+          onSelected: (value) {
+            showCustomBottomSheet(
+                context: context,
+                content: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -232,25 +234,40 @@ Widget appBarWidgetSection(
                             color: AppColor.black1A1C1E,
                             fontWeight: FontWeight.w700),
                       ),
-                      const CustomReportTile(
+                      CustomReportTile(
                         title: AppString.theyArePretending,
-                        check: true,
+                        check: selected == 0,
+                        ontap: () {
+                          ref.read(selectedReportIndex.notifier).state = 0;
+                        },
                       ),
-                      const CustomReportTile(
+                      CustomReportTile(
                         title: AppString.theyAreUnderTheAge,
-                        check: false,
+                        check: selected == 1,
+                        ontap: () {
+                          ref.read(selectedReportIndex.notifier).state = 1;
+                        },
                       ),
-                      const CustomReportTile(
+                      CustomReportTile(
                         title: AppString.violenceAndDangerous,
-                        check: false,
+                        check: selected == 2,
+                        ontap: () {
+                          ref.read(selectedReportIndex.notifier).state = 2;
+                        },
                       ),
-                      const CustomReportTile(
+                      CustomReportTile(
                         title: AppString.hateSpeech,
-                        check: false,
+                        check: selected == 3,
+                        ontap: () {
+                          ref.read(selectedReportIndex.notifier).state = 3;
+                        },
                       ),
-                      const CustomReportTile(
+                      CustomReportTile(
                         title: AppString.nudity,
-                        check: false,
+                        check: selected == 4,
+                        ontap: () {
+                          ref.read(selectedReportIndex.notifier).state = 4;
+                        },
                       ),
                       const SizedBox(
                         height: 12,
@@ -267,14 +284,19 @@ Widget appBarWidgetSection(
                               fontWeight: FontWeight.w700),
                         ],
                       ),
-                      const CustomTextFieldWidget(
-                        // enableBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(20),
-                        // ),
-                        minLines: 2,
-                        fillColor: AppColor.whiteF0F5FE,
-                        hintText: "Lorem ipsum dolor sit......",
-                      ),
+                      CustomTextFieldWidget(
+                          controller: somethingTextController,
+                          // enableBorder: OutlineInputBorder(
+                          //   borderRadius: BorderRadius.circular(20),
+                          // ),
+                          minLines: 2,
+                          fillColor: AppColor.whiteF0F5FE,
+                          hintText: "Lorem ipsum dolor sit......",
+                          onChanged: (value) {
+                            if (value!.isNotEmpty) {
+                              reportNotifier.clearAllChecks();
+                            }
+                          }),
                       5.verticalSpace,
                       CommonAppBtn(
                         title: AppString.submit,
@@ -288,28 +310,28 @@ Widget appBarWidgetSection(
                       10.verticalSpace
                     ],
                   ),
-                );
-              }));
-        },
-        itemBuilder: (BuildContext bc) {
-          return [
-            const PopupMenuItem(
-                value: AppString.report,
-                child: AppText(
-                  text: AppString.report,
-                  color: AppColor.redFF3B30,
-                )),
-          ];
-        },
-        child: Padding(
-          padding: EdgeInsets.only(right: context.width * .05),
-          child: SvgPicture.asset(
-            Assets.icMore,
-            colorFilter:
-                const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                ));
+          },
+          itemBuilder: (BuildContext bc) {
+            return [
+              const PopupMenuItem(
+                  value: AppString.report,
+                  child: AppText(
+                    text: AppString.report,
+                    color: AppColor.redFF3B30,
+                  )),
+            ];
+          },
+          child: Padding(
+            padding: EdgeInsets.only(right: context.width * .05),
+            child: SvgPicture.asset(
+              Assets.icMore,
+              colorFilter:
+                  const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     ],
   );
 }
@@ -635,6 +657,8 @@ Widget profileWidget({
     ],
   );
 }
+
+
 
   // void toggleCheck(int index) {
   //   state = [
