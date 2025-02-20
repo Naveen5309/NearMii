@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
@@ -47,11 +48,13 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
   //LOGIN
   Future<void> otherUserProfileApi(String id) async {
-    state = const OtherUserProfileApiLoading();
+    state = const OtherUserProfileApiLoading(
+        otherUserType: OtherUserType.otherUserProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const OtherUserProfileApiFailed(
-            error: AppString.noInternetConnection);
+            error: AppString.noInternetConnection,
+            otherUserType: OtherUserType.otherUserProfile);
         return;
       }
       if (await Getters.networkInfo.isSlow) {
@@ -67,30 +70,37 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
       );
       state = result.fold((error) {
         log("login error:${error.message} ");
-        return OtherUserProfileApiFailed(error: error.message);
+        return OtherUserProfileApiFailed(
+            error: error.message,
+            otherUserType: OtherUserType.otherUserProfile);
       }, (result) {
         profile = result;
-        return const OtherUserProfileApiSuccess();
+        return const OtherUserProfileApiSuccess(
+            otherUserType: OtherUserType.otherUserProfile);
       });
     } catch (e) {
-      state = OtherUserProfileApiFailed(error: e.toString());
+      state = OtherUserProfileApiFailed(
+          error: e.toString(), otherUserType: OtherUserType.otherUserProfile);
     }
   }
 
   //GET SOCIAL PROFILES
   Future<void> getSocialPlatform() async {
-    state = const OtherUserProfileApiLoading();
+    state = const OtherUserProfileApiLoading(
+        otherUserType: OtherUserType.otherUserProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const OtherUserProfileApiFailed(
-          error: "No internet connection",
-        );
+            error: "No internet connection",
+            otherUserType: OtherUserType.otherUserProfile);
         return;
       }
 
       final result = await otherUserProfileUsecases.getPlatformApi(body: {});
       state = result.fold((error) {
-        return OtherUserProfileApiFailed(error: error.message);
+        return OtherUserProfileApiFailed(
+            error: error.message,
+            otherUserType: OtherUserType.otherUserProfile);
       }, (result) {
         log("result is:-> $result");
 
@@ -102,10 +112,52 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
         // Update the list and notify UI by updating state
         // platformDataList = result ?? [];
-        return const OtherUserProfileApiSuccess();
+        return const OtherUserProfileApiSuccess(
+            otherUserType: OtherUserType.otherUserProfile);
       });
     } catch (e) {
-      state = OtherUserProfileApiFailed(error: e.toString());
+      state = OtherUserProfileApiFailed(
+          error: e.toString(), otherUserType: OtherUserType.otherUserProfile);
+    }
+  }
+
+  //Report
+  Future<void> reportApi(
+      {required String reportedUserId, required String somethingElse}) async {
+    state =
+        const OtherUserProfileApiLoading(otherUserType: OtherUserType.report);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const OtherUserProfileApiFailed(
+            error: AppString.noInternetConnection,
+            otherUserType: OtherUserType.report);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "reported_user_id": reportedUserId,
+        "something_else": somethingElse,
+      };
+
+      log("body is :->${body}");
+      final result = await otherUserProfileUsecases.callReport(
+        body: body,
+      );
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return OtherUserProfileApiFailed(
+            error: error.message, otherUserType: OtherUserType.report);
+      }, (result) {
+        return const OtherUserProfileApiSuccess(
+            otherUserType: OtherUserType.report);
+      });
+    } catch (e) {
+      state = OtherUserProfileApiFailed(
+          error: e.toString(), otherUserType: OtherUserType.report);
     }
   }
 }

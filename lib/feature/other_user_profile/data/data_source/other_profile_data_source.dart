@@ -11,6 +11,7 @@ abstract class OtherUserProfileDataSource {
   Future<ResponseWrapper?> otherUserProfile(
       {required Map<String, dynamic> body});
   Future<ResponseWrapper?> getPlatformApi();
+  Future<ResponseWrapper?> getReport({required Map<String, dynamic> body});
 }
 
 class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
@@ -81,6 +82,43 @@ class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "getPlatformApi",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<OtherUserProfileModel>?> getReport(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse =
+          await Getters.getHttpService.request<OtherUserProfileModel>(
+              body: body,
+              url: ApiConstants.report,
+              fromJson: (json) {
+                log("json in data source :-> $json");
+
+                if (json is Map<String, dynamic>) {
+                  var myData = OtherUserProfileModel.fromJson(json["data"]);
+
+                  log("mydata is :-. ${myData.name}");
+                  return OtherUserProfileModel.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              });
+      print("dataResponse===>${dataResponse.data!.name}");
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "OtherUserProfileLogin",
       ));
     }
   }

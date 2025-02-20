@@ -1,3 +1,4 @@
+import 'package:NearMii/config/enums.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,26 +14,36 @@ class OtherUserProfileInitial extends OtherUserProfileStates {
 }
 
 class OtherUserProfileApiLoading extends OtherUserProfileStates {
-  const OtherUserProfileApiLoading();
+  final OtherUserType otherUserType;
+
+  const OtherUserProfileApiLoading({
+    required this.otherUserType,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [otherUserType];
 }
 
 class OtherUserProfileApiSuccess extends OtherUserProfileStates {
-  const OtherUserProfileApiSuccess();
+  final OtherUserType otherUserType;
+
+  const OtherUserProfileApiSuccess({
+    required this.otherUserType,
+  });
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [otherUserType];
 }
 
 class OtherUserProfileApiFailed extends OtherUserProfileStates {
   final String error;
+  final OtherUserType otherUserType;
 
   const OtherUserProfileApiFailed({
     required this.error,
+    required this.otherUserType,
   });
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, otherUserType];
 }

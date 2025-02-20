@@ -14,6 +14,6 @@ enum AuthType {
 
 enum LocationType { loading, updated, error }
 
-enum otherProfile { otherUserProfile }
+enum OtherUserType { otherUserProfile, report }
 
-enum Setting { contactUs, deleteAccount, radius }
+enum Setting { contactUs, deleteAccount, radius, profile }

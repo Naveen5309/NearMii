@@ -193,4 +193,36 @@ class SettingNotifier extends StateNotifier<SettingStates> {
           SettingApiFailed(error: e.toString(), settingType: Setting.radius);
     }
   }
+
+  //Profile
+  Future<void> profileApi() async {
+    state = const SettingApiLoading(settingType: Setting.profile);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection,
+            settingType: Setting.profile);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "password": currentPasswordController.text.trim(),
+      };
+      final result = await settingUseCase.callProfile(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.profile);
+      }, (result) {
+        return const SettingApiSuccess(settingType: Setting.profile);
+      });
+    } catch (e) {
+      state =
+          SettingApiFailed(error: e.toString(), settingType: Setting.profile);
+    }
+  }
 }
