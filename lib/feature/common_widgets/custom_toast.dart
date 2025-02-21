@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../config/helper.dart';
 import 'app_text.dart';
 
-void toast({required String msg, bool isError = true}) {
+void toast({required String msg, bool isError = true, bool isInfo = false}) {
   BotToast.showCustomText(
       duration: const Duration(seconds: 2),
       toastBuilder: (cancelFunc) => Align(
@@ -12,7 +12,11 @@ void toast({required String msg, bool isError = true}) {
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                  color: isError ? Colors.red : Colors.green,
+                  color: isError
+                      ? Colors.red
+                      : (isInfo == true)
+                          ? Colors.yellow[700]
+                          : Colors.green,
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [
                     BoxShadow(
@@ -37,8 +41,16 @@ void toast({required String msg, bool isError = true}) {
                             borderRadius: BorderRadius.circular(50),
                             color: AppColor.primary),
                         child: Icon(
-                          isError ? Icons.error : Icons.done_all,
-                          color: isError ? Colors.red : Colors.green,
+                          isError
+                              ? Icons.error
+                              : (isInfo == true)
+                                  ? Icons.info_outline_rounded
+                                  : Icons.done_all,
+                          color: isError
+                              ? Colors.red
+                              : (isInfo == true)
+                                  ? Colors.yellow[700]
+                                  : Colors.green,
                         ),
                       ),
                       xWidth(10),

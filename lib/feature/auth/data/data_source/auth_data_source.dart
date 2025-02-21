@@ -56,9 +56,13 @@ class AuthDataSourceImpl extends AuthDataSource {
         log("user data is:-> ${dataResponse.token}");
         log("user data is:-> $dataResponse");
 
-        await Getters.getLocalStorage.saveLoginUser(model);
-        await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
-        await Getters.getLocalStorage.saveIsLogin(true);
+        if (model.isProfile == 1) {
+          await Getters.getLocalStorage.saveLoginUser(model);
+          await Getters.getLocalStorage.saveIsLogin(true);
+          await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
+        } else {
+          await Getters.getLocalStorage.saveToken(dataResponse.token ?? "");
+        }
 
         return getSuccessResponseWrapper(dataResponse);
       } else {

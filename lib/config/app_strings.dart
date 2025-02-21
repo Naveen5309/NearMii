@@ -69,6 +69,9 @@ abstract final class AppString {
   static const String dob = "Date of birth";
   static const String next = "Next";
   static const String loginSuccess = "You are logged in successfully";
+
+  static const String completeYourProfile = "Please Complete your profile";
+
   static const String resetPswdSuccessfully = "Password reset successfully";
 
   static const String platformUpdateSuccess = "Platform added";

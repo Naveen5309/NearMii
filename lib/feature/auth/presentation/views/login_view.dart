@@ -34,9 +34,17 @@ class LoginView extends ConsumerWidget {
           Utils.showLoader();
         } else if (next is AuthApiSuccess && next.authType == AuthType.login) {
           Utils.hideLoader();
-          toast(msg: AppString.loginSuccess, isError: false);
-          // back(context);
-          toNamed(context, Routes.bottomNavBar);
+
+          if (loginNotifier.userModel?.isProfile == 1) {
+            toast(msg: AppString.loginSuccess, isError: false);
+            toNamed(context, Routes.bottomNavBar);
+          } else if (loginNotifier.userModel?.isProfile == 0) {
+            toast(
+                msg: AppString.completeYourProfile,
+                isError: false,
+                isInfo: true);
+            toNamed(context, Routes.completeProfile);
+          }
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {
           // back(context);
           Utils.hideLoader();

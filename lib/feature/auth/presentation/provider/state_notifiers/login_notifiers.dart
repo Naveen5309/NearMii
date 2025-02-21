@@ -25,6 +25,8 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  UserModel? userModel;
+
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
   //VALIDATE SIGN UP
   bool validateLogin() {
@@ -110,6 +112,8 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
+        userModel = result;
+
         clearLoginFields();
         return const AuthApiSuccess(authType: AuthType.login);
       });
