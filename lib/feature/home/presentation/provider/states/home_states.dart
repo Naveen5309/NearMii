@@ -14,12 +14,10 @@ class HomeInitial extends HomeState {
 }
 
 class HomeApiLoading extends HomeState {
-  final LocationType locationType;
-
-  const HomeApiLoading({required this.locationType});
+  const HomeApiLoading();
 
   @override
-  List<Object> get props => [locationType];
+  List<Object> get props => [];
 }
 
 class HomeApiSuccess extends HomeState {
@@ -28,7 +26,7 @@ class HomeApiSuccess extends HomeState {
   const HomeApiSuccess({required this.locationType});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [locationType];
 }
 
 class HomeApiFailed extends HomeState {
@@ -41,7 +39,7 @@ class HomeApiFailed extends HomeState {
   });
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, locationType];
 }
 
 class UpdateLocation extends HomeState {

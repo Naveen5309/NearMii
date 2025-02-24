@@ -1,5 +1,6 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:NearMii/feature/setting/data/repossitories/setting_repo.dart';
 
 abstract class SettingUsecases {
@@ -14,7 +15,7 @@ abstract class SettingUsecases {
   Future<Either<Failure, dynamic>> callProfile(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, dynamic>> callGetProfile(
+  Future<Either<Failure, UserProfileModel>> callGetProfile(
       {required Map<String, dynamic> body});
 }
 
@@ -60,7 +61,7 @@ class SettingUseCaseImpl implements SettingUsecases {
   }
 
   @override
-  Future<Either<Failure, dynamic>> callGetProfile(
+  Future<Either<Failure, UserProfileModel>> callGetProfile(
       {required Map<String, dynamic> body}) async {
     final result = await repository.isProfileGet(body: body);
     return result.fold((l) => Left(l), (r) {

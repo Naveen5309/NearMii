@@ -8,6 +8,7 @@ import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,40 +33,12 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   final designationController = TextEditingController();
 
   final genderController = TextEditingController();
+  // List<UserProfileModel> getProfileDataList = [];
+  UserProfileModel? userProfileModel;
 
   List<PlatformData> platformDataList = [];
 
   SettingNotifier({required this.settingUseCase}) : super(SettingInitial());
-
-  //VALIDATE Edit Profile
-  bool validateEditProfile() {
-    bool isValid = Validator().completeEditProfileValidator(
-        fullName: fullNameController.text.trim(),
-        dob: dobController.text.trim(),
-        designation: designationController.text.trim(),
-        gender: genderController.text.trim(),
-        phoneNumber: phoneController.text.trim());
-    if (isValid) {
-      return true;
-    } else {
-      toast(msg: Validator().error, isError: true);
-      return false;
-    }
-  }
-
-  //VALIDATE Change Password
-  bool validateChangePassword() {
-    bool isValid = Validator().changePasswordValidation(
-        currentPassword: currentPasswordController.text.trim(),
-        newPassword: newPasswordController.text.trim(),
-        confirmPassword: confirmPasswordController.text.trim());
-    if (isValid) {
-      return true;
-    } else {
-      toast(msg: Validator().error, isError: true);
-      return false;
-    }
-  }
 
 //VALIDATE  Contact us
   bool validateContactUs() {
@@ -195,38 +168,6 @@ class SettingNotifier extends StateNotifier<SettingStates> {
     }
   }
 
-  //Profile
-  Future<void> profileApi() async {
-    state = const SettingApiLoading(settingType: Setting.profile);
-    try {
-      if (!(await Getters.networkInfo.isConnected)) {
-        state = const SettingApiFailed(
-            error: AppString.noInternetConnection,
-            settingType: Setting.profile);
-        return;
-      }
-      if (await Getters.networkInfo.isSlow) {
-        toast(
-          msg: AppString.networkSlow,
-        );
-      }
-      Map<String, dynamic> body = {
-        "password": currentPasswordController.text.trim(),
-      };
-      final result = await settingUseCase.callProfile(body: body);
-      state = result.fold((error) {
-        log("login error:${error.message} ");
-        return SettingApiFailed(
-            error: error.message, settingType: Setting.profile);
-      }, (result) {
-        return const SettingApiSuccess(settingType: Setting.profile);
-      });
-    } catch (e) {
-      state =
-          SettingApiFailed(error: e.toString(), settingType: Setting.profile);
-    }
-  }
-
   //Get Profile
   Future<void> getProfileApi() async {
     state = const SettingApiLoading(settingType: Setting.getProfile);
@@ -243,14 +184,17 @@ class SettingNotifier extends StateNotifier<SettingStates> {
         );
       }
       Map<String, dynamic> body = {
-        "password": currentPasswordController.text.trim(),
+        // "password": currentPasswordController.text.trim(),
       };
       final result = await settingUseCase.callGetProfile(body: body);
+
       state = result.fold((error) {
         log("login error:${error.message} ");
         return SettingApiFailed(
             error: error.message, settingType: Setting.getProfile);
       }, (result) {
+        userProfileModel = result;
+        print("result=>>${result}");
         return const SettingApiSuccess(settingType: Setting.getProfile);
       });
     } catch (e) {

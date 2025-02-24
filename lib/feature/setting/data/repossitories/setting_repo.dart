@@ -1,6 +1,8 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
+import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/setting/data/data_source/setting_data_source.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 
 abstract class SettingRepository {
   Future<Either<Failure, dynamic>> contactUs(
@@ -15,7 +17,7 @@ abstract class SettingRepository {
   Future<Either<Failure, dynamic>> isProfileSummary(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, dynamic>> isProfileGet(
+  Future<Either<Failure, UserProfileModel>> isProfileGet(
       {required Map<String, dynamic> body});
 }
 
@@ -89,7 +91,7 @@ class SettingRepoImpl implements SettingRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> isProfileGet(
+  Future<Either<Failure, UserProfileModel>> isProfileGet(
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.getProfile(body: body);

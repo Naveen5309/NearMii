@@ -35,21 +35,17 @@ final homeProvider =
   return HomeNotifier(homeUseCase: homeUseCase);
 });
 
-//IS MAP VIEW
-final isMapView =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isMapView");
-
-final getHomeDataProvider =
-    FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
-  final getUserHomeCase = ref.watch(homeUseCaseProvider);
-  final res = await getUserHomeCase.callGetPreference();
-  return res.fold(
-    (error) {
-      print("Error: ${error.message}");
-      throw Exception(error.toString());
-    },
-    (data) {
-      return data?.preferences ?? [];
-    },
-  );
-});
+// final getHomeDataProvider =
+//     FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
+//   final getUserHomeCase = ref.watch(homeUseCaseProvider);
+//   final res = await getUserHomeCase.callGetPreference();
+//   return res.fold(
+//     (error) {
+//       print("Error: ${error.message}");
+//       throw Exception(error.toString());
+//     },
+//     (data) {
+//       return data?.preferences ?? [];
+//     },
+//   );
+// });

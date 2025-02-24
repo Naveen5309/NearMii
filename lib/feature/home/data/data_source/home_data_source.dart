@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/home/data/models/home_data_model.dart';
+
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
 import '../../../../core/response_wrapper/data_response.dart';
@@ -18,7 +20,7 @@ class HomeDataSourceImpl extends HomeDataSource {
         requestType: RequestType.get,
         fromJson: (json) => PreferencesModel.fromJson(json),
       );
-      if (dataResponse.status == true) {
+      if (dataResponse.status == "success") {
         return getSuccessResponseWrapper(dataResponse);
       } else {
         return getFailedResponseWrapper(dataResponse.message,
@@ -33,15 +35,32 @@ class HomeDataSourceImpl extends HomeDataSource {
   }
 
   @override
-  Future<ResponseWrapper<PreferencesModel>?> getHomeData() async {
+  Future<ResponseWrapper<List<HomeData>>?> getHomeData() async {
     try {
-      final dataResponse =
-          await Getters.getHttpService.request<PreferencesModel>(
-        url: ApiConstants.preferences,
+      final dataResponse = await Getters.getHttpService.request<List<dynamic>?>(
+        url: ApiConstants.getHomeUserData,
         requestType: RequestType.get,
-        fromJson: (json) => PreferencesModel.fromJson(json),
-      );
-      if (dataResponse.status == true) {
+        fromJson: (json) {
+          if (json is Map<String, dynamic> && json.containsKey('data')) {
+            return (json['data'] as List<dynamic>)
+                .map((item) => HomeData.fromJson(item as Map<String, dynamic>))
+                .toList();
+          }
+          return [];
+        },
+      ); // fromJson: (json) {
+      //   print("json in data source :-> $json");
+
+      //   if (json is Map<String, dynamic>) {
+      //     print("json in data source :-> ${json["data"]}");
+
+      //     return HomeData.fromJson(json["data"]);
+      //   }
+      //   throw Exception("Unexpected API response format");
+      // }
+
+      // );
+      if (dataResponse.status == "success") {
         return getSuccessResponseWrapper(dataResponse);
       } else {
         return getFailedResponseWrapper(dataResponse.message,

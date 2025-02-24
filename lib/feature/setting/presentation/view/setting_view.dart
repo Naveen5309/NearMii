@@ -20,41 +20,76 @@ import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
+import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
+import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SettingView extends ConsumerWidget {
+class SettingView extends ConsumerStatefulWidget {
   const SettingView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final loginNotifier = ref.watch(loginProvider.notifier);
+  ConsumerState<SettingView> createState() => _SettingViewState();
+}
 
+class _SettingViewState extends ConsumerState<SettingView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(getProfileProvider.notifier).getProfileApi();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var notifier = ref.read(getProfileProvider.notifier);
+    ref.watch(getProfileProvider);
+    // final profileNotifier = ref.read(getProfileProvider.notifier);
+    // profileNotifier.getProfileApi();
     ref.watch(loginProvider);
     // final loginNotifier = ref.watch(loginProvider.notifier);
+    // UserProfileModel? profile;
+    // var data = notifier.getProfileDataList[];
 
-    ref.listen(
-      loginProvider,
-      (previous, next) async {
-        if (next is AuthApiLoading && next.authType == AuthType.logOut) {
-          Utils.showLoader();
-        } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
-          toast(msg: AppString.logoutSuccess, isError: false);
+    // var data = notifier.getProfileDataList;
+    ref.listen(loginProvider, (previous, next) async {
+      if (next is AuthApiLoading && next.authType == AuthType.logOut) {
+        Utils.showLoader();
+      } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
+        toast(msg: AppString.logoutSuccess, isError: false);
 
-          await Getters.getLocalStorage.clearLoginData();
+        await Getters.getLocalStorage.clearLoginData();
+        Utils.hideLoader();
+
+        // back(context);
+        offAllNamed(context, Routes.login);
+      } else if (next is AuthApiFailed && next.authType == AuthType.logOut) {
+        Utils.hideLoader();
+
+        toast(msg: next.error);
+      }
+    });
+
+    ref.listen(getProfileProvider, (previous, next) async {
+      if (next is SettingApiLoading) {
+        print("other user loading is called");
+        Utils.showLoader();
+      } else if (next is SettingApiSuccess) {
+        Utils.hideLoader();
+
+        // toNamed(context, Routes.bottomNavBar);
+      } else if (next is SettingApiFailed) {
+        if (context.mounted) {
           Utils.hideLoader();
-
-          // back(context);
-          offAllNamed(context, Routes.login);
-        } else if (next is AuthApiFailed && next.authType == AuthType.logOut) {
-          Utils.hideLoader();
-
-          toast(msg: next.error);
         }
-      },
-    );
+
+        toast(msg: next.error);
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
@@ -75,8 +110,9 @@ class SettingView extends ConsumerWidget {
                   child: Column(
                     children: [
                       ProfileWidget(
-                        imageUrl: '',
-                        name: "Cameron Williamson",
+                        imageUrl: notifier.userProfileModel?.profilePhoto ?? '',
+                        name: notifier.userProfileModel?.name ?? '',
+                        //  profile!.name ?? "",
                         points: 124,
                         isVip: true,
                         model: SubscriptionModel(Points: 221, daysLeft: 11),

@@ -4,6 +4,7 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/home/data/models/home_data_model.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ import 'package:geolocator/geolocator.dart';
 class HomeNotifier extends StateNotifier<HomeState> {
   final HomeUseCase homeUseCase;
   HomeNotifier({required this.homeUseCase}) : super(HomeInitial());
+  List<HomeData> homeUserDataList = [];
 
   // Location data varibale & methods
   List<Placemark> placemarks = [];
@@ -100,9 +102,9 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = UpdateLocation2();
   }
 
-  //Get Home Data
+  // Home Data Api
   Future<void> getHomeDataApi() async {
-    state = const HomeApiLoading(locationType: LocationType.homeData);
+    state = const HomeApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const HomeApiFailed(
@@ -115,15 +117,19 @@ class HomeNotifier extends StateNotifier<HomeState> {
           msg: AppString.networkSlow,
         );
       }
-      Map<String, dynamic> body = {
-        // "password": currentPasswordController.text.trim(),
-      };
+      // Map<String, dynamic> body = {};
       final result = await homeUseCase.callGetHome();
       state = result.fold((error) {
         log("login error:${error.message} ");
         return HomeApiFailed(
             error: error.message, locationType: LocationType.homeData);
       }, (result) {
+        if (result != null) {
+          homeUserDataList = result;
+        } else {
+          homeUserDataList = [];
+        }
+        log("history result is :->${homeUserDataList}");
         return const HomeApiSuccess(locationType: LocationType.homeData);
       });
     } catch (e) {
@@ -131,4 +137,40 @@ class HomeNotifier extends StateNotifier<HomeState> {
           error: e.toString(), locationType: LocationType.homeData);
     }
   }
+
+  // //Get Home Data
+  // Future<void> getHomeDataApi() async {
+  //   state = const HomeApiLoading(locationType: LocationType.homeData);
+  //   try {
+  //     if (!(await Getters.networkInfo.isConnected)) {
+  //       state = const HomeApiFailed(
+  //           error: AppString.noInternetConnection,
+  //           locationType: LocationType.homeData);
+  //       return;
+  //     }
+  //     if (await Getters.networkInfo.isSlow) {
+  //       toast(
+  //         msg: AppString.networkSlow,
+  //       );
+  //     }
+  //     Map<String, dynamic> body = {
+  //       // "password": currentPasswordController.text.trim(),
+  //     };
+  //     final result = await homeUseCase.callGetHome();
+  //     // printLog("${result?.data??[]} fun:" "GET_LENGTH");
+
+  //     state = result.fold((error) {
+  //       log("login error:${error.message} ");
+  //       return HomeApiFailed(
+  //           error: error.message, locationType: LocationType.homeData);
+  //     }, (result) {
+  //       printLog((result?.data ?? []).length, fun: "GET_LENGTH");
+
+  //       return const HomeApiSuccess(locationType: LocationType.homeData);
+  //     });
+  //   } catch (e) {
+  //     state = HomeApiFailed(
+  //         error: e.toString(), locationType: LocationType.homeData);
+  //   }
+  // }
 }

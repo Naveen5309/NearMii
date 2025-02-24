@@ -44,7 +44,6 @@ class CompleteProfileView extends ConsumerWidget {
             next.authType == AuthType.completeProfile) {
           Utils.hideLoader();
 
-          // toast(msg: AppString.signupSuccess, isError: false);
           // back(context);
           toNamed(context, Routes.selectSocialMedia, args: false);
         } else if (next is AuthApiFailed &&

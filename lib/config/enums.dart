@@ -9,11 +9,13 @@ enum AuthType {
   otpVerify,
   resetPassword,
   addPlatform,
-  resendOtp
+  resendOtp,
+  changePassword,
+  editProfile
 }
 
 enum LocationType { loading, updated, error, homeData }
 
 enum OtherUserType { otherUserProfile, report }
 
-enum Setting { contactUs, deleteAccount, radius, profile, getProfile }
+enum Setting { contactUs, deleteAccount, radius, getProfile }

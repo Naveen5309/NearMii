@@ -1,5 +1,6 @@
 import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
+import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
@@ -32,6 +33,11 @@ abstract class AuthRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, GetPlatformData>> getPlatform();
   Future<Either<Failure, dynamic>> logOut();
+
+  Future<Either<Failure, dynamic>> changePassword(
+      {required Map<String, dynamic> body});
+  Future<Either<Failure, EditProfileModel>> editProfile(
+      {required Map<String, dynamic> body, required String imagePath});
 }
 
 class AuthRepoImpl implements AuthRepository {
@@ -176,6 +182,39 @@ class AuthRepoImpl implements AuthRepository {
   Future<Either<Failure, dynamic>> logOut() async {
     try {
       final data = await dataSource.logOutApi();
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> changePassword(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.changePassword(body: body);
+
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, EditProfileModel>> editProfile(
+      {required Map<String, dynamic> body, required String imagePath}) async {
+    try {
+      final data =
+          await dataSource.editProfile(body: body, imagePath: imagePath);
+
       if (data?.status == "success") {
         return Right(data?.data);
       } else {

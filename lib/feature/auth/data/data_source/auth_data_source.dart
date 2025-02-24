@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
+import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
@@ -15,8 +16,8 @@ abstract class AuthDataSource {
       {required Map<String, dynamic> body, required bool isSocial});
 
   Future<ResponseWrapper?> signUpApi({required Map<String, dynamic> body});
-  Future<ResponseWrapper?> forgotPassword({required Map<String, dynamic> body});
   Future<ResponseWrapper?> addPlatform({required Map<String, dynamic> body});
+  Future<ResponseWrapper?> forgotPassword({required Map<String, dynamic> body});
 
   Future<ResponseWrapper?> completeProfile(
       {required Map<String, dynamic> body, required String imagePath});
@@ -26,6 +27,9 @@ abstract class AuthDataSource {
 
   Future<ResponseWrapper?> getPlatformApi();
   Future<ResponseWrapper?> logOutApi();
+  Future<ResponseWrapper?> changePassword({required Map<String, dynamic> body});
+  Future<ResponseWrapper?> editProfile(
+      {required Map<String, dynamic> body, required String imagePath});
 }
 
 class AuthDataSourceImpl extends AuthDataSource {
@@ -194,7 +198,7 @@ class AuthDataSourceImpl extends AuthDataSource {
     }
   }
 
-//FORGOT PASSWORD API
+//complete Profile  API
   @override
   Future<ResponseWrapper<dynamic>?> completeProfile({
     required Map<String, dynamic> body,
@@ -301,6 +305,37 @@ class AuthDataSourceImpl extends AuthDataSource {
     }
   }
 
+//RESET PASSWORD
+  @override
+  Future<ResponseWrapper<dynamic>?> changePassword(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+          body: body,
+          url: ApiConstants.changePassword,
+          fromJson: (json) {
+            log("json in data source :-> $json");
+
+            return json;
+          });
+
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "resetPassword",
+      ));
+    }
+  }
+
 //GET PLATFORM
   @override
   Future<ResponseWrapper<GetPlatformData>> getPlatformApi() async {
@@ -362,6 +397,46 @@ class AuthDataSourceImpl extends AuthDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "logOutApi",
+      ));
+    }
+  }
+
+//edit Profile  API
+  @override
+  Future<ResponseWrapper<EditProfileModel>?> editProfile({
+    required Map<String, dynamic> body,
+    required String imagePath,
+  }) async {
+    try {
+      final dataResponse =
+          await Getters.getHttpService.request<EditProfileModel>(
+              body: body,
+              imagePath: imagePath,
+              paramName: "profile_photo",
+              url: ApiConstants.updateProfile,
+              fromJson: (json) {
+                log("json in data source :-> $json");
+
+                // Ensure the response is a map and correctly map it to GetPlatformData
+                if (json is Map<String, dynamic>) {
+                  return EditProfileModel.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              });
+
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "completeProfile",
       ));
     }
   }

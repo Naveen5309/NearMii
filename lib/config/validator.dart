@@ -50,17 +50,17 @@ class Validator {
     required String phoneNumber,
     required String fullName,
     required String dob,
-    required String designation,
+    String? designation,
     required String gender,
   }) {
     if (fullName.isEmpty) {
       error = AppString.pleaseEnterName;
       return false;
     }
-    if (designation.isEmpty) {
-      error = AppString.pleaseEnterDesignation;
-      return false;
-    }
+    // if (designation.isEmpty) {
+    //   error = AppString.pleaseEnterDesignation;
+    //   return false;
+    // }
 
     if (phoneNumber.isEmpty) {
       error = AppString.validNumber;
@@ -180,15 +180,10 @@ class Validator {
     required String phoneNumber,
     required String fullName,
     required String dob,
-    required String designation,
     required String gender,
   }) {
     if (fullName.isEmpty) {
       error = AppString.pleaseEnterName;
-      return false;
-    }
-    if (designation.isEmpty) {
-      error = AppString.pleaseEnterDesignation;
       return false;
     }
 

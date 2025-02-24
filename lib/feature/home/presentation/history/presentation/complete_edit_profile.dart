@@ -1,5 +1,6 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
@@ -10,7 +11,6 @@ import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
 import 'package:NearMii/feature/setting/presentation/provider/edit_profile_provider.dart';
-import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,14 +78,15 @@ class CompleteEditProfile extends ConsumerWidget {
                     //login
                     CommonAppBtn(
                       onTap: () {
-                        // final isComplete =
-                        //     editProfileNotifier.validateEditProfile();
-                        // print(isComplete);
-                        // if (isComplete) {
-                        showCustomBottomSheet(
-                            context: context,
-                            content: updateSuccessWidget(context: context));
-                        // }
+                        final isUpdate =
+                            editProfileNotifier.validateEditProfile();
+                        print(isUpdate);
+                        if (isUpdate) {
+                          showCustomBottomSheet(
+                              context: context,
+                              content: updateSuccessWidget(context: context));
+                          // }
+                        }
                       },
                       title: AppString.update,
                       textSize: 16.sp,
@@ -188,7 +189,7 @@ class CompleteEditProfile extends ConsumerWidget {
 //FORMS FIELDS SECTION
   Widget formsFieldsSection(
       {required BuildContext context,
-      required SettingNotifier editProfileNotifier}) {
+      required SignupNotifiers editProfileNotifier}) {
     return Column(
       children: [
         //FULL NAME

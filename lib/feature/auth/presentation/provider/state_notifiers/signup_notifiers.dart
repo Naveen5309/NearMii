@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../../../../../config/validator.dart';
 import '../../../domain/usecases/get_auth.dart';
 import '../states/auth_states.dart';
 
@@ -26,6 +29,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final confirmPswdController = TextEditingController();
   final dobController = TextEditingController();
   final bioController = TextEditingController();
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  EditProfileModel? editProfileModel;
 
   final urlController = TextEditingController();
 
@@ -72,6 +79,20 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     timer?.cancel();
     enableResend = true;
     secondsRemaining = 30;
+  }
+
+  //VALIDATE Change Password
+  bool validateChangePassword() {
+    bool isValid = Validator().changePasswordValidation(
+        currentPassword: currentPasswordController.text.trim(),
+        newPassword: newPasswordController.text.trim(),
+        confirmPassword: confirmPasswordController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
   }
 
   //VALIDATE SIGN UP
@@ -307,6 +328,21 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     }
   }
 
+  //VALIDATE Edit Profile
+  bool validateEditProfile() {
+    bool isValid = Validator().completeEditProfileValidator(
+        fullName: fullNameController.text.trim(),
+        dob: dobController.text.trim(),
+        gender: genderController.text.trim(),
+        phoneNumber: phoneController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
 // RESET PASSWORD
   Future<void> resetPassword() async {
     state = const AuthApiLoading(authType: AuthType.resetPassword);
@@ -459,5 +495,87 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   clearResetPasswordFields() {
     pswdController.clear();
     confirmPswdController.clear();
+  }
+
+// RESET PASSWORD
+  Future<void> changePasswordApi() async {
+    state = const AuthApiLoading(authType: AuthType.changePassword);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.changePassword);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "current_password": currentPasswordController.text.trim(),
+        "new_password": newPasswordController.text.trim(),
+      };
+      final result = await authUseCase.changePassword(body: body);
+      state = result.fold((error) {
+        log("changePassword error:${error.message} ");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.changePassword);
+      }, (result) {
+        return const AuthApiSuccess(authType: AuthType.changePassword);
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.changePassword);
+    }
+  }
+
+//edit PROFILE API
+  Future<void> editProfileApi() async {
+    state = const AuthApiLoading(authType: AuthType.editProfile);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: AppString.noInternetConnection,
+            authType: AuthType.editProfile);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+
+      final Map<String, String> body = {
+        "name": fullNameController.text.trim(),
+        "email": emailController.text.trim(),
+        "social_id": ' socialIdController.text.trim()',
+        "social_type": 'socialTypeController.text.trim()',
+        "designation": designationController.text.trim(),
+        "phone_number": phoneController.text.trim(),
+        "bio": bioController.text.trim(),
+        "gender": genderController.text.trim(),
+        "dob": DateFormat("yyyy-MM-dd")
+            .format(DateFormat("MM/dd/yyyy").parse(dobController.text.trim())),
+      };
+
+      final result = await authUseCase.editProfile(
+          body: body, imagePath: image?.path ?? '');
+
+      state = result.fold((error) {
+        log("edit Profile error: ${error.message}");
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.editProfile);
+      }, (result) {
+        editProfileModel = result;
+
+        print(
+            editProfileModel); // editProfileModel की जगह userModel को प्रिंट किया
+        return const AuthApiSuccess(authType: AuthType.editProfile);
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.editProfile);
+    }
   }
 }

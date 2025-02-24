@@ -97,6 +97,7 @@ abstract final class AppString {
   static const String buyNow = "Buy Now";
 
   static const String fetchingLocation = "Fetching your location";
+  static const String fetchingData = "Fetching Data Successfully";
 
   static const String logoutSuccess = "You are Logged Out";
 

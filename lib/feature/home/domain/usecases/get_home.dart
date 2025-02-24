@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/home/data/models/home_data_model.dart';
+
 import '../../../../core/error/failure.dart';
 import '../../../../core/utils/dartz/either.dart';
 import '../../data/models/preferance_model.dart';
@@ -5,7 +7,7 @@ import '../../data/repositories/home_repo_implementation.dart';
 
 abstract class HomeUseCase {
   Future<Either<Failure, PreferencesModel?>> callGetPreference();
-  Future<Either<Failure, PreferencesModel?>> callGetHome();
+  Future<Either<Failure, List<HomeData>?>> callGetHome();
 }
 
 class HomeUseCaseImpl implements HomeUseCase {
@@ -20,7 +22,7 @@ class HomeUseCaseImpl implements HomeUseCase {
   }
 
   @override
-  Future<Either<Failure, PreferencesModel?>> callGetHome() async {
+  Future<Either<Failure, List<HomeData>?>> callGetHome() async {
     final result = await repository.getHome();
     return result.fold((l) => Left(l), (r) {
       return Right(r);

@@ -1,3 +1,8 @@
+import 'package:NearMii/feature/auth/data/data_source/auth_data_source.dart';
+import 'package:NearMii/feature/auth/data/repositories/auth_repo_implementation.dart';
+import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
+import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/setting/data/data_source/setting_data_source.dart';
 import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
 import 'package:NearMii/feature/setting/data/repossitories/setting_repo.dart';
@@ -6,24 +11,24 @@ import 'package:NearMii/feature/setting/presentation/provider/states/setting_sta
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a Provider for AuthDataSource
-final settingDataProvider =
-    Provider.autoDispose<SettingDataSource>((ref) => SettingDataSourceImpl());
+final authDataProvider =
+    Provider.autoDispose<AuthDataSource>((ref) => AuthDataSourceImpl());
 
 // Define a Provider for AuthRepository
-final settingRepoProvider = Provider.autoDispose<SettingRepository>((ref) {
-  final dataSource = ref.watch(settingDataProvider);
-  return SettingRepoImpl(dataSource: dataSource);
+final authRepoProvider = Provider.autoDispose<AuthRepository>((ref) {
+  final dataSource = ref.watch(authDataProvider);
+  return AuthRepoImpl(dataSource: dataSource);
 });
 
 // Define a Provider for AuthUseCase
-final settingUseCaseProvider = Provider.autoDispose<SettingUsecases>((ref) {
-  final repository = ref.watch(settingRepoProvider);
-  return SettingUseCaseImpl(repository: repository);
+final authUseCaseProvider = Provider.autoDispose<AuthUseCase>((ref) {
+  final repository = ref.watch(authRepoProvider);
+  return AuthUseCaseImpl(repository: repository);
 });
 
 // Define a StateNotifierProvider for SignupNotifier
 final editProfileProvider =
-    StateNotifierProvider.autoDispose<SettingNotifier, SettingStates>((ref) {
-  final settingUseCase = ref.watch(settingUseCaseProvider);
-  return SettingNotifier(settingUseCase: settingUseCase);
+    StateNotifierProvider.autoDispose<SignupNotifiers, AuthState>((ref) {
+  final authUseCase = ref.watch(authUseCaseProvider);
+  return SignupNotifiers(authUseCase: authUseCase);
 });

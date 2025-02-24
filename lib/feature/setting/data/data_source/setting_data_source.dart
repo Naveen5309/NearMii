@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:NearMii/feature/home/domain/profile_model.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
+
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
 import '../../../../core/response_wrapper/data_response.dart';
@@ -131,17 +134,20 @@ class SettingDataSourceImpl extends SettingDataSource {
   }
 
   @override
-  Future<ResponseWrapper<dynamic>?> getProfile(
+  Future<ResponseWrapper<UserProfileModel>?> getProfile(
       {required Map<String, dynamic> body}) async {
     try {
-      final dataResponse = await Getters.getHttpService.request<dynamic>(
-          body: body,
-          url: '',
-          //  ApiConstants.getProfile,
-          fromJson: (json) {
-            log("json in data source :-> $json");
-            return json["data"];
-          });
+      final dataResponse =
+          await Getters.getHttpService.request<UserProfileModel>(
+              requestType: RequestType.get,
+              url: ApiConstants.getSelfProfile,
+              fromJson: (json) {
+                log("json in data source :-> $json");
+                if (json is Map<String, dynamic>) {
+                  return UserProfileModel.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              });
       print("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");

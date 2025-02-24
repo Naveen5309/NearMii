@@ -1,9 +1,12 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/presentation/provider/change_password_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +17,26 @@ class ChangePasswordView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(changePasswordProvider);
+    // final signUpNotifiers = ref.watch(signupProvider.notifier);
+
     final changePasswordNotifier = ref.watch(changePasswordProvider.notifier);
+    ref.listen(changePasswordProvider, (previous, next) async {
+      if (next is AuthApiLoading) {
+        print("other user loading is called");
+        Utils.showLoader();
+      } else if (next is AuthApiSuccess) {
+        Utils.hideLoader();
+
+        // toNamed(context, Routes.bottomNavBar);
+      } else if (next is AuthApiFailed) {
+        if (context.mounted) {
+          Utils.hideLoader();
+        }
+
+        toast(msg: next.error);
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
@@ -71,11 +93,19 @@ class ChangePasswordView extends ConsumerWidget {
             ),
             CommonAppBtn(
               onTap: () {
-                // final isNewPassword =
-                //     changePasswordNotifier.validateChangePassword();
-                // print(isNewPassword);
-                // if (isNewPassword) {
-                back(context);
+                final isForget =
+                    changePasswordNotifier.validateChangePassword();
+                print(isForget);
+                if (isForget) {
+                  changePasswordNotifier.changePasswordApi();
+                  // toNamed(context, Routes.otpVerify);
+
+                  // final isNewPassword =
+                  //     changePasswordNotifier.validateChangePassword();
+                  // print(isNewPassword);
+                  // if (isNewPassword) {
+                  back(context);
+                }
                 // }
               },
               title: AppString.update,

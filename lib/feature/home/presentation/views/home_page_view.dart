@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -5,7 +6,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
-import 'package:NearMii/feature/common_widgets/exit_app_confirmation.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
@@ -32,6 +33,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       //   builder: (context) => const VIPMembershipDialog(),
       // );
       var notifier = ref.watch(homeProvider.notifier);
+      final homeDataNotifier = ref.read(homeProvider.notifier);
+      homeDataNotifier.getHomeDataApi();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -86,115 +89,141 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
               next.locationType == LocationType.error) {
             back(context);
           }
+
+          if (next is HomeApiLoading) {
+            print("other user loading is called");
+            Utils.showLoader();
+          } else if (next is HomeApiSuccess) {
+            Utils.hideLoader();
+
+            // toNamed(context, Routes.bottomNavBar);
+          } else if (next is HomeApiFailed) {
+            if (context.mounted) {
+              Utils.hideLoader();
+            }
+
+            toast(msg: next.error);
+          }
         },
       );
 
       return Scaffold(
-        body: Column(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(Assets.icHomePngBg),
-                ),
-              ),
+          body:
+              //  Consumer(builder: (context, ref, child) {
+              //   var homeState = ref.watch(homeProvider);
+              //   var notifier = ref.watch(homeProvider.notifier);
 
-              height: context.height * 0.29,
-              // color: Colors.green,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.width * 0.05,
-                    vertical: context.height * 0.01),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: totalHeight -
-                          MediaQuery.of(navigatorKey.currentState!.context)
-                              .padding
-                              .top,
-                    ),
-                    15.verticalSpace,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //WELCOME BACK TEXT
-                            AppText(
-                              text: AppString.welcomeBack,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.primary.withOpacity(.8),
-                            ),
-                            5.verticalSpace,
-                            //NAME
-
-                            AppText(
-                              text: "Brooklyn Simmons",
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.primary,
-                            ),
-                          ],
-                        ),
-                        Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: AppColor.primary.withOpacity(.16),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const CustomCacheNetworkImage(
-                                height: 45,
-                                width: 45,
-                                img: "https://picsum.photos/250?image=9",
-                                imageRadius: 40)),
-                      ],
-                    ),
-                    SizedBox(
-                      height: context.height * .04,
-                    ),
-                    LocationCard(
-                      location: notifier.addressName,
-                      address: notifier.location,
-                    ),
-                  ],
-                ),
+              //   if (homeState is HomeApiLoading) {
+              //     return const Center(
+              //       child: Utils.showLoader(),
+              //     );
+              //   }
+              Column(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(Assets.icHomePngBg),
               ),
             ),
-            ref.watch(isMapView)
-                ? Image.asset(
-                    Assets.map,
-                    height: context.height * .62,
-                    width: context.width,
-                    fit: BoxFit.cover,
-                  )
-                : SizedBox(
-                    height: context.height * .69,
-                    child: ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: 15,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return CustomProfileCard(
-                          profileImage:
-                              'https://picsum.photos/250?image=9', // Replace with actual image
-                          name: "Robert Fox",
-                          designation: "Senior Developer",
-                          distance: "50 meters away",
-                          onUnlockTap: () {
-                            print("Unlock Now Clicked!");
-                          },
-                        );
-                      },
-                    ),
+
+            height: context.height * 0.29,
+            // color: Colors.green,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.width * 0.05,
+                  vertical: context.height * 0.01),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: totalHeight -
+                        MediaQuery.of(navigatorKey.currentState!.context)
+                            .padding
+                            .top,
                   ),
-            // Image.asset(Assets.map)
-          ],
-        ),
-      );
+                  15.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //WELCOME BACK TEXT
+                          AppText(
+                            text: AppString.welcomeBack,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.primary.withOpacity(.8),
+                          ),
+                          5.verticalSpace,
+                          //NAME
+
+                          AppText(
+                            text: "Brooklyn Simmons",
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.primary,
+                          ),
+                        ],
+                      ),
+                      Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColor.primary.withOpacity(.16),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const CustomCacheNetworkImage(
+                              height: 45,
+                              width: 45,
+                              img: "https://picsum.photos/250?image=9",
+                              imageRadius: 40)),
+                    ],
+                  ),
+                  SizedBox(
+                    height: context.height * .04,
+                  ),
+                  LocationCard(
+                    location: notifier.addressName,
+                    address: notifier.location,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ref.watch(isMapView)
+              ? Image.asset(
+                  Assets.map,
+                  height: context.height * .62,
+                  width: context.width,
+                  fit: BoxFit.cover,
+                )
+              : SizedBox(
+                  height: context.height * .69,
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: notifier.homeUserDataList.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var data = notifier.homeUserDataList[index];
+
+                      return CustomProfileCard(
+                        profileImage: data.profilePhoto ??
+                            'https://picsum.photos/250?image=9', // Replace with actual image
+                        name: data.name ?? "Name",
+                        designation: data.designation ?? "designation",
+                        distance: "50 meters away",
+                        onUnlockTap: () {
+                          // print("Unlock Now Clicked!");
+                        },
+                      );
+                    },
+                  ),
+                ),
+          // Image.asset(Assets.map)
+        ],
+      ));
     });
   }
 }

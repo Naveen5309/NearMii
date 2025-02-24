@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/home/data/models/home_data_model.dart';
+
 import '../../../../core/error/failure.dart';
 import '../../../../core/utils/dartz/either.dart';
 import '../data_source/home_data_source.dart';
@@ -5,7 +7,7 @@ import '../models/preferance_model.dart';
 
 abstract class HomeRepository {
   Future<Either<Failure, PreferencesModel?>> getPreference();
-  Future<Either<Failure, PreferencesModel?>> getHome();
+  Future<Either<Failure, List<HomeData>?>> getHome();
 }
 
 class HomeRepoImpl implements HomeRepository {
@@ -17,7 +19,7 @@ class HomeRepoImpl implements HomeRepository {
   Future<Either<Failure, PreferencesModel?>> getPreference() async {
     try {
       final data = await dataSource.getPreferences();
-      if (data?.status == true) {
+      if (data?.status == "success") {
         return Right(data?.data);
       } else {
         return Left(ServerFailure(message: data?.message ?? ""));
@@ -28,10 +30,10 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, PreferencesModel?>> getHome() async {
+  Future<Either<Failure, List<HomeData>?>> getHome() async {
     try {
       final data = await dataSource.getHomeData();
-      if (data?.status == true) {
+      if (data?.status == "success") {
         return Right(data?.data);
       } else {
         return Left(ServerFailure(message: data?.message ?? ""));

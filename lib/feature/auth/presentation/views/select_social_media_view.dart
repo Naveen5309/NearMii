@@ -12,6 +12,7 @@ import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,6 +76,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
         child: CommonAppBtn(
           onTap: () {
             offAllNamed(context, Routes.bottomNavBar);
+            toast(msg: AppString.signupSuccess, isError: false);
           },
           title: AppString.next,
           textSize: 16.sp,
@@ -101,6 +103,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                         InkWell(
                           onTap: () {
                             offAllNamed(context, Routes.bottomNavBar);
+                            toast(msg: AppString.signupSuccess, isError: false);
                           },
                           child: AppText(
                             text: widget.isFromProfile ? " " : AppString.skip,
