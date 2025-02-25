@@ -6,7 +6,6 @@ import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
-import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/data/domain/other_user_profile_usecases.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
@@ -144,7 +143,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
         "something_else": somethingElse,
       };
 
-      log("body is :->${body}");
+      log("body is :->$body");
       final result = await otherUserProfileUsecases.callReport(
         body: body,
       );
@@ -166,7 +165,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
     if (state is OtherUserProfileApiSuccess) {
       final currentState = state as OtherUserProfileApiSuccess;
 
-      if (index < 0 || index >= (currentState.reasons?.length ?? 0)) return;
+      if (index < 0 || index >= (currentState.reasons.length ?? 0)) return;
 
       final updatedReasons =
           List<CustomReportTile>.from(currentState.reasons ?? []);

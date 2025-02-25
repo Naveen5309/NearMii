@@ -1,6 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
 
+import 'package:NearMii/config/countries.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
@@ -33,6 +33,10 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   final designationController = TextEditingController();
 
   final genderController = TextEditingController();
+
+  String countryCode = '+1';
+  String countryFlag = '🇺🇸';
+
   // List<UserProfileModel> getProfileDataList = [];
   UserProfileModel? userProfileModel;
 
@@ -70,6 +74,23 @@ class SettingNotifier extends StateNotifier<SettingStates> {
     }
   }
 
+//GET FLAG WITH CONUNTRY CODE
+  String? getFlagByDialCode(String dialCode) {
+    final country = allCountries.firstWhere(
+      (c) => c.dialCode == dialCode,
+      orElse: () => const Country(
+        name: "",
+        flag: "",
+        code: "",
+        dialCode: "",
+        minLength: 0,
+        maxLength: 0,
+      ),
+    );
+
+    return country.flag!.isNotEmpty ? country.flag : null;
+  }
+
   //Contact US
   Future<void> contactUSApi() async {
     state = const SettingApiLoading(settingType: Setting.contactUs);
@@ -90,12 +111,10 @@ class SettingNotifier extends StateNotifier<SettingStates> {
         "email": emailController.text.trim(),
         "subject": subjectController.text.trim(),
         "message": messageController.text.trim(),
-        "device_type": Platform.isAndroid ? "android" : "ios",
-        "device_token": "No Token",
       };
       final result = await settingUseCase.callContactUs(body: body);
       state = result.fold((error) {
-        log("login error:${error.message} ");
+        log("contact api error:${error.message} ");
         return SettingApiFailed(
             error: error.message, settingType: Setting.contactUs);
       }, (result) {
@@ -194,7 +213,13 @@ class SettingNotifier extends StateNotifier<SettingStates> {
             error: error.message, settingType: Setting.getProfile);
       }, (result) {
         userProfileModel = result;
-        print("result=>>${result}");
+
+        if (userProfileModel?.phoneNumber != null) {
+          countryCode =
+              userProfileModel?.phoneNumber.toString().split(' ').first ?? "+1";
+          countryFlag = getFlagByDialCode(countryCode) ?? '🇺🇸';
+        }
+
         return const SettingApiSuccess(settingType: Setting.getProfile);
       });
     } catch (e) {

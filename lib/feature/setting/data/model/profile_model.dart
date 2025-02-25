@@ -1,25 +1,33 @@
 class UserProfileModel {
-  int? id;
-  String? name;
-  String? email;
-  dynamic emailVerifiedAt;
-  dynamic socialId;
-  dynamic socialType;
-  dynamic designation;
-  dynamic phoneNumber;
-  dynamic profilePhoto;
-  dynamic bio;
-  dynamic gender;
-  dynamic dob;
-  dynamic otp;
-  int? isProfile;
-  String? token;
-  int? points;
-  dynamic deviceType;
-  dynamic deviceToken;
-  String? status;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  final int? id;
+  final dynamic name;
+  final String? email;
+  final dynamic emailVerifiedAt;
+  final dynamic socialId;
+  final dynamic socialType;
+  final dynamic designation;
+  final dynamic phoneNumber;
+  final dynamic profilePhoto;
+  final dynamic bio;
+  final dynamic gender;
+  final dynamic dob;
+  final dynamic otp;
+  final int? isProfile;
+  final String? token;
+  final int? points;
+  final dynamic deviceType;
+  final dynamic deviceToken;
+  final String? lat;
+  final String? long;
+  final String? location;
+  final String? radius;
+  final String? status;
+  final int? isSubscription;
+  final String? subscriptionPlan;
+  final String? paymentToken;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? price;
 
   UserProfileModel({
     this.id,
@@ -40,64 +48,85 @@ class UserProfileModel {
     this.points,
     this.deviceType,
     this.deviceToken,
+    this.lat,
+    this.long,
+    this.location,
+    this.radius,
     this.status,
-    this.createdAt,
-    this.updatedAt,
+    this.isSubscription,
+    this.subscriptionPlan,
+    this.paymentToken,
+    this.startDate,
+    this.endDate,
+    this.price,
   });
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
     return UserProfileModel(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      emailVerifiedAt: json['email_verified_at'],
-      socialId: json['social_id'],
-      socialType: json['social_type'],
-      designation: json['designation'],
-      phoneNumber: json['phone_number'],
-      profilePhoto: json['profile_photo'],
-      bio: json['bio'],
-      gender: json['gender'],
-      dob: json['dob'],
-      otp: json['otp'],
-      isProfile: json['is_profile'],
-      token: json['token'],
-      points: json['points'],
-      deviceType: json['device_type'],
-      deviceToken: json['device_token'],
-      status: json['status'],
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : null,
+      id: json["id"],
+      name: json["name"],
+      email: json["email"],
+      emailVerifiedAt: json["email_verified_at"],
+      socialId: json["social_id"],
+      socialType: json["social_type"],
+      designation: json["designation"],
+      phoneNumber: json["phone_number"],
+      profilePhoto: json["profile_photo"],
+      bio: json["bio"],
+      gender: json["gender"],
+      dob: json["dob"],
+      otp: json["otp"],
+      isProfile: json["is_profile"],
+      token: json["token"],
+      points: json["points"],
+      deviceType: json["device_type"],
+      deviceToken: json["device_token"],
+      lat: json["lat"],
+      long: json["long"],
+      location: json["location"],
+      radius: json["radius"],
+      status: json["status"],
+      isSubscription: json["isSubscription"],
+      subscriptionPlan: json["subscriptionPlan"],
+      paymentToken: json["paymentToken"],
+      startDate:
+          json["startDate"] == null ? null : DateTime.parse(json["startDate"]),
+      endDate: json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
+      price: json["price"],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'email_verified_at': emailVerifiedAt,
-      'social_id': socialId,
-      'social_type': socialType,
-      'designation': designation,
-      'phone_number': phoneNumber,
-      'profile_photo': profilePhoto,
-      'bio': bio,
-      'gender': gender,
-      'dob': dob,
-      'otp': otp,
-      'is_profile': isProfile,
-      'token': token,
-      'points': points,
-      'device_type': deviceType,
-      'device_token': deviceToken,
-      'status': status,
-      'created_at': createdAt?.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
+      "id": id,
+      "name": name,
+      "email": email,
+      "email_verified_at": emailVerifiedAt,
+      "social_id": socialId,
+      "social_type": socialType,
+      "designation": designation,
+      "phone_number": phoneNumber,
+      "profile_photo": profilePhoto,
+      "bio": bio,
+      "gender": gender,
+      "dob": dob,
+      "otp": otp,
+      "is_profile": isProfile,
+      "token": token,
+      "points": points,
+      "device_type": deviceType,
+      "device_token": deviceToken,
+      "lat": lat,
+      "long": long,
+      "location": location,
+      "radius": radius,
+      "status": status,
+      "isSubscription": isSubscription,
+      "subscriptionPlan": subscriptionPlan,
+      "paymentToken": paymentToken,
+      "startDate": startDate?.toIso8601String(),
+      "endDate": endDate?.toIso8601String(),
+      "price": price,
     };
   }
 }

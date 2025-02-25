@@ -70,6 +70,8 @@ abstract final class AppString {
   static const String next = "Next";
   static const String loginSuccess = "You are logged in successfully";
 
+  static const String formSubmittedSuccess = "Form submitted successfully";
+
   static const String completeYourProfile = "Please Complete your profile";
 
   static const String resetPswdSuccessfully = "Password reset successfully";
@@ -95,19 +97,16 @@ abstract final class AppString {
   static const String somethingElse = "Something else";
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
-
   static const String fetchingLocation = "Fetching your location";
   static const String fetchingData = "Fetching Data Successfully";
-
   static const String logoutSuccess = "You are Logged Out";
-
   static const String editProfile = "Edit Profile Details";
   static const String inviteFriends = "Invite Friends";
   static const String termsAndConditions = "Terms & Conditions";
   static const String contactUs = "Contact Us";
   static const String howItWorks = "How it works";
   static const String updateProfile = "Update your profile info";
-  static const String get15points = "Get 15 Points";
+  static const String get15points = "Get 5 Points";
   static const String viewOurPolicies = "View our Policies  ";
   static const String resetYourPswd = "Reset your password";
   static const String reachOutToSupport = "Reach out to our support team";
@@ -149,7 +148,7 @@ abstract final class AppString {
   static const String invalidOtp = "Invalid Otp Please check Your Opt";
   static const String saveText = "Save";
   static const String subscription = "Subscription ";
-  static const String pricePerMonth = "\$120.00/mo";
+  static const String pricePerMonth = "\$19/mo";
   static const String settings = "Settings";
   static const String logout = "Logout";
   static const String changePassword = "Change Password";
@@ -183,8 +182,17 @@ abstract final class AppString {
   static const String signupSuccess = "Signup Success";
   static const String chooseImage = "Choose image source";
   static const String camera = "Camera";
+  static const String radiusUpdateSuccess = "Radius update successfully";
+
   static const String gallery = "Gallery";
   static const String accountDeleted = "Account deleted";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
+  //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

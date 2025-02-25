@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -35,7 +37,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       var notifier = ref.watch(homeProvider.notifier);
       final homeDataNotifier = ref.read(homeProvider.notifier);
       homeDataNotifier.getHomeDataApi();
-      homeDataNotifier.updateCoordinates();
+      homeDataNotifier.updateCoordinates(radius: "");
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -50,11 +52,10 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       ref.watch(homeProvider);
       var notifier = ref.watch(homeProvider.notifier);
 
-      // final getPreference = ref.watch(getPreferenceProvider);
-
       ref.listen(
         homeProvider,
         (previous, next) {
+          log("next is :-> $next");
           if (next is UpdateLocation &&
               next.locationType == LocationType.loading) {
             showDialog(
@@ -92,6 +93,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
           }
 
           if (next is HomeApiLoading && next.homeType == HomeType.home) {
+            log("home loader called");
             Utils.showLoader();
           } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
             Utils.hideLoader();
@@ -108,17 +110,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       );
 
       return Scaffold(
-          body:
-              //  Consumer(builder: (context, ref, child) {
-              //   var homeState = ref.watch(homeProvider);
-              //   var notifier = ref.watch(homeProvider.notifier);
-
-              //   if (homeState is HomeApiLoading) {
-              //     return const Center(
-              //       child: Utils.showLoader(),
-              //     );
-              //   }
-              Column(
+          body: Column(
         children: [
           Container(
             decoration: const BoxDecoration(

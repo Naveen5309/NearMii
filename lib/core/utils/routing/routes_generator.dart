@@ -8,7 +8,7 @@ import 'package:NearMii/feature/home/presentation/history/presentation/complete_
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
 import 'package:NearMii/feature/setting/presentation/view/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
-import 'package:NearMii/feature/home/presentation/history/presentation/radius.dart';
+import 'package:NearMii/feature/home/presentation/history/presentation/radius_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
 import 'package:NearMii/feature/home/presentation/views/bottom_navigation_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/reset_password_view.dart';

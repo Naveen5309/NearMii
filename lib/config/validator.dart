@@ -253,6 +253,9 @@ class Validator {
     } else if (email.isEmpty) {
       error = AppString.pleaseEnterEmail;
       return false;
+    } else if (!Utils.emailValidation(email)) {
+      error = AppString.pleaseEnterValidEmailAddress;
+      return false;
     } else if (subject.isEmpty) {
       error = AppString.pleaseEnterSubject;
       return false;

@@ -1,34 +1,63 @@
+import 'dart:developer';
+
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/custum_thumb.dart';
+import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
+import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class RadiusScreen extends StatefulWidget {
+class RadiusScreen extends ConsumerStatefulWidget {
   const RadiusScreen({super.key});
 
   @override
   _RadiusScreenState createState() => _RadiusScreenState();
 }
 
-class _RadiusScreenState extends State<RadiusScreen> {
-  double _currentRadius = 50.0;
+class _RadiusScreenState extends ConsumerState<RadiusScreen> {
+  double _currentRadius = 32.0;
   final List<double> _customIntervals = [0, 50, 80, 100];
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(homeProvider);
+    var notifier = ref.watch(homeProvider.notifier);
+
+    ref.listen(
+      homeProvider,
+      (previous, next) {
+        if (next is HomeApiLoading && next.homeType == HomeType.coordinates) {
+          log("home loader called");
+          Utils.showLoader();
+        } else if (next is HomeApiSuccess &&
+            next.homeType == HomeType.coordinates) {
+          toast(msg: AppString.radiusUpdateSuccess, isError: false);
+
+          Utils.hideLoader();
+          back(context);
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is HomeApiFailed &&
+            next.homeType == HomeType.coordinates) {
+          if (context.mounted) {
+            Utils.hideLoader();
+          }
+
+          toast(msg: next.error);
+        }
+      },
+    );
+
     return Scaffold(
-      // appBar: CustomAppbarWidget(
-      //   toolbarHeight: 30,
-      //   leadingWidth: 50,
-      //   title: AppString.radius,
-      //   centerTitle: true,
-      //   // leading: Icon(Icons.arrow_back_outlined),
-      // ),
       body: Column(
         children: [
           const CustomAppbarWidget(
@@ -56,7 +85,7 @@ class _RadiusScreenState extends State<RadiusScreen> {
                     ),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.green,
+                      color: AppColor.appThemeColor,
                       width: 2,
                     ),
                   ),
@@ -103,30 +132,6 @@ class _RadiusScreenState extends State<RadiusScreen> {
                 ),
               ],
             ),
-            // child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       AppText(
-            //         text: '0 m',
-            //         textSize: 12.sp,
-            //         color: _currentRadius == 0
-            //             ? AppColor.green00C565
-            //             : AppColor.black000000,
-            //       ),
-            //       ...List.generate(
-            //         5,
-            //         (index) {
-            //           int value = ((index + 1) * 20);
-            //           return AppText(
-            //             text: '$value m',
-            //             textSize: 12.sp,
-            //             color: (_currentRadius - value).abs() < 10
-            //                 ? AppColor.green00C565
-            //                 : AppColor.black000000,
-            //           );
-            //         },
-            //       ),
-            //     ]),
           ),
 
           // Syncfusion Slider
@@ -162,7 +167,9 @@ class _RadiusScreenState extends State<RadiusScreen> {
           CommonAppBtn(
             title: AppString.saveText,
             width: context.width * 0.9,
-            onTap: () => back(context),
+            onTap: () {
+              notifier.updateCoordinates(radius: _currentRadius.toString());
+            },
             borderRadius: 50,
             backGroundColor: AppColor.green00C56524,
           ),

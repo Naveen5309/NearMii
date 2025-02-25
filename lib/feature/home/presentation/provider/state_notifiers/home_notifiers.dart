@@ -106,7 +106,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   //UPDATE COORDINATES
-  Future<void> updateCoordinates() async {
+  Future<void> updateCoordinates({required String radius}) async {
     log("update coordinates called");
     state = const HomeApiLoading(homeType: HomeType.coordinates);
     try {
@@ -125,6 +125,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       Map<String, dynamic> body = {
         "lat": lat,
         "long": long,
+        if (radius.isNotEmpty) "radius": radius
       };
       final result = await homeUseCase.updateCoordinates(
         body: body,

@@ -399,7 +399,6 @@ Widget profileWidget({
   required String name,
   required int points,
   required bool isVip,
-  required SubscriptionModel model,
 }) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -435,7 +434,7 @@ Widget profileWidget({
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: AppText(
-          text: "${model.Points} Points",
+          text: "$points Points",
           color: const Color(0xff01C27D),
           fontSize: 15.sp,
           fontWeight: FontWeight.w500,

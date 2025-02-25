@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -20,7 +18,6 @@ import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
-import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:flutter/material.dart';
@@ -48,14 +45,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
   Widget build(BuildContext context) {
     var notifier = ref.read(getProfileProvider.notifier);
     ref.watch(getProfileProvider);
-    // final profileNotifier = ref.read(getProfileProvider.notifier);
-    // profileNotifier.getProfileApi();
-    ref.watch(loginProvider);
-    // final loginNotifier = ref.watch(loginProvider.notifier);
-    // UserProfileModel? profile;
-    // var data = notifier.getProfileDataList[];
 
-    // var data = notifier.getProfileDataList;
+    ref.watch(loginProvider);
+
     ref.listen(loginProvider, (previous, next) async {
       if (next is AuthApiLoading && next.authType == AuthType.logOut) {
         Utils.showLoader();
@@ -109,17 +101,17 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
                   child: Column(
                     children: [
-                      ProfileWidget(
+                      profileWidget(
                         imageUrl: notifier.userProfileModel?.profilePhoto ?? '',
                         name: notifier.userProfileModel?.name ?? '',
                         //  profile!.name ?? "",
-                        points: 124,
-                        isVip: true,
-                        model: SubscriptionModel(Points: 221, daysLeft: 11),
+                        points: notifier.userProfileModel?.points ?? 0,
+                        isVip: notifier.userProfileModel?.isSubscription == 1,
                       ),
                       28.verticalSpace,
                       dottedContainer(
-                          context, SubscriptionModel(Points: 0, daysLeft: 27)),
+                        context,
+                      ),
                       35.verticalSpace,
 
                       //SETTING TEXT
@@ -152,13 +144,16 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         trailingIcon: Assets.iconArrowRight,
                         onTap: () => showCustomBottomSheet(
                             context: context,
-                            content: const InviteFriendBottomSheet(
+                            content: InviteFriendBottomSheet(
+                              text: notifier.userProfileModel?.token ?? '',
                               title: AppString.inviteFriend,
                               subtitle:
                                   "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
                             )),
                       ),
                       10.verticalSpace,
+
+                      //SET RADIUS
                       CustomTile(
                         leadingIcon: Assets.iconSetRadius,
                         title: AppString.setRadius,
@@ -167,6 +162,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         onTap: () => toNamed(context, Routes.setRadius),
                       ),
                       10.verticalSpace,
+
                       CustomTile(
                         leadingIcon: Assets.iconCheckBox,
                         title: AppString.termsAndConditions,
@@ -176,14 +172,24 @@ class _SettingViewState extends ConsumerState<SettingView> {
                             toNamed(context, Routes.termsAndConditions),
                       ),
                       10.verticalSpace,
-                      CustomTile(
-                        leadingIcon: Assets.iconChangePassword,
-                        title: AppString.changePassword,
-                        subtitle: AppString.resetYourPswd,
-                        trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.changePassword),
-                      ),
-                      10.verticalSpace,
+
+                      //CHANGE PASSWORD
+
+                      notifier.userProfileModel?.socialId == null
+                          ? CustomTile(
+                              leadingIcon: Assets.iconChangePassword,
+                              title: AppString.changePassword,
+                              subtitle: AppString.resetYourPswd,
+                              trailingIcon: Assets.iconArrowRight,
+                              onTap: () =>
+                                  toNamed(context, Routes.changePassword),
+                            )
+                          : const SizedBox(),
+                      notifier.userProfileModel?.socialId == null
+                          ? 10.verticalSpace
+                          : const SizedBox.shrink(),
+
+                      //CONTACT US
                       CustomTile(
                         leadingIcon: Assets.iconContactUs,
                         title: AppString.contactUs,
@@ -250,12 +256,11 @@ class _SettingViewState extends ConsumerState<SettingView> {
     );
   }
 
-  Widget ProfileWidget({
+  Widget profileWidget({
     required String imageUrl,
     required String name,
     required int points,
     required bool isVip,
-    required SubscriptionModel model,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -295,7 +300,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: AppText(
-            text: "${model.Points} Points",
+            text: "$points Points",
             color: const Color(0xff01C27D),
             fontFamily: Constants.fontFamily,
             fontSize: 15.sp,
@@ -306,7 +311,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
     );
   }
 
-  Widget dottedContainer(BuildContext context, SubscriptionModel model) {
+  Widget dottedContainer(
+    BuildContext context,
+  ) {
     return CommonDottedBorder(
       borderRadius: 20,
       child: Container(
@@ -346,7 +353,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
             const Spacer(),
             AppText(
               fontFamily: Constants.fontFamily,
-              text: "${model.daysLeft} days left",
+              text: "25 days left",
               color: const Color(0xff00C565),
               fontSize: 12.sp,
             ),

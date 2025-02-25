@@ -2,7 +2,6 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
-import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,11 +11,15 @@ import 'package:share_plus/share_plus.dart';
 class InviteFriendBottomSheet extends StatelessWidget {
   final String title;
   final String subtitle;
-  final String text = '';
-  final String link = '';
+  final String text;
+  // final String link;
 
-  const InviteFriendBottomSheet(
-      {super.key, required this.title, required this.subtitle});
+  const InviteFriendBottomSheet({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,7 @@ class InviteFriendBottomSheet extends StatelessWidget {
                 color: AppColor.black000000.withOpacity(.6)),
           ),
           const SizedBox(height: 20),
-          customTextField(),
+          customTextField(text: text),
           // CustomTextFieldWidget(
           //   enableBorder: const OutlineInputBorder(
           //     borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -60,9 +63,7 @@ class InviteFriendBottomSheet extends StatelessWidget {
           CommonAppBtn(
             backGroundColor: AppColor.appThemeColor,
             onTap: () {
-              _onShare(
-                context,
-              );
+              _onShare(context: context, text: text);
             },
             title: AppString.copyReferralCode,
             textSize: 16.sp,
@@ -74,7 +75,7 @@ class InviteFriendBottomSheet extends StatelessWidget {
   }
 }
 
-Widget customTextField() {
+Widget customTextField({required String text}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
     decoration: BoxDecoration(
@@ -86,10 +87,11 @@ Widget customTextField() {
       children: [
         SvgPicture.asset(Assets.shareIcon),
         const SizedBox(width: 8),
-        const Expanded(
+        Expanded(
           child: TextField(
+            controller: TextEditingController(text: text),
             readOnly: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
               hintStyle: TextStyle(color: AppColor.black000000),
             ),
@@ -97,8 +99,8 @@ Widget customTextField() {
         ),
         GestureDetector(
           onTap: () {
-            Clipboard.setData(const ClipboardData(text: "fff"));
-            toast(msg: "Text Copied to clipboard", isError: false);
+            Clipboard.setData(ClipboardData(text: text));
+            // toast(msg: "Text Copied to clipboard", isError: false);
           },
           child: SvgPicture.asset(Assets.copy),
         )
@@ -107,9 +109,9 @@ Widget customTextField() {
   );
 }
 
-void _onShare(BuildContext context) async {
+void _onShare({required BuildContext context, required String text}) async {
   final box = context.findRenderObject() as RenderBox?;
-  await Share.share("text",
-      subject: "link",
+  await Share.share(text,
+      subject: text,
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
 }

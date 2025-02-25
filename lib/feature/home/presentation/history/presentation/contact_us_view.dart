@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -21,13 +22,18 @@ class ContactUsView extends ConsumerWidget {
     final contactUsNotifier = ref.watch(contactUsProvider.notifier);
     ref.listen(contactUsProvider, (previous, next) {
       if (next is SettingApiLoading && next.settingType == Setting.contactUs) {
+        Utils.showLoader();
       } else if (next is SettingApiSuccess &&
           next.settingType == Setting.contactUs) {
-        toast(msg: AppString.loginSuccess, isError: false);
+        toast(msg: AppString.formSubmittedSuccess, isError: false);
+        Utils.hideLoader();
+
         back(context);
         // toNamed(context, Routes.bottomNavBar);
-      } else if (next is SettingApiFailed && next.error == Setting.contactUs) {
-        back(context);
+      } else if (next is SettingApiFailed &&
+          next.settingType == Setting.contactUs) {
+        Utils.hideLoader();
+
         toast(msg: next.error);
       }
     });
@@ -81,7 +87,7 @@ class ContactUsView extends ConsumerWidget {
                 CommonAppBtn(
                   onTap: () {
                     final isContactUs = contactUsNotifier.validateContactUs();
-                    print(isContactUs);
+
                     if (isContactUs) {
                       contactUsNotifier.contactUSApi();
                     }
