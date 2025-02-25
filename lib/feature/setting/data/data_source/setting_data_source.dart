@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 
@@ -150,7 +151,10 @@ class SettingDataSourceImpl extends SettingDataSource {
               });
       print("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
-        log("user data is:-> ${dataResponse.data}");
+        UserProfileModel model = dataResponse.data!;
+
+        log("user data is:-> ${model.toJson()}");
+        await Getters.getLocalStorage.saveGetUserProfile(model);
 
         return getSuccessResponseWrapper(dataResponse);
       } else {

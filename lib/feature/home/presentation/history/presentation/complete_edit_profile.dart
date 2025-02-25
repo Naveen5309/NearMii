@@ -1,6 +1,9 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
@@ -10,6 +13,7 @@ import 'package:NearMii/feature/common_widgets/custom_dropdown_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_textform_feild.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/presentation/provider/edit_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +26,28 @@ class CompleteEditProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editProfileNotifier = ref.watch(editProfileProvider.notifier);
+    editProfileNotifier.setDatainFields();
+    ref.listen(
+      editProfileProvider,
+      (previous, next) {
+        if (next is AuthApiLoading && next.authType == AuthType.editProfile) {
+          Utils.showLoader();
+        } else if (next is AuthApiSuccess &&
+            next.authType == AuthType.editProfile) {
+          Utils.hideLoader();
 
+          toast(msg: AppString.profileUpdateSuccess, isError: false);
+          // toNamed(context, Routes.otpVerify);
+          showCustomBottomSheet(
+              context: context, content: updateSuccessWidget(context: context));
+        } else if (next is AuthApiFailed &&
+            next.authType == AuthType.editProfile) {
+          Utils.hideLoader();
+
+          toast(msg: next.error);
+        }
+      },
+    );
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -64,7 +89,8 @@ class CompleteEditProfile extends ConsumerWidget {
 
                     Padding(
                       padding: EdgeInsets.only(top: context.height * .02),
-                      child: profileSection(),
+                      child: profileSection(
+                          editProfileNotifier: editProfileNotifier),
                     ),
 
                     //Field forms
@@ -82,9 +108,8 @@ class CompleteEditProfile extends ConsumerWidget {
                             editProfileNotifier.validateEditProfile();
                         print(isUpdate);
                         if (isUpdate) {
-                          showCustomBottomSheet(
-                              context: context,
-                              content: updateSuccessWidget(context: context));
+                          editProfileNotifier.editProfileApi();
+
                           // }
                         }
                       },
@@ -150,7 +175,7 @@ class CompleteEditProfile extends ConsumerWidget {
 
   //PROFILE SECTION
 
-  Widget profileSection() {
+  Widget profileSection({required SignupNotifiers editProfileNotifier}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -165,7 +190,8 @@ class CompleteEditProfile extends ConsumerWidget {
                 ),
                 padding: const EdgeInsets.all(5),
                 child: const CustomCacheNetworkImage(
-                  img: '', imageRadius: 120, height: 100, width: 100,
+                  img: '',
+                  imageRadius: 120, height: 100, width: 100,
                   // CircleAvatar(
                   //   radius: 30.r,
                   //   backgroundImage: NetworkImage(imageUrl),

@@ -166,6 +166,8 @@ abstract final class AppString {
   static const String inviteFriend = "Invite Friend & Earn Points";
   static const String bio = "Bio";
   static const String profileUpdateSuccess = "Profile Updated Successfully ";
+  static const String updatePasswordSuccess = " Update Password Successfully ";
+
   //  static const String localDirectory="Lorem ipsum dolor sit amet consectetur. Semper vel interdum et posuere venenatis.";
   // static const String report = "Report";
   //  static const String localDirectory="appname";

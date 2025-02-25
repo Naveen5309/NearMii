@@ -8,6 +8,7 @@ import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final imageController = TextEditingController();
   EditProfileModel? editProfileModel;
 
   final urlController = TextEditingController();
@@ -498,7 +500,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 // RESET PASSWORD
-  Future<void> changePasswordApi() async {
+  Future<void> changePasswordApi({required AuthType authType}) async {
     state = const AuthApiLoading(authType: AuthType.changePassword);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -555,8 +557,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         "phone_number": phoneController.text.trim(),
         "bio": bioController.text.trim(),
         "gender": genderController.text.trim(),
-        "dob": DateFormat("yyyy-MM-dd")
-            .format(DateFormat("MM/dd/yyyy").parse(dobController.text.trim())),
+        "dob": dobController.text.trim(),
       };
 
       final result = await authUseCase.editProfile(
@@ -567,15 +568,24 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         return AuthApiFailed(
             error: error.message, authType: AuthType.editProfile);
       }, (result) {
-        editProfileModel = result;
-
-        print(
-            editProfileModel); // editProfileModel की जगह userModel को प्रिंट किया
+        print(result);
         return const AuthApiSuccess(authType: AuthType.editProfile);
       });
     } catch (e) {
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.editProfile);
     }
+  }
+
+  void setDatainFields() {
+    UserProfileModel? getProfile = Getters.getLocalStorage.getUserProfileData();
+
+    fullNameController.text = getProfile?.name ?? '';
+    designationController.text = getProfile?.designation ?? '';
+    phoneController.text = getProfile?.phoneNumber ?? "";
+    dobController.text = getProfile?.dob ?? '';
+    genderController.text = getProfile?.gender ?? '';
+    bioController.text = getProfile?.bio ?? '';
+    imageController.text = getProfile?.profilePhoto ?? '';
   }
 }

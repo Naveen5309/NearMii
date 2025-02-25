@@ -10,12 +10,12 @@ import '../local_storage/local_storage.dart';
 class Getters {
   Getters._();
 
-  static GlobalKey<NavigatorState> get navKey => GetIt.I.get<GlobalKey<NavigatorState>>();
+  static GlobalKey<NavigatorState> get navKey =>
+      GetIt.I.get<GlobalKey<NavigatorState>>();
 
   static DateTime get now => DateTime.now();
 
-  static LocalStorage get getLocalStorage =>  GetIt.I.get<LocalStorage>();
-
+  static LocalStorage get getLocalStorage => GetIt.I.get<LocalStorage>();
 
   static ApiProvider get getHttpService => GetIt.I.get<ApiProvider>();
 
@@ -23,15 +23,15 @@ class Getters {
 
   static NetworkInfo get networkInfo => GetIt.I.get<NetworkInfo>();
 
- // static SettingsRepo get settingsRepo => GetIt.I.get<SettingsRepo>();
- // static PaymentRepo get paymentRepo => GetIt.I.get<PaymentRepo>();
+  // static SettingsRepo get settingsRepo => GetIt.I.get<SettingsRepo>();
+  // static PaymentRepo get paymentRepo => GetIt.I.get<PaymentRepo>();
   static BuildContext? get getContext => navKey.currentContext;
 
- // static UserModel? get getLoginUser => GetIt.I.get<LocalStorage>().getLoginUser();
+  // static UserModel? get getLoginUser => GetIt.I.get<LocalStorage>().getLoginUser();
 
   static String? get authToken => GetIt.I.get<LocalStorage>().getToken();
 
- static bool get isLoggedIn => GetIt.I.get<LocalStorage>().getIsProfileComplete() == 1;
-
+  static bool get isLoggedIn =>
+      GetIt.I.get<LocalStorage>().getIsProfileComplete() == 1;
   //static bool get hasProfileDate => GetIt.I.get<LocalStorage>().getLoginUser()?.firstName != null;
 }
