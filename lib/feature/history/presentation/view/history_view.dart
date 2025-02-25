@@ -1,10 +1,14 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_history_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/history/presentation/provider/history_provider.dart';
+import 'package:NearMii/feature/history/presentation/provider/states/history_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +29,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         final notifier = ref.read(historyProvider.notifier);
-        notifier.historyApi();
+        notifier.historyApi(name: "");
       },
     );
   }
@@ -34,6 +38,20 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   Widget build(BuildContext context) {
     ref.watch(historyProvider);
     final history = ref.watch(historyProvider.notifier);
+    ref.listen(
+      historyProvider,
+      (previous, next) async {
+        if (next is HistoryApiLoading) {
+          Utils.showLoader();
+        } else if (next is HistoryApiSuccess) {
+          Utils.hideLoader();
+        } else if (next is HistoryApiFailed) {
+          Utils.hideLoader();
+
+          toast(msg: next.error);
+        }
+      },
+    );
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
@@ -53,7 +71,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                     children: [
                       CustomSearchBarWidget(
                         controller: TextEditingController(),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            history.historyApi(name: value.trim());
+                          }
+                        },
                       ),
                       SizedBox(
                         height: context.height * .81,
@@ -164,8 +186,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
-                                          itemCount: 4,
+                                          itemCount:
+                                              history.historyDataList.length,
                                           itemBuilder: (context, index) {
+                                            var data =
+                                                history.historyDataList[index];
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -173,9 +198,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "Courtney Henry",
+                                                title: data.profile?.name ?? "",
                                                 leadingIcon: '',
-                                                subtitle: 'Designation',
+                                                subtitle:
+                                                    data.profile?.designation ??
+                                                        "",
                                                 onTap: () {
                                                   toNamed(context,
                                                       Routes.otherUserProfile,
@@ -226,8 +253,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
-                                          itemCount: 4,
+                                          itemCount:
+                                              history.historyDataList.length,
                                           itemBuilder: (context, index) {
+                                            var data =
+                                                history.historyDataList[index];
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -235,9 +265,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                               child: CustomTile(
                                                 isHistory: true,
                                                 time: "1h ago",
-                                                title: "Wade Warren",
+                                                title: data.profile?.name ?? "",
                                                 leadingIcon: '',
-                                                subtitle: 'Designation',
+                                                subtitle:
+                                                    data.profile?.designation ??
+                                                        "",
                                                 onTap: () {
                                                   toNamed(context,
                                                       Routes.otherUserProfile,

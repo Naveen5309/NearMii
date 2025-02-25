@@ -6,22 +6,21 @@ import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
 import '../../../../core/response_wrapper/data_response.dart';
 
-abstract class NotificationDataSource {
-  Future<ResponseWrapper<List<HistoryModel>>?> notification(
+abstract class SelfUserProfileDataSource {
+  Future<ResponseWrapper<dynamic>> updateSocialLink(
       {required Map<String, dynamic> body});
 }
 
-class NotificationDataSourceImpl extends NotificationDataSource {
+class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
   @override
-  Future<ResponseWrapper<List<HistoryModel>>?> notification(
+  Future<ResponseWrapper<dynamic>> updateSocialLink(
       {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
           await Getters.getHttpService.request<List<HistoryModel>>(
               body: body,
               requestType: RequestType.get,
-              url: '',
-              //  ApiConstants.notification,
+              url: ApiConstants.updateSocialLink,
               fromJson: (json) {
                 print("json in data source :-> $json");
 

@@ -19,7 +19,7 @@ class HistoryDataSourceImpl extends HistoryDataSource {
       final dataResponse =
           await Getters.getHttpService.request<List<HistoryModel>>(
               body: body,
-              requestType: RequestType.get,
+              requestType: RequestType.post,
               url: ApiConstants.getHistory,
               fromJson: (json) {
                 print("json in data source :-> $json");

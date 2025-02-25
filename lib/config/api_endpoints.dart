@@ -32,7 +32,7 @@ abstract final class ApiConstants {
   static const String getHomeUserData = "$baseUrl/userIndex";
   static const String getSelfProfile = "$baseUrl/getSelfProfile";
   static const String updateCoordinates = "$baseUrl/updateLocation";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  static const String updateSocialLink = "$baseUrl/updateSocialLink";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

@@ -1,3 +1,7 @@
+import 'package:NearMii/config/app_utils.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/notification/presentation/provider/notification_provider.dart';
+import 'package:NearMii/feature/notification/presentation/provider/state/notification_state.dart';
 import 'package:flutter/material.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -7,11 +11,41 @@ import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NotificationView extends ConsumerWidget {
+class NotificationView extends ConsumerStatefulWidget {
   const NotificationView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotificationView> createState() => _NotificationViewState();
+}
+
+class _NotificationViewState extends ConsumerState<NotificationView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final notifier = ref.read(notificationProvider.notifier);
+        notifier.notificationApi();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(
+      notificationProvider,
+      (previous, next) async {
+        if (next is NotificationApiLoading) {
+          Utils.showLoader();
+        } else if (next is NotificationApiSuccess) {
+          Utils.hideLoader();
+        } else if (next is NotificationApiFailed) {
+          Utils.hideLoader();
+
+          toast(msg: next.error);
+        }
+      },
+    );
     return Scaffold(
         backgroundColor: AppColor.greyf9f9f9,
         body: SingleChildScrollView(
