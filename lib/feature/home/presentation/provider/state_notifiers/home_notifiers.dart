@@ -90,6 +90,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         state = const UpdateLocation(locationType: LocationType.error);
       }
     } catch (e) {
+      log("location error $e");
       loader = false;
       addressName = 'No address found';
 
@@ -106,8 +107,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     if (addressName.isEmpty || location.isEmpty) {
       getLocation();
     }
-    addressName = Getters.getLocalStorage.getAddress() ?? '';
-    location = Getters.getLocalStorage.getLocation() ?? '';
+
     state = UpdateLocation2();
   }
 

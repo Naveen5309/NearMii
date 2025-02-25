@@ -170,7 +170,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         subtitle:
                             "${notifier.userProfileModel?.radius ?? '50'} M",
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.setRadius),
+                        onTap: () {
+                          toNamed(context, Routes.setRadius);
+                        },
                       ),
                       10.verticalSpace,
 

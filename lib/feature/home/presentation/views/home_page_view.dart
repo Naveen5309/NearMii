@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
-import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/network/http_service.dart';
