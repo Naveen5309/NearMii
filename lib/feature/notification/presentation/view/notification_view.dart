@@ -27,7 +27,10 @@ class NotificationView extends ConsumerWidget {
                   children: [
                     SizedBox(
                         width: context.width * .9,
-                        child: const CustomSearchBarWidget()),
+                        child: CustomSearchBarWidget(
+                          controller: TextEditingController(),
+                          onChanged: (value) {},
+                        )),
                     SizedBox(
                       height: context.height * .81,
                       child: SingleChildScrollView(

@@ -14,7 +14,13 @@ enum AuthType {
   editProfile
 }
 
-enum LocationType { loading, updated, error, homeData }
+enum LocationType {
+  loading,
+  updated,
+  error,
+}
+
+enum HomeType { home, coordinates }
 
 enum OtherUserType { otherUserProfile, report }
 

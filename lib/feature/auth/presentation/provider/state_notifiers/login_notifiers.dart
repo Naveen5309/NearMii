@@ -23,6 +23,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
   final emailController = TextEditingController();
   final referralController = TextEditingController();
   final passwordController = TextEditingController();
+
   final confirmPasswordController = TextEditingController();
 
   UserModel? userModel;
@@ -304,6 +305,8 @@ class LoginNotifier extends StateNotifier<AuthState> {
         log("login error:${error.message} ");
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
+        userModel = result;
+
         return const AuthApiSuccess(authType: AuthType.login);
       });
     } catch (e) {

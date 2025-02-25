@@ -43,6 +43,7 @@ class CustomSocialGridview extends ConsumerWidget {
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.addPlatform) {
           Utils.hideLoader();
+          // Utils.hideBottomSheet(context);
 
           toast(msg: AppString.platformUpdateSuccess, isError: false);
 
@@ -136,8 +137,7 @@ class CustomSocialGridview extends ConsumerWidget {
                                       vertical: context.height * .04),
                                   child: CustomLabelTextField(
                                       labelBckColor: AppColor.primary,
-                                      labelText:
-                                          " https://${socialMedia[pIndex].name}/username",
+                                      labelText: "${socialMedia[pIndex].type}",
                                       controller: notifier.urlController,
                                       prefixWidget: CustomCacheNetworkImage(
                                           img: ApiConstants.socialIconBaseUrl +

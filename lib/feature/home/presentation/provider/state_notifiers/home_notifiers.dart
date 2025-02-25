@@ -16,6 +16,9 @@ class HomeNotifier extends StateNotifier<HomeState> {
   HomeNotifier({required this.homeUseCase}) : super(HomeInitial());
   List<HomeData> homeUserDataList = [];
 
+  double lat = 30.710446;
+  double long = 76.719350;
+
   // Location data varibale & methods
   List<Placemark> placemarks = [];
   String addressName = '';
@@ -102,14 +105,16 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = UpdateLocation2();
   }
 
-  // Home Data Api
-  Future<void> getHomeDataApi() async {
-    state = const HomeApiLoading();
+  //UPDATE COORDINATES
+  Future<void> updateCoordinates() async {
+    log("update coordinates called");
+    state = const HomeApiLoading(homeType: HomeType.coordinates);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const HomeApiFailed(
-            error: AppString.noInternetConnection,
-            locationType: LocationType.homeData);
+          homeType: HomeType.coordinates,
+          error: AppString.noInternetConnection,
+        );
         return;
       }
       if (await Getters.networkInfo.isSlow) {
@@ -117,24 +122,69 @@ class HomeNotifier extends StateNotifier<HomeState> {
           msg: AppString.networkSlow,
         );
       }
+      Map<String, dynamic> body = {
+        "lat": lat,
+        "long": long,
+      };
+      final result = await homeUseCase.updateCoordinates(
+        body: body,
+      );
+      state = result.fold((error) {
+        log("coordiantes update:${error.message} ");
+
+        return HomeApiFailed(
+            error: error.message, homeType: HomeType.coordinates);
+      }, (result) {
+        // userModel = result;
+
+        // clearLoginFields();
+        return const HomeApiSuccess(homeType: HomeType.coordinates);
+      });
+    } catch (e) {
+      state =
+          HomeApiFailed(error: e.toString(), homeType: HomeType.coordinates);
+    }
+  }
+
+  // Home Data Api
+  Future<void> getHomeDataApi() async {
+    state = const HomeApiLoading(homeType: HomeType.home);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const HomeApiFailed(
+          homeType: HomeType.home,
+          error: AppString.noInternetConnection,
+        );
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "lat": lat,
+        "long": long,
+      };
       // Map<String, dynamic> body = {};
-      final result = await homeUseCase.callGetHome();
+      final result = await homeUseCase.callGetHome(body: body);
       state = result.fold((error) {
         log("login error:${error.message} ");
         return HomeApiFailed(
-            error: error.message, locationType: LocationType.homeData);
+          homeType: HomeType.home,
+          error: error.message,
+        );
       }, (result) {
         if (result != null) {
           homeUserDataList = result;
         } else {
           homeUserDataList = [];
         }
-        log("history result is :->${homeUserDataList}");
-        return const HomeApiSuccess(locationType: LocationType.homeData);
+        log("history result is :->$homeUserDataList");
+        return const HomeApiSuccess(homeType: HomeType.home);
       });
     } catch (e) {
-      state = HomeApiFailed(
-          error: e.toString(), locationType: LocationType.homeData);
+      state = HomeApiFailed(error: e.toString(), homeType: HomeType.home);
     }
   }
 

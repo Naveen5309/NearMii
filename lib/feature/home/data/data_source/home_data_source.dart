@@ -7,7 +7,9 @@ import '../models/preferance_model.dart';
 
 abstract class HomeDataSource {
   Future<ResponseWrapper?> getPreferences();
-  Future<ResponseWrapper?> getHomeData();
+  Future<ResponseWrapper?> getHomeData({required Map<String, dynamic> body});
+  Future<ResponseWrapper?> updateCoordinates(
+      {required Map<String, dynamic> body});
 }
 
 class HomeDataSourceImpl extends HomeDataSource {
@@ -34,12 +36,39 @@ class HomeDataSourceImpl extends HomeDataSource {
     }
   }
 
+//UPDATE COORDINATES
   @override
-  Future<ResponseWrapper<List<HomeData>>?> getHomeData() async {
+  Future<ResponseWrapper<dynamic>?> updateCoordinates(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+        url: ApiConstants.updateCoordinates,
+        body: body,
+        requestType: RequestType.post,
+        fromJson: (json) => json,
+      );
+      if (dataResponse.status == "success") {
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "updateCoordinates",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<List<HomeData>>?> getHomeData(
+      {required Map<String, dynamic> body}) async {
     try {
       final dataResponse = await Getters.getHttpService.request<List<dynamic>?>(
         url: ApiConstants.getHomeUserData,
-        requestType: RequestType.get,
+        requestType: RequestType.post,
+        body: body,
         fromJson: (json) {
           if (json is Map<String, dynamic> && json.containsKey('data')) {
             return (json['data'] as List<dynamic>)

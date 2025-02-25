@@ -35,6 +35,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       var notifier = ref.watch(homeProvider.notifier);
       final homeDataNotifier = ref.read(homeProvider.notifier);
       homeDataNotifier.getHomeDataApi();
+      homeDataNotifier.updateCoordinates();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -90,14 +91,13 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
             back(context);
           }
 
-          if (next is HomeApiLoading) {
-            print("other user loading is called");
+          if (next is HomeApiLoading && next.homeType == HomeType.home) {
             Utils.showLoader();
-          } else if (next is HomeApiSuccess) {
+          } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
             Utils.hideLoader();
 
             // toNamed(context, Routes.bottomNavBar);
-          } else if (next is HomeApiFailed) {
+          } else if (next is HomeApiFailed && next.homeType == HomeType.home) {
             if (context.mounted) {
               Utils.hideLoader();
             }

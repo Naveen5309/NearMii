@@ -40,7 +40,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     fetchProfileData();
     Future.microtask(() {
       final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform();
+      notifier.getSocialPlatform(query: '');
     });
   }
 
@@ -205,7 +205,10 @@ Widget bottomSection(
       padding: EdgeInsets.symmetric(
           horizontal: context.width * .04, vertical: context.width * .01),
       child: Column(children: [
-        const CustomSearchBarWidget(),
+        CustomSearchBarWidget(
+          controller: TextEditingController(),
+          onChanged: (value) {},
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: hideAllSection(),

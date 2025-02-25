@@ -7,7 +7,10 @@ import '../../data/repositories/home_repo_implementation.dart';
 
 abstract class HomeUseCase {
   Future<Either<Failure, PreferencesModel?>> callGetPreference();
-  Future<Either<Failure, List<HomeData>?>> callGetHome();
+  Future<Either<Failure, List<HomeData>?>> callGetHome(
+      {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> updateCoordinates(
+      {required Map<String, dynamic> body});
 }
 
 class HomeUseCaseImpl implements HomeUseCase {
@@ -22,8 +25,18 @@ class HomeUseCaseImpl implements HomeUseCase {
   }
 
   @override
-  Future<Either<Failure, List<HomeData>?>> callGetHome() async {
-    final result = await repository.getHome();
+  Future<Either<Failure, List<HomeData>?>> callGetHome(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.getHome(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> updateCoordinates(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.updateCoordinates(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

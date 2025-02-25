@@ -17,6 +17,7 @@ class CustomPhoneNumber extends StatefulWidget {
   final bool? readOnly;
   final VoidCallback? onTapOnSuffixIcon;
   final VoidCallback? onTapOnPrefixIcon;
+  final Function(String, String)? onCountryCodeChanged; // Added Callback
 
   const CustomPhoneNumber({
     super.key,
@@ -30,6 +31,7 @@ class CustomPhoneNumber extends StatefulWidget {
     this.onTapOnPrefixIcon,
     this.onTapOnSuffixIcon,
     required this.prefixIcon,
+    this.onCountryCodeChanged, // Added Callback
   });
 
   @override
@@ -41,7 +43,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
   bool textEditHasFocus = false;
   bool isTextFieldEmpty = true;
   String selectedCountryCode = "+1"; // Default Country Code
-  String selectedCountryFlag = "🇺🇸"; // Default Country Code
+  String selectedCountryFlag = "🇺🇸"; // Default Country Flag
 
   @override
   void initState() {
@@ -63,6 +65,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
   @override
   void dispose() {
     widget.controller.removeListener(_onTextChanged);
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -77,8 +80,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(12),
-          height:
-              MediaQuery.of(context).size.height * 0.8, // 90% of screen height
+          height: MediaQuery.of(context).size.height * 0.8,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: context.width * .02),
             child: Column(
@@ -91,14 +93,15 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                       fontSize: 20.sp,
                     ),
                     IconButton(
-                        onPressed: () {
-                          back(context);
-                        },
-                        icon: Icon(
-                          Icons.cancel,
-                          size: 30.sp,
-                          color: Colors.red,
-                        )).align(alignment: Alignment.centerRight),
+                      onPressed: () {
+                        back(context);
+                      },
+                      icon: Icon(
+                        Icons.cancel,
+                        size: 30.sp,
+                        color: Colors.red,
+                      ),
+                    ).align(alignment: Alignment.centerRight),
                   ],
                 ),
                 Expanded(
@@ -111,14 +114,20 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                         flag: data.flag!,
                         countryDialCode: data.dialCode!,
                         countryName: data.name!,
-                        isSelected: data.code ==
-                            selectedCountryCode, // Highlight selected country
+                        isSelected: data.code == selectedCountryCode,
                         onTap: () {
                           setState(() {
                             selectedCountryCode = data.dialCode!;
                             selectedCountryFlag = data.flag!;
                           });
-                          Navigator.pop(context); // Close modal after selection
+
+                          // Trigger Callback when country code changes
+                          if (widget.onCountryCodeChanged != null) {
+                            widget.onCountryCodeChanged!(
+                                selectedCountryCode, selectedCountryFlag);
+                          }
+
+                          Navigator.pop(context);
                         },
                       );
                     },
@@ -143,50 +152,30 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
           color: AppColor.greyFAFAFA,
           borderRadius: BorderRadius.circular(50),
           border: Border.all(
-              color: textEditHasFocus
-                  ? AppColor.appThemeColor
-                  : AppColor.green173E01.withOpacity(.4)),
+            color: textEditHasFocus
+                ? AppColor.appThemeColor
+                : AppColor.green173E01.withOpacity(.4),
+          ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Row(
           children: [
-            // Prefix Icon (Country Flag & Code)
             GestureDetector(
               onTap: _showCountryPicker,
               child: Row(
                 children: [
                   const SizedBox(width: 5),
                   AppText(
-                    text: selectedCountryFlag, // Updated flag
+                    text: selectedCountryFlag,
                     fontSize: 20.sp,
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   AppText(
-                    text: selectedCountryCode, // Updated country code
+                    text: selectedCountryCode,
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                     color: AppColor.green173E01,
                   ),
-                  // Container(
-                  //   margin: const EdgeInsets.only(right: 5),
-                  //   height: 20,
-                  //   width: 20,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(100),
-                  //   ),
-                  //   child: AppText(
-                  //     text: "🇦🇹",
-                  //     fontSize: 20.sp,
-                  //   ),
-                  // ),
-                  // AppText(
-                  //   text: selectedCountryCode,
-                  //   fontSize: 12.sp,
-                  //   fontWeight: FontWeight.w400,
-                  //   color: AppColor.green173E01,
-                  // ),
                   Icon(
                     Icons.keyboard_arrow_down,
                     size: 18.sp,
@@ -195,11 +184,12 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                   const ColoredBox(
                     color: AppColor.grey9EAE95,
                     child: VerticalDivider(
-                        endIndent: 20,
-                        indent: 10,
-                        width: 1,
-                        thickness: 5,
-                        color: AppColor.black000000),
+                      endIndent: 20,
+                      indent: 10,
+                      width: 1,
+                      thickness: 5,
+                      color: AppColor.black000000,
+                    ),
                   ),
                 ],
               ),

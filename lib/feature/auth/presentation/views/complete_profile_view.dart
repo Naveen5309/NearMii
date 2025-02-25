@@ -241,6 +241,10 @@ class CompleteProfileView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CustomPhoneNumber(
+            onCountryCodeChanged: (code, flag) {
+              print("Selected Country Code: $code, Flag: $flag");
+              createProfileNotifier.countryCode = code;
+            },
             prefixIcon: Assets.icGender,
             controller: createProfileNotifier.phoneController,
             labelText: AppString.phoneNumber,
@@ -333,7 +337,7 @@ class CompleteProfileView extends ConsumerWidget {
         //Bio
 
         CustomTextformFeild(
-          maxLength: 200,
+          // maxLength: 200,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: createProfileNotifier.bioController,

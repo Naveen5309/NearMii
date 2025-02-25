@@ -76,6 +76,7 @@ class GetPlatformData {
 class PlatformData {
   int? id;
   String? name;
+  String? type;
   int? categoryId;
   String? icon;
   int? status;
@@ -86,6 +87,7 @@ class PlatformData {
   PlatformData({
     this.id,
     this.name,
+    this.type,
     this.categoryId,
     this.icon,
     this.status,
@@ -97,6 +99,7 @@ class PlatformData {
   factory PlatformData.fromJson(Map<String, dynamic> json) => PlatformData(
         id: json["id"],
         name: json["name"],
+        type: json["type"],
         categoryId: json["category_id"],
         icon: json["icon"],
         status: json["status"],
@@ -114,6 +117,7 @@ class PlatformData {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "type": type,
         "category_id": categoryId,
         "icon": icon,
         "status": status,

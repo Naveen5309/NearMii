@@ -1,7 +1,9 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
@@ -36,7 +38,16 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
     super.initState();
     Future.microtask(() {
       final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform();
+      notifier.getSocialPlatform(query: '');
+    });
+  }
+
+  final _debounce = Debouncer();
+
+  void _onSearchChanged(String query) {
+    final notifier = ref.read(signupProvider.notifier);
+    _debounce.run(() {
+      notifier.getSocialPlatform(query: query);
     });
   }
 
@@ -74,8 +85,15 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
         padding: EdgeInsets.symmetric(
             horizontal: context.width * .05, vertical: context.height * .01),
         child: CommonAppBtn(
-          onTap: () {
-            offAllNamed(context, Routes.bottomNavBar);
+          onTap: () async {
+            await Getters.getLocalStorage.saveIsLogin(true);
+            await Getters.getLocalStorage.saveFirstIn(false);
+
+            if (context.mounted) {
+              offAllNamed(context, Routes.bottomNavBar);
+              toast(msg: AppString.signupSuccess, isError: false);
+            }
+
             toast(msg: AppString.signupSuccess, isError: false);
           },
           title: AppString.next,
@@ -101,9 +119,15 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       children: [
                         const CommonBackBtn(),
                         InkWell(
-                          onTap: () {
-                            offAllNamed(context, Routes.bottomNavBar);
-                            toast(msg: AppString.signupSuccess, isError: false);
+                          onTap: () async {
+                            await Getters.getLocalStorage.saveIsLogin(true);
+                            await Getters.getLocalStorage.saveFirstIn(false);
+
+                            if (context.mounted) {
+                              offAllNamed(context, Routes.bottomNavBar);
+                              toast(
+                                  msg: AppString.signupSuccess, isError: false);
+                            }
                           },
                           child: AppText(
                             text: widget.isFromProfile ? " " : AppString.skip,
@@ -135,7 +159,12 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     15.verticalSpace,
 
                     //SEARCH FIELD
-                    const CustomSearchBarWidget(),
+                    CustomSearchBarWidget(
+                      controller: signupPro.searchTextController,
+                      onChanged: (value) {
+                        _onSearchChanged(value);
+                      },
+                    ),
 
                     //SOCIAL MEDIA
 

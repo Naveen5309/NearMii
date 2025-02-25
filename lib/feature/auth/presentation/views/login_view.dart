@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -34,6 +36,8 @@ class LoginView extends ConsumerWidget {
           Utils.showLoader();
         } else if (next is AuthApiSuccess && next.authType == AuthType.login) {
           Utils.hideLoader();
+
+          log("success:-> ${loginNotifier.userModel?.isProfile}");
 
           if (loginNotifier.userModel?.isProfile == 1) {
             toast(msg: AppString.loginSuccess, isError: false);

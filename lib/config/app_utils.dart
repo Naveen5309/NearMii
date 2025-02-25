@@ -79,4 +79,8 @@ class Utils {
   static void hideKeyboard(context) {
     FocusScope.of(context).requestFocus(FocusNode());
   }
+
+  static void hideBottomSheet(context) {
+    back(context);
+  }
 }

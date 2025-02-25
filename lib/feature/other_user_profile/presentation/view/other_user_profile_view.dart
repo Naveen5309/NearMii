@@ -332,7 +332,10 @@ Widget bottomSection(
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: context.width * .04),
       child: Column(children: [
-        const CustomSearchBarWidget(),
+        CustomSearchBarWidget(
+          controller: signupNotifier.searchTextController,
+          onChanged: (value) {},
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ProfileGridView(

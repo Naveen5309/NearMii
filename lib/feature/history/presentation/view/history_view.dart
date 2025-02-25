@@ -51,7 +51,10 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                   physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     children: [
-                      const CustomSearchBarWidget(),
+                      CustomSearchBarWidget(
+                        controller: TextEditingController(),
+                        onChanged: (value) {},
+                      ),
                       SizedBox(
                         height: context.height * .81,
                         child: SingleChildScrollView(

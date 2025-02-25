@@ -32,7 +32,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final searchTextController = TextEditingController();
+
   EditProfileModel? editProfileModel;
+  String countryCode = "+1";
 
   final urlController = TextEditingController();
 
@@ -155,7 +158,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //GET SOCIAL PROFILES
-  Future<void> getSocialPlatform() async {
+  Future<void> getSocialPlatform({required String query}) async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -273,7 +276,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       Map<String, dynamic> body = {
         "name": fullNameController.text.trim(),
         "designation": designationController.text.trim(),
-        "phone_number": phoneController.text.trim(),
+        "phone_number": "$countryCode ${phoneController.text.trim()}",
         "gender": genderController.text.trim(),
         "dob": DateFormat("yyyy/MM/dd")
             .format(DateFormat("MM/dd/yyyy").parse(dobController.text.trim())),
