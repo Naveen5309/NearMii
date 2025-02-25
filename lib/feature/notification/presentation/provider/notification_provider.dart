@@ -1,8 +1,3 @@
-import 'package:NearMii/feature/history/data/data_source/history_data_source.dart';
-import 'package:NearMii/feature/history/data/repository/history_repository.dart';
-import 'package:NearMii/feature/history/domain/usecases/history_usecases.dart';
-import 'package:NearMii/feature/history/presentation/provider/state_notifier/history_notifier.dart';
-import 'package:NearMii/feature/history/presentation/provider/states/history_state.dart';
 import 'package:NearMii/feature/notification/data/data_source/notification_data_source.dart';
 import 'package:NearMii/feature/notification/data/repository/notification_repository.dart';
 import 'package:NearMii/feature/notification/domain/usecases/notification_usecases.dart';

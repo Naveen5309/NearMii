@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
@@ -17,7 +16,7 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   List<HistoryModel> historyDataList = [];
 
   //History US
-  Future<void> historyApi() async {
+  Future<void> historyApi({required String name}) async {
     state = const HistoryApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -31,7 +30,9 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
           msg: AppString.networkSlow,
         );
       }
-      Map<String, dynamic> body = {};
+      Map<String, dynamic> body = {
+        "name": name,
+      };
       final result = await historyUsecases.callHistory(body: body);
       state = result.fold((error) {
         log("login error:${error.message} ");
