@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import '../../config/helper.dart';
 import '../../feature/auth/data/models/user_model.dart';
 
 abstract class HiveConst {
   static const String userData = 'userData';
+
   static const String authToken = 'authToken';
   static const String isProfileComplete = 'isProfileComplete';
   static const String isOnboard = 'isOnboard';
+  static const String editPrfileUserData = 'EditPrfileUserData';
 
   static const String isLogin = 'isLogin';
   static const String address = 'address';
@@ -17,9 +21,11 @@ abstract class HiveConst {
 
 abstract class LocalStorage {
   Future<bool> saveLoginUser(UserModel userModel);
-  Future<void> saveFirstIn(bool isOnboard);
+  Future<bool> saveGetUserProfile(UserProfileModel editProfileModel);
 
+  Future<void> saveFirstIn(bool isOnboard);
   UserModel? getLoginUser();
+  UserProfileModel? getUserProfileData();
   bool? getFirstOnboard();
 
   Future<void> clearAllBox();
@@ -97,10 +103,26 @@ class HiveStorageImp extends LocalStorage {
   }
 
   @override
+  Future<bool> saveGetUserProfile(UserProfileModel editProfileModel) async {
+    await userBox.put(HiveConst.editPrfileUserData, editProfileModel.toJson());
+    printLog("==============saveUpdateProfile==========");
+
+    return true;
+  }
+
+  @override
   UserModel? getLoginUser() {
     final user = userBox.get(HiveConst.userData);
     if (user == null) return null;
     final data = UserModel.fromJson(jsonDecode(jsonEncode(user)));
+    return data;
+  }
+
+  @override
+  UserProfileModel? getUserProfileData() {
+    final user = userBox.get(HiveConst.editPrfileUserData);
+    if (user == null) return null;
+    final data = UserProfileModel.fromJson(jsonDecode(jsonEncode(user)));
     return data;
   }
 

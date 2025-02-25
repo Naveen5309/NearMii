@@ -1,6 +1,8 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
@@ -12,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../auth/presentation/provider/signup_provider.dart';
+
 class ChangePasswordView extends ConsumerWidget {
   const ChangePasswordView({super.key});
 
@@ -21,22 +25,43 @@ class ChangePasswordView extends ConsumerWidget {
     // final signUpNotifiers = ref.watch(signupProvider.notifier);
 
     final changePasswordNotifier = ref.watch(changePasswordProvider.notifier);
-    ref.listen(changePasswordProvider, (previous, next) async {
-      if (next is AuthApiLoading) {
-        print("other user loading is called");
-        Utils.showLoader();
-      } else if (next is AuthApiSuccess) {
-        Utils.hideLoader();
+    // ref.listen(changePasswordProvider, (previous, next) async {
+    //   if (next is AuthApiLoading) {
+    //     print("other user loading is called");
+    //     Utils.showLoader();
+    //   } else if (next is AuthApiSuccess) {
+    //     Utils.hideLoader();
 
-        // toNamed(context, Routes.bottomNavBar);
-      } else if (next is AuthApiFailed) {
-        if (context.mounted) {
+    //     // toNamed(context, Routes.bottomNavBar);
+    //   } else if (next is AuthApiFailed) {
+    //     if (context.mounted) {
+    //       Utils.hideLoader();
+    //     }
+
+    //     toast(msg: next.error);
+    //   }
+    // });
+    ref.listen(
+      changePasswordProvider,
+      (previous, next) {
+        if (next is AuthApiLoading &&
+            next.authType == AuthType.changePassword) {
+          Utils.showLoader();
+        } else if (next is AuthApiSuccess &&
+            next.authType == AuthType.changePassword) {
           Utils.hideLoader();
-        }
 
-        toast(msg: next.error);
-      }
-    });
+          toast(msg: AppString.updatePasswordSuccess, isError: false);
+          // toNamed(context, Routes.otpVerify);
+          back(context);
+        } else if (next is AuthApiFailed &&
+            next.authType == AuthType.changePassword) {
+          Utils.hideLoader();
+
+          toast(msg: next.error);
+        }
+      },
+    );
 
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
@@ -65,13 +90,14 @@ class ChangePasswordView extends ConsumerWidget {
               var isVisible = ref.watch(isNewPswdVisible);
               return CustomLabelTextField(
                 onTapOnSuffixIcon: () {
-                  ref.read(isNewPswdVisible.notifier).state = !isVisible;
+                  ref.read(isNewPswdVisible.notifier).state =
+                      !ref.read(isNewPswdVisible.notifier).state;
                 },
                 isObscure: isVisible,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.newPasswordController,
                 labelText: AppString.newPswd,
-                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             Consumer(
@@ -79,13 +105,14 @@ class ChangePasswordView extends ConsumerWidget {
               var isVisible = ref.watch(isConfirmPswdVisible);
               return CustomLabelTextField(
                 onTapOnSuffixIcon: () {
-                  ref.read(isConfirmPswdVisible.notifier).state = !isVisible;
+                  ref.read(isConfirmPswdVisible.notifier).state =
+                      !ref.read(isConfirmPswdVisible.notifier).state;
                 },
                 isObscure: isVisible,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.confirmPasswordController,
                 labelText: AppString.confirmPswd,
-                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             SizedBox(
@@ -97,14 +124,15 @@ class ChangePasswordView extends ConsumerWidget {
                     changePasswordNotifier.validateChangePassword();
                 print(isForget);
                 if (isForget) {
-                  changePasswordNotifier.changePasswordApi();
+                  changePasswordNotifier.changePasswordApi(
+                      authType: AuthType.changePassword);
+
                   // toNamed(context, Routes.otpVerify);
 
                   // final isNewPassword =
                   //     changePasswordNotifier.validateChangePassword();
                   // print(isNewPassword);
                   // if (isNewPassword) {
-                  back(context);
                 }
                 // }
               },
