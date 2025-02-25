@@ -6,6 +6,9 @@ abstract final class ApiConstants {
   static const String socialIconBaseUrl =
       "https://php.parastechnologies.in/nearmii/storage/app/public/uploads/icons/";
 
+  static const String profileBaseUrl =
+      "https://php.parastechnologies.in/nearmii/storage/app/public/uploads/profile_pictures/";
+
   static const String baseUrl = "$url/api/users";
   static const String login = "$baseUrl/login";
   static const String register = "$baseUrl/register";

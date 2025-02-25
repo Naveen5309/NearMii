@@ -9,13 +9,13 @@ import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../../../../config/validator.dart';
 import '../../../domain/usecases/get_auth.dart';
 import '../states/auth_states.dart';
 
@@ -38,6 +38,9 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final imageController = TextEditingController();
   EditProfileModel? editProfileModel;
   String countryCode = "+1";
+
+  String profilePic = '';
+  String name = '';
 
   final urlController = TextEditingController();
 
@@ -293,6 +296,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
             error: error.message, authType: AuthType.completeProfile);
       }, (result) {
         enableResend = false;
+        profilePic = result.profilePhoto ?? '';
+        name = result.name ?? '';
+
+        saveToLocalStorage();
+
         return const AuthApiSuccess(authType: AuthType.completeProfile);
       });
     } catch (e) {
@@ -411,7 +419,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   Future<void> registerApi() async {
     state = const AuthApiLoading(authType: AuthType.signup);
     try {
-      // String token = await FirebaseMessaging.instance.getToken() ?? '';
+      String token = await FirebaseMessaging.instance.getToken() ?? '';
 
       // log("fcm token is :-> $token");
       if (!(await Getters.networkInfo.isConnected)) {
@@ -427,6 +435,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       Map<String, dynamic> body = {
         "email": emailController.text.trim(),
         "password": pswdController.text.trim(),
+        "device_type": Platform.isAndroid ? "android" : "ios",
+        "device_token": token,
       };
       final result = await authUseCase.signUp(
         body: body,
@@ -536,7 +546,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //edit PROFILE API
-  Future<void> editProfileApi() async {
+  Future<void> editProfileApi({String? socialId}) async {
     state = const AuthApiLoading(authType: AuthType.editProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -554,8 +564,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       final Map<String, String> body = {
         "name": fullNameController.text.trim(),
         "email": emailController.text.trim(),
-        "social_id": ' socialIdController.text.trim()',
-        "social_type": 'socialTypeController.text.trim()',
+        if (socialId != null) "social_id": socialId,
+        if (socialId != null) "social_type": 'google',
         "designation": designationController.text.trim(),
         "phone_number": phoneController.text.trim(),
         "bio": bioController.text.trim(),
@@ -590,5 +600,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     genderController.text = getProfile?.gender ?? '';
     bioController.text = getProfile?.bio ?? '';
     imageController.text = getProfile?.profilePhoto ?? '';
+  }
+
+  void saveToLocalStorage() async {
+    await Getters.getLocalStorage.saveName(name);
+    await Getters.getLocalStorage.saveProfileImg(profilePic);
   }
 }

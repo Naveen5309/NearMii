@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -15,7 +18,6 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_dotted_box.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
-import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
@@ -37,13 +39,13 @@ class _SettingViewState extends ConsumerState<SettingView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(getProfileProvider.notifier).getProfileApi();
+      ref.watch(getProfileProvider.notifier).getProfileApi();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var notifier = ref.read(getProfileProvider.notifier);
+    var notifier = ref.watch(getProfileProvider.notifier);
     ref.watch(getProfileProvider);
 
     ref.watch(loginProvider);
@@ -53,6 +55,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
         Utils.showLoader();
       } else if (next is AuthApiSuccess && next.authType == AuthType.logOut) {
         toast(msg: AppString.logoutSuccess, isError: false);
+        await Getters.getLocalStorage.saveFirstIn(false);
 
         await Getters.getLocalStorage.clearLoginData();
         Utils.hideLoader();
@@ -101,12 +104,19 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
                   child: Column(
                     children: [
+                      //PROFILE SECTION
+
                       profileWidget(
-                        imageUrl: notifier.userProfileModel?.profilePhoto ?? '',
+                        imageUrl:
+                            notifier.userProfileModel?.profilePhoto != null
+                                ? ApiConstants.profileBaseUrl +
+                                    notifier.userProfileModel!.profilePhoto!
+                                : '',
                         name: notifier.userProfileModel?.name ?? '',
-                        //  profile!.name ?? "",
                         points: notifier.userProfileModel?.points ?? 0,
-                        isVip: notifier.userProfileModel?.isSubscription == 1,
+                        isVip: notifier.userProfileModel != null
+                            ? notifier.userProfileModel?.isSubscription == 1
+                            : false,
                       ),
                       28.verticalSpace,
                       dottedContainer(
@@ -157,7 +167,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       CustomTile(
                         leadingIcon: Assets.iconSetRadius,
                         title: AppString.setRadius,
-                        subtitle: AppString.meter,
+                        subtitle:
+                            "${notifier.userProfileModel?.radius ?? '50'} M",
                         trailingIcon: Assets.iconArrowRight,
                         onTap: () => toNamed(context, Routes.setRadius),
                       ),
@@ -262,17 +273,20 @@ class _SettingViewState extends ConsumerState<SettingView> {
     required int points,
     required bool isVip,
   }) {
+    log("img url si :-> $imageUrl");
+
+    log("img url si :-> ${(imageUrl.runtimeType)}");
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           children: [
             CustomCacheNetworkImage(
-              img: imageUrl, imageRadius: 70, height: 70, width: 70,
-              // CircleAvatar(
-              //   radius: 30.r,
-              //   backgroundImage: NetworkImage(imageUrl),
-              // ),
+              img: imageUrl,
+              imageRadius: 70,
+              height: 70,
+              width: 70,
             ),
             if (isVip)
               Positioned(

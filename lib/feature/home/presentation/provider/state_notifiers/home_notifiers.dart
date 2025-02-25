@@ -25,6 +25,15 @@ class HomeNotifier extends StateNotifier<HomeState> {
   String location = '';
 
   bool loader = true;
+
+  String profilePic = '';
+  String name = '';
+
+  void getFromLocalStorage() async {
+    name = Getters.getLocalStorage.getName() ?? '';
+    profilePic = Getters.getLocalStorage.getProfilePic() ?? '';
+  }
+
 // Function to get the current location and update the state
   Future<Position> determinePosition() async {
     bool serviceEnabled;
@@ -77,16 +86,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
       } else {
         loader = false;
         addressName = 'No address found';
-        await Getters.getLocalStorage.saveAddress('');
-        await Getters.getLocalStorage.saveLocation('');
 
         state = const UpdateLocation(locationType: LocationType.error);
       }
     } catch (e) {
       loader = false;
       addressName = 'No address found';
-      await Getters.getLocalStorage.saveAddress('');
-      await Getters.getLocalStorage.saveLocation('');
+
       state = const UpdateLocation(locationType: LocationType.error);
     }
   }

@@ -7,7 +7,7 @@ class UserProfileModel {
   final dynamic socialType;
   final dynamic designation;
   final dynamic phoneNumber;
-  final dynamic profilePhoto;
+  final String? profilePhoto;
   final dynamic bio;
   final dynamic gender;
   final dynamic dob;

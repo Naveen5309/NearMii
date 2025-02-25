@@ -209,6 +209,7 @@ class AuthDataSourceImpl extends AuthDataSource {
           await Getters.getHttpService.request<CompleteProfileData>(
               body: body,
               imagePath: imagePath,
+              requestType: RequestType.multipart,
               paramName: "profile_photo",
               url: ApiConstants.completeProfile,
               fromJson: (json) {

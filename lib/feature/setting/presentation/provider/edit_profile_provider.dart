@@ -3,11 +3,6 @@ import 'package:NearMii/feature/auth/data/repositories/auth_repo_implementation.
 import 'package:NearMii/feature/auth/domain/usecases/get_auth.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
-import 'package:NearMii/feature/setting/data/data_source/setting_data_source.dart';
-import 'package:NearMii/feature/setting/data/domain/usecases/setting_usecases.dart';
-import 'package:NearMii/feature/setting/data/repossitories/setting_repo.dart';
-import 'package:NearMii/feature/setting/presentation/provider/state_notifier/setting_notifier.dart';
-import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a Provider for AuthDataSource

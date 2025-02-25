@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
@@ -38,6 +40,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       final homeDataNotifier = ref.read(homeProvider.notifier);
       homeDataNotifier.getHomeDataApi();
       homeDataNotifier.updateCoordinates(radius: "");
+      homeDataNotifier.getFromLocalStorage();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -153,7 +156,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           //NAME
 
                           AppText(
-                            text: "Brooklyn Simmons",
+                            text: notifier.name,
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w500,
                             color: AppColor.primary,
@@ -166,10 +169,11 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             color: AppColor.primary.withOpacity(.16),
                             shape: BoxShape.circle,
                           ),
-                          child: const CustomCacheNetworkImage(
+                          child: CustomCacheNetworkImage(
                               height: 45,
                               width: 45,
-                              img: "https://picsum.photos/250?image=9",
+                              img: ApiConstants.profileBaseUrl +
+                                  notifier.profilePic,
                               imageRadius: 40)),
                     ],
                   ),
@@ -191,27 +195,35 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   width: context.width,
                   fit: BoxFit.cover,
                 )
-              : SizedBox(
-                  height: context.height * .69,
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: notifier.homeUserDataList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      var data = notifier.homeUserDataList[index];
+              : Column(
+                  children: [
+                    SizedBox(
+                      height: context.height * .69,
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: notifier.homeUserDataList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          var data = notifier.homeUserDataList[index];
 
-                      return CustomProfileCard(
-                        profileImage: data.profilePhoto ??
-                            'https://picsum.photos/250?image=9', // Replace with actual image
-                        name: data.name ?? "Name",
-                        designation: data.designation ?? "designation",
-                        distance: "50 meters away",
-                        onUnlockTap: () {
-                          // print("Unlock Now Clicked!");
+                          return CustomProfileCard(
+                            profileImage: data.profilePhoto != null
+                                ? ApiConstants.profileBaseUrl +
+                                    data.profilePhoto!
+                                : '', // Replace with actual image
+                            name: data.name ?? "Name",
+                            designation: data.designation ?? "designation",
+                            distance: data.distance != null
+                                ? getDistance(data.distance.toString())
+                                : '',
+                            onUnlockTap: () {
+                              // print("Unlock Now Clicked!");
+                            },
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
           // Image.asset(Assets.map)
         ],

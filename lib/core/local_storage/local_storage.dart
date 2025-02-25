@@ -17,6 +17,8 @@ abstract class HiveConst {
   static const String address = 'address';
 
   static const String location = 'location';
+  static const String profilePic = 'profilePic';
+  static const String name = 'name';
 }
 
 abstract class LocalStorage {
@@ -35,10 +37,14 @@ abstract class LocalStorage {
   String? getAddress();
 
   String? getLocation();
+  String? getProfilePic();
+  String? getName();
 
   Future<void> saveToken(String token);
   Future<void> saveAddress(String address);
   Future<void> saveLocation(String location);
+  Future<void> saveProfileImg(String profilePic);
+  Future<void> saveName(String name);
 
   Future<void> saveIsLogin(bool isLogin);
   bool? getIsLogin();
@@ -61,6 +67,16 @@ class HiveStorageImp extends LocalStorage {
   }
 
   @override
+  Future<void> saveName(String name) async {
+    await userBox.put(HiveConst.name, name);
+  }
+
+  @override
+  Future<void> saveProfileImg(String profilePic) async {
+    await userBox.put(HiveConst.profilePic, profilePic);
+  }
+
+  @override
   Future<void> saveAddress(String address) async {
     await userBox.put(HiveConst.address, address);
     printLog("==============address==========> $address ");
@@ -76,6 +92,18 @@ class HiveStorageImp extends LocalStorage {
   String? getToken() {
     final authToken = userBox.get(HiveConst.authToken);
     return authToken;
+  }
+
+  @override
+  String? getName() {
+    final name = userBox.get(HiveConst.name);
+    return name;
+  }
+
+  @override
+  String? getProfilePic() {
+    final profilePic = userBox.get(HiveConst.profilePic);
+    return profilePic;
   }
 
   @override

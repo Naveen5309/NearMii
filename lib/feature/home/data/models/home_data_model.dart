@@ -9,19 +9,20 @@ class HomeData {
   String? profilePhoto;
   String? bio;
   DateTime? dob;
+  dynamic distance;
 
-  HomeData({
-    this.id,
-    this.name,
-    this.email,
-    this.socialId,
-    this.socialType,
-    this.designation,
-    this.phoneNumber,
-    this.profilePhoto,
-    this.bio,
-    this.dob,
-  });
+  HomeData(
+      {this.id,
+      this.name,
+      this.email,
+      this.socialId,
+      this.socialType,
+      this.designation,
+      this.phoneNumber,
+      this.profilePhoto,
+      this.bio,
+      this.dob,
+      this.distance});
 
   factory HomeData.fromJson(Map<String, dynamic> json) {
     return HomeData(
@@ -35,6 +36,7 @@ class HomeData {
       profilePhoto: json['profile_photo'],
       bio: json['bio'],
       dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
+      distance: json["distance"],
     );
   }
 
@@ -49,6 +51,7 @@ class HomeData {
       'phone_number': phoneNumber,
       'profile_photo': profilePhoto,
       'bio': bio,
+      'distance': distance,
       'dob': dob?.toIso8601String(),
     };
   }

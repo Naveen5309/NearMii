@@ -165,3 +165,19 @@ Alignment getAlignment(int index) {
     return Alignment.centerRight;
   }
 }
+
+String getDistance(String value) {
+  if (value.isEmpty) return "0"; // Handle empty string case
+
+  double? number = double.tryParse(value);
+  if (number == null) {
+    return value; // Return original if it's not a valid number
+  }
+
+  // Check if it's an integer
+  if (number % 1 == 0) {
+    return "${number.toInt()} meters away";
+  } else {
+    return "${number.toStringAsFixed(1)} meters away";
+  }
+}

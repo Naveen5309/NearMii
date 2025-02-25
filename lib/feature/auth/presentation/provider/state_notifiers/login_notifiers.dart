@@ -26,6 +26,8 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
   final confirmPasswordController = TextEditingController();
 
+  String profilePic = '';
+  String name = '';
   UserModel? userModel;
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
@@ -115,6 +117,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
       }, (result) {
         userModel = result;
 
+        profilePic = result?.profilePhoto ?? '';
+        name = result?.name ?? '';
+        saveToLocalStorage();
         clearLoginFields();
         return const AuthApiSuccess(authType: AuthType.login);
       });
@@ -306,11 +311,19 @@ class LoginNotifier extends StateNotifier<AuthState> {
         return AuthApiFailed(error: error.message, authType: AuthType.login);
       }, (result) {
         userModel = result;
+        profilePic = result?.profilePhoto ?? '';
+        name = result?.name ?? '';
+        saveToLocalStorage();
 
         return const AuthApiSuccess(authType: AuthType.login);
       });
     } catch (e) {
       state = AuthApiFailed(error: e.toString(), authType: AuthType.login);
     }
+  }
+
+  void saveToLocalStorage() async {
+    await Getters.getLocalStorage.saveName(name);
+    await Getters.getLocalStorage.saveProfileImg(profilePic);
   }
 }
