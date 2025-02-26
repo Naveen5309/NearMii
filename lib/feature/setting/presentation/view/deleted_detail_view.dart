@@ -100,6 +100,7 @@ class DeletedDetailView extends ConsumerWidget {
                       },
                       // isObscure: isVisible,
                       prefixIcon: Assets.icLock,
+                      readOnly: true,
 
                       controller: deleteAccountNotifier.reasonController,
                       labelText: AppString.reason,
@@ -123,7 +124,7 @@ class DeletedDetailView extends ConsumerWidget {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   CustomReportTile(
-                                    title: AppString.theyArePretending,
+                                    title: AppString.noLongerNeed,
                                     check: selected == 0,
                                     ontap: () {
                                       ref
@@ -132,7 +133,7 @@ class DeletedDetailView extends ConsumerWidget {
                                     },
                                   ),
                                   CustomReportTile(
-                                    title: AppString.theyAreUnderTheAge,
+                                    title: AppString.notUsingAppAnymore,
                                     check: selected == 1,
                                     ontap: () {
                                       ref
@@ -141,7 +142,9 @@ class DeletedDetailView extends ConsumerWidget {
                                     },
                                   ),
                                   CustomReportTile(
-                                    title: AppString.violenceAndDangerous,
+                                    maxlines: 2,
+                                    title: AppString
+                                        .multipleAccountsSoNeedToRemove,
                                     check: selected == 2,
                                     ontap: () {
                                       ref
@@ -150,7 +153,8 @@ class DeletedDetailView extends ConsumerWidget {
                                     },
                                   ),
                                   CustomReportTile(
-                                    title: AppString.hateSpeech,
+                                    maxlines: 2,
+                                    title: AppString.createNewAccount,
                                     check: selected == 3,
                                     ontap: () {
                                       ref
@@ -158,43 +162,9 @@ class DeletedDetailView extends ConsumerWidget {
                                           .state = 3;
                                     },
                                   ),
-                                  CustomReportTile(
-                                    title: AppString.nudity,
-                                    check: selected == 4,
-                                    ontap: () {
-                                      ref
-                                          .read(selectedReportIndex.notifier)
-                                          .state = 4;
-                                    },
-                                  ),
                                   const SizedBox(
                                     height: 12,
                                   ),
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      AppText(
-                                          text: "Something Else",
-                                          fontSize: 14.sp,
-                                          color: AppColor.black1A1C1E,
-                                          fontWeight: FontWeight.w700),
-                                    ],
-                                  ),
-                                  CustomTextFieldWidget(
-                                      controller: somethingTextController,
-                                      // enableBorder: OutlineInputBorder(
-                                      //   borderRadius: BorderRadius.circular(20),
-                                      // ),
-                                      minLines: 2,
-                                      fillColor: AppColor.whiteF0F5FE,
-                                      hintText: "Lorem ipsum dolor sit......",
-                                      onChanged: (value) {
-                                        if (value!.isNotEmpty) {
-                                          reportNotifier.clearAllChecks();
-                                        }
-                                      }),
                                   5.verticalSpace,
                                   CommonAppBtn(
                                     title: AppString.submit,

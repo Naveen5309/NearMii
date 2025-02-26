@@ -10,9 +10,11 @@ import 'package:flutter_svg/svg.dart';
 class CustomReportTile extends ConsumerWidget {
   final String title;
   final bool check;
+  final int? maxlines;
   final VoidCallback? ontap;
 
   const CustomReportTile({
+    this.maxlines,
     super.key,
     required this.title,
     required this.check,
@@ -37,11 +39,15 @@ class CustomReportTile extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AppText(
-                text: title,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColor.black272727.withOpacity(.9),
+              Expanded(
+                child: AppText(
+                  text: title,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  maxlines: maxlines ?? 1,
+                  overflow: TextOverflow.ellipsis,
+                  color: AppColor.black272727.withOpacity(.9),
+                ),
               ),
               GestureDetector(
                 onTap: ontap,
@@ -60,6 +66,7 @@ class CustomReportTile extends ConsumerWidget {
 
   CustomReportTile copyWith({String? title, bool? check}) {
     return CustomReportTile(
+      maxlines: maxlines ?? 1,
       title: title ?? this.title,
       check: check ?? this.check,
     );

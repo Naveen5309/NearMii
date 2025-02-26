@@ -80,7 +80,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   }
 
   //SelfUserProfile US
-  Future<void> updateGetSelfPlatformApi({required String name}) async {
+  Future<void> getSelfPlatformApi({required String name}) async {
     state = const SelfUserProfileApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -105,7 +105,40 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
         return SelfUserProfileApiFailed(error: error.message);
       }, (result) {
         // historyDataList = result ?? [];
-        log("SelfUserProfile result is :->${result}");
+        log("getSelfPlatform result is :->${result}");
+        return const SelfUserProfileApiSuccess();
+      });
+    } catch (e) {
+      state = SelfUserProfileApiFailed(error: e.toString());
+    }
+  }
+
+  //SelfUserProfile US
+  Future<void> deleteApi({required String name}) async {
+    state = const SelfUserProfileApiLoading();
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SelfUserProfileApiFailed(
+          error: AppString.noInternetConnection,
+        );
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        "name": name,
+      };
+      final result = await selfUserProfileUsecases.callDelete(body: body);
+
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SelfUserProfileApiFailed(error: error.message);
+      }, (result) {
+        // historyDataList = result ?? [];
+        log("SelfUserProfile result is :->$result");
         return const SelfUserProfileApiSuccess();
       });
     } catch (e) {

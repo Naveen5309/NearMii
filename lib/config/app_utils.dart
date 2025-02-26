@@ -14,7 +14,7 @@ class Utils {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult.isEmpty ||
         connectivityResult.first == ConnectivityResult.none) {
-      toast(msg: "Please check your Internet Connection", isError: true);
+      toast(msg: "check your Internet Connection", isError: true);
       return false;
     } else {
       return true;
