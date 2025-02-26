@@ -1,6 +1,7 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
@@ -8,6 +9,7 @@ import 'package:NearMii/feature/common_widgets/custom_history_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/history/presentation/provider/history_provider.dart';
+import 'package:NearMii/feature/history/presentation/provider/state_notifier/history_notifier.dart';
 import 'package:NearMii/feature/history/presentation/provider/states/history_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -119,17 +121,19 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
                                           itemCount:
-                                              history.historyDataList.length,
+                                              history.recentHistoryList.length,
                                           itemBuilder: (context, index) {
-                                            var data =
-                                                history.historyDataList[index];
+                                            var data = history
+                                                .recentHistoryList[index];
+                                            var timeAgo =
+                                                getTimeAgo(data.createdAt);
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 5),
                                               child: CustomTile(
                                                 isHistory: true,
-                                                time: "1h ago",
+                                                time: timeAgo,
                                                 title: data.profile?.name ?? "",
                                                 leadingIcon: '',
                                                 subtitle:
@@ -186,20 +190,29 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
-                                          itemCount:
-                                              history.historyDataList.length,
+                                          itemCount: history
+                                              .historyLastWeekTimeList.length,
                                           itemBuilder: (context, index) {
-                                            var data =
-                                                history.historyDataList[index];
+                                            var data = history
+                                                .historyLastWeekTimeList[index];
+                                            var timeAgo =
+                                                getTimeAgo(data.createdAt);
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 5),
                                               child: CustomTile(
                                                 isHistory: true,
-                                                time: "1h ago",
+                                                time: timeAgo,
                                                 title: data.profile?.name ?? "",
-                                                leadingIcon: '',
+                                                leadingIcon: data.profile
+                                                            ?.profilePhoto !=
+                                                        null
+                                                    ? (ApiConstants
+                                                            .profileBaseUrl +
+                                                        data.profile!
+                                                            .profilePhoto!)
+                                                    : '',
                                                 subtitle:
                                                     data.profile?.designation ??
                                                         "",
@@ -253,18 +266,21 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           shrinkWrap: true,
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 3),
-                                          itemCount:
-                                              history.historyDataList.length,
+                                          itemCount: history
+                                              .historyLastMonthTimeList.length,
                                           itemBuilder: (context, index) {
-                                            var data =
-                                                history.historyDataList[index];
+                                            var data = history
+                                                    .historyLastMonthTimeList[
+                                                index];
+                                            var timeAgo =
+                                                getTimeAgo(data.createdAt);
                                             return Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 5),
                                               child: CustomTile(
                                                 isHistory: true,
-                                                time: "1h ago",
+                                                time: timeAgo,
                                                 title: data.profile?.name ?? "",
                                                 leadingIcon: '',
                                                 subtitle:

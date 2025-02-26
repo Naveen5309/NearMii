@@ -25,7 +25,7 @@ final selfUserProfileUseCaseProvider =
 });
 
 // Define a StateNotifierProvider for SelfUserProfileNotifier
-final updateSocialLinksProvider = StateNotifierProvider.autoDispose<
+final getSelfPlatformProvider = StateNotifierProvider.autoDispose<
     SelfUserProfileNotifier, SelfUserProfileState>((ref) {
   final selfUserProfileUseCase = ref.watch(selfUserProfileUseCaseProvider);
   return SelfUserProfileNotifier(

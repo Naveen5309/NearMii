@@ -78,7 +78,7 @@ abstract final class AppString {
 
   static const String platformUpdateSuccess = "Platform added";
 
-  static const String otpVerified = "OTP Verified successfully";
+  static const String otpVerified = "OTP verified successfully";
 
   static const String addSocialProfiles = "Add Social Profiles";
   static const String searchHere = "Search here";
@@ -98,7 +98,7 @@ abstract final class AppString {
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
   static const String fetchingLocation = "Fetching your location";
-  static const String fetchingData = "Fetching Data Successfully";
+  static const String fetchingData = "Fetching data successfully";
   static const String logoutSuccess = "You are Logged Out";
   static const String editProfile = "Edit Profile Details";
   static const String inviteFriends = "Invite Friends";
@@ -131,7 +131,7 @@ abstract final class AppString {
   static const String and = " and ";
   static const String iAgreeTo = "I agreed to";
   static const String privacyPolicy = "Privacy Policies";
-  static const String enterOtp = "Enter OTP shared on your email";
+  static const String enterOtp = "Enter otp shared on your email";
   static const String selectCountry = "Select Country";
   static const String enterReferralCode = "Enter referral code";
   static const String mapView = "Map View";
@@ -140,12 +140,12 @@ abstract final class AppString {
   static const String cancel = "Cancel";
   static const String save = "Save";
   static const String done = "Done";
-  static const String copyReferralCode = "Share Referral Code";
-  static const String pleaseEnterOtp = "Please Enter Otp";
+  static const String copyReferralCode = "Share referral code";
+  static const String pleaseEnterOtp = "Enter otp";
 
-  static const String pleaseEnterLink = "Please Enter Link";
+  static const String pleaseEnterLink = "Enter link";
 
-  static const String invalidOtp = "Invalid Otp Please check Your Opt";
+  static const String invalidOtp = "Invalid otp please check your opt";
   static const String saveText = "Save";
   static const String subscription = "Subscription ";
   static const String pricePerMonth = "\$19/mo";
@@ -211,35 +211,33 @@ abstract final class AppString {
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
 
-  static const pleaseEnterEmailAddress = 'Please Enter Email Address';
-  static const pleaseEnterValidEmailAddress =
-      'Please Enter Valid Email Address';
+  static const pleaseEnterEmailAddress = 'Enter email address';
+  static const pleaseEnterValidEmailAddress = 'Enter valid email address';
 
-  static const pleaseEnterPassword = 'Please Enter Password';
-  static const pleaseEnterNewPassword = 'Please Enter New Password';
+  static const pleaseEnterPassword = 'Enter password';
+  static const pleaseEnterNewPassword = 'Enter new password';
 
   static const newPasswordShouldBeDifferent =
-      'New Password should be Different from Current Password';
+      'New password should be Different from current password';
 
-  static const pleaseEnterCurrentPassword =
-      'Please Enter Your Current Password';
+  static const pleaseEnterCurrentPassword = 'Enter your current password';
   static const passwordShouldBe =
       'Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
   static const newPasswordShouldBe =
       'New Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
   static const passwordMismatch =
       'confirm password didn\'t match with password you enter';
-  static const pleaseEnterConfirmPassword = 'Please Enter Confirm Password';
+  static const pleaseEnterConfirmPassword = 'Enter confirm password';
 
-  static const String pleaseEnterName = "Please Enter Your Name";
-  static const String pleaseEnterDob = "Please Enter Your Date of Birth";
-  static const String pleaseEnterDesignation = "Please Enter Your Designation";
-  static const String pleaseEnterGender = "Please Enter Your Gender";
-  static const String validNumber = "Please Enter Your  Phone Number";
-  static const String validPhoneNumber = "Please Enter a Valid Phone Number";
-  static const String pleaseEnterEmail = "Please Enter Your email";
-  static const String pleaseEnterSubject = "Please Enter Subject";
-  static const String pleaseEnterMessage = "Please Enter Message";
+  static const String pleaseEnterName = "Enter your name";
+  static const String pleaseEnterDob = "Enter your date of birth";
+  static const String pleaseEnterDesignation = "Enter your designation";
+  static const String pleaseEnterGender = "Enter your gender";
+  static const String validNumber = "Enter phone number";
+  static const String validPhoneNumber = "Enter a valid phone number";
+  static const String pleaseEnterEmail = "Enter your email";
+  static const String pleaseEnterSubject = "Enter subject";
+  static const String pleaseEnterMessage = "Enter message";
 }
 
 abstract final class AuthStrings {

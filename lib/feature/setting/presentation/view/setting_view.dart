@@ -11,6 +11,7 @@ import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
+import 'package:NearMii/feature/common_widgets/common_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
@@ -85,7 +86,9 @@ class _SettingViewState extends ConsumerState<SettingView> {
         toast(msg: next.error);
       }
     });
-
+    final isVIP = notifier.userProfileModel != null
+        ? notifier.userProfileModel?.isSubscription == 1
+        : false;
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
@@ -114,14 +117,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
                                 : '',
                         name: notifier.userProfileModel?.name ?? '',
                         points: notifier.userProfileModel?.points ?? 0,
-                        isVip: notifier.userProfileModel != null
-                            ? notifier.userProfileModel?.isSubscription == 1
-                            : false,
+                        isVip: isVIP,
                       ),
                       28.verticalSpace,
-                      dottedContainer(
-                        context,
-                      ),
+                      dottedContainer(context, isVIP),
                       35.verticalSpace,
 
                       //SETTING TEXT
@@ -329,6 +328,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
 
   Widget dottedContainer(
     BuildContext context,
+    bool isVip,
   ) {
     return CommonDottedBorder(
       borderRadius: 20,
@@ -367,12 +367,23 @@ class _SettingViewState extends ConsumerState<SettingView> {
               ],
             ),
             const Spacer(),
-            AppText(
-              fontFamily: Constants.fontFamily,
-              text: "25 days left",
-              color: const Color(0xff00C565),
-              fontSize: 12.sp,
-            ),
+            (isVip == false)
+                ? SizedBox(
+                    height: 28.h,
+                    width: 76.w,
+                    child: CommonBtn(
+                      text: "Buy Now",
+                      onPressed: () {
+                        print("Button Pressed!");
+                      },
+                    ),
+                  )
+                : AppText(
+                    fontFamily: Constants.fontFamily,
+                    text: "25 days left",
+                    color: const Color(0xff00C565),
+                    fontSize: 12.sp,
+                  ),
           ],
         ),
       ),
