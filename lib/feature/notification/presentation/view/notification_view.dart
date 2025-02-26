@@ -24,8 +24,8 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        final notifier = ref.read(notificationProvider.notifier);
-        notifier.notificationApi();
+        // final notifier = ref.read(notificationProvider.notifier);
+        // notifier.notificationApi();
       },
     );
   }

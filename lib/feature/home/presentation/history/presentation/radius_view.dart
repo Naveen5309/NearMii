@@ -24,7 +24,7 @@ class RadiusScreen extends ConsumerStatefulWidget {
 }
 
 class _RadiusScreenState extends ConsumerState<RadiusScreen> {
-  double _currentRadius = 0;
+  double _currentRadius = 20;
   final List<double> _customIntervals = [20, 40, 60, 80, 100];
 
   @override
@@ -91,6 +91,10 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
                   ),
                 ),
               ),
+              AppText(
+                text: "${_currentRadius.toStringAsFixed(2)} m",
+                color: AppColor.btnColor,
+              ),
             ],
           ),
 
@@ -143,7 +147,7 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
 
           // Syncfusion Slider
           SfSlider(
-            min: 0,
+            min: 20,
             max: 100,
             value: _currentRadius,
             thumbShape: CustomThumbShape(),
