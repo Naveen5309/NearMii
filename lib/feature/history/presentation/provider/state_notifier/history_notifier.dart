@@ -14,6 +14,10 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   HistoryNotifier({required this.historyUsecases}) : super(HistoryInitial());
 
   List<HistoryModel> historyDataList = [];
+  List<HistoryModel> recentHistoryList = [];
+
+  List<HistoryModel> historyLastWeekTimeList = [];
+  List<HistoryModel> historyLastMonthTimeList = [];
 
   //History US
   Future<void> historyApi({required String name}) async {
@@ -39,11 +43,52 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
         return HistoryApiFailed(error: error.message);
       }, (result) {
         historyDataList = result ?? [];
-        log("history result is :->${result}");
+        log("history result is :->$result");
+        DateTime now = DateTime.now();
+        DateTime last7Days = now.subtract(const Duration(days: 7));
+        DateTime last14Days = now.subtract(const Duration(days: 14));
+        DateTime last365Days = now.subtract(const Duration(days: 365));
+        recentHistoryList = historyDataList
+            .where((history) =>
+                history.createdAt != null &&
+                history.createdAt!.isAfter(last7Days))
+            .toList();
+
+        historyLastWeekTimeList = historyDataList
+            .where((history) =>
+                history.createdAt != null &&
+                history.createdAt!.isAfter(last14Days) &&
+                history.createdAt!.isBefore(last7Days))
+            .toList();
+
+        historyLastMonthTimeList = historyDataList
+            .where((history) =>
+                history.createdAt != null &&
+                history.createdAt!.isAfter(last365Days) &&
+                history.createdAt!.isBefore(last14Days))
+            .toList();
+
+        log("Recent History (Last 7 Days): ${recentHistoryList.length}");
+        log("Last Week History (7-14 Days): ${historyLastWeekTimeList.length}");
+        log("Last Month History (14-30 Days): ${historyLastMonthTimeList.length}");
+
         return const HistoryApiSuccess();
       });
     } catch (e) {
       state = HistoryApiFailed(error: e.toString());
     }
   }
+}
+
+//  Time Format Function
+String getTimeAgo(DateTime? dateTime) {
+  if (dateTime == null) return "Unknown";
+
+  Duration diff = DateTime.now().difference(dateTime);
+  if (diff.inSeconds < 60) return "${diff.inSeconds}s ago";
+  if (diff.inMinutes < 60) return "${diff.inMinutes}m ago";
+  if (diff.inHours < 24) return "${diff.inHours}h ago";
+  if (diff.inDays < 7) return "${diff.inDays}d ago";
+  if (diff.inDays < 30) return "${(diff.inDays / 7).floor()}w ago";
+  return "${(diff.inDays / 30).floor()}mo ago";
 }
