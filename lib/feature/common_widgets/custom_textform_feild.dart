@@ -182,8 +182,8 @@ class _CustomLabelTextFieldState extends State<CustomTextformFeild> {
                   onTap: widget.onTapOnPrefixIcon,
                   child: Container(
                     // padding: const EdgeInsets.only(top: 10), // Moves the icon up child: Align( alignment: Alignment.topCenter, child: Icon(Icons.mail, color: _isFocused ? Colors.blue : Colors.grey), ), ),
-                    padding: const EdgeInsets.only(left: 15, bottom: 72),
-                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 15, top: 18),
+                    alignment: Alignment.topLeft,
                     child: widget.prefixWidget ??
                         SvgPicture.asset(
                           widget.prefixIcon!,

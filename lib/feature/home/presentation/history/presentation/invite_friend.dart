@@ -111,7 +111,8 @@ Widget customTextField({required String text}) {
 
 void _onShare({required BuildContext context, required String text}) async {
   final box = context.findRenderObject() as RenderBox?;
-  await Share.share(text,
+  await Share.share(
+      "Hi!\n\nJoin me on the NearMii App and earn credits! Use the referral code below when you sign up.\n\nReferral code: $text\n\nI look forward to seeing you on the NearMii App!\n",
       subject: text,
       sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
 }

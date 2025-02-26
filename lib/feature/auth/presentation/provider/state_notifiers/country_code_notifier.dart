@@ -5,10 +5,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CountryPickerNotifier extends StateNotifier<CountryPickerState> {
   final searchController = TextEditingController();
+  Country country = const Country(
+    name: "United States",
+    flag: "🇺🇸",
+    code: "US",
+    dialCode: "+1",
+    minLength: 10,
+    maxLength: 10,
+  );
 
-  CountryPickerNotifier() : super(CountryPickerInitial()) {
-    getCountries();
+  void makeInitialCountry(Country country) {
+    this.country = country;
+    state = const CountryPickerLoading();
   }
+
+  void updateInitialCountry(String code) {
+    final myCountry = allCountries.firstWhere((element) => element.code == code,
+        orElse: () => country);
+    country = myCountry;
+    state = const CountryPickerLoading();
+  }
+
+  CountryPickerNotifier() : super(CountryPickerInitial());
 
   Future<void> getCountries() async {
     state = const CountryPickerLoading();

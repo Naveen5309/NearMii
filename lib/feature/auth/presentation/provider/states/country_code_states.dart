@@ -28,6 +28,13 @@ class CountryPickerLoaded extends CountryPickerState {
   List<Object> get props => [countryList];
 }
 
+class CountryPickerUpdate extends CountryPickerState {
+  const CountryPickerUpdate();
+
+  @override
+  List<Object> get props => [];
+}
+
 class CountryPickerFailed extends CountryPickerState {
   final String error;
 

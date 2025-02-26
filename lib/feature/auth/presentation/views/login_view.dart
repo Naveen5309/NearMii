@@ -76,15 +76,18 @@ class LoginView extends ConsumerWidget {
 
                     // const Text("APPlOGO"),
 
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: SvgPicture.asset(
-                        Assets.icDummyLogo,
-                        height: 50,
-                        // width: 100,
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: SvgPicture.asset(
+                          Assets.icDummyLogo,
+                          height: 50,
+                          // width: 100,
+                        ),
                       ),
                     ),
-
+                    15.verticalSpace,
                     AppText(
                       text: AppString.signInToYourAccount,
                       fontSize: 32.sp,
@@ -225,12 +228,14 @@ Widget socialMediaSection({
   required VoidCallback onTapOnApple,
 }) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
       GestureDetector(
           onTap: onTapOnFb, child: SvgPicture.asset(Assets.icFbSingle)),
+      15.horizontalSpace,
       GestureDetector(
           onTap: onTapOnGoogle, child: SvgPicture.asset(Assets.google)),
+      15.horizontalSpace,
       if (Platform.isIOS)
         GestureDetector(
             onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),

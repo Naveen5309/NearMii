@@ -25,6 +25,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../auth/presentation/provider/states/country_code_provider.dart';
+
 class CompleteEditProfile extends ConsumerStatefulWidget {
   const CompleteEditProfile({super.key});
 
@@ -37,7 +39,13 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
   @override
   void initState() {
     final editProfileNotifier = ref.read(editProfileProvider.notifier);
+    final countryNotifier = ref.read(countryPickerProvider.notifier);
     editProfileNotifier.setDatainFields();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        countryNotifier.updateInitialCountry(editProfileNotifier.countryCode);
+      },
+    );
     super.initState();
   }
 
@@ -55,7 +63,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
             next.authType == AuthType.editProfile) {
           Utils.hideLoader();
 
-          toast(msg: AppString.profileUpdateSuccess, isError: false);
+          // toast(msg: AppString.profileUpdateSuccess, isError: false);
           // toNamed(context, Routes.otpVerify);
           showCustomBottomSheet(
               context: context, content: updateSuccessWidget(context: context));
@@ -101,7 +109,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
                     15.verticalSpace,
                     AppText(
-                      text: "Lorem ipsum dolor sit amet consectetur. Massa.",
+                      text: "Make changes to your profile information.",
                       fontSize: 14.sp,
                       color: AppColor.grey999,
                     ),
@@ -190,7 +198,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
               fontWeight: FontWeight.w400,
               color: AppColor.grey999,
               text:
-                  "Lorem ipsum dolor sit amet consectetur. Semper\nvel interdum et posuere venenatis."),
+                  "Your profile has been updated successfully. All your changes have been saved and applied to your account"),
         ),
 
         //Button
@@ -199,6 +207,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
           title: AppString.continu,
           textSize: 16.sp,
           onTap: () {
+            back(context);
             back(context);
           },
         )
@@ -245,11 +254,9 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                             ? ApiConstants.profileBaseUrl +
                                 editProfileNotifier.imageUrl
                             : '',
-                        imageRadius: 120, height: 100, width: 100,
-                        // CircleAvatar(
-                        //   radius: 30.r,
-                        //   backgroundImage: NetworkImage(imageUrl),
-                        // ),
+                        imageRadius: 120,
+                        height: 100,
+                        width: 100,
                       ),
                     ),
               Positioned(
@@ -273,6 +280,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
   Widget formsFieldsSection(
       {required BuildContext context,
       required SignupNotifiers editProfileNotifier}) {
+    print("Callleddddddddddd");
     return Column(
       children: [
         //FULL NAME
@@ -297,10 +305,11 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         //phone number
 
         CustomPhoneNumber(
-          onCountryCodeChanged: (code, flag) {
-            print("Selected Country Code: $code, Flag: $flag");
-            editProfileNotifier.countryCode = code;
-          },
+          selectedCountryCode: editProfileNotifier.countryCode,
+          selectedCountryFlag: editProfileNotifier.countryFlag,
+          // onCountryCodeChanged: (code, flag) {
+          //   editProfileNotifier.countryCode = code;
+          // },
           prefixIcon: Assets.icGender,
           controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,

@@ -37,7 +37,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       // );
       var notifier = ref.watch(homeProvider.notifier);
       final homeDataNotifier = ref.read(homeProvider.notifier);
-      homeDataNotifier.getHomeDataApi();
+
       homeDataNotifier.updateCoordinates(radius: "");
       homeDataNotifier.getFromLocalStorage();
 

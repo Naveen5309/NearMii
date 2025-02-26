@@ -24,7 +24,7 @@ class CommonBtn extends StatelessWidget {
         text: text,
         color: AppColor.whiteFFFFFF,
         fontSize: 13.sp,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w500,
       ),
     );
   }

@@ -169,7 +169,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                               text: notifier.userProfileModel?.token ?? '',
                               title: AppString.inviteFriend,
                               subtitle:
-                                  "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec nisl vitae. Amet nulla etiam.",
+                                  "Invite & Earn, get 5 credits for each invite, and your friend gets 2 credits when they sign up!",
                             )),
                       ),
                       10.verticalSpace,
@@ -327,7 +327,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: AppText(
-            text: "$points Points",
+            text: "$points Credits",
             color: const Color(0xff01C27D),
             fontFamily: Constants.fontFamily,
             fontSize: 15.sp,

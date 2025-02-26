@@ -25,14 +25,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../provider/states/country_code_provider.dart';
+
 class CompleteProfileView extends ConsumerWidget {
   const CompleteProfileView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final createProfileNotifier = ref.watch(signupProvider.notifier);
+    final createProfileNotifier = ref.read(signupProvider.notifier);
 
     ref.watch(signupProvider);
+    ref.watch(countryPickerProvider);
 
     ref.listen(
       signupProvider,
@@ -86,13 +89,16 @@ class CompleteProfileView extends ConsumerWidget {
 
                       // const Text("APPlOGO"),
 
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: SvgPicture.asset(
-                          Assets.icDummyLogo,
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: SvgPicture.asset(
+                            Assets.icDummyLogo,
 
-                          height: 50,
-                          // width: 100,
+                            height: 50,
+                            // width: 100,
+                          ),
                         ),
                       ),
 
@@ -101,9 +107,10 @@ class CompleteProfileView extends ConsumerWidget {
                         fontSize: 32.sp,
                       ),
 
-                      15.verticalSpace,
+                      10.verticalSpace,
                       AppText(
-                        text: "Lorem ipsum dolor sit amet consectetur. Massa.",
+                        text:
+                            "Complete Your Profile to Unlock Full Access and Personalized Experience.",
                         fontSize: 14.sp,
                         color: AppColor.grey999,
                       ),
@@ -224,9 +231,40 @@ class CompleteProfileView extends ConsumerWidget {
         //DESIGNATION
         CustomLabelTextField(
           maxLength: 50,
+          suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: createProfileNotifier.designationController,
           labelText: AppString.designation,
+          onTapOnSuffixIcon: () {
+            showCustomBottomSheet(
+                context: context,
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                              onTap: () {
+                                back(context);
+                              },
+                              child: SvgPicture.asset(Assets.icCloseCircle))),
+                      AppText(
+                        text: "Designation",
+                        fontSize: 20.sp,
+                      ),
+                      10.verticalSpace,
+                      AppText(
+                          color: AppColor.grey4848,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          text:
+                              "Please enter your professional designation. Your designation reflects your role, expertise, and responsibilities in your industry."),
+                    ],
+                  ),
+                ));
+          },
         ),
 
         // CustomLabelTextField(
@@ -241,10 +279,11 @@ class CompleteProfileView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CustomPhoneNumber(
-            onCountryCodeChanged: (code, flag) {
-              print("Selected Country Code: $code, Flag: $flag");
-              createProfileNotifier.countryCode = code;
-            },
+            selectedCountryCode: createProfileNotifier.countryCode,
+            selectedCountryFlag: createProfileNotifier.countryFlag,
+            // onCountryCodeChanged: (code, flag) {
+            //   createProfileNotifier.countryCode = code;
+            // },
             prefixIcon: Assets.icGender,
             controller: createProfileNotifier.phoneController,
             labelText: AppString.phoneNumber,
@@ -347,6 +386,37 @@ class CompleteProfileView extends ConsumerWidget {
 
         //REFERREL CODE
         CustomLabelTextField(
+          onTapOnSuffixIcon: () {
+            showCustomBottomSheet(
+                context: context,
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                              onTap: () {
+                                back(context);
+                              },
+                              child: SvgPicture.asset(Assets.icCloseCircle))),
+                      AppText(
+                        text: "Referral code",
+                        fontSize: 20.sp,
+                      ),
+                      10.verticalSpace,
+                      AppText(
+                          color: AppColor.grey4848,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          text:
+                              "Please enter your referral code. Your referral code helps us identify who referred you and unlock any special rewards or benefits."),
+                    ],
+                  ),
+                ));
+          },
+          suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icReferrelCode,
           controller: (createProfileNotifier.referralController),
           labelText: AppString.enterReferralCode,

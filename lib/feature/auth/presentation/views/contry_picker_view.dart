@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/country_code_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/country_code_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -6,12 +9,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CountryPickerView extends ConsumerWidget {
+class CountryPickerView extends ConsumerStatefulWidget {
   const CountryPickerView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CountryPickerView> createState() => _CountryPickerViewState();
+}
+
+class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        ref.read(countryPickerProvider.notifier).getCountries();
+      },
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final county = ref.watch(countryPickerProvider);
+    final updateCode = ref.watch(signupProvider.notifier);
     return Scaffold(
       appBar: AppBar(
           elevation: 1,
@@ -48,7 +67,17 @@ class CountryPickerView extends ConsumerWidget {
                     dense: true,
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
                     onTap: () {
+                      log("selected country:-> ${data.dialCode}");
+                      // updateCode.updateCountryData(
+                      //   dialCode: data.dialCode ?? "+1",
+                      // );
+
+                      ref
+                          .read(countryPickerProvider.notifier)
+                          .makeInitialCountry(data);
+
                       Navigator.pop(context, data);
+                      // Navigator.pop(context, data);
                     },
                     leading: AppText(
                       text: data.flag ?? "",

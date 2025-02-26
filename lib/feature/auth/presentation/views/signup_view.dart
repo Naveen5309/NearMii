@@ -68,14 +68,18 @@ class SignUpView extends ConsumerWidget {
 
                     // const Text("APPlOGO"),
 
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: SvgPicture.asset(
-                        Assets.icDummyLogo,
-                        height: 50,
-                        // width: 100,
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: SvgPicture.asset(
+                          Assets.icDummyLogo,
+                          height: 50,
+                          // width: 100,
+                        ),
                       ),
                     ),
+                    15.verticalSpace,
 
                     AppText(
                       text: AppString.signUpToYourAccount,
@@ -302,14 +306,16 @@ Widget socialMediaSection(
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 25),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: onTapOnFb,
           child: SvgPicture.asset(Assets.icFbSingle),
         ),
+        15.horizontalSpace,
         GestureDetector(
             onTap: onTapOnGoogle, child: SvgPicture.asset(Assets.google)),
+        15.horizontalSpace,
         if (Platform.isIOS)
           GestureDetector(
               onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),

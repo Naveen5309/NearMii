@@ -179,7 +179,7 @@ class Assets {
   static const String locationAnimation =
       'assets/animation/location_animation.json';
   static const String appLogoRound = 'assets/icons/app_logo_round.png';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
+  static const String icInfo = 'assets/icons/info.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';

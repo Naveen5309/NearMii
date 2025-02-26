@@ -58,6 +58,16 @@ class UpdateTimer extends AuthState {
   List<Object?> get props => [];
 }
 
+class UpdateCodeLoading extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
+class UpdateCodeLoaded extends AuthState {
+  @override
+  List<Object?> get props => [];
+}
+
 // ///****** Sinup States *******************
 // @immutable
 // sealed class SignUpState extends Equatable {

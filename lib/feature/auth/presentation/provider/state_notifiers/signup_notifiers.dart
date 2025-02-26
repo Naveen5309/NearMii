@@ -8,6 +8,7 @@ import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/country_code_states.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -638,5 +639,16 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     emailController.clear();
     pswdController.clear();
     confirmPswdController.clear();
+  }
+
+  void updateCountryData({
+    required String dialCode,
+  }) async {
+    log("update code called");
+    state = UpdateCodeLoading();
+    countryCode = dialCode;
+    state = UpdateCodeLoaded();
+
+    log("update code called :-> $countryCode, $countryFlag");
   }
 }

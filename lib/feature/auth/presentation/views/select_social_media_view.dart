@@ -151,11 +151,34 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     ),
 
                     10.verticalSpace,
-                    AppText(
-                      text: "Lorem ipsum dolor sit amet consectetur. Massa.",
-                      fontSize: 14.sp,
-                      color: AppColor.grey999,
+
+                    RichText(
+                      text: TextSpan(
+                        text: 'Upload the URL of your profiles. ',
+                        style: TextStyle(
+                          color: AppColor.grey999,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Learn More',
+                            style: TextStyle(
+                              color: AppColor.btnColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+
+                    // AppText(
+                    //   text: "Lorem ipsum dolor sit amet consectetur. Massa.",
+                    //   fontSize: 14.sp,
+                    //   color: AppColor.grey999,
+                    // ),
                     15.verticalSpace,
 
                     //SEARCH FIELD
