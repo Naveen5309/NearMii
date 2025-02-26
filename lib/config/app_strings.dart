@@ -90,6 +90,12 @@ abstract final class AppString {
   static const String report = "Report";
   static const String theyArePretending =
       "They are pretending to be  someone else";
+  static const String noLongerNeed = "I no longer need the account.";
+  static const String notUsingAppAnymore = "I am not using the app anymore.";
+  static const String multipleAccountsSoNeedToRemove =
+      "I have multiple accounts and want to remove this one";
+  static const String createNewAccount =
+      "I want to create a new account with a different email/phone number";
   static const String theyAreUnderTheAge = "They are under the age of 10";
   static const String violenceAndDangerous = "Violence & dangerous ";
   static const String hateSpeech = "Hate speech or symbol ";

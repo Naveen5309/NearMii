@@ -32,13 +32,13 @@ class ProfileGridView extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColor.primary,
-        borderRadius: BorderRadius.circular(12), // Smooth rounded corners
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03), // Adjust opacity as needed
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 2,
-            spreadRadius: 0, // No spreading to the sides
-            offset: const Offset(0, 5), // Move shadow downwards
+            spreadRadius: 0,
+            offset: const Offset(0, 5),
           ),
         ],
       ),

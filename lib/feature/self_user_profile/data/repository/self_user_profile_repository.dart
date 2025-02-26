@@ -9,6 +9,8 @@ abstract class SelfUserProfileRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> isGetSelfPlatform(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> isDelete(
+      {required Map<String, dynamic> body});
 }
 
 class SelfUserProfileRepoImpl implements SelfUserProfileRepository {
@@ -36,7 +38,7 @@ class SelfUserProfileRepoImpl implements SelfUserProfileRepository {
   Future<Either<Failure, dynamic>> isHideAllLinks(
       {required Map<String, dynamic> body}) async {
     try {
-      final data = await dataSource.updateSocialLink(body: body);
+      final data = await dataSource.hideAllLinks(body: body);
 
       if (data.status == "success") {
         return Right(data.data);
@@ -52,7 +54,23 @@ class SelfUserProfileRepoImpl implements SelfUserProfileRepository {
   Future<Either<Failure, dynamic>> isGetSelfPlatform(
       {required Map<String, dynamic> body}) async {
     try {
-      final data = await dataSource.updateSocialLink(body: body);
+      final data = await dataSource.getSelfPlatform(body: body);
+
+      if (data.status == "success") {
+        return Right(data.data);
+      } else {
+        return Left(ServerFailure(message: data.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> isDelete(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.delete(body: body);
 
       if (data.status == "success") {
         return Right(data.data);

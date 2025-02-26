@@ -16,6 +16,7 @@ import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
 import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -41,6 +42,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     Future.microtask(() {
       final notifier = ref.read(signupProvider.notifier);
       notifier.getSocialPlatform(query: '');
+      final selfNotifier = ref.read(getSelfPlatformProvider.notifier);
+      selfNotifier.getSelfPlatformApi(name: '');
     });
   }
 

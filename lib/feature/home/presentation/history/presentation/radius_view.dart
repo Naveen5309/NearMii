@@ -24,8 +24,8 @@ class RadiusScreen extends ConsumerStatefulWidget {
 }
 
 class _RadiusScreenState extends ConsumerState<RadiusScreen> {
-  double _currentRadius = 32.0;
-  final List<double> _customIntervals = [0, 50, 80, 100];
+  double _currentRadius = 0;
+  final List<double> _customIntervals = [20, 40, 60, 80, 100];
 
   @override
   Widget build(BuildContext context) {
@@ -103,30 +103,37 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppText(
-                  text: "0 m",
+                  text: "20 m",
                   fontSize: 12.sp,
                   color: (_currentRadius - 0).abs() < 10
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
-                  text: "50 m",
+                  text: "40 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 32).abs() < 10
+                  color: (_currentRadius - 26).abs() < 1
+                      ? AppColor.green00C56524
+                      : AppColor.black000000.withOpacity(0.3),
+                ),
+                AppText(
+                  text: "60 m",
+                  fontSize: 12.sp,
+                  color: (_currentRadius - 47).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
                   text: "80 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 63).abs() < 10
+                  color: (_currentRadius - 70).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
                   text: "100 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 100).abs() < 10
+                  color: (_currentRadius - 100).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
@@ -140,7 +147,7 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
             max: 100,
             value: _currentRadius,
             thumbShape: CustomThumbShape(),
-            interval: 50,
+            interval: 20,
             onChangeStart: (value) {
               print(value);
             },
@@ -149,7 +156,7 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
             },
             activeColor: AppColor.green00C56524,
             inactiveColor: Colors.grey.shade300,
-            minorTicksPerInterval: 50,
+            minorTicksPerInterval: 0,
             labelFormatterCallback: (dynamic value, String formattedText) {
               return _customIntervals.contains(value)
                   ? "${value.toInt()} m"
@@ -157,7 +164,8 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
             },
             onChanged: (dynamic value) {
               setState(() {
-                _currentRadius = _getNearestValue(value);
+                _currentRadius = value;
+                //  _getNearestValue(value);
               });
             },
           ),
@@ -179,10 +187,10 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
     );
   }
 
-  double _getNearestValue(double value) {
-    if (value <= 30) return 0;
-    if (value > 30 && value <= 60) return 32;
-    if (value > 60 && value <= 90) return 63;
-    return 100;
-  }
+  // double _getNearestValue(double value) {
+  //   if (value <= 30) return 0;
+  //   if (value > 30 && value <= 60) return 32;
+  //   if (value > 60 && value <= 90) return 63;
+  //   return 100;
+  // }
 }

@@ -115,6 +115,8 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
                   maxWidth: 50, maxHeight: 50, minHeight: 25, minWidth: 25),
               suffixIcon: widget.suffixIcon != null
                   ? InkWell(
+                      splashColor: AppColor.transparent,
+                      highlightColor: Colors.transparent,
                       onTap: widget.onTapOnSuffixIcon,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 18.0),
