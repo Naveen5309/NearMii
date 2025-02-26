@@ -1,5 +1,6 @@
 import 'package:NearMii/config/countries.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/feature/auth/presentation/views/contry_picker_view.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_countries_tile.dart';
 import 'package:flutter/material.dart';
@@ -161,7 +162,15 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: _showCountryPicker,
+              // onTap: _showCountryPicker,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CountryPickerView(),
+                    ));
+              },
+
               child: Row(
                 children: [
                   const SizedBox(width: 5),

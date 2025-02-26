@@ -39,7 +39,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(getProfileProvider.notifier).getProfileApi();
+      ref.read(getProfileProvider.notifier).getProfileApi();
     });
   }
 
@@ -139,14 +139,26 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         ),
                       ),
                       8.verticalSpace,
+
+                      //UPDATE PROFILE
                       CustomTile(
                         leadingIcon: Assets.iconPerson,
                         title: AppString.editProfile,
                         subtitle: AppString.updateProfile,
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.editProfile),
+                        onTap: () async {
+                          await toNamed(context, Routes.editProfile).then(
+                            (value) {
+                              ref
+                                  .read(getProfileProvider.notifier)
+                                  .getProfileApi();
+                            },
+                          );
+                        },
                       ),
                       10.verticalSpace,
+
+                      //INVITE FRIENDS
                       CustomTile(
                         leadingIcon: Assets.add,
                         title: AppString.inviteFriends,
@@ -367,6 +379,20 @@ class _SettingViewState extends ConsumerState<SettingView> {
               ],
             ),
             const Spacer(),
+
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Colors.white,
+            //     foregroundColor: Colors.black,
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //     ),
+            //   ),
+            //   onPressed: () => Navigator.pop(context),
+            //   child: const Text("Buy Now"),
+            // ),
             AppText(
               fontFamily: Constants.fontFamily,
               text: "25 days left",

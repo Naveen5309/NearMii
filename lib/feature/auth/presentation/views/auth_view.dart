@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
@@ -173,12 +174,13 @@ class AuthView extends ConsumerWidget {
             ),
 
             //APPLE
-            customSocialMediaBtn(
-              onTap: () {},
-              icon: Assets.icApple2,
-              text: AppString.singInWithApple,
-              context: context,
-            ),
+            if (Platform.isIOS)
+              customSocialMediaBtn(
+                onTap: () {},
+                icon: Assets.icApple2,
+                text: AppString.singInWithApple,
+                context: context,
+              ),
           ],
         );
       },

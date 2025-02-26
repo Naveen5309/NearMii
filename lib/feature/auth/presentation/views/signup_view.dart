@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -308,8 +310,9 @@ Widget socialMediaSection(
         ),
         GestureDetector(
             onTap: onTapOnGoogle, child: SvgPicture.asset(Assets.google)),
-        GestureDetector(
-            onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),
+        if (Platform.isIOS)
+          GestureDetector(
+              onTap: onTapOnApple, child: SvgPicture.asset(Assets.apple)),
       ],
     ),
   );

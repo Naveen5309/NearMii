@@ -81,8 +81,9 @@ void offAllNamed(BuildContext context, String routesName, {Object? args}) {
       arguments: args);
 }
 
-void toNamed(BuildContext context, String routesName, {Object? args}) {
-  Navigator.pushNamed(context, routesName, arguments: args);
+Future<dynamic> toNamed(BuildContext context, String routesName,
+    {Object? args}) async {
+  return await Navigator.pushNamed(context, routesName, arguments: args);
 }
 
 void back(BuildContext context) {
