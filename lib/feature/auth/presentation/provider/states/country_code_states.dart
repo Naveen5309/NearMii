@@ -28,10 +28,10 @@ class CountryPickerLoaded extends CountryPickerState {
   List<Object> get props => [countryList];
 }
 
-class AuthApiFailed extends CountryPickerState {
+class CountryPickerFailed extends CountryPickerState {
   final String error;
 
-  const AuthApiFailed({
+  const CountryPickerFailed({
     required this.error,
   });
 

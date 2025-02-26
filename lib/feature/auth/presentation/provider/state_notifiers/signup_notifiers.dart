@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:NearMii/config/countries.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
@@ -35,9 +36,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final confirmPasswordController = TextEditingController();
   final searchTextController = TextEditingController();
 
-  final imageController = TextEditingController();
+  // final imageController = TextEditingController();
   EditProfileModel? editProfileModel;
-  String countryCode = "+1";
+
+  String countryCode = '+1';
+  String countryFlag = '🇺🇸';
 
   String profilePic = '';
   String name = '';
@@ -51,6 +54,9 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   //My Profile Method to upload profile image
   XFile? image;
   String imageUrl = '';
+
+  String socialId = '';
+
   List<PlatformData> socialMediaList = [];
   List<PlatformData> contactList = [];
   List<PlatformData> portfolioList = [];
@@ -503,6 +509,23 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     confirmPswdController.clear();
   }
 
+//GET FLAG WITH CONUNTRY CODE
+  String? getFlagByDialCode(String dialCode) {
+    final country = allCountries.firstWhere(
+      (c) => c.dialCode == dialCode,
+      orElse: () => const Country(
+        name: "",
+        flag: "",
+        code: "",
+        dialCode: "",
+        minLength: 0,
+        maxLength: 0,
+      ),
+    );
+
+    return country.flag!.isNotEmpty ? country.flag : null;
+  }
+
   clearOtpFields() {
     otpController.clear();
   }
@@ -545,8 +568,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     }
   }
 
-//edit PROFILE API
-  Future<void> editProfileApi({String? socialId}) async {
+//update PROFILE API
+  Future<void> editProfileApi() async {
     state = const AuthApiLoading(authType: AuthType.editProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -563,11 +586,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
       final Map<String, String> body = {
         "name": fullNameController.text.trim(),
-        "email": emailController.text.trim(),
-        if (socialId != null) "social_id": socialId,
-        if (socialId != null) "social_type": 'google',
+        if (socialId.isNotEmpty) "social_id": socialId,
+        if (socialId.isNotEmpty) "social_type": 'google',
         "designation": designationController.text.trim(),
-        "phone_number": phoneController.text.trim(),
+        "phone_number": "$countryCode ${phoneController.text.trim()}",
         "bio": bioController.text.trim(),
         "gender": genderController.text.trim(),
         "dob": dobController.text.trim(),
@@ -595,15 +617,26 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
     fullNameController.text = getProfile?.name ?? '';
     designationController.text = getProfile?.designation ?? '';
-    phoneController.text = getProfile?.phoneNumber ?? "";
+    phoneController.text =
+        (getProfile?.phoneNumber).toString().split(' ').last ?? "";
     dobController.text = getProfile?.dob ?? '';
     genderController.text = getProfile?.gender ?? '';
     bioController.text = getProfile?.bio ?? '';
-    imageController.text = getProfile?.profilePhoto ?? '';
+    imageUrl = getProfile?.profilePhoto ?? '';
+    socialId = getProfile?.socialId ?? '';
+    countryFlag = getFlagByDialCode(
+            (getProfile?.phoneNumber).toString().split(' ').first) ??
+        '🇺🇸';
   }
 
   void saveToLocalStorage() async {
     await Getters.getLocalStorage.saveName(name);
     await Getters.getLocalStorage.saveProfileImg(profilePic);
+  }
+
+  clearFormFields() {
+    emailController.clear();
+    pswdController.clear();
+    confirmPswdController.clear();
   }
 }

@@ -40,7 +40,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.watch(getProfileProvider.notifier).getProfileApi();
+      ref.read(getProfileProvider.notifier).getProfileApi();
     });
   }
 
@@ -138,14 +138,26 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         ),
                       ),
                       8.verticalSpace,
+
+                      //UPDATE PROFILE
                       CustomTile(
                         leadingIcon: Assets.iconPerson,
                         title: AppString.editProfile,
                         subtitle: AppString.updateProfile,
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.editProfile),
+                        onTap: () async {
+                          await toNamed(context, Routes.editProfile).then(
+                            (value) {
+                              ref
+                                  .read(getProfileProvider.notifier)
+                                  .getProfileApi();
+                            },
+                          );
+                        },
                       ),
                       10.verticalSpace,
+
+                      //INVITE FRIENDS
                       CustomTile(
                         leadingIcon: Assets.add,
                         title: AppString.inviteFriends,

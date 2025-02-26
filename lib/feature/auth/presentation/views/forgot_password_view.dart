@@ -25,6 +25,7 @@ class ForgotPasswordView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final forgetPasswordNotifier = ref.watch(signupProvider.notifier);
     forgetPasswordNotifier.cancelTimer();
+    forgetPasswordNotifier.clearFormFields();
 
     ref.listen(
       signupProvider,

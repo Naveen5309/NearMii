@@ -60,7 +60,7 @@ class CustomProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ImageFiltered(
-                  enabled: true,
+                  enabled: false,
                   imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 2),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

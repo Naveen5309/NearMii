@@ -86,7 +86,7 @@ class VIPMembershipDialog extends StatelessWidget {
                   Row(
                     children: [
                       AppText(
-                        text: "\$120",
+                        text: "\$19",
                         fontSize: 34.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,

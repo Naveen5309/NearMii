@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
+import 'package:NearMii/feature/common_widgets/choose_image_widget.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
@@ -19,14 +23,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
-class CompleteEditProfile extends ConsumerWidget {
+class CompleteEditProfile extends ConsumerStatefulWidget {
   const CompleteEditProfile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final editProfileNotifier = ref.watch(editProfileProvider.notifier);
+  ConsumerState<CompleteEditProfile> createState() =>
+      _CompleteEditProfileState();
+}
+
+class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
+  @override
+  void initState() {
+    final editProfileNotifier = ref.read(editProfileProvider.notifier);
     editProfileNotifier.setDatainFields();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final editProfileNotifier = ref.read(editProfileProvider.notifier);
+    ref.watch(editProfileProvider);
+
     ref.listen(
       editProfileProvider,
       (previous, next) {
@@ -90,6 +109,21 @@ class CompleteEditProfile extends ConsumerWidget {
                     Padding(
                       padding: EdgeInsets.only(top: context.height * .02),
                       child: profileSection(
+                          image: editProfileNotifier.image,
+                          onTap: () => showCustomBottomSheet(
+                              context: context,
+                              content: ChooseImageWidget(
+                                onClickOnCamera: () {
+                                  editProfileNotifier.pickAndCropImage(
+                                      context: context,
+                                      source: ImageSource.camera);
+                                },
+                                onClickOnGallery: () {
+                                  editProfileNotifier.pickAndCropImage(
+                                      context: context,
+                                      source: ImageSource.gallery);
+                                },
+                              )),
                           editProfileNotifier: editProfileNotifier),
                     ),
 
@@ -106,7 +140,6 @@ class CompleteEditProfile extends ConsumerWidget {
                       onTap: () {
                         final isUpdate =
                             editProfileNotifier.validateEditProfile();
-                        print(isUpdate);
                         if (isUpdate) {
                           editProfileNotifier.editProfileApi();
 
@@ -175,7 +208,11 @@ class CompleteEditProfile extends ConsumerWidget {
 
   //PROFILE SECTION
 
-  Widget profileSection({required SignupNotifiers editProfileNotifier}) {
+  Widget profileSection({
+    required SignupNotifiers editProfileNotifier,
+    XFile? image,
+    required VoidCallback onTap,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -183,26 +220,46 @@ class CompleteEditProfile extends ConsumerWidget {
           height: 125,
           child: Stack(
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.greenC5EDD9,
-                ),
-                padding: const EdgeInsets.all(5),
-                child: const CustomCacheNetworkImage(
-                  img: '',
-                  imageRadius: 120, height: 100, width: 100,
-                  // CircleAvatar(
-                  //   radius: 30.r,
-                  //   backgroundImage: NetworkImage(imageUrl),
-                  // ),
-                ),
-              ),
+              image != null
+                  ? Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(120)),
+                      height: 100,
+                      width: 100,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(120),
+                          child: Image(
+                            image: FileImage(
+                              File(image.path),
+                            ),
+                            fit: BoxFit.cover,
+                          )))
+                  : Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColor.greenC5EDD9,
+                      ),
+                      padding: const EdgeInsets.all(5),
+                      child: CustomCacheNetworkImage(
+                        img: editProfileNotifier.imageUrl.isNotEmpty
+                            ? ApiConstants.profileBaseUrl +
+                                editProfileNotifier.imageUrl
+                            : '',
+                        imageRadius: 120, height: 100, width: 100,
+                        // CircleAvatar(
+                        //   radius: 30.r,
+                        //   backgroundImage: NetworkImage(imageUrl),
+                        // ),
+                      ),
+                    ),
               Positioned(
                 right: 0,
                 bottom: 15,
-                child: SvgPicture.asset(
-                  Assets.camera,
+                child: InkWell(
+                  onTap: onTap,
+                  child: SvgPicture.asset(
+                    Assets.camera,
+                  ),
                 ),
               ),
             ],
@@ -240,6 +297,10 @@ class CompleteEditProfile extends ConsumerWidget {
         //phone number
 
         CustomPhoneNumber(
+          onCountryCodeChanged: (code, flag) {
+            print("Selected Country Code: $code, Flag: $flag");
+            editProfileNotifier.countryCode = code;
+          },
           prefixIcon: Assets.icGender,
           controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,

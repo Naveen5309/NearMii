@@ -171,8 +171,10 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           child: CustomCacheNetworkImage(
                               height: 45,
                               width: 45,
-                              img: ApiConstants.profileBaseUrl +
-                                  notifier.profilePic,
+                              img: notifier.profilePic.isNotEmpty
+                                  ? ApiConstants.profileBaseUrl +
+                                      notifier.profilePic
+                                  : '',
                               imageRadius: 40)),
                     ],
                   ),

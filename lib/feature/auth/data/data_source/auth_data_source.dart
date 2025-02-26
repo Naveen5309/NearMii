@@ -412,7 +412,7 @@ class AuthDataSourceImpl extends AuthDataSource {
       final dataResponse =
           await Getters.getHttpService.request<EditProfileModel>(
               body: body,
-              requestType: RequestType.post,
+              requestType: RequestType.multipart,
               imagePath: imagePath,
               paramName: "profile_photo",
               url: ApiConstants.updateProfile,
