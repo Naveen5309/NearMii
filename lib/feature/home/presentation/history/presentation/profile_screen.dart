@@ -131,10 +131,11 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
             backdropWidget: Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.background),
-                  fit: BoxFit.fill,
-                ),
+                color: AppColor.greyf9f9f9,
+                // image: DecorationImage(
+                //   image: AssetImage(Assets.background),
+                //   fit: BoxFit.fill,
+                // ),
               ),
             ),
             expandedContentHeight: context.height * .55,
@@ -233,77 +234,85 @@ Widget bottomSection(
 
 Widget profileSection(
     {required BuildContext context, required ProfileModel profile}) {
-  return Column(
-      mainAxisSize:
-          MainAxisSize.min, // Ensures column takes only necessary space
-      children: [
-        SizedBox(height: context.height * .1),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              back(context);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: context.width * .05),
-              child: SvgPicture.asset(
-                Assets.icBackBtn,
-                colorFilter:
-                    const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+  return Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage(Assets.background),
+        fit: BoxFit.fill,
+      ),
+    ),
+    child: Column(
+        mainAxisSize:
+            MainAxisSize.min, // Ensures column takes only necessary space
+        children: [
+          SizedBox(height: context.height * .1),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: () {
+                back(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: context.width * .05),
+                child: SvgPicture.asset(
+                  Assets.icBackBtn,
+                  colorFilter:
+                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(height: context.height * .02),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xff69DDA5),
+          SizedBox(height: context.height * .02),
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xff69DDA5),
+            ),
+            padding: const EdgeInsets.all(6),
+            child: CustomCacheNetworkImage(
+              img: '',
+              imageRadius: 150,
+              height: 105.w,
+              width: 105.w,
+            ),
           ),
-          padding: const EdgeInsets.all(6),
-          child: CustomCacheNetworkImage(
-            img: '',
-            imageRadius: 150,
-            height: 105.w,
-            width: 105.w,
+          10.verticalSpace,
+          AppText(
+            color: AppColor.whiteFFFFFF,
+            text: profile.name,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
           ),
-        ),
-        10.verticalSpace,
-        AppText(
-          color: AppColor.whiteFFFFFF,
-          text: profile.name,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w500,
-        ),
-        5.verticalSpace,
-        AppText(
-          text: profile.designation,
-          fontWeight: FontWeight.w500,
-          fontSize: 16.sp,
-          color: AppColor.whiteFFFFFF.withOpacity(.8),
-        ),
-        25.verticalSpace,
-        AppText(
-          text: profile.description,
-          textAlign: TextAlign.center,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColor.whiteFFFFFF.withOpacity(.8),
-        ),
-        20.verticalSpace,
-        Wrap(
-          alignment: WrapAlignment.center,
-          runSpacing: 8,
-          spacing: 6,
-          children: [
-            InfoChip(label: 'Social', value: profile.social),
-            InfoChip(label: 'Contact', value: profile.contact),
-            InfoChip(label: 'Portfolio', value: profile.portfolio),
-            InfoChip(label: 'Finance', value: profile.finance),
-            InfoChip(label: 'Business', value: profile.business),
-          ],
-        )
-      ]);
+          5.verticalSpace,
+          AppText(
+            text: profile.designation,
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          ),
+          25.verticalSpace,
+          AppText(
+            text: profile.description,
+            textAlign: TextAlign.center,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          ),
+          20.verticalSpace,
+          Wrap(
+            alignment: WrapAlignment.center,
+            runSpacing: 8,
+            spacing: 6,
+            children: [
+              InfoChip(label: 'Social', value: profile.social),
+              InfoChip(label: 'Contact', value: profile.contact),
+              InfoChip(label: 'Portfolio', value: profile.portfolio),
+              InfoChip(label: 'Finance', value: profile.finance),
+              InfoChip(label: 'Business', value: profile.business),
+            ],
+          )
+        ]),
+  );
   // background: Container(
   //   width: MediaQuery.of(context).size.width,
   //   padding: EdgeInsets.only(
