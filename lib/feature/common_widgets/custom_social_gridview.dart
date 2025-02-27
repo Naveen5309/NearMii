@@ -206,7 +206,7 @@ class CustomSocialGridview extends ConsumerWidget {
                               name: socialMedia[pIndex].name ?? '',
                             ),
                             Visibility(
-                              visible: !notifier.selectedPlatform
+                              visible: notifier.selectedPlatform
                                   .contains(socialMedia[pIndex].id),
                               child: Positioned(
                                 right: 0,

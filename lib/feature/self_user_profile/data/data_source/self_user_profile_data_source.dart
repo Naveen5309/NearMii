@@ -108,17 +108,19 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
     try {
       final dataResponse =
           await Getters.getHttpService.request<GetPlatformData>(
-              body: body,
-              requestType: RequestType.post,
-              url: ApiConstants.getSelfPlatform,
-              fromJson: (json) {
-                print("json in data source :-> $json");
+        body: body,
+        requestType: RequestType.post,
+        url: ApiConstants.getSelfPlatform,
+        fromJson: (json) {
+          log("json in data source :-> $json");
 
-                if (json is Map<String, dynamic>) {
-                  return GetPlatformData.fromJson(json["data"]);
-                }
-                throw Exception("Unexpected API response format");
-              });
+          // Ensure the response is a map and correctly map it to GetPlatformData
+          if (json is Map<String, dynamic>) {
+            return GetPlatformData.fromJson(json["data"]);
+          }
+          throw Exception("Unexpected API response format");
+        },
+      );
       print("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
@@ -132,7 +134,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "OtherUserProfileLogin",
+        functionName: "getSelfPlatform",
       ));
     }
   }

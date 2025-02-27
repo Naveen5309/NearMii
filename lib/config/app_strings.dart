@@ -227,7 +227,7 @@ abstract final class AppString {
   static const pleaseEnterNewPassword = 'Enter new password';
 
   static const newPasswordShouldBeDifferent =
-      'New password should be Different from current password';
+      'New password must be different from current password';
 
   static const pleaseEnterCurrentPassword = 'Enter your current password';
   static const selectReason = 'Select reason';

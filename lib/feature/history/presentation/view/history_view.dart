@@ -1,6 +1,5 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';

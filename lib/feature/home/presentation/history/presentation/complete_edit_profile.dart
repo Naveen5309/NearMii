@@ -302,9 +302,40 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
         //DESIGNATION
         CustomLabelTextField(
+          suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: editProfileNotifier.designationController,
           labelText: AppString.designation,
+          onTapOnSuffixIcon: () {
+            showCustomBottomSheet(
+                context: context,
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: InkWell(
+                              onTap: () {
+                                back(context);
+                              },
+                              child: SvgPicture.asset(Assets.icCloseCircle))),
+                      AppText(
+                        text: "Designation",
+                        fontSize: 20.sp,
+                      ),
+                      10.verticalSpace,
+                      AppText(
+                          color: AppColor.grey4848,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          text:
+                              "Please enter your professional designation. Your designation reflects your role, expertise, and responsibilities in your industry."),
+                    ],
+                  ),
+                ));
+          },
         ),
         SizedBox(
           height: context.height * 0.014,

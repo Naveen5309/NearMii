@@ -104,12 +104,15 @@ class ProfileGridView extends StatelessWidget {
                                         ],
                                       ),
                                       // 10.verticalSpace,
+
+                                      Text("==${socialMedia[pIndex].icon}"),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                             vertical: context.height * .03),
                                         child: CustomLabelTextField(
-                                            labelText:
-                                                " https://${socialMedia[pIndex].name}/username",
+                                            labelText: socialMedia[pIndex]
+                                                    .type ??
+                                                '',
                                             controller: TextEditingController(),
                                             prefixWidget:
                                                 CustomCacheNetworkImage(
@@ -162,12 +165,15 @@ class ProfileGridView extends StatelessWidget {
                                 )
                               : null;
                         },
-                        child: ProfileSocialMedia(
-                          isMyProfile: isMyProfile,
-                          index: pIndex,
-                          icon: socialMedia[pIndex].icon ?? '',
-                          name: socialMedia[pIndex].name ?? '',
-                        ));
+                        child: Text("asdf :${socialMedia[pIndex].name}")
+
+                        //  ProfileSocialMedia(
+                        //   isMyProfile: isMyProfile,
+                        //   index: pIndex,
+                        //   icon: socialMedia[pIndex].icon ?? 'asdf',
+                        //   name: socialMedia[pIndex].name ?? '',
+                        // )
+                        );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, // 3 columns

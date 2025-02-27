@@ -4,7 +4,6 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
@@ -15,11 +14,10 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
 import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
-import 'package:NearMii/feature/home/data/models/subscription_model.dart';
-import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/state_notifier/self_user_profile_notifier.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -52,10 +50,10 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(signupProvider);
+    ref.watch(getSelfPlatformProvider);
     ref.watch(getSocialProfileProvider);
 
-    final signUpNotifier = ref.watch(signupProvider.notifier);
+    final selfUserProfileNotifier = ref.read(getSelfPlatformProvider.notifier);
     final notifier = ref.read(getSocialProfileProvider.notifier);
     ref.listen(
       getSocialProfileProvider,
@@ -225,11 +223,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                 // collapsedBarHeight: 60,
                 animationDuration: const Duration(milliseconds: 1),
                 onCollapseStateChanged:
-                    (isCollapsed, scrollingOffset, maxExtent) {
-                  log("isCollapsed $isCollapsed");
-                  log("scrollingOffset $scrollingOffset");
-                  log("maxExtent $maxExtent");
-                },
+                    (isCollapsed, scrollingOffset, maxExtent) {},
                 collapsedBackgroundColor: AppColor.btnColor,
                 expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                 // backdropWidget: Container(
@@ -245,7 +239,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                     context: context, profile: notifier.userProfileModel),
                 collapsedContent: appBarWidgetSection(context: context),
                 body: bottomSection(
-                    signUpNotifier: signUpNotifier, context: context)));
+                    selfUserProfileNotifier: selfUserProfileNotifier,
+                    context: context)));
   }
 }
 
@@ -303,7 +298,8 @@ Widget appBarWidgetSection({required BuildContext context}) {
 //BOTTOM SECTION
 
 Widget bottomSection(
-    {required SignupNotifiers signUpNotifier, required BuildContext context}) {
+    {required SelfUserProfileNotifier selfUserProfileNotifier,
+    required BuildContext context}) {
   return Container(
     color: AppColor.greyf9f9f9,
     width: context.width,
@@ -324,7 +320,23 @@ Widget bottomSection(
           child: ProfileGridView(
             isMyProfile: true,
             title: AppString.socialMedia,
-            socialMedia: signUpNotifier.socialMediaList,
+            socialMedia: selfUserProfileNotifier.socialMediaList,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ProfileGridView(
+            isMyProfile: true,
+            title: AppString.contactInformation,
+            socialMedia: selfUserProfileNotifier.contactList,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ProfileGridView(
+            isMyProfile: true,
+            title: AppString.portfolio,
+            socialMedia: selfUserProfileNotifier.portfolioList,
           ),
         )
       ]),

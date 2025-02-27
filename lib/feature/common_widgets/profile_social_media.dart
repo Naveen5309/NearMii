@@ -43,7 +43,7 @@ class ProfileSocialMedia extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        5.verticalSpace,
+        // 5.verticalSpace,
         Align(
           // alignment: getAlignment(index),
           alignment: Alignment.center,

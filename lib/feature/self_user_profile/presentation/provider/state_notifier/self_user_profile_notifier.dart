@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
+import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/self_user_profile/domain/usecases/self_user_profile_usecases.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
@@ -13,6 +14,9 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   SelfUserProfileNotifier({required this.selfUserProfileUsecases})
       : super(SelfUserProfileInitial());
   UserProfileModel? userProfileModel;
+  List<PlatformData> socialMediaList = [];
+  List<PlatformData> contactList = [];
+  List<PlatformData> portfolioList = [];
 
   //SelfUserProfile US
   Future<void> updateSocialLinksApi({required String name}) async {
@@ -106,8 +110,12 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
         log("login error:${error.message} ");
         return SelfUserProfileApiFailed(error: error.message);
       }, (result) {
+        socialMediaList = result.socialMedia ?? [];
+        contactList = result.contactInformation ?? [];
+        portfolioList = result.portfolio ?? [];
+
         // historyDataList = result ?? [];
-        log("getSelfPlatform result is :->${result}");
+        log("socialmedialist result is :->${result}");
         return const SelfUserProfileApiSuccess();
       });
     } catch (e) {
