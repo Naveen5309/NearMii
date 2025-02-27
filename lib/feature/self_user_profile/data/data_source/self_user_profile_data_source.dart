@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:NearMii/feature/history/data/model/history_model.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
@@ -15,6 +15,8 @@ abstract class SelfUserProfileDataSource {
   Future<ResponseWrapper<dynamic>> getSelfPlatform(
       {required Map<String, dynamic> body});
   Future<ResponseWrapper<dynamic>> delete({required Map<String, dynamic> body});
+  Future<ResponseWrapper<dynamic>> getSocialProfile(
+      {required Map<String, dynamic> body});
 }
 
 class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
@@ -172,6 +174,37 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "OtherUserProfileLogin",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<dynamic>> getSocialProfile(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse =
+          await Getters.getHttpService.request<UserProfileModel>(
+              requestType: RequestType.get,
+              url: ApiConstants.getSelfProfile,
+              fromJson: (json) {
+                log("json in data source :-> $json");
+                if (json is Map<String, dynamic>) {
+                  return UserProfileModel.fromJson(json["data"]);
+                }
+                throw Exception("Unexpected API response format");
+              });
+      print("dataResponse===>$dataResponse");
+      if (dataResponse.status == "success") {
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "userLogin",
       ));
     }
   }

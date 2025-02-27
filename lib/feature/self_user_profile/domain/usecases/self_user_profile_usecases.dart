@@ -11,6 +11,8 @@ abstract class SelfUserProfileUsecases {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> callDelete(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> callGetSocialProfile(
+      {required Map<String, dynamic> body});
 }
 
 class SelfUserProfileUseCaseImpl implements SelfUserProfileUsecases {
@@ -49,6 +51,15 @@ class SelfUserProfileUseCaseImpl implements SelfUserProfileUsecases {
   Future<Either<Failure, dynamic>> callDelete(
       {required Map<String, dynamic> body}) async {
     final result = await repository.isDelete(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> callGetSocialProfile(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.isGetSocialProfile(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

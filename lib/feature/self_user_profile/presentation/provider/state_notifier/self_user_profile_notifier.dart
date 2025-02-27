@@ -4,6 +4,7 @@ import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/self_user_profile/domain/usecases/self_user_profile_usecases.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
@@ -11,6 +12,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
 
   SelfUserProfileNotifier({required this.selfUserProfileUsecases})
       : super(SelfUserProfileInitial());
+  UserProfileModel? userProfileModel;
 
   //SelfUserProfile US
   Future<void> updateSocialLinksApi({required String name}) async {
@@ -143,6 +145,44 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       });
     } catch (e) {
       state = SelfUserProfileApiFailed(error: e.toString());
+    }
+  }
+
+  //Get Profile
+  Future<void> getProfileApi() async {
+    state = const SelfUserProfileApiLoading();
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SelfUserProfileApiFailed(
+          error: AppString.noInternetConnection,
+        );
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {
+        // "password": currentPasswordController.text.trim(),
+      };
+      final result =
+          await selfUserProfileUsecases.callGetSocialProfile(body: body);
+
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SelfUserProfileApiFailed(
+          error: error.message,
+        );
+      }, (result) {
+        userProfileModel = result;
+
+        return const SelfUserProfileApiSuccess();
+      });
+    } catch (e) {
+      state = SelfUserProfileApiFailed(
+        error: e.toString(),
+      );
     }
   }
 }

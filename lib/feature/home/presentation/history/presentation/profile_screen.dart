@@ -4,6 +4,7 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
@@ -17,12 +18,16 @@ import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/home/data/models/subscription_model.dart';
 import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
 
 class MyProfileView extends ConsumerStatefulWidget {
@@ -33,43 +38,42 @@ class MyProfileView extends ConsumerStatefulWidget {
 }
 
 class _MyProfileViewState extends ConsumerState<MyProfileView> {
-  ProfileModel? profile;
-
   @override
   void initState() {
     super.initState();
-    fetchProfileData();
     Future.microtask(() {
-      final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform(query: '');
+      final notifier = ref.read(getSocialProfileProvider.notifier);
+      // notifier.getSocialPlatform(query: '');
+      notifier.getProfileApi();
       final selfNotifier = ref.read(getSelfPlatformProvider.notifier);
       selfNotifier.getSelfPlatformApi(name: '');
-    });
-  }
-
-  void fetchProfileData() {
-    // Simulating data fetch from an API or database
-    setState(() {
-      profile = ProfileModel(
-        name: 'Brooklyn Simmons',
-        designation: 'Designation',
-        imageUrl: 'https://picsum.photos/250?image=9',
-        description:
-            'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
-        social: '10',
-        contact: '04',
-        portfolio: '10',
-        finance: '06',
-        business: '06',
-      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     ref.watch(signupProvider);
-    final signUpNotifier = ref.watch(signupProvider.notifier);
+    ref.watch(getSocialProfileProvider);
 
+    final signUpNotifier = ref.watch(signupProvider.notifier);
+    final notifier = ref.read(getSocialProfileProvider.notifier);
+    ref.listen(
+      getSocialProfileProvider,
+      (previous, next) {
+        if (next is SelfUserProfileApiLoading) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess) {
+          // toast(msg: AppString.loginSuccess, isError: false);
+          Utils.hideLoader();
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is SelfUserProfileApiFailed) {
+          Utils.hideLoader();
+
+          // toast(msg: next.error);
+        }
+      },
+    );
     ref.listen(
       loginProvider,
       (previous, next) {
@@ -107,42 +111,141 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             ),
           ),
         ),
-        body: SliverSnap(
-            stretch: true,
-            scrollBehavior: const CupertinoScrollBehavior(),
-            pinned: true,
-            animationCurve: Curves.easeInOutCubicEmphasized,
-            // bottom: const PreferredSize(
-            //   preferredSize: Size.fromHeight(100),
-            //   child: Icon(
-            //     Icons.directions_boat,
-            //     color: Colors.blue,
-            //     size: 45,
-            //   ),
-            // ),
-            // collapsedBarHeight: 60,
-            animationDuration: const Duration(milliseconds: 1),
-            onCollapseStateChanged: (isCollapsed, scrollingOffset, maxExtent) {
-              log("isCollapsed $isCollapsed");
-              log("scrollingOffset $scrollingOffset");
-              log("maxExtent $maxExtent");
-            },
-            collapsedBackgroundColor: AppColor.btnColor,
-            expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-            backdropWidget: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.background),
-                  fit: BoxFit.fill,
+        body: (notifier.userProfileModel == null)
+            ? Shimmer.fromColors(
+                baseColor: AppColor.whiteF0F5FE,
+                highlightColor: AppColor.grey9EAE95,
+                child: Column(
+                    mainAxisSize: MainAxisSize
+                        .min, // Ensures column takes only necessary space
+                    children: [
+                      SizedBox(height: context.height * .1),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
+                          onTap: () {
+                            back(context);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: context.width * .05),
+                            child: SvgPicture.asset(
+                              Assets.icBackBtn,
+                              colorFilter: const ColorFilter.mode(
+                                  AppColor.primary, BlendMode.srcIn),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: context.height * .02),
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xff69DDA5),
+                        ),
+                        padding: const EdgeInsets.all(6),
+                        child: CustomCacheNetworkImage(
+                          img: '',
+                          imageRadius: 150,
+                          height: 105.w,
+                          width: 105.w,
+                        ),
+                      ),
+                      10.verticalSpace,
+                      Container(
+                        height: 20,
+                        width: 150,
+                        color: Colors.grey.shade400,
+                      ),
+                      5.verticalSpace,
+                      Container(
+                        height: 20,
+                        width: 150,
+                        color: Colors.grey.shade400,
+                      ),
+                      25.verticalSpace,
+                      Container(
+                        height: 20,
+                        width: 150,
+                        color: Colors.grey.shade400,
+                      ),
+                      20.verticalSpace,
+                      20.verticalSpace,
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        runSpacing: 8,
+                        spacing: 6,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 150,
+                            color: Colors.grey.shade400,
+                          ),
+                          Container(
+                            height: 20,
+                            width: 150,
+                            color: Colors.grey.shade400,
+                          ),
+                          Container(
+                            height: 20,
+                            width: 150,
+                            color: Colors.grey.shade400,
+                          ),
+                          Container(
+                            height: 20,
+                            width: 150,
+                            color: Colors.grey.shade400,
+                          ),
+                          Container(
+                            height: 20,
+                            width: 150,
+                            color: Colors.grey.shade400,
+                          ),
+                          Container(
+                            height: 255,
+                            width: context.width,
+                            color: Colors.grey.shade400,
+                          ),
+                        ],
+                      )
+                    ]),
+              )
+            : SliverSnap(
+                stretch: true,
+                scrollBehavior: const CupertinoScrollBehavior(),
+                pinned: true,
+                animationCurve: Curves.easeInOutCubicEmphasized,
+                // bottom: const PreferredSize(
+                //   preferredSize: Size.fromHeight(100),
+                //   child: Icon(
+                //     Icons.directions_boat,
+                //     color: Colors.blue,
+                //     size: 45,
+                //   ),
+                // ),
+                // collapsedBarHeight: 60,
+                animationDuration: const Duration(milliseconds: 1),
+                onCollapseStateChanged:
+                    (isCollapsed, scrollingOffset, maxExtent) {
+                  log("isCollapsed $isCollapsed");
+                  log("scrollingOffset $scrollingOffset");
+                  log("maxExtent $maxExtent");
+                },
+                collapsedBackgroundColor: AppColor.btnColor,
+                expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
+                backdropWidget: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(Assets.background),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            expandedContentHeight: context.height * .55,
-            expandedContent:
-                profileSection(context: context, profile: profile!),
-            collapsedContent: appBarWidgetSection(context: context),
-            body: bottomSection(
-                signUpNotifier: signUpNotifier, context: context)));
+                expandedContentHeight: context.height * .55,
+                expandedContent: profileSection(
+                    context: context, profile: notifier.userProfileModel),
+                collapsedContent: appBarWidgetSection(context: context),
+                body: bottomSection(
+                    signUpNotifier: signUpNotifier, context: context)));
   }
 }
 
@@ -180,7 +283,7 @@ Widget appBarWidgetSection({required BuildContext context}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: "Brooklyn Simmons",
+            text: "Brooklyn ",
             fontSize: 18.sp,
             fontWeight: FontWeight.w500,
             color: AppColor.whiteFFFFFF,
@@ -232,7 +335,7 @@ Widget bottomSection(
 //PROFILE SECTION
 
 Widget profileSection(
-    {required BuildContext context, required ProfileModel profile}) {
+    {required BuildContext context, required UserProfileModel? profile}) {
   return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures column takes only necessary space
@@ -262,7 +365,7 @@ Widget profileSection(
           ),
           padding: const EdgeInsets.all(6),
           child: CustomCacheNetworkImage(
-            img: '',
+            img: '${ApiConstants.profileBaseUrl}${profile?.profilePhoto ?? ''}',
             imageRadius: 150,
             height: 105.w,
             width: 105.w,
@@ -271,20 +374,20 @@ Widget profileSection(
         10.verticalSpace,
         AppText(
           color: AppColor.whiteFFFFFF,
-          text: profile.name,
+          text: profile?.name,
           fontSize: 20.sp,
           fontWeight: FontWeight.w500,
         ),
         5.verticalSpace,
         AppText(
-          text: profile.designation,
+          text: profile?.designation,
           fontWeight: FontWeight.w500,
           fontSize: 16.sp,
           color: AppColor.whiteFFFFFF.withOpacity(.8),
         ),
         25.verticalSpace,
         AppText(
-          text: profile.description,
+          text: profile?.bio ?? '',
           textAlign: TextAlign.center,
           fontSize: 12.sp,
           fontWeight: FontWeight.w400,
@@ -296,14 +399,15 @@ Widget profileSection(
           runSpacing: 8,
           spacing: 6,
           children: [
-            InfoChip(label: 'Social', value: profile.social),
-            InfoChip(label: 'Contact', value: profile.contact),
-            InfoChip(label: 'Portfolio', value: profile.portfolio),
-            InfoChip(label: 'Finance', value: profile.finance),
-            InfoChip(label: 'Business', value: profile.business),
+            InfoChip(label: 'Social', value: "0"),
+            InfoChip(label: 'Contact', value: '0'),
+            InfoChip(label: 'Portfolio', value: '0'),
+            InfoChip(label: 'Finance', value: '0'),
+            InfoChip(label: 'Business', value: '0'),
           ],
         )
       ]);
+
   // background: Container(
   //   width: MediaQuery.of(context).size.width,
   //   padding: EdgeInsets.only(
