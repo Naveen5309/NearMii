@@ -102,35 +102,35 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
 
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: 22, vertical: context.height * .01),
+                horizontal: 15, vertical: context.height * .01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppText(
                   text: "20 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 0).abs() < 10
+                  color: (_currentRadius - 20).abs() < 10
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
-                  text: "40 m",
+                  text: "  40 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 26).abs() < 1
+                  color: (_currentRadius - 40).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
-                  text: "60 m",
+                  text: "   60 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 47).abs() < 1
+                  color: (_currentRadius - 60).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
-                  text: "80 m",
+                  text: "   80 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 70).abs() < 1
+                  color: (_currentRadius - 80).abs() < 1
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
