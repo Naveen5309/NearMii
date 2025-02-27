@@ -8,7 +8,6 @@ import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
-import 'package:NearMii/feature/auth/presentation/provider/states/country_code_states.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -170,7 +169,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //GET SOCIAL PROFILES
-  Future<void> getSocialPlatform({required String query}) async {
+  Future<void> getSocialPlatform() async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -178,8 +177,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
             error: "No internet connection", authType: AuthType.socialMedia);
         return;
       }
+      Map<String, dynamic> body = {
+        "search": searchTextController.text.trim(),
+      };
 
-      final result = await authUseCase.getPlatform();
+      final result = await authUseCase.getPlatform(body: body);
       state = result.fold((error) {
         return AuthApiFailed(
             error: error.message, authType: AuthType.socialMedia);
@@ -585,6 +587,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         );
       }
 
+      log("dob ius :-> ${dobController.text}");
       final Map<String, String> body = {
         "name": fullNameController.text.trim(),
         if (socialId.isNotEmpty) "social_id": socialId,
@@ -593,7 +596,9 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         "phone_number": "$countryCode ${phoneController.text.trim()}",
         "bio": bioController.text.trim(),
         "gender": genderController.text.trim(),
-        "dob": dobController.text.trim(),
+        "dob": formatDOBforUpdate(
+          dobController.text.trim(),
+        ),
       };
 
       final result = await authUseCase.editProfile(
@@ -613,14 +618,14 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     }
   }
 
-  void setDatainFields() {
+  Future<void> setDatainFields() async {
     UserProfileModel? getProfile = Getters.getLocalStorage.getUserProfileData();
 
     fullNameController.text = getProfile?.name ?? '';
     designationController.text = getProfile?.designation ?? '';
     phoneController.text =
         (getProfile?.phoneNumber).toString().split(' ').last ?? "";
-    dobController.text = getProfile?.dob ?? '';
+    dobController.text = formatDob(getProfile?.dob ?? '');
     genderController.text = getProfile?.gender ?? '';
     bioController.text = getProfile?.bio ?? '';
     imageUrl = getProfile?.profilePhoto ?? '';

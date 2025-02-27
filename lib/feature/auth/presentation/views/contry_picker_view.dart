@@ -45,10 +45,28 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
               ref.read(countryPickerProvider.notifier).getCountries();
             },
             decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                fillColor: AppColor.primary,
-                filled: true),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                borderSide:
+                    const BorderSide(color: AppColor.greyf9f9f9, width: 1.5),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                borderSide:
+                    const BorderSide(color: AppColor.greyf9f9f9, width: 1.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                borderSide: const BorderSide(
+                    color: AppColor.primary, width: 2), // Highlight on focus
+              ),
+              fillColor: AppColor.greyf9f9f9,
+              filled: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              hintText: "Search country...",
+              hintStyle: TextStyle(color: Colors.grey[500]),
+            ),
           )),
       body: Builder(
         builder: (context) {
@@ -56,7 +74,7 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
             return customLoader();
           } else if (county is CountryPickerLoaded) {
             return RawScrollbar(
-              thumbColor: AppColor.primary,
+              thumbColor: AppColor.grey21203F,
               radius: const Radius.circular(20),
               thickness: 5,
               child: ListView.builder(
@@ -68,16 +86,12 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
                     onTap: () {
                       log("selected country:-> ${data.dialCode}");
-                      // updateCode.updateCountryData(
-                      //   dialCode: data.dialCode ?? "+1",
-                      // );
 
                       ref
                           .read(countryPickerProvider.notifier)
                           .makeInitialCountry(data);
 
                       Navigator.pop(context, data);
-                      // Navigator.pop(context, data);
                     },
                     leading: AppText(
                       text: data.flag ?? "",

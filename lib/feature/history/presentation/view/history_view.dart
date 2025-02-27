@@ -113,42 +113,55 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(
-                                        child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 3),
-                                          itemCount:
-                                              history.recentHistoryList.length,
-                                          itemBuilder: (context, index) {
-                                            var data = history
-                                                .recentHistoryList[index];
-                                            var timeAgo =
-                                                getTimeAgo(data.createdAt);
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: CustomTile(
-                                                isHistory: true,
-                                                time: timeAgo,
-                                                title: data.profile?.name ?? "",
-                                                leadingIcon: '',
-                                                subtitle:
-                                                    data.profile?.designation ??
-                                                        "",
-                                                onTap: () {
-                                                  toNamed(context,
-                                                      Routes.otherUserProfile,
-                                                      args: "52");
+                                      history.recentHistoryList.isNotEmpty
+                                          ? SizedBox(
+                                              child: ListView.builder(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 3),
+                                                itemCount: history
+                                                    .recentHistoryList.length,
+                                                itemBuilder: (context, index) {
+                                                  var data = history
+                                                      .recentHistoryList[index];
+                                                  var timeAgo = getTimeAgo(
+                                                      data.createdAt);
+                                                  return Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    child: CustomTile(
+                                                      isHistory: true,
+                                                      time: timeAgo,
+                                                      title:
+                                                          data.profile?.name ??
+                                                              "",
+                                                      leadingIcon: '',
+                                                      subtitle: data.profile
+                                                              ?.designation ??
+                                                          "",
+                                                      onTap: () {
+                                                        toNamed(
+                                                            context,
+                                                            Routes
+                                                                .otherUserProfile,
+                                                            args: "52");
+                                                      },
+                                                    ),
+                                                  );
                                                 },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                            )
+                                          : const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: AppText(
+                                                    text:
+                                                        "No History on Recent time"),
+                                              ),
+                                            )
                                     ],
                                   ),
                                 ),
@@ -183,49 +196,64 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(
-                                        child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 3),
-                                          itemCount: history
-                                              .historyLastWeekTimeList.length,
-                                          itemBuilder: (context, index) {
-                                            var data = history
-                                                .historyLastWeekTimeList[index];
-                                            var timeAgo =
-                                                getTimeAgo(data.createdAt);
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: CustomTile(
-                                                isHistory: true,
-                                                time: timeAgo,
-                                                title: data.profile?.name ?? "",
-                                                leadingIcon: data.profile
-                                                            ?.profilePhoto !=
-                                                        null
-                                                    ? (ApiConstants
-                                                            .profileBaseUrl +
-                                                        data.profile!
-                                                            .profilePhoto!)
-                                                    : '',
-                                                subtitle:
-                                                    data.profile?.designation ??
-                                                        "",
-                                                onTap: () {
-                                                  toNamed(context,
-                                                      Routes.otherUserProfile,
-                                                      args: "52");
+                                      history.historyLastWeekTimeList.isNotEmpty
+                                          ? SizedBox(
+                                              child: ListView.builder(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 3),
+                                                itemCount: history
+                                                    .historyLastWeekTimeList
+                                                    .length,
+                                                itemBuilder: (context, index) {
+                                                  var data = history
+                                                          .historyLastWeekTimeList[
+                                                      index];
+                                                  var timeAgo = getTimeAgo(
+                                                      data.createdAt);
+                                                  return Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    child: CustomTile(
+                                                      isHistory: true,
+                                                      time: timeAgo,
+                                                      title:
+                                                          data.profile?.name ??
+                                                              "",
+                                                      leadingIcon: data.profile
+                                                                  ?.profilePhoto !=
+                                                              null
+                                                          ? (ApiConstants
+                                                                  .profileBaseUrl +
+                                                              data.profile!
+                                                                  .profilePhoto!)
+                                                          : '',
+                                                      subtitle: data.profile
+                                                              ?.designation ??
+                                                          "",
+                                                      onTap: () {
+                                                        toNamed(
+                                                            context,
+                                                            Routes
+                                                                .otherUserProfile,
+                                                            args: "52");
+                                                      },
+                                                    ),
+                                                  );
                                                 },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                            )
+                                          : const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: AppText(
+                                                    text:
+                                                        "No History on Last week"),
+                                              ),
+                                            )
                                     ],
                                   ),
                                 ),
@@ -259,43 +287,58 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(
-                                        child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 3),
-                                          itemCount: history
-                                              .historyLastMonthTimeList.length,
-                                          itemBuilder: (context, index) {
-                                            var data = history
-                                                    .historyLastMonthTimeList[
-                                                index];
-                                            var timeAgo =
-                                                getTimeAgo(data.createdAt);
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: CustomTile(
-                                                isHistory: true,
-                                                time: timeAgo,
-                                                title: data.profile?.name ?? "",
-                                                leadingIcon: '',
-                                                subtitle:
-                                                    data.profile?.designation ??
-                                                        "",
-                                                onTap: () {
-                                                  toNamed(context,
-                                                      Routes.otherUserProfile,
-                                                      args: "52");
+                                      history.historyLastMonthTimeList
+                                              .isNotEmpty
+                                          ? SizedBox(
+                                              child: ListView.builder(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 3),
+                                                itemCount: history
+                                                    .historyLastMonthTimeList
+                                                    .length,
+                                                itemBuilder: (context, index) {
+                                                  var data = history
+                                                          .historyLastMonthTimeList[
+                                                      index];
+                                                  var timeAgo = getTimeAgo(
+                                                      data.createdAt);
+                                                  return Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    child: CustomTile(
+                                                      isHistory: true,
+                                                      time: timeAgo,
+                                                      title:
+                                                          data.profile?.name ??
+                                                              "",
+                                                      leadingIcon: '',
+                                                      subtitle: data.profile
+                                                              ?.designation ??
+                                                          "",
+                                                      onTap: () {
+                                                        toNamed(
+                                                            context,
+                                                            Routes
+                                                                .otherUserProfile,
+                                                            args: "52");
+                                                      },
+                                                    ),
+                                                  );
                                                 },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                            )
+                                          : const SizedBox(
+                                              height: 100,
+                                              child: Center(
+                                                child: AppText(
+                                                    text:
+                                                        "No History on Last month"),
+                                              ),
+                                            )
                                     ],
                                   ),
                                 ),

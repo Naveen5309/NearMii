@@ -31,7 +31,8 @@ abstract class AuthRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> resetPassword(
       {required Map<String, dynamic> body});
-  Future<Either<Failure, GetPlatformData>> getPlatform();
+  Future<Either<Failure, GetPlatformData>> getPlatform(
+      {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> logOut();
 
   Future<Either<Failure, dynamic>> changePassword(
@@ -163,9 +164,10 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, GetPlatformData>> getPlatform() async {
+  Future<Either<Failure, GetPlatformData>> getPlatform(
+      {required Map<String, dynamic> body}) async {
     try {
-      final data = await dataSource.getPlatformApi();
+      final data = await dataSource.getPlatformApi(body: body);
       if (data?.status == "success") {
         return Right(data?.data);
       } else {

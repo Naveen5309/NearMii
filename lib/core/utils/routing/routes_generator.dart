@@ -29,7 +29,10 @@ class RouteGenerator {
       case Routes.splash:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.home:
-        return MaterialPageRoute(builder: (_) => const HomePageView());
+        return MaterialPageRoute(
+            builder: (_) => const HomePageView(
+                  isFromAuth: true,
+                ));
       case Routes.bottomNavBar:
         return MaterialPageRoute(builder: (_) => BottomNavigationView());
 
@@ -84,7 +87,11 @@ class RouteGenerator {
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
       case Routes.deleteAccount:
-        return MaterialPageRoute(builder: (_) => const DeletedDetailView());
+        final args = settings.arguments as dynamic;
+        return MaterialPageRoute(
+            builder: (_) => DeletedDetailView(
+                  socialId: args,
+                ));
       // case Routes.share:
       //   return MaterialPageRoute(builder: (_) => ShareViewScreen());
 

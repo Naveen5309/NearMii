@@ -190,7 +190,9 @@ class BottomNavigationView extends ConsumerWidget {
   }
 
   final _pageController = [
-    const HomePageView(),
+    const HomePageView(
+      isFromAuth: false,
+    ),
     const HistoryView(),
     const NotificationView(),
     const SettingView()

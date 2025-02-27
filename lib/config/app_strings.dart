@@ -14,6 +14,8 @@ abstract final class AppString {
   static const String fontFamily = "Rubik";
   static const String fontFamilyUrbanist = "Urbanist";
   static const String appName = "App Name";
+  static const String addReason = "App reason";
+
   static const String localDirectory = "appname";
   static const String addYourPersonalInfo = "Add Your Personal Information";
   static const String createYourUniqueProfile =
@@ -91,6 +93,8 @@ abstract final class AppString {
   static const String theyArePretending =
       "They are pretending to be  someone else";
   static const String noLongerNeed = "I no longer need the account.";
+  static const String others = "others";
+
   static const String notUsingAppAnymore = "I am not using the app anymore.";
   static const String multipleAccountsSoNeedToRemove =
       "I have multiple accounts and want to remove this one";
@@ -121,7 +125,7 @@ abstract final class AppString {
   static const String deleteYourAccount = "Delete your account";
   static const String logOut = "Logout";
   static const String enterYourCurrentPswd =
-      "Enter your current password to delete the account";
+      "Select reason and Enter your current password to delete the account";
   static const String hideAll = "Hide All";
   static const String someoneViewed = "Someone viewed your profile";
   static const String checkOutTheirProfile = "Check out their profile.";
@@ -172,7 +176,6 @@ abstract final class AppString {
   static const String bio = "Bio";
   static const String profileUpdateSuccess = "Profile Updated Successfully ";
   static const String updatePasswordSuccess = " Update Password Successfully ";
-
   //  static const String localDirectory="Lorem ipsum dolor sit amet consectetur. Semper vel interdum et posuere venenatis.";
   // static const String report = "Report";
   //  static const String localDirectory="appname";
@@ -227,10 +230,12 @@ abstract final class AppString {
       'New password should be Different from current password';
 
   static const pleaseEnterCurrentPassword = 'Enter your current password';
+  static const selectReason = 'Select reason';
+
   static const passwordShouldBe =
-      'Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
+      'Password must contains letters, numbers and special character.';
   static const newPasswordShouldBe =
-      'New Password should be minimum 8 and contain at least 1 alphabet, 1 number, and 1 special character';
+      'New Password must contains letters, numbers and special character.';
   static const passwordMismatch =
       'confirm password didn\'t match with password you enter';
   static const pleaseEnterConfirmPassword = 'Enter confirm password';

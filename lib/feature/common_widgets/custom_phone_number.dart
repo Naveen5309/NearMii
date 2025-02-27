@@ -120,7 +120,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                     if (result != null) {
                       log("data s :-. ${result.dialCode}");
                       ref
-                          .watch(signupProvider.notifier)
+                          .read(signupProvider.notifier)
                           .updateCountryData(dialCode: result.dialCode ?? "+1");
                     }
                   },

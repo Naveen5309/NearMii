@@ -38,7 +38,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
     super.initState();
     Future.microtask(() {
       final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform(query: '');
+      notifier.getSocialPlatform();
     });
   }
 
@@ -47,7 +47,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   void _onSearchChanged(String query) {
     final notifier = ref.read(signupProvider.notifier);
     _debounce.run(() {
-      notifier.getSocialPlatform(query: query);
+      notifier.getSocialPlatform();
     });
   }
 
@@ -191,27 +191,33 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
 
                     //SOCIAL MEDIA
 
-                    CustomSocialGridview(
-                      title: AppString.socialMedia,
-                      socialMedia: signupPro.socialMediaList,
-                      notifier: signupPro,
-                    ),
+                    signupPro.socialMediaList.isEmpty
+                        ? const SizedBox()
+                        : CustomSocialGridview(
+                            title: AppString.socialMedia,
+                            socialMedia: signupPro.socialMediaList,
+                            notifier: signupPro,
+                          ),
 
                     //CONTACT INFORMATION
 
-                    CustomSocialGridview(
-                      notifier: signupPro,
-                      title: AppString.contactInformation,
-                      socialMedia: signupPro.contactList,
-                    ),
+                    signupPro.contactList.isEmpty
+                        ? const SizedBox()
+                        : CustomSocialGridview(
+                            notifier: signupPro,
+                            title: AppString.contactInformation,
+                            socialMedia: signupPro.contactList,
+                          ),
 
                     //PORTFOLIO
 
-                    CustomSocialGridview(
-                      notifier: signupPro,
-                      title: AppString.portfolio,
-                      socialMedia: signupPro.portfolioList,
-                    ),
+                    signupPro.portfolioList.isEmpty
+                        ? const SizedBox()
+                        : CustomSocialGridview(
+                            notifier: signupPro,
+                            title: AppString.portfolio,
+                            socialMedia: signupPro.portfolioList,
+                          ),
 
                     SizedBox(
                       height: context.height * .05,

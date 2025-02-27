@@ -98,10 +98,11 @@ class Validator {
     if (password.isEmpty) {
       error = AppString.pleaseEnterPassword;
       return false;
-    } else if (checkPassword(password)) {
-      error = AppString.passwordShouldBe;
-      return false;
     }
+    // else if (checkPassword(password)) {
+    //   error = AppString.passwordShouldBe;
+    //   return false;
+    // }
 
     return true;
   }
@@ -270,12 +271,27 @@ class Validator {
   //Delete Account
   bool deleteAccountValidation({
     required String currentPassword,
+    required String reason,
   }) {
-    if (currentPassword.isEmpty) {
+    if (reason.isEmpty) {
+      error = AppString.selectReason;
+      return false;
+    } else if (currentPassword.isEmpty) {
       error = AppString.pleaseEnterCurrentPassword;
       return false;
     }
 
+    return true;
+  }
+
+  //Delete Account
+  bool deleteAccountValidationSocial({
+    required String reason,
+  }) {
+    if (reason.isEmpty) {
+      error = AppString.selectReason;
+      return false;
+    }
     return true;
   }
 }

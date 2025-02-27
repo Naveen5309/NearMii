@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:NearMii/config/app_utils.dart';
@@ -38,21 +39,30 @@ class CompleteEditProfile extends ConsumerStatefulWidget {
 class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
   @override
   void initState() {
+    log("edit profile called");
     final editProfileNotifier = ref.read(editProfileProvider.notifier);
     final countryNotifier = ref.read(countryPickerProvider.notifier);
-    editProfileNotifier.setDatainFields();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
-        countryNotifier.updateInitialCountry(editProfileNotifier.countryCode);
+    editProfileNotifier.setDatainFields().then(
+      (value) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) async {
+            countryNotifier
+                .updateInitialCountry(editProfileNotifier.countryCode);
+          },
+        );
       },
     );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    log("edit profile called52");
     final editProfileNotifier = ref.read(editProfileProvider.notifier);
+    final countryNotifier = ref.read(countryPickerProvider.notifier);
     ref.watch(editProfileProvider);
+    ref.watch(countryPickerProvider);
 
     ref.listen(
       editProfileProvider,
@@ -99,8 +109,6 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                       height: 18.h,
                     ),
                     //Logo
-
-                    // const Text("APPlOGO"),
 
                     AppText(
                       text: AppString.editProfileSetting,
@@ -280,7 +288,6 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
   Widget formsFieldsSection(
       {required BuildContext context,
       required SignupNotifiers editProfileNotifier}) {
-    print("Callleddddddddddd");
     return Column(
       children: [
         //FULL NAME
@@ -307,9 +314,6 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         CustomPhoneNumber(
           selectedCountryCode: editProfileNotifier.countryCode,
           selectedCountryFlag: editProfileNotifier.countryFlag,
-          // onCountryCodeChanged: (code, flag) {
-          //   editProfileNotifier.countryCode = code;
-          // },
           prefixIcon: Assets.icGender,
           controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,
@@ -345,18 +349,22 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         CustomLabelTextField(
           readOnly: true,
           onTap: () async {
+            DateTime? selectedDate =
+                formatDOBtoDateTime(editProfileNotifier.dobController.text);
+
+            log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
             final DateTime? picked = await showDatePicker(
               context: context,
-              initialDate: DateTime.now(),
+              initialDate: selectedDate ?? DateTime.now(),
               firstDate: DateTime(1970, 8),
-              lastDate: DateTime.now(),
+              lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
               builder: (context, child) {
                 return Theme(
                   data: ThemeData.light().copyWith(
-                    primaryColor: Colors.green, // Header background color
-                    hintColor: Colors.green, // Accent color
+                    primaryColor: AppColor.btnColor, // Header background color
+                    hintColor: AppColor.btnColor, // Accent color
                     colorScheme: const ColorScheme.light(
-                        primary: Colors.green), // Active date color
+                        primary: AppColor.btnColor), // Active date color
                     buttonTheme: const ButtonThemeData(
                         textTheme: ButtonTextTheme.primary),
                   ),
@@ -367,6 +375,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
             if (picked != null) {
               editProfileNotifier.dobController.text = formatDOB(picked);
+              log("pciked is :-, > ${editProfileNotifier.dobController.text}");
             }
           },
 
@@ -375,29 +384,34 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
           suffixIcon: Assets.icCalender,
           labelText: AppString.dob,
           onTapOnSuffixIcon: () async {
-            final DateTime? picked = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(1970, 8),
-              lastDate: DateTime.now(),
-              builder: (context, child) {
-                return Theme(
-                  data: ThemeData.light().copyWith(
-                    primaryColor: Colors.green, // Header background color
-                    hintColor: Colors.green, // Accent color
-                    colorScheme: const ColorScheme.light(
-                        primary: Colors.green), // Active date color
-                    buttonTheme: const ButtonThemeData(
-                        textTheme: ButtonTextTheme.primary),
-                  ),
-                  child: child!,
-                );
-              },
-            );
+            // DateTime? selectedDate =
+            //     formatDOBtoDateTime(editProfileNotifier.dobController.text);
 
-            if (picked != null) {
-              editProfileNotifier.dobController.text = formatDOB(picked);
-            }
+            // log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
+            // final DateTime? picked = await showDatePicker(
+            //   context: context,
+            //   initialDate: selectedDate ?? DateTime.now(),
+            //   firstDate: DateTime(1970, 8),
+            //   lastDate: DateTime.now(),
+            //   builder: (context, child) {
+            //     return Theme(
+            //       data: ThemeData.light().copyWith(
+            //         primaryColor: AppColor.btnColor, // Header background color
+            //         hintColor: AppColor.btnColor, // Accent color
+            //         colorScheme: const ColorScheme.light(
+            //             primary: AppColor.btnColor), // Active date color
+            //         buttonTheme: const ButtonThemeData(
+            //             textTheme: ButtonTextTheme.primary),
+            //       ),
+            //       child: child!,
+            //     );
+            //   },
+            // );
+
+            // if (picked != null) {
+            //   editProfileNotifier.dobController.text = formatDOB(picked);
+            //   log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+            // }
           },
 
           // labelText: AppString.confirmPswd,

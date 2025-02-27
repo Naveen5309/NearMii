@@ -3,6 +3,7 @@ import 'package:NearMii/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 part 'extensions.dart';
 part '../config/app_colors.dart';
 part '../config/app_strings.dart';
@@ -147,6 +148,49 @@ String formatDOB(DateTime dob) {
   return '${dob.day.toString().padLeft(2, '0')}/${dob.month.toString().padLeft(2, '0')}/${dob.year}';
 }
 
+String formatDOBforUpdate(String dob) {
+  try {
+    DateTime parsedDate;
+
+    if (dob.contains('/')) {
+      // Handle MM/dd/yyyy format
+      parsedDate = DateFormat("MM/dd/yyyy").parse(dob);
+    } else if (dob.contains('-')) {
+      // Handle dd-MM-yyyy format
+      List<String> parts = dob.split('-');
+      if (parts.length == 3) {
+        parsedDate = DateTime(
+            int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
+      } else {
+        throw const FormatException("Invalid date format");
+      }
+    } else {
+      throw const FormatException("Unsupported date format");
+    }
+
+    return DateFormat("yyyy-MM-dd").format(parsedDate);
+  } catch (e) {
+    print("Error parsing date: $e");
+    return ""; // Handle error gracefully
+  }
+}
+
+DateTime formatDOBtoDateTime(String dateString) {
+  // Check for '/' or '-' as separator
+  String separator = dateString.contains('/') ? '/' : '-';
+  List<String> parts = dateString.split(separator);
+
+  if (parts.length == 3) {
+    return DateTime(
+      int.parse(parts[2]), // Year
+      int.parse(parts[1]), // Month
+      int.parse(parts[0]), // Day
+    );
+  }
+
+  throw const FormatException("Invalid date format");
+}
+
 CrossAxisAlignment getCrossAxisAlignment(int index) {
   if (index % 3 == 0) {
     return CrossAxisAlignment.start;
@@ -181,4 +225,12 @@ String getDistance(String value) {
   } else {
     return "${number.toStringAsFixed(1)} meters away";
   }
+}
+
+String formatDob(String dateString) {
+  List<String> parts = dateString.split('-');
+  if (parts.length == 3) {
+    return '${parts[2]}-${parts[1]}-${parts[0]}';
+  }
+  return dateString; // Return original if format is incorrect
 }

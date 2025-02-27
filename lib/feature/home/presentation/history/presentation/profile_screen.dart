@@ -38,32 +38,32 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
   @override
   void initState() {
     super.initState();
-    fetchProfileData();
+    // fetchProfileData();
     Future.microtask(() {
       final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform(query: '');
+      notifier.getSocialPlatform();
       final selfNotifier = ref.read(getSelfPlatformProvider.notifier);
       selfNotifier.getSelfPlatformApi(name: '');
     });
   }
 
-  void fetchProfileData() {
-    // Simulating data fetch from an API or database
-    setState(() {
-      profile = ProfileModel(
-        name: 'Brooklyn Simmons',
-        designation: 'Designation',
-        imageUrl: 'https://picsum.photos/250?image=9',
-        description:
-            'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
-        social: '10',
-        contact: '04',
-        portfolio: '10',
-        finance: '06',
-        business: '06',
-      );
-    });
-  }
+  // void fetchProfileData() {
+  //   // Simulating data fetch from an API or database
+  //   setState(() {
+  //     profile = ProfileModel(
+  //       name: 'Brooklyn Simmons',
+  //       designation: 'Designation',
+  //       imageUrl: 'https://picsum.photos/250?image=9',
+  //       description:
+  //           'Lorem ipsum dolor sit amet consectetur. Tempus cursus et tincidunt sollicitudin a eu feugiat sagittis.',
+  //       social: '10',
+  //       contact: '04',
+  //       portfolio: '10',
+  //       finance: '06',
+  //       business: '06',
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

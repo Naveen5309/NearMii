@@ -34,3 +34,6 @@ final reportProvider = StateNotifierProvider.autoDispose<
 
 final selectedReportIndex =
     StateProvider.autoDispose<int>((ref) => 0, name: "selectedReportIndex");
+
+final selectedDeleteIndex =
+    StateProvider.autoDispose<int>((ref) => 0, name: "selectedDeleteIndex");

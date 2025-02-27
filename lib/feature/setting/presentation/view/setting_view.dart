@@ -101,7 +101,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
             SizedBox(
               height: context.height * .85,
               child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const ClampingScrollPhysics(),
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
@@ -208,10 +208,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
                               onTap: () =>
                                   toNamed(context, Routes.changePassword),
                             )
-                          : const SizedBox(),
+                          : const Text("dfsfds"),
                       notifier.userProfileModel?.socialId == null
                           ? 10.verticalSpace
-                          : const SizedBox.shrink(),
+                          : const Text("Data "),
 
                       //CONTACT US
                       CustomTile(
@@ -239,7 +239,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         title: AppString.deleteAccount,
                         subtitle: AppString.deleteYourAccount,
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.deleteAccount),
+                        onTap: () => toNamed(context, Routes.deleteAccount,
+                            args: notifier.userProfileModel?.socialId ?? ''),
                       ),
                       15.verticalSpace,
 

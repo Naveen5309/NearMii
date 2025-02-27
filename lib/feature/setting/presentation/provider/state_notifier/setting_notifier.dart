@@ -64,7 +64,21 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   //VALIDATE Delete Account
   bool validateDeleteAccount() {
     bool isValid = Validator().deleteAccountValidation(
+      reason: reasonController.text.trim(),
       currentPassword: currentPasswordController.text.trim(),
+    );
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+  //VALIDATE Delete Account
+  bool validateDeleteAccountSocial() {
+    bool isValid = Validator().deleteAccountValidationSocial(
+      reason: reasonController.text.trim(),
     );
     if (isValid) {
       return true;
@@ -127,7 +141,7 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   }
 
   //Delete Account
-  Future<void> deleteAccountApi() async {
+  Future<void> deleteAccountApi({String? socialId}) async {
     state = const SettingApiLoading(settingType: Setting.deleteAccount);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -141,8 +155,11 @@ class SettingNotifier extends StateNotifier<SettingStates> {
           msg: AppString.networkSlow,
         );
       }
+
       Map<String, dynamic> body = {
-        "password": currentPasswordController.text.trim(),
+        if (socialId == null) "password": currentPasswordController.text.trim(),
+        if (socialId != null) "social_id": socialId,
+        "reason": reasonController.text.trim()
       };
       final result = await settingUseCase.callDeleteAccount(body: body);
       state = result.fold((error) {
@@ -218,6 +235,10 @@ class SettingNotifier extends StateNotifier<SettingStates> {
           countryCode =
               userProfileModel?.phoneNumber.toString().split(' ').first ?? "+1";
           countryFlag = getFlagByDialCode(countryCode) ?? '🇺🇸';
+
+          Getters.getLocalStorage.saveName(userProfileModel?.name);
+          Getters.getLocalStorage
+              .saveProfileImg(userProfileModel?.profilePhoto ?? '');
         }
 
         return const SettingApiSuccess(settingType: Setting.getProfile);

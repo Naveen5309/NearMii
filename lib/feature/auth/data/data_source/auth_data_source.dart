@@ -25,7 +25,7 @@ abstract class AuthDataSource {
   Future<ResponseWrapper?> otpVerify({required Map<String, dynamic> body});
   Future<ResponseWrapper?> resetPassword({required Map<String, dynamic> body});
 
-  Future<ResponseWrapper?> getPlatformApi();
+  Future<ResponseWrapper?> getPlatformApi({required Map<String, dynamic> body});
   Future<ResponseWrapper?> logOutApi();
   Future<ResponseWrapper?> changePassword({required Map<String, dynamic> body});
   Future<ResponseWrapper?> editProfile(
@@ -339,10 +339,12 @@ class AuthDataSourceImpl extends AuthDataSource {
 
 //GET PLATFORM
   @override
-  Future<ResponseWrapper<GetPlatformData>> getPlatformApi() async {
+  Future<ResponseWrapper<GetPlatformData>> getPlatformApi(
+      {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
           await Getters.getHttpService.request<GetPlatformData>(
+              body: body,
               url: ApiConstants.getPlatform,
               fromJson: (json) {
                 log("json in data source :-> $json");

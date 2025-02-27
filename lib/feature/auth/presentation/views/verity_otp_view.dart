@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -44,13 +46,15 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
     ref.listen(
       signupProvider,
       (previous, next) {
+        log("previous :-> $previous");
         if (next is AuthApiLoading &&
             ((next.authType == AuthType.otpVerify) ||
                 (next.authType == AuthType.resendOtp))) {
-          Utils.hideLoader();
+          Utils.showLoader();
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.otpVerify) {
           otpValidatorNotifier.clearResetPasswordFields();
+          otpValidatorNotifier.clearOtpFields();
           Utils.hideLoader();
 // Close loading dialog if open
           toast(msg: AppString.otpVerified, isError: false);
@@ -211,12 +215,15 @@ class _VerityOtpViewState extends ConsumerState<VerityOtpView> {
                             : AppColor.greyD4D4D4,
                       ),
                     ),
-                    AppText(
-                      text: ' (00:${otpValidatorNotifier.secondsRemaining})',
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColor.btnColor,
-                    ),
+                    otpValidatorNotifier.enableResend
+                        ? const SizedBox()
+                        : AppText(
+                            text:
+                                ' (00:${otpValidatorNotifier.secondsRemaining})',
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.btnColor,
+                          ),
                   ],
                 ),
               ],

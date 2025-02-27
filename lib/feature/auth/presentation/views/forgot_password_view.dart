@@ -18,14 +18,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ForgotPasswordView extends ConsumerWidget {
+class ForgotPasswordView extends ConsumerStatefulWidget {
   const ForgotPasswordView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final forgetPasswordNotifier = ref.watch(signupProvider.notifier);
-    forgetPasswordNotifier.cancelTimer();
-    forgetPasswordNotifier.clearFormFields();
+  ConsumerState<ForgotPasswordView> createState() => _ForgotPasswordViewState();
+}
+
+class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        final forgetPasswordNotifier = ref.read(signupProvider.notifier);
+        forgetPasswordNotifier.clearFormFields();
+        forgetPasswordNotifier.cancelTimer();
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final forgetPasswordNotifier = ref.read(signupProvider.notifier);
 
     ref.listen(
       signupProvider,

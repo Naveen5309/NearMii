@@ -34,7 +34,8 @@ abstract class AuthUseCase {
   Future<Either<Failure, dynamic>> resetPassword(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, GetPlatformData>> getPlatform();
+  Future<Either<Failure, GetPlatformData>> getPlatform(
+      {required Map<String, dynamic> body});
 
   Future<Either<Failure, dynamic>> logOut();
 
@@ -119,8 +120,9 @@ class AuthUseCaseImpl implements AuthUseCase {
   }
 
   @override
-  Future<Either<Failure, GetPlatformData>> getPlatform() async {
-    final result = await repository.getPlatform();
+  Future<Either<Failure, GetPlatformData>> getPlatform(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.getPlatform(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

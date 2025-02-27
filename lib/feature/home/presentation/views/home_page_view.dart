@@ -20,7 +20,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePageView extends ConsumerStatefulWidget {
-  const HomePageView({super.key});
+  final bool isFromAuth;
+  const HomePageView({super.key, required this.isFromAuth});
 
   @override
   ConsumerState<HomePageView> createState() => _HomePageViewState();
@@ -38,8 +39,12 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       var notifier = ref.watch(homeProvider.notifier);
       final homeDataNotifier = ref.read(homeProvider.notifier);
 
+      // if (widget.isFromAuth)
+
       homeDataNotifier.updateCoordinates(radius: "");
       homeDataNotifier.getFromLocalStorage();
+
+      homeDataNotifier.getHomeDataApi();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -94,7 +99,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
             back(context);
           }
 
-          if (next is HomeApiLoading && next.homeType == HomeType.home) {
+          if (next is HomeApiLoading &&
+              ((next.homeType == HomeType.home) ||
+                  (next.homeType == HomeType.coordinates))) {
             log("home loader called");
             Utils.showLoader();
           } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {

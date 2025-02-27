@@ -143,7 +143,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
             error: error.message, homeType: HomeType.coordinates);
       }, (result) {
         // userModel = result;
-        getHomeDataApi();
+
         // clearLoginFields();
         return const HomeApiSuccess(homeType: HomeType.coordinates);
       });
