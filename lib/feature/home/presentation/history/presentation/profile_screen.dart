@@ -342,21 +342,20 @@ Widget profileSection(
       children: [
         SizedBox(height: context.height * .1),
         Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              back(context);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: context.width * .05),
-              child: SvgPicture.asset(
-                Assets.icBackBtn,
-                colorFilter:
-                    const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: () {
+                back(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: context.width * .05),
+                child: SvgPicture.asset(
+                  Assets.icBackBtn,
+                  colorFilter:
+                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                ),
               ),
-            ),
-          ),
-        ),
+            )),
         SizedBox(height: context.height * .02),
         Container(
           decoration: const BoxDecoration(
@@ -365,7 +364,7 @@ Widget profileSection(
           ),
           padding: const EdgeInsets.all(6),
           child: CustomCacheNetworkImage(
-            img: '${ApiConstants.profileBaseUrl}${profile?.profilePhoto ?? ''}',
+            img: '',
             imageRadius: 150,
             height: 105.w,
             width: 105.w,
