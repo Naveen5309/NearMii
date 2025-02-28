@@ -90,7 +90,8 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
         children: [
           TextField(
             onChanged: widget.onChanged,
-            // maxLength: widget.maxLength ?? 35,
+            maxLength: widget.maxLength ?? 35,
+            minLines: 1,
 
             obscureText: widget.isObscure ?? false,
             obscuringCharacter: "*",
@@ -111,6 +112,7 @@ class _CustomLabelTextFieldState extends State<CustomLabelTextField> {
             focusNode: _focusNode,
             controller: widget.controller,
             decoration: InputDecoration(
+              counterText: '',
               suffixIconConstraints: const BoxConstraints(
                   maxWidth: 50, maxHeight: 50, minHeight: 25, minWidth: 25),
               suffixIcon: widget.suffixIcon != null

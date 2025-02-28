@@ -32,7 +32,7 @@ class AuthView extends ConsumerWidget {
           Utils.hideLoader();
           toast(msg: AppString.loginSuccess, isError: false);
           // back(context);
-          offAllNamed(context, Routes.bottomNavBar);
+          offAllNamed(context, Routes.bottomNavBar, args: true);
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {
           Utils.hideLoader();
 

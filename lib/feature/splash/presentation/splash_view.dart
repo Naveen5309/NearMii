@@ -73,7 +73,7 @@ class _SplashViewState extends ConsumerState<SplashView>
 
       if (isLogin) {
         if (context.mounted) {
-          offAllNamed(context, Routes.bottomNavBar, args: false);
+          offAllNamed(context, Routes.bottomNavBar, args: true);
         }
       } else if (isFirstOnboard) {
         if (context.mounted) {

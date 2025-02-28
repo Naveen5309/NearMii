@@ -142,6 +142,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         return HomeApiFailed(
             error: error.message, homeType: HomeType.coordinates);
       }, (result) {
+        getHomeDataApi();
         // userModel = result;
 
         // clearLoginFields();

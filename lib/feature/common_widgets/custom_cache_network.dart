@@ -43,7 +43,7 @@ class CustomCacheNetworkImage extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(10.0),
                 child: SvgPicture.asset(Assets.userDummy),
               ),
             ),
@@ -54,17 +54,7 @@ class CustomCacheNetworkImage extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
             alignment: Alignment.center,
             child: img.contains(".svg")
-                ?
-
-                // ClipRRect(
-                //     borderRadius: BorderRadius.circular(15),
-                //     child: SvgPicture.asset(
-                //       img,
-                //       fit: BoxFit.cover,
-                //     ),
-                //   )
-
-                SvgPicture.network(
+                ? SvgPicture.network(
                     img,
                     placeholderBuilder: (context) => const Icon(Icons.error),
                     fit: BoxFit.cover,

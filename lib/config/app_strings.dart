@@ -158,7 +158,7 @@ abstract final class AppString {
   static const String invalidOtp = "Invalid otp please check your opt";
   static const String saveText = "Save";
   static const String subscription = "Subscription ";
-  static const String pricePerMonth = "\$19/mo";
+  static const String pricePerMonth = "\$19.99/mo";
   static const String settings = "Settings";
   static const String logout = "Logout";
   static const String changePassword = "Change Password";
@@ -233,14 +233,13 @@ abstract final class AppString {
   static const selectReason = 'Select reason';
 
   static const passwordShouldBe =
-      'Password must contains letters, numbers and special character.';
+      'Password must be at least 8 characters long and include letters, numbers, and special characters.';
   static const newPasswordShouldBe =
-      'New Password must contains letters, numbers and special character.';
-  static const passwordMismatch =
-      'confirm password didn\'t match with password you enter';
+      'Password must be at least 8 characters long and include letters, numbers, and special characters.';
+  static const passwordMismatch = 'Passwords do not match. Re-enter passwords';
   static const pleaseEnterConfirmPassword = 'Enter confirm password';
 
-  static const String pleaseEnterName = "Enter your name";
+  static const String pleaseEnterName = "Enter full name";
   static const String pleaseEnterDob = "Enter your date of birth";
   static const String pleaseEnterDesignation = "Enter your designation";
   static const String pleaseEnterGender = "Enter your gender";
@@ -249,6 +248,70 @@ abstract final class AppString {
   static const String pleaseEnterEmail = "Enter your email";
   static const String pleaseEnterSubject = "Enter subject";
   static const String pleaseEnterMessage = "Enter message";
+
+  static List<String> subscriptionDataList = [
+    "Ad-free experience",
+    "Unlimited profile views",
+    "Full-time profile view history",
+    "See who viewed your Profile",
+  ];
+
+  static List<String> profileUrls = [
+    // "1. **Directly from the Profile Page**:",
+    // "   - **Facebook**: Go to the profile and check the address bar. It should look like:\n`https://www.facebook.com/username`",
+    // "   - **Twitter**: Visit the Twitter profile, and the URL will look like:\n`https://twitter.com/username`",
+    // "   - **Instagram**: Check the profile page, and the URL will be:\n`https://www.instagram.com/username/`",
+    // "   - **LinkedIn**: Go to the profile, and the URL will look like:\n`https://www.linkedin.com/in/username`\nOr for companies:\n`https://www.linkedin.com/company/companyname`",
+    // "   - **TikTok**: Visit the profile, and the URL will be:\n `https://www.tiktok.com/@username`",
+    // "   - **YouTube**: On the channel page, the URL will look like: \n`https://www.youtube.com/c/username` \nOr for custom URLs: \n `https://www.youtube.com/user/username`",
+    // "2. **For Mobile Apps**:",
+    // "   - Open the app (Facebook, Twitter, Instagram, LinkedIn, etc.).",
+    // "   - Go to the profile page.",
+    // "   - Look for the option to 'Copy Link' or 'Share Profile.'",
+    // "3. **Search for the Username**:",
+    // "   - **Google Search**: Search using the platform and username, e.g., `username site:twitter.com`.",
+    // "   - **Third-Party Tools**: Use sites like [Social Search](https://www.social-search.com/) or [Hunter.io](https://hunter.io/) to find profiles based on name or email.",
+    // "4. **Check Profile Settings (If You Have Access)**:",
+    // "   - If you have admin or authorized access to a profile, check the profile settings or account settings for the profile URL.",
+    // "5. **Use Profile Links Provided by Others**:",
+    // "   - Look for social profile links in email signatures, websites, or business cards.",
+  ];
+
+  static const List<Map<String, String>> stepsList = [
+    {
+      "step": "Step 1",
+      "msg": "Launch the app or visit the website where your profile is."
+    },
+    {
+      "step": "Step 2",
+      "msg":
+          "Tap on your profile picture or username to open your profile page."
+    },
+    {
+      "step": "Step 3",
+      "msg": "Look for a menu (three dots or share icon) on your profile page."
+    },
+    {"step": "Step 4", "msg": "Select 'Copy Link' or 'Copy Profile URL.'"},
+    {
+      "step": "Step 5",
+      "msg": "Open NearMii app and go to 'Add Social Profile' screen."
+    },
+    {
+      "step": "Step 6",
+      "msg":
+          "Click on any social app icon for which you want to add your profile for."
+    },
+    {
+      "step": "Step 7",
+      "msg":
+          "Tap on the input field, long press, and select 'Paste' to insert your copied profile link."
+    },
+    {
+      "step": "Step 8",
+      "msg":
+          "Tap the save or confirm button to add the link to your NearMii profile."
+    },
+  ];
 }
 
 abstract final class AuthStrings {

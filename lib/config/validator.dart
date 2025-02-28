@@ -65,19 +65,19 @@ class Validator {
     if (phoneNumber.isEmpty) {
       error = AppString.validNumber;
       return false;
-    } else if (phoneNumber.length < 6 || phoneNumber.length > 12) {
+    } else if (phoneNumber.length < 6 || phoneNumber.length > 15) {
       error = AppString.validPhoneNumber;
       return false;
     }
-    if (gender.isEmpty) {
-      error = AppString.pleaseEnterGender;
-      return false;
-    }
+    // if (gender.isEmpty) {
+    //   error = AppString.pleaseEnterGender;
+    //   return false;
+    // }
 
-    if (dob.isEmpty) {
-      error = AppString.pleaseEnterDob;
-      return false;
-    }
+    // if (dob.isEmpty) {
+    //   error = AppString.pleaseEnterDob;
+    //   return false;
+    // }
 
     return true;
   }
@@ -180,8 +180,6 @@ class Validator {
   bool completeEditProfileValidator({
     required String phoneNumber,
     required String fullName,
-    required String dob,
-    required String gender,
   }) {
     if (fullName.isEmpty) {
       error = AppString.pleaseEnterName;
@@ -193,15 +191,6 @@ class Validator {
       return false;
     } else if (phoneNumber.length < 6 || phoneNumber.length > 12) {
       error = AppString.validPhoneNumber;
-      return false;
-    }
-    if (gender.isEmpty) {
-      error = AppString.pleaseEnterGender;
-      return false;
-    }
-
-    if (dob.isEmpty) {
-      error = AppString.pleaseEnterDob;
       return false;
     }
 

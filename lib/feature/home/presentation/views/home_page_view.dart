@@ -10,9 +10,11 @@ import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/common_widgets/dummy_profile_card.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
+import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,19 +34,23 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // showDialog(
-      //   context: context,
-      //   builder: (context) => const VIPMembershipDialog(),
-      // );
+      showDialog(
+        context: context,
+        builder: (context) => const VIPMembershipDialog(),
+      );
       var notifier = ref.watch(homeProvider.notifier);
-      final homeDataNotifier = ref.read(homeProvider.notifier);
 
-      // if (widget.isFromAuth)
+      if (notifier.homeUserDataList.isEmpty) {
+        // final homeDataNotifier = ref.read(homeProvider.notifier);
 
-      homeDataNotifier.updateCoordinates(radius: "");
-      homeDataNotifier.getFromLocalStorage();
+        if (widget.isFromAuth) {
+          notifier.updateCoordinates(radius: '');
+        } else {
+          // homeDataNotifier.getHomeDataApi();
+        }
+      }
 
-      homeDataNotifier.getHomeDataApi();
+      notifier.getFromLocalStorage();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -63,6 +69,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         homeProvider,
         (previous, next) {
           log("next is :-> $next");
+          log("next is :-> ${widget.isFromAuth}");
+
           if (next is UpdateLocation &&
               next.locationType == LocationType.loading) {
             showDialog(
@@ -99,9 +107,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
             back(context);
           }
 
-          if (next is HomeApiLoading &&
-              ((next.homeType == HomeType.home) ||
-                  (next.homeType == HomeType.coordinates))) {
+          if (next is HomeApiLoading && ((next.homeType == HomeType.home))) {
             log("home loader called");
             Utils.showLoader();
           } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
@@ -196,43 +202,101 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
               ),
             ),
           ),
-          ref.watch(isMapView)
-              ? Image.asset(
-                  Assets.map,
-                  height: context.height * .62,
-                  width: context.width,
-                  fit: BoxFit.cover,
-                )
-              : Column(
-                  children: [
-                    SizedBox(
-                      height: context.height * .69,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: notifier.homeUserDataList.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          var data = notifier.homeUserDataList[index];
+          // ref.watch(isMapView)
+          //     ? Image.asset(
+          //         Assets.map,
+          //         height: context.height * .62,
+          //         width: context.width,
+          //         fit: BoxFit.cover,
+          //       )
+          //     :
 
-                          return CustomProfileCard(
-                            profileImage: data.profilePhoto != null
-                                ? ApiConstants.profileBaseUrl +
-                                    data.profilePhoto!
-                                : '', // Replace with actual image
-                            name: data.name ?? "Name",
-                            designation: data.designation ?? "designation",
-                            distance: data.distance != null
-                                ? getDistance(data.distance.toString())
-                                : '',
-                            onUnlockTap: () {
-                              // print("Unlock Now Clicked!");
-                            },
-                          );
-                        },
+          // notifier.homeUserDataList.isEmpty
+          //     ? SizedBox(
+          //         height: context.height * .6,
+          //         child: const Center(child: AppText(text: "No user found")),
+          //       )
+          //     : Column(
+          //         children: [
+          //           SizedBox(
+          //             height: context.height * .69,
+          //             child: ListView.builder(
+          //               padding: EdgeInsets.zero,
+          //               itemCount: notifier.homeUserDataList.length + 1,
+          //               shrinkWrap: true,
+          //               itemBuilder: (context, index) {
+          //                 if (index == notifier.homeUserDataList.length) {
+          //                   // Last index, show "No Data"
+          //                   return const DummyProfileCard();
+          //                 }
+          //                 var data = notifier.homeUserDataList[index];
+
+          //                 return CustomProfileCard(
+          //                   profileImage: data.profilePhoto != null
+          //                       ? ApiConstants.profileBaseUrl +
+          //                           data.profilePhoto!
+          //                       : '', // Replace with actual image
+          //                   name: data.name ?? "Name",
+          //                   designation: data.designation ?? "designation",
+          //                   distance: data.distance != null
+          //                       ? getDistance(data.distance.toString())
+          //                       : '',
+          //                   onUnlockTap: () {
+          //                     // print("Unlock Now Clicked!");
+          //                   },
+          //                 );
+          //               },
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+
+          RefreshIndicator(
+            onRefresh: () async {
+              var notifier = ref.read(homeProvider.notifier);
+              notifier.updateCoordinates(radius: '');
+            },
+            child: notifier.homeUserDataList.isEmpty
+                ? SizedBox(
+                    height: context.height * .6,
+                    child: const Center(child: AppText(text: "No user found")),
+                  )
+                : Column(
+                    children: [
+                      SizedBox(
+                        height: context.height * .69,
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: notifier.homeUserDataList.length + 1,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            if (index == notifier.homeUserDataList.length) {
+                              // Last index, show "No Data"
+                              return const DummyProfileCard();
+                            }
+                            var data = notifier.homeUserDataList[index];
+
+                            return CustomProfileCard(
+                              profileImage: data.profilePhoto != null
+                                  ? ApiConstants.profileBaseUrl +
+                                      data.profilePhoto!
+                                  : '', // Replace with actual image
+                              name: data.name ?? "Name",
+                              designation: data.designation ?? "designation",
+                              distance: data.distance != null
+                                  ? getDistance(data.distance.toString())
+                                  : '',
+                              onUnlockTap: () {
+                                // print("Unlock Now Clicked!");
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+          )
+
           // Image.asset(Assets.map)
         ],
       ));

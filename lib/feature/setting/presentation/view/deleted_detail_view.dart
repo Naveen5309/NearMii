@@ -101,6 +101,7 @@ class _DeletedDetailViewState extends ConsumerState<DeletedDetailView> {
                       },
                       prefixIcon: Assets.icLock,
                       readOnly: true,
+                      suffixIcon: Assets.icArrowDown,
 
                       controller: deleteAccountNotifier.reasonController,
                       labelText: AppString.reason,
@@ -204,7 +205,7 @@ class _DeletedDetailViewState extends ConsumerState<DeletedDetailView> {
                     );
                   }),
                   Visibility(
-                    visible: widget.socialId.isNotEmpty,
+                    visible: widget.socialId.isEmpty,
                     child: Consumer(builder: (context, ref, child) {
                       var isVisible = ref.watch(isCurrentPasswordVisible);
 

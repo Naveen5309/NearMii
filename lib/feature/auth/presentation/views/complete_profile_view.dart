@@ -376,7 +376,7 @@ class CompleteProfileView extends ConsumerWidget {
         //Bio
 
         CustomTextformFeild(
-          // maxLength: 200,
+          maxLength: 200,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: createProfileNotifier.bioController,

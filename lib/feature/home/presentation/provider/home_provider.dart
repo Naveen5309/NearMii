@@ -8,39 +8,37 @@ import '../../domain/usecases/get_home.dart';
 
 // Define a Provider for HomeDataSource
 final homeDataProvider =
-    Provider.autoDispose<HomeDataSource>((ref) => HomeDataSourceImpl());
+    Provider<HomeDataSource>((ref) => HomeDataSourceImpl());
 
 // Define a Provider for HomeRepository
-final homeRepoProvider = Provider.autoDispose<HomeRepository>((ref) {
+final homeRepoProvider = Provider<HomeRepository>((ref) {
   final dataSource = ref.watch(homeDataProvider);
   return HomeRepoImpl(dataSource: dataSource);
 });
 
 // Define a Provider for HomeUseCase
-final homeUseCaseProvider = Provider.autoDispose<HomeUseCase>((ref) {
+final homeUseCaseProvider = Provider<HomeUseCase>((ref) {
   final repository = ref.watch(homeRepoProvider);
   return HomeUseCaseImpl(repository: repository);
 });
 
 // Define a Provider for HomeUseCase
-final bottomNavIndexProvider = Provider.autoDispose<HomeUseCase>((ref) {
+final bottomNavIndexProvider = Provider<HomeUseCase>((ref) {
   final repository = ref.watch(homeRepoProvider);
   return HomeUseCaseImpl(repository: repository);
 });
 
 // Define a StateNotifierProvider for LoginNotifier
-final homeProvider =
-    StateNotifierProvider.autoDispose<HomeNotifier, HomeState>((ref) {
+final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
   final homeUseCase = ref.watch(homeUseCaseProvider);
   return HomeNotifier(homeUseCase: homeUseCase);
 });
 
 //IS MAP VIEW
-final isMapView =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isMapView");
+final isMapView = StateProvider<bool>((ref) => false, name: "isMapView");
 
 final getPreferenceProvider =
-    FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
+    FutureProvider<List<PreferencesModel>>((ref) async {
   final getUserHomeCase = ref.watch(homeUseCaseProvider);
   final res = await getUserHomeCase.callGetPreference();
   return res.fold(

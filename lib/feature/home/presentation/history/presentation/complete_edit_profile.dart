@@ -46,6 +46,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
       (value) {
         WidgetsBinding.instance.addPostFrameCallback(
           (timeStamp) async {
+            print("==========>>>>> ${editProfileNotifier.countryCode}");
             countryNotifier
                 .updateInitialCountry(editProfileNotifier.countryCode);
           },
@@ -157,7 +158,8 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                         final isUpdate =
                             editProfileNotifier.validateEditProfile();
                         if (isUpdate) {
-                          editProfileNotifier.editProfileApi();
+                          editProfileNotifier
+                              .editProfileApi(countryNotifier.country);
 
                           // }
                         }
@@ -292,6 +294,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
       children: [
         //FULL NAME
         CustomLabelTextField(
+          maxLength: 35,
           prefixIcon: Assets.icUser,
           controller: editProfileNotifier.fullNameController,
           labelText: AppString.fullName,
@@ -302,6 +305,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
         //DESIGNATION
         CustomLabelTextField(
+          maxLength: 50,
           suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: editProfileNotifier.designationController,
@@ -451,6 +455,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         //Bio
 
         CustomTextformFeild(
+          maxLength: 200,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: editProfileNotifier.bioController,

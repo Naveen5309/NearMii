@@ -119,9 +119,9 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
 
                     if (result != null) {
                       log("data s :-. ${result.dialCode}");
-                      ref
-                          .read(signupProvider.notifier)
-                          .updateCountryData(dialCode: result.dialCode ?? "+1");
+                      ref.read(signupProvider.notifier).updateCountryData(
+                          dialCode: result.dialCode ?? "+1",
+                          countryNmCode: result.code ?? "US");
                     }
                   },
                   child: Row(

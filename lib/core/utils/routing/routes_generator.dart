@@ -34,7 +34,11 @@ class RouteGenerator {
                   isFromAuth: true,
                 ));
       case Routes.bottomNavBar:
-        return MaterialPageRoute(builder: (_) => BottomNavigationView());
+        final args = settings.arguments as bool;
+        return MaterialPageRoute(
+            builder: (_) => BottomNavigationView(
+                  isFromAuth: args,
+                ));
 
       case Routes.onboard:
         final args = settings.arguments as bool;

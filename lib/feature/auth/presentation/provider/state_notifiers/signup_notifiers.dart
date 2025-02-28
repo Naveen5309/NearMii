@@ -38,10 +38,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   // final imageController = TextEditingController();
   EditProfileModel? editProfileModel;
-
   String countryCode = '+1';
-  String countryFlag = '🇺🇸';
+  String countryNameCode = 'US';
 
+  String countryFlag = '🇺🇸';
   String profilePic = '';
   String name = '';
 
@@ -292,8 +292,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         "designation": designationController.text.trim(),
         "phone_number": "$countryCode ${phoneController.text.trim()}",
         "gender": genderController.text.trim(),
-        "dob": DateFormat("yyyy/MM/dd")
-            .format(DateFormat("MM/dd/yyyy").parse(dobController.text.trim())),
+        "country_code": countryNameCode,
+        "dob": dobController.text.isNotEmpty
+            ? DateFormat("yyyy/MM/dd").format(
+                DateFormat("MM/dd/yyyy").parse(dobController.text.trim()))
+            : '',
         "token": referralController.text.trim(),
         "bio": bioController.text.trim(),
       };
@@ -354,8 +357,6 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   bool validateEditProfile() {
     bool isValid = Validator().completeEditProfileValidator(
         fullName: fullNameController.text.trim(),
-        dob: dobController.text.trim(),
-        gender: genderController.text.trim(),
         phoneNumber: phoneController.text.trim());
     if (isValid) {
       return true;
@@ -572,7 +573,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 //update PROFILE API
-  Future<void> editProfileApi() async {
+  Future<void> editProfileApi(Country county) async {
     state = const AuthApiLoading(authType: AuthType.editProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -593,7 +594,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         if (socialId.isNotEmpty) "social_id": socialId,
         if (socialId.isNotEmpty) "social_type": 'google',
         "designation": designationController.text.trim(),
-        "phone_number": "$countryCode ${phoneController.text.trim()}",
+        "phone_number": "${county.dialCode} ${phoneController.text.trim()}",
         "bio": bioController.text.trim(),
         "gender": genderController.text.trim(),
         "dob": formatDOBforUpdate(
@@ -630,6 +631,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     bioController.text = getProfile?.bio ?? '';
     imageUrl = getProfile?.profilePhoto ?? '';
     socialId = getProfile?.socialId ?? '';
+    countryCode = (getProfile?.phoneNumber).toString().split(' ').first;
     countryFlag = getFlagByDialCode(
             (getProfile?.phoneNumber).toString().split(' ').first) ??
         '🇺🇸';
@@ -648,12 +650,15 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   void updateCountryData({
     required String dialCode,
+    required String countryNmCode,
   }) async {
     log("update code called");
     state = UpdateCodeLoading();
     countryCode = dialCode;
+    countryNameCode = countryNmCode;
+
     state = UpdateCodeLoaded();
 
-    log("update code called :-> $countryCode, $countryFlag");
+    log("update code called :-> $countryCode, $countryFlag, $countryNameCode");
   }
 }

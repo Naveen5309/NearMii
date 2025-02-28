@@ -7,23 +7,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Define a Provider for HistoryDataSource
 final historyDataProvider =
-    Provider.autoDispose<HistoryDataSource>((ref) => HistoryDataSourceImpl());
+    Provider<HistoryDataSource>((ref) => HistoryDataSourceImpl());
 
 // Define a Provider for HistoryRepository
-final historyRepoProvider = Provider.autoDispose<HistoryRepository>((ref) {
+final historyRepoProvider = Provider<HistoryRepository>((ref) {
   final dataSource = ref.watch(historyDataProvider);
   return HistoryRepoImpl(dataSource: dataSource);
 });
 
 // Define a Provider for HistoryUseCase
-final historyUseCaseProvider = Provider.autoDispose<HistoryUsecases>((ref) {
+final historyUseCaseProvider = Provider<HistoryUsecases>((ref) {
   final repository = ref.watch(historyRepoProvider);
   return HistoryUseCaseImpl(repository: repository);
 });
 
 // Define a StateNotifierProvider for HistoryNotifier
 final historyProvider =
-    StateNotifierProvider.autoDispose<HistoryNotifier, HistoryState>((ref) {
+    StateNotifierProvider<HistoryNotifier, HistoryState>((ref) {
   final historyUseCase = ref.watch(historyUseCaseProvider);
   return HistoryNotifier(historyUsecases: historyUseCase);
 });

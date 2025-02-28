@@ -14,7 +14,8 @@ import '../../../../../config/assets.dart';
 import '../../../../../config/helper.dart';
 
 class BottomNavigationView extends ConsumerWidget {
-  BottomNavigationView({super.key});
+  final bool isFromAuth;
+  BottomNavigationView({super.key, required this.isFromAuth});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -191,7 +192,7 @@ class BottomNavigationView extends ConsumerWidget {
 
   final _pageController = [
     const HomePageView(
-      isFromAuth: false,
+      isFromAuth: true,
     ),
     const HistoryView(),
     const NotificationView(),

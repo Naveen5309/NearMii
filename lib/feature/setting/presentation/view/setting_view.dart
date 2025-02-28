@@ -212,10 +212,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
                               onTap: () =>
                                   toNamed(context, Routes.changePassword),
                             )
-                          : const Text("dfsfds"),
+                          : const Text(""),
                       notifier.userProfileModel?.socialId == null
                           ? 10.verticalSpace
-                          : const Text("Data "),
+                          : const Text(" "),
 
                       //CONTACT US
                       CustomTile(

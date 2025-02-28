@@ -58,7 +58,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
           if (loginNotifier.userModel?.isProfile == 1) {
             toast(msg: AppString.loginSuccess, isError: false);
-            toNamed(context, Routes.bottomNavBar);
+            toNamed(context, Routes.bottomNavBar, args: true);
           } else if (loginNotifier.userModel?.isProfile == 0) {
             toast(
                 msg: AppString.completeYourProfile,

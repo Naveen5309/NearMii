@@ -44,6 +44,8 @@ class VIPMembershipDialog extends StatelessWidget {
                   child: IconButton(
                     icon: SvgPicture.asset(
                       Assets.icCloseCircle,
+                      height: 30,
+                      width: 30,
                       colorFilter: const ColorFilter.mode(
                         AppColor.primary,
                         BlendMode.srcIn,
@@ -62,21 +64,21 @@ class VIPMembershipDialog extends StatelessWidget {
               fontWeight: FontWeight.w500,
               color: AppColor.whiteFFFFFF,
             ),
-            const SizedBox(height: 15),
+            10.verticalSpace,
             AppText(
-              text:
-                  "Lorem ipsum dolor sit amet consectetur. Dui etiam tempus scelerisque donec.",
+              text: "Subscription Details",
               textAlign: TextAlign.center,
               lineHeight: 1.2,
               fontWeight: FontWeight.w400,
               color: AppColor.whiteFFFFFF,
-              fontSize: 12.sp,
+              fontSize: 14.sp,
             ),
-            const SizedBox(height: 35),
+
+            10.verticalSpace,
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 11),
+              margin: const EdgeInsets.symmetric(horizontal: 30),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.2, vertical: 15),
+                  const EdgeInsets.symmetric(horizontal: 15.2, vertical: 30),
               decoration: BoxDecoration(
                 color: AppColor.green009E51,
                 borderRadius: BorderRadius.circular(11),
@@ -86,13 +88,13 @@ class VIPMembershipDialog extends StatelessWidget {
                   Row(
                     children: [
                       AppText(
-                        text: "\$19",
-                        fontSize: 34.sp,
+                        text: "\$19.99",
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
                       AppText(
-                        text: " /month",
+                        text: "/month",
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
                         color: Colors.white,
@@ -100,10 +102,11 @@ class VIPMembershipDialog extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Column(
-                    children: List.generate(
-                      4,
-                      (index) => Padding(
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: AppString.subscriptionDataList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
                           children: [
@@ -114,14 +117,14 @@ class VIPMembershipDialog extends StatelessWidget {
                             ),
                             const SizedBox(width: 5),
                             AppText(
-                                text: "Lorem ipsum dolor sit amet consectetur.",
-                                fontSize: 10.sp,
+                                text: AppString.subscriptionDataList[index],
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w400,
                                 color: AppColor.whiteFFFFFF),
                           ],
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),

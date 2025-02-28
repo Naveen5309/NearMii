@@ -1,19 +1,14 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
-import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
-import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
-import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
@@ -315,30 +310,30 @@ Widget bottomSection(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: hideAllSection(),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ProfileGridView(
-            isMyProfile: true,
-            title: AppString.socialMedia,
-            socialMedia: selfUserProfileNotifier.socialMediaList,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ProfileGridView(
-            isMyProfile: true,
-            title: AppString.contactInformation,
-            socialMedia: selfUserProfileNotifier.contactList,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ProfileGridView(
-            isMyProfile: true,
-            title: AppString.portfolio,
-            socialMedia: selfUserProfileNotifier.portfolioList,
-          ),
-        )
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: ProfileGridView(
+        //     isMyProfile: true,
+        //     title: AppString.socialMedia,
+        //     socialMedia: selfUserProfileNotifier.socialMediaList,
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: ProfileGridView(
+        //     isMyProfile: true,
+        //     title: AppString.contactInformation,
+        //     socialMedia: selfUserProfileNotifier.contactList,
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: ProfileGridView(
+        //     isMyProfile: true,
+        //     title: AppString.portfolio,
+        //     socialMedia: selfUserProfileNotifier.portfolioList,
+        //   ),
+        // )
       ]),
     ),
   );
@@ -398,7 +393,7 @@ Widget profileSection(
           ),
           5.verticalSpace,
           AppText(
-            text: profile?.designation,
+            text: profile?.designation ?? '',
             fontWeight: FontWeight.w500,
             fontSize: 16.sp,
             color: AppColor.whiteFFFFFF.withOpacity(.8),

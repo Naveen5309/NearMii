@@ -1,5 +1,6 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
@@ -12,12 +13,15 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SelectSocialMediaView extends ConsumerStatefulWidget {
   final bool isFromProfile;
@@ -90,7 +94,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
             await Getters.getLocalStorage.saveFirstIn(false);
 
             if (context.mounted) {
-              offAllNamed(context, Routes.bottomNavBar);
+              offAllNamed(context, Routes.bottomNavBar, args: true);
               toast(msg: AppString.signupSuccess, isError: false);
             }
 
@@ -124,7 +128,8 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                             await Getters.getLocalStorage.saveFirstIn(false);
 
                             if (context.mounted) {
-                              offAllNamed(context, Routes.bottomNavBar);
+                              offAllNamed(context, Routes.bottomNavBar,
+                                  args: true);
                               toast(
                                   msg: AppString.signupSuccess, isError: false);
                             }
@@ -169,6 +174,98 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                               fontWeight: FontWeight.w400,
                               decoration: TextDecoration.underline,
                             ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle the tap action here
+
+                                showCustomBottomSheet(
+                                    context: context,
+                                    content: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: .0, vertical: 15),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              AppText(
+                                                text:
+                                                    "Steps to Add Profile Link",
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              InkWell(
+                                                  onTap: () {
+                                                    back(context);
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                      height: 30,
+                                                      width: 30,
+                                                      Assets.icCloseCircle))
+                                            ],
+                                          ),
+                                          12.verticalSpace,
+                                          SizedBox(
+                                            height: context.height * .6,
+                                            child: ListView.builder(
+                                              itemCount:
+                                                  AppString.stepsList.length,
+                                              itemBuilder: (context, index) {
+                                                var data =
+                                                    AppString.stepsList[index];
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 8.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      AppText(
+                                                          fontFamily: Constants
+                                                              .fontFamily,
+                                                          fontSize: 15.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          text: data["step"] ??
+                                                              ''),
+                                                      5.verticalSpace,
+                                                      AppText(
+                                                          fontFamily: Constants
+                                                              .fontFamily,
+                                                          fontSize: 12.sp,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color: AppColor
+                                                              .black000000
+                                                              .withOpacity(.6),
+                                                          text: data["msg"] ??
+                                                              ''),
+                                                    ],
+                                                  ),
+                                                );
+
+                                                // ListTile(
+                                                //   title: Text(
+                                                //     AppString
+                                                //         .profileUrls[index],
+                                                //     style: const TextStyle(
+                                                //         fontSize: 16),
+                                                //   ),
+                                                // );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+
+                                // You can add any navigation or action here, e.g., navigate to a new screen
+                              },
                           ),
                         ],
                       ),
