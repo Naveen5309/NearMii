@@ -1,3 +1,4 @@
+import 'package:NearMii/config/enums.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,23 +14,28 @@ class SelfUserProfileInitial extends SelfUserProfileState {
 }
 
 class SelfUserProfileApiLoading extends SelfUserProfileState {
-  const SelfUserProfileApiLoading();
+  final SelfProfileDataType selfProfileDataType;
+  const SelfUserProfileApiLoading({required this.selfProfileDataType});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [selfProfileDataType];
 }
 
 class SelfUserProfileApiSuccess extends SelfUserProfileState {
-  const SelfUserProfileApiSuccess();
+  final SelfProfileDataType selfProfileDataType;
+  const SelfUserProfileApiSuccess({required this.selfProfileDataType});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [selfProfileDataType];
 }
 
 class SelfUserProfileApiFailed extends SelfUserProfileState {
+  final SelfProfileDataType selfProfileDataType;
+
   final String error;
 
-  const SelfUserProfileApiFailed({required this.error});
+  const SelfUserProfileApiFailed(
+      {required this.error, required this.selfProfileDataType});
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, selfProfileDataType];
 }

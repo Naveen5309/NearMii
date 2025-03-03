@@ -303,8 +303,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
             CustomCacheNetworkImage(
               img: imageUrl,
               imageRadius: 70,
-              height: 70,
-              width: 70,
+              height: 100,
+              width: 100,
             ),
             if (isVip)
               Positioned(
@@ -317,12 +317,15 @@ class _SettingViewState extends ConsumerState<SettingView> {
           ],
         ),
         SizedBox(height: 10.h),
+
+        //NAME
         AppText(
           text: name,
           fontFamily: Constants.fontFamily,
           fontSize: 24.sp,
           color: AppColor.black000000,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w500,
+          textAlign: TextAlign.center,
         ),
         SizedBox(height: 10.h),
         Container(

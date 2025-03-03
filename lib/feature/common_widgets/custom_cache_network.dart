@@ -8,6 +8,8 @@ class CustomCacheNetworkImage extends StatelessWidget {
   final String img;
   final double? size;
   final double? height;
+  final double? dummyPadding;
+
   final double? width;
   final Color? backgroundColor;
   final Color? color;
@@ -22,6 +24,7 @@ class CustomCacheNetworkImage extends StatelessWidget {
     this.height,
     this.backgroundColor,
     this.width,
+    this.dummyPadding,
     this.fit,
     this.color,
     required this.imageRadius,
@@ -43,7 +46,7 @@ class CustomCacheNetworkImage extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(dummyPadding ?? 15),
                 child: SvgPicture.asset(Assets.userDummy),
               ),
             ),

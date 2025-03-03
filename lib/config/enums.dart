@@ -25,3 +25,11 @@ enum HomeType { home, coordinates }
 enum OtherUserType { otherUserProfile, report }
 
 enum Setting { contactUs, deleteAccount, radius, getProfile }
+
+enum SelfProfileDataType {
+  hideAll,
+  updatePlatform,
+  getProfile,
+  getPlatform,
+  deletePlatform
+}

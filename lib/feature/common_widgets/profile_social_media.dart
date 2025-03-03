@@ -10,6 +10,8 @@ class ProfileSocialMedia extends StatelessWidget {
   final String icon;
   final String name;
   final int index;
+  final bool? isToggled;
+
   final bool isMyProfile;
 
   const ProfileSocialMedia(
@@ -17,6 +19,7 @@ class ProfileSocialMedia extends StatelessWidget {
       required this.icon,
       required this.name,
       required this.index,
+      this.isToggled,
       required this.isMyProfile});
 
   @override
@@ -43,7 +46,7 @@ class ProfileSocialMedia extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        // 5.verticalSpace,
+        5.verticalSpace,
         Align(
           // alignment: getAlignment(index),
           alignment: Alignment.center,
@@ -59,6 +62,7 @@ class ProfileSocialMedia extends StatelessWidget {
             ? Align(
                 alignment: Alignment.center,
                 child: ToggleSwitchBtn(
+                  isToggled: isToggled ?? false,
                   onToggled: (bool isToggled) {},
                 ),
               )

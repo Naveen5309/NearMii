@@ -230,11 +230,11 @@ class CompleteProfileView extends ConsumerWidget {
 
         //DESIGNATION
         CustomLabelTextField(
-          maxLength: 50,
+          maxLength: 40,
           suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: createProfileNotifier.designationController,
-          labelText: AppString.designation,
+          labelText: "${AppString.designation} (optional)",
           onTapOnSuffixIcon: () {
             showCustomBottomSheet(
                 context: context,
@@ -251,7 +251,7 @@ class CompleteProfileView extends ConsumerWidget {
                               },
                               child: SvgPicture.asset(Assets.icCloseCircle))),
                       AppText(
-                        text: "Designation",
+                        text: "Designation ",
                         fontSize: 20.sp,
                       ),
                       10.verticalSpace,
@@ -376,11 +376,11 @@ class CompleteProfileView extends ConsumerWidget {
         //Bio
 
         CustomTextformFeild(
-          maxLength: 200,
+          maxLength: 60,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: createProfileNotifier.bioController,
-          labelText: AppString.bio,
+          labelText: "${AppString.bio} (optional)",
           maxLines: 5,
         ),
 

@@ -2,16 +2,17 @@ import 'package:NearMii/config/helper.dart';
 import 'package:flutter/material.dart';
 
 class ToggleSwitchBtn extends StatefulWidget {
-  final void Function(bool isToggled) onToggled;
+  final bool isToggled;
+  final void Function(bool toggle) onToggled;
 
-  const ToggleSwitchBtn({super.key, required this.onToggled});
+  const ToggleSwitchBtn(
+      {super.key, required this.isToggled, required this.onToggled});
 
   @override
   State<ToggleSwitchBtn> createState() => _ToggleSwitchBtnState();
 }
 
 class _ToggleSwitchBtnState extends State<ToggleSwitchBtn> {
-  bool isToggled = false;
   double size = 20;
   double innerPadding = 0;
 
@@ -24,24 +25,19 @@ class _ToggleSwitchBtnState extends State<ToggleSwitchBtn> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() => isToggled = !isToggled);
-        widget.onToggled(isToggled);
-      },
-      onPanEnd: (b) {
-        setState(() => isToggled = !isToggled);
-        widget.onToggled(isToggled);
-      },
+      onTap: () => widget.onToggled(!widget.isToggled),
+      onPanEnd: (b) => widget.onToggled(!widget.isToggled),
       child: AnimatedContainer(
         height: size,
         width: size * 2,
         padding: EdgeInsets.all(innerPadding),
-        alignment: isToggled ? Alignment.centerLeft : Alignment.centerRight,
+        alignment:
+            widget.isToggled ? Alignment.centerRight : Alignment.centerLeft,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: isToggled ? AppColor.greyD4D4D4 : AppColor.btnColor,
+          color: widget.isToggled ? AppColor.btnColor : AppColor.greyD4D4D4,
         ),
         child: Container(
           width: size - innerPadding * 2,

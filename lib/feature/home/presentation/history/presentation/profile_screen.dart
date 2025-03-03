@@ -1,7 +1,9 @@
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -9,6 +11,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
+import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
@@ -36,10 +39,20 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
     super.initState();
     Future.microtask(() {
       final notifier = ref.read(getSocialProfileProvider.notifier);
+
       // notifier.getSocialPlatform(query: '');
       notifier.getProfileApi();
       final selfNotifier = ref.read(getSelfPlatformProvider.notifier);
-      selfNotifier.getSelfPlatformApi(name: '');
+      selfNotifier.getSelfPlatformApi();
+    });
+  }
+
+  final _debounce = Debouncer();
+
+  void onSearchChanged(String query) {
+    final notifier = ref.read(getSelfPlatformProvider.notifier);
+    _debounce.run(() {
+      notifier.getSelfPlatformApi();
     });
   }
 
@@ -207,41 +220,33 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                 scrollBehavior: const CupertinoScrollBehavior(),
                 pinned: true,
                 animationCurve: Curves.easeInOutCubicEmphasized,
-                // bottom: const PreferredSize(
-                //   preferredSize: Size.fromHeight(100),
-                //   child: Icon(
-                //     Icons.directions_boat,
-                //     color: Colors.blue,
-                //     size: 45,
-                //   ),
-                // ),
-                // collapsedBarHeight: 60,
                 animationDuration: const Duration(milliseconds: 1),
                 onCollapseStateChanged:
                     (isCollapsed, scrollingOffset, maxExtent) {},
                 collapsedBackgroundColor: AppColor.btnColor,
                 expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-                // backdropWidget: Container(
-                //   decoration: const BoxDecoration(
-                //     image: DecorationImage(
-                //       image: AssetImage(Assets.background),
-                //       fit: BoxFit.fill,
-                //     ),
-                //   ),
-                // ),
                 expandedContentHeight: context.height * .55,
                 expandedContent: profileSection(
-                    context: context, profile: notifier.userProfileModel),
-                collapsedContent: appBarWidgetSection(context: context),
+                    selfUserProfileNotifier: selfUserProfileNotifier,
+                    context: context,
+                    profile: notifier.userProfileModel),
+                collapsedContent: appBarWidgetSection(
+                  profile: notifier.userProfileModel,
+                  context: context,
+                ),
                 body: bottomSection(
                     selfUserProfileNotifier: selfUserProfileNotifier,
-                    context: context)));
+                    context: context,
+                    onSearchChanged: onSearchChanged)));
   }
 }
 
 //APP BAR WIDGET SECTION
 
-Widget appBarWidgetSection({required BuildContext context}) {
+Widget appBarWidgetSection({
+  required BuildContext context,
+  required UserProfileModel? profile,
+}) {
   return Row(
     children: [
       GestureDetector(
@@ -262,7 +267,9 @@ Widget appBarWidgetSection({required BuildContext context}) {
         ),
         padding: const EdgeInsets.all(3),
         child: CustomCacheNetworkImage(
-          img: '',
+          img: profile?.profilePhoto != null
+              ? ("${ApiConstants.getSelfProfile}${profile?.profilePhoto}")
+              : '',
           imageRadius: 150,
           height: 40.w,
           width: 40.w,
@@ -273,13 +280,13 @@ Widget appBarWidgetSection({required BuildContext context}) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: "Brooklyn ",
+            text: profile?.name ?? '',
             fontSize: 18.sp,
             fontWeight: FontWeight.w500,
             color: AppColor.whiteFFFFFF,
           ),
           AppText(
-            text: "Designation",
+            text: profile?.designation ?? '',
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
             color: AppColor.whiteFFFFFF.withOpacity(.8),
@@ -292,9 +299,11 @@ Widget appBarWidgetSection({required BuildContext context}) {
 
 //BOTTOM SECTION
 
-Widget bottomSection(
-    {required SelfUserProfileNotifier selfUserProfileNotifier,
-    required BuildContext context}) {
+Widget bottomSection({
+  required SelfUserProfileNotifier selfUserProfileNotifier,
+  required BuildContext context,
+  required Function(String) onSearchChanged, // Add this parameter
+}) {
   return Container(
     color: AppColor.greyf9f9f9,
     width: context.width,
@@ -303,37 +312,45 @@ Widget bottomSection(
           horizontal: context.width * .04, vertical: context.width * .01),
       child: Column(children: [
         CustomSearchBarWidget(
-          controller: TextEditingController(),
-          onChanged: (value) {},
+          controller: selfUserProfileNotifier.searchTextController,
+          onChanged: (value) {
+            onSearchChanged(value);
+          },
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: hideAllSection(),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: ProfileGridView(
-        //     isMyProfile: true,
-        //     title: AppString.socialMedia,
-        //     socialMedia: selfUserProfileNotifier.socialMediaList,
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: ProfileGridView(
-        //     isMyProfile: true,
-        //     title: AppString.contactInformation,
-        //     socialMedia: selfUserProfileNotifier.contactList,
-        //   ),
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: ProfileGridView(
-        //     isMyProfile: true,
-        //     title: AppString.portfolio,
-        //     socialMedia: selfUserProfileNotifier.portfolioList,
-        //   ),
-        // )
+        selfUserProfileNotifier.socialMediaList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ProfileGridView(
+                  isMyProfile: true,
+                  title: AppString.socialMedia,
+                  socialMedia: selfUserProfileNotifier.socialMediaList,
+                ),
+              )
+            : const SizedBox(),
+        selfUserProfileNotifier.contactList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ProfileGridView(
+                  isMyProfile: true,
+                  title: AppString.contactInformation,
+                  socialMedia: selfUserProfileNotifier.contactList,
+                ),
+              )
+            : const SizedBox(),
+        selfUserProfileNotifier.portfolioList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ProfileGridView(
+                  isMyProfile: true,
+                  title: AppString.portfolio,
+                  socialMedia: selfUserProfileNotifier.portfolioList,
+                ),
+              )
+            : const SizedBox()
       ]),
     ),
   );
@@ -342,7 +359,9 @@ Widget bottomSection(
 //PROFILE SECTION
 
 Widget profileSection(
-    {required BuildContext context, required UserProfileModel? profile}) {
+    {required BuildContext context,
+    required UserProfileModel? profile,
+    required SelfUserProfileNotifier selfUserProfileNotifier}) {
   return Container(
     decoration: const BoxDecoration(
       image: DecorationImage(
@@ -378,45 +397,72 @@ Widget profileSection(
             ),
             padding: const EdgeInsets.all(6),
             child: CustomCacheNetworkImage(
-              img: '',
+              dummyPadding: 30,
+              img: profile?.profilePhoto != null
+                  ? ("${ApiConstants.getSelfProfile}${profile?.profilePhoto}")
+                  : '',
               imageRadius: 150,
               height: 105.w,
               width: 105.w,
             ),
           ),
           10.verticalSpace,
-          AppText(
-            color: AppColor.whiteFFFFFF,
-            text: profile?.name,
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w500,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+            child: AppText(
+              color: AppColor.whiteFFFFFF,
+              text: profile?.name,
+              fontSize: 20.sp,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          5.verticalSpace,
-          AppText(
-            text: profile?.designation ?? '',
-            fontWeight: FontWeight.w500,
-            fontSize: 16.sp,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          8.verticalSpace,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+            child: AppText(
+              text: profile?.designation ?? '',
+              fontWeight: FontWeight.w500,
+              fontSize: 16.sp,
+              textAlign: TextAlign.center,
+              color: AppColor.whiteFFFFFF.withOpacity(.8),
+            ),
           ),
           25.verticalSpace,
-          AppText(
-            text: profile?.bio ?? '',
-            textAlign: TextAlign.center,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+            child: AppText(
+              text: profile?.bio ?? '',
+              textAlign: TextAlign.center,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColor.whiteFFFFFF.withOpacity(.8),
+            ),
           ),
           20.verticalSpace,
-          const Wrap(
+          Wrap(
             alignment: WrapAlignment.center,
             runSpacing: 8,
             spacing: 6,
             children: [
-              InfoChip(label: 'Social', value: "0"),
-              InfoChip(label: 'Contact', value: '0'),
-              InfoChip(label: 'Portfolio', value: '0'),
-              InfoChip(label: 'Finance', value: '0'),
-              InfoChip(label: 'Business', value: '0'),
+              InfoChip(
+                  label: 'Social',
+                  value: selfUserProfileNotifier.socialMediaList.length
+                      .toString()),
+              InfoChip(
+                  label: 'Contact',
+                  value: selfUserProfileNotifier.contactList.length.toString()),
+              InfoChip(
+                  label: 'Portfolio',
+                  value:
+                      selfUserProfileNotifier.portfolioList.length.toString()),
+              InfoChip(
+                  label: 'Finance',
+                  value: selfUserProfileNotifier.financeList.length.toString()),
+              InfoChip(
+                  label: 'Business',
+                  value:
+                      selfUserProfileNotifier.businessList.length.toString()),
             ],
           )
         ]),
@@ -468,6 +514,7 @@ Widget hideAllSection() {
       //SWITCH BUTTON
 
       ToggleSwitchBtn(
+        isToggled: false,
         onToggled: (isToggled) {},
       ),
     ],

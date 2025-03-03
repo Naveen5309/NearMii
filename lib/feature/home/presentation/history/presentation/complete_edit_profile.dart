@@ -305,7 +305,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
         //DESIGNATION
         CustomLabelTextField(
-          maxLength: 50,
+          maxLength: 40,
           suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: editProfileNotifier.designationController,
@@ -384,33 +384,61 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         CustomLabelTextField(
           readOnly: true,
           onTap: () async {
-            DateTime? selectedDate =
-                formatDOBtoDateTime(editProfileNotifier.dobController.text);
+            if (editProfileNotifier.dobController.text.isNotEmpty) {
+              DateTime? selectedDate =
+                  formatDOBtoDateTime(editProfileNotifier.dobController.text);
 
-            log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
-            final DateTime? picked = await showDatePicker(
-              context: context,
-              initialDate: selectedDate ?? DateTime.now(),
-              firstDate: DateTime(1970, 8),
-              lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
-              builder: (context, child) {
-                return Theme(
-                  data: ThemeData.light().copyWith(
-                    primaryColor: AppColor.btnColor, // Header background color
-                    hintColor: AppColor.btnColor, // Accent color
-                    colorScheme: const ColorScheme.light(
-                        primary: AppColor.btnColor), // Active date color
-                    buttonTheme: const ButtonThemeData(
-                        textTheme: ButtonTextTheme.primary),
-                  ),
-                  child: child!,
-                );
-              },
-            );
+              log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: selectedDate ?? DateTime.now(),
+                firstDate: DateTime(1970, 8),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                builder: (context, child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                      primaryColor:
+                          AppColor.btnColor, // Header background color
+                      hintColor: AppColor.btnColor, // Accent color
+                      colorScheme: const ColorScheme.light(
+                          primary: AppColor.btnColor), // Active date color
+                      buttonTheme: const ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
 
-            if (picked != null) {
-              editProfileNotifier.dobController.text = formatDOB(picked);
-              log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+              if (picked != null) {
+                editProfileNotifier.dobController.text = formatDOB(picked);
+                log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+              }
+            } else {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1970, 8),
+                lastDate: DateTime.now(),
+                builder: (context, child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                      primaryColor: Colors.green, // Header background color
+                      hintColor: Colors.green, // Accent color
+                      colorScheme: const ColorScheme.light(
+                          primary: Colors.green), // Active date color
+                      buttonTheme: const ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+
+              if (picked != null) {
+                editProfileNotifier.dobController.text = formatDOB(picked);
+                log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+              }
             }
           },
 
@@ -419,34 +447,62 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
           suffixIcon: Assets.icCalender,
           labelText: AppString.dob,
           onTapOnSuffixIcon: () async {
-            // DateTime? selectedDate =
-            //     formatDOBtoDateTime(editProfileNotifier.dobController.text);
+            if (editProfileNotifier.dobController.text.isNotEmpty) {
+              DateTime? selectedDate =
+                  formatDOBtoDateTime(editProfileNotifier.dobController.text);
 
-            // log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
-            // final DateTime? picked = await showDatePicker(
-            //   context: context,
-            //   initialDate: selectedDate ?? DateTime.now(),
-            //   firstDate: DateTime(1970, 8),
-            //   lastDate: DateTime.now(),
-            //   builder: (context, child) {
-            //     return Theme(
-            //       data: ThemeData.light().copyWith(
-            //         primaryColor: AppColor.btnColor, // Header background color
-            //         hintColor: AppColor.btnColor, // Accent color
-            //         colorScheme: const ColorScheme.light(
-            //             primary: AppColor.btnColor), // Active date color
-            //         buttonTheme: const ButtonThemeData(
-            //             textTheme: ButtonTextTheme.primary),
-            //       ),
-            //       child: child!,
-            //     );
-            //   },
-            // );
+              log("selected date:-. $selectedDate ,${editProfileNotifier.dobController.text}");
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: selectedDate ?? DateTime.now(),
+                firstDate: DateTime(1970, 8),
+                lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                builder: (context, child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                      primaryColor:
+                          AppColor.btnColor, // Header background color
+                      hintColor: AppColor.btnColor, // Accent color
+                      colorScheme: const ColorScheme.light(
+                          primary: AppColor.btnColor), // Active date color
+                      buttonTheme: const ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
 
-            // if (picked != null) {
-            //   editProfileNotifier.dobController.text = formatDOB(picked);
-            //   log("pciked is :-, > ${editProfileNotifier.dobController.text}");
-            // }
+              if (picked != null) {
+                editProfileNotifier.dobController.text = formatDOB(picked);
+                log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+              }
+            } else {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1970, 8),
+                lastDate: DateTime.now(),
+                builder: (context, child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                      primaryColor: Colors.green, // Header background color
+                      hintColor: Colors.green, // Accent color
+                      colorScheme: const ColorScheme.light(
+                          primary: Colors.green), // Active date color
+                      buttonTheme: const ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+
+              if (picked != null) {
+                editProfileNotifier.dobController.text = formatDOB(picked);
+                log("pciked is :-, > ${editProfileNotifier.dobController.text}");
+              }
+            }
           },
 
           // labelText: AppString.confirmPswd,
@@ -455,7 +511,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         //Bio
 
         CustomTextformFeild(
-          maxLength: 200,
+          maxLength: 60,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: editProfileNotifier.bioController,

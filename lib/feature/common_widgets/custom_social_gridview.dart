@@ -43,11 +43,10 @@ class CustomSocialGridview extends ConsumerWidget {
         } else if (next is AuthApiSuccess &&
             next.authType == AuthType.addPlatform) {
           Utils.hideLoader();
-          // Utils.hideBottomSheet(context);
 
           toast(msg: AppString.platformUpdateSuccess, isError: false);
 
-          // toNamed(context, Routes.bottomNavBar);
+          printLog("Platform added succesfully");
         } else if (next is AuthApiFailed &&
             next.authType == AuthType.addPlatform) {
           Utils.hideLoader();
@@ -131,21 +130,21 @@ class CustomSocialGridview extends ConsumerWidget {
                                             Assets.icCloseCircle))
                                   ],
                                 ),
-                                // 10.verticalSpace,
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: context.height * .04),
-                                  child: CustomLabelTextField(
-                                      labelBckColor: AppColor.primary,
-                                      labelText: "${socialMedia[pIndex].type}",
-                                      controller: notifier.urlController,
-                                      prefixWidget: CustomCacheNetworkImage(
-                                          img: ApiConstants.socialIconBaseUrl +
-                                              socialMedia[pIndex].icon!,
-                                          width: 25,
-                                          height: 25,
-                                          imageRadius: 10)),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10.0),
+                                  child: Divider(),
                                 ),
+                                // 10.verticalSpace,
+                                CustomLabelTextField(
+                                    labelBckColor: AppColor.primary,
+                                    labelText: "${socialMedia[pIndex].type}",
+                                    controller: notifier.urlController,
+                                    prefixWidget: CustomCacheNetworkImage(
+                                        img: ApiConstants.socialIconBaseUrl +
+                                            socialMedia[pIndex].icon!,
+                                        width: 25,
+                                        height: 25,
+                                        imageRadius: 10)),
 
                                 /**--------------------- CANCEL AND SAVE  ---------------- **/
                                 Padding(

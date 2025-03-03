@@ -1,6 +1,7 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/network/http_service.dart';
+import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_svg/svg.dart';
 
 class ProfileGridView extends StatelessWidget {
   final String title;
-  final List<PlatformData> socialMedia;
+  final List<SelfPlatformData> socialMedia;
   final bool isMyProfile;
 
   const ProfileGridView({
@@ -88,8 +89,10 @@ class ProfileGridView extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           AppText(
-                                            text:
-                                                socialMedia[pIndex].name ?? '',
+                                            text: socialMedia[pIndex]
+                                                    .platform
+                                                    ?.name ??
+                                                '',
                                             fontSize: 18.sp,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -105,27 +108,35 @@ class ProfileGridView extends StatelessWidget {
                                       ),
                                       // 10.verticalSpace,
 
-                                      Text("==${socialMedia[pIndex].icon}"),
+                                      Text(
+                                          "${socialMedia[pIndex].platform?.icon}"),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                             vertical: context.height * .03),
                                         child: CustomLabelTextField(
                                             labelText: socialMedia[pIndex]
-                                                    .type ??
+                                                    .platform
+                                                    ?.type ??
                                                 '',
                                             controller: TextEditingController(),
-                                            prefixWidget:
-                                                CustomCacheNetworkImage(
-                                                    img: ApiConstants
-                                                            .socialIconBaseUrl +
-                                                        socialMedia[pIndex]
-                                                            .icon!,
-                                                    width: 25,
-                                                    height: 25,
-                                                    imageRadius: 10)),
+                                            prefixWidget: CustomCacheNetworkImage(
+                                                img: socialMedia[pIndex]
+                                                            .platform
+                                                            ?.icon !=
+                                                        null
+                                                    ? ApiConstants
+                                                                .socialIconBaseUrl +
+                                                            socialMedia[pIndex]
+                                                                .platform!
+                                                                .icon! ??
+                                                        ''
+                                                    : '',
+                                                width: 25,
+                                                height: 25,
+                                                imageRadius: 10)),
                                       ),
 
-                                      /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                      /**--------------------- CANCEL AND UPDATE  ---------------- **/
                                       Padding(
                                         padding: EdgeInsets.only(
                                             bottom: context.height * .02),
@@ -151,7 +162,7 @@ class ProfileGridView extends StatelessWidget {
                                             Expanded(
                                               child: CommonAppBtn(
                                                 onTap: () {},
-                                                title: AppString.save,
+                                                title: AppString.update,
                                                 width: context.width,
                                               ),
                                             ),
@@ -165,15 +176,15 @@ class ProfileGridView extends StatelessWidget {
                                 )
                               : null;
                         },
-                        child: Text("asdf :${socialMedia[pIndex].name}")
-
-                        //  ProfileSocialMedia(
-                        //   isMyProfile: isMyProfile,
-                        //   index: pIndex,
-                        //   icon: socialMedia[pIndex].icon ?? 'asdf',
-                        //   name: socialMedia[pIndex].name ?? '',
-                        // )
-                        );
+                        child: ProfileSocialMedia(
+                          isToggled: socialMedia[pIndex].platform?.status == 1
+                              ? true
+                              : false,
+                          isMyProfile: isMyProfile,
+                          index: pIndex,
+                          icon: socialMedia[pIndex].platform?.icon ?? '',
+                          name: socialMedia[pIndex].platform?.name ?? '',
+                        ));
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, // 3 columns

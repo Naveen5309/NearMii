@@ -8,7 +8,7 @@ class Debouncer {
 
   void run(VoidCallback action) {
     _timer?.cancel(); // Cancel the previous timer if still running
-    _timer = Timer(const Duration(milliseconds: 500), action);
+    _timer = Timer(const Duration(milliseconds: 300), action);
   }
 
   void cancel() {

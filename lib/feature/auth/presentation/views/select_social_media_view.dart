@@ -208,7 +208,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                                           ),
                                           12.verticalSpace,
                                           SizedBox(
-                                            height: context.height * .6,
+                                            height: context.height * .8,
                                             child: ListView.builder(
                                               itemCount:
                                                   AppString.stepsList.length,
@@ -225,6 +225,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                                                     mainAxisSize:
                                                         MainAxisSize.min,
                                                     children: [
+                                                      5.verticalSpace,
                                                       AppText(
                                                           fontFamily: Constants
                                                               .fontFamily,
@@ -238,6 +239,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                                                           fontFamily: Constants
                                                               .fontFamily,
                                                           fontSize: 12.sp,
+                                                          lineHeight: 1.5,
                                                           fontWeight:
                                                               FontWeight.w400,
                                                           color: AppColor
@@ -271,11 +273,6 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       ),
                     ),
 
-                    // AppText(
-                    //   text: "Lorem ipsum dolor sit amet consectetur. Massa.",
-                    //   fontSize: 14.sp,
-                    //   color: AppColor.grey999,
-                    // ),
                     15.verticalSpace,
 
                     //SEARCH FIELD

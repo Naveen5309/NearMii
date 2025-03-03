@@ -336,14 +336,14 @@ Widget bottomSection(
           controller: signupNotifier.searchTextController,
           onChanged: (value) {},
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ProfileGridView(
-            title: AppString.socialMedia,
-            isMyProfile: false,
-            socialMedia: signupNotifier.socialMediaList,
-          ),
-        )
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: ProfileGridView(
+        //     title: AppString.socialMedia,
+        //     isMyProfile: false,
+        //     socialMedia: signupNotifier.socialMediaList,
+        //   ),
+        // )
       ]),
     ),
   );
@@ -549,9 +549,9 @@ Widget hideAllSection() {
 
       //SWITCH BUTTON
 
-      ToggleSwitchBtn(
-        onToggled: (isToggled) {},
-      ),
+      // ToggleSwitchBtn(
+      //   onToggled: (isToggled) {},
+      // ),
     ],
   );
 }

@@ -162,16 +162,24 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             text: AppString.welcomeBack,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
                             color: AppColor.primary.withOpacity(.8),
                           ),
                           5.verticalSpace,
                           //NAME
-
-                          AppText(
-                            text: notifier.name,
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.primary,
+                          SizedBox(
+                            width: context.width * .7,
+                            child: Wrap(
+                              children: [
+                                AppText(
+                                  maxlines: 1,
+                                  text: notifier.name,
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.primary,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -182,8 +190,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             shape: BoxShape.circle,
                           ),
                           child: CustomCacheNetworkImage(
-                              height: 45,
-                              width: 45,
+                              height: context.width * .15,
+                              width: context.width * .15,
                               img: notifier.profilePic.isNotEmpty
                                   ? ApiConstants.profileBaseUrl +
                                       notifier.profilePic
@@ -192,7 +200,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                     ],
                   ),
                   SizedBox(
-                    height: context.height * .04,
+                    height: context.height * .03,
                   ),
                   LocationCard(
                     location: notifier.addressName,
