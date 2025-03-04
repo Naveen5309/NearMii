@@ -243,8 +243,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         title: AppString.deleteAccount,
                         subtitle: AppString.deleteYourAccount,
                         trailingIcon: Assets.iconArrowRight,
-                        onTap: () => toNamed(context, Routes.deleteAccount,
-                            args: notifier.userProfileModel?.socialId ?? ''),
+                        onTap: () => toNamed(
+                          context, Routes.deleteAccountReason,
+                          // args: notifier.userProfileModel?.socialId ?? ''
+                        ),
                       ),
                       15.verticalSpace,
 

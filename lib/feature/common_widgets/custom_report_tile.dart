@@ -28,7 +28,7 @@ class CustomReportTile extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       padding: const EdgeInsets.all(5),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -49,6 +49,7 @@ class CustomReportTile extends ConsumerWidget {
                   color: AppColor.black272727.withOpacity(.9),
                 ),
               ),
+              5.horizontalSpace,
               GestureDetector(
                 onTap: ontap,
                 child: check

@@ -7,6 +7,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/data/models/home_data_model.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
+import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,6 +16,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   final HomeUseCase homeUseCase;
   HomeNotifier({required this.homeUseCase}) : super(HomeInitial());
   List<HomeData> homeUserDataList = [];
+  UserProfileModel? userProfileModel;
 
   double lat = 30.710446;
   double long = 76.719350;

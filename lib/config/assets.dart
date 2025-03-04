@@ -172,7 +172,9 @@ class Assets {
   static const String bottomNav = 'assets/icons/bottom_nav.svg';
   static const String icMore = 'assets/icons/more.svg';
   static const String copy = 'assets/icons/copy.svg';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
+  static const String gallery = 'assets/icons/gallery.svg';
+
+  static const String cameraImage = 'assets/icons/camera_image.svg';
   static const String reportNavClose = 'assets/icons/report_nav_close.svg';
   static const String icCopy = 'assets/icons/copy.svg';
   static const String checkBox = 'assets/icons/check_box.svg';
@@ -180,7 +182,7 @@ class Assets {
       'assets/animation/location_animation.json';
   static const String appLogoRound = 'assets/icons/app_logo_round.png';
   static const String icInfo = 'assets/icons/info.svg';
-  // static const String checkFalse = 'assets/icons/check_false.svg';
+  static const String lineBar = 'assets/icons/line_bar.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';

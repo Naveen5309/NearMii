@@ -131,6 +131,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                               context: context,
                               content: ChooseImageWidget(
                                 onClickOnCamera: () {
+                                  print('shvjdsvbj');
                                   editProfileNotifier.pickAndCropImage(
                                       context: context,
                                       source: ImageSource.camera);

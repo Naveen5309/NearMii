@@ -11,6 +11,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/custum_thumb.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
+import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,9 +27,19 @@ class RadiusScreen extends ConsumerStatefulWidget {
 class _RadiusScreenState extends ConsumerState<RadiusScreen> {
   double _currentRadius = 20;
   final List<double> _customIntervals = [20, 40, 60, 80, 100];
+  @override
+  void initState() {
+    super.initState();
+    var radiusNotifier = ref.read(getProfileProvider.notifier);
+    double savedRadius =
+        double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50') ?? 50;
+    _currentRadius = savedRadius;
+  }
 
   @override
   Widget build(BuildContext context) {
+    // var radiusNotifier = ref.watch(getProfileProvider.notifier);
+
     ref.watch(homeProvider);
     var notifier = ref.watch(homeProvider.notifier);
 
@@ -93,6 +104,9 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
               ),
               AppText(
                 text: "${_currentRadius.toStringAsFixed(2)} m",
+                // "${(double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50')?.toStringAsFixed(2)) ?? '50'} m",
+
+                //  "${_currentRadius.toStringAsFixed(2)} m",
                 color: AppColor.btnColor,
               ),
             ],
