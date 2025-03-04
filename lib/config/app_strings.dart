@@ -104,7 +104,7 @@ abstract final class AppString {
   static const String violenceAndDangerous = "Violence & dangerous ";
   static const String hateSpeech = "Hate speech or symbol ";
   static const String nudity = "Nudity or bad content ";
-  static const String somethingElse = "Something else";
+  static const String somethingElse = "Something Else";
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
   static const String fetchingLocation = "Fetching your location";
@@ -199,8 +199,9 @@ abstract final class AppString {
   static const String accountDeleted = "Account deleted";
   static const String uploadfromGallery = "Upload from gallery";
   static const String takeAPhoto = "Take a photo";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  static const String giveReason = "Give reason for deleting the account";
+  static const String tellReason =
+      "Tell us the reason before deleting the account.";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
