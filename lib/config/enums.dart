@@ -22,7 +22,11 @@ enum LocationType {
 
 enum HomeType { home, coordinates }
 
-enum OtherUserType { otherUserProfile, report }
+enum OtherUserType {
+  getProfile,
+  report,
+  getPlatform,
+}
 
 enum Setting { contactUs, deleteAccount, radius, getProfile }
 

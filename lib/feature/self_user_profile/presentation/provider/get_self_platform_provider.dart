@@ -24,10 +24,10 @@ final selfUserProfileUseCaseProvider =
   return SelfUserProfileUseCaseImpl(repository: repository);
 });
 
-// Define a StateNotifierProvider for SelfUserProfileNotifier
-final getSelfPlatformProvider = StateNotifierProvider.autoDispose<
-    SelfUserProfileNotifier, SelfUserProfileState>((ref) {
-  final selfUserProfileUseCase = ref.watch(selfUserProfileUseCaseProvider);
-  return SelfUserProfileNotifier(
-      selfUserProfileUsecases: selfUserProfileUseCase);
-});
+// // Define a StateNotifierProvider for SelfUserProfileNotifier
+// final getSelfPlatformProvider = StateNotifierProvider.autoDispose<
+//     SelfUserProfileNotifier, SelfUserProfileState>((ref) {
+//   final selfUserProfileUseCase = ref.watch(selfUserProfileUseCaseProvider);
+//   return SelfUserProfileNotifier(
+//       selfUserProfileUsecases: selfUserProfileUseCase);
+// });

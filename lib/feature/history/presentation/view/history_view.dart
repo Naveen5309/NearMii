@@ -69,287 +69,310 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
               height: context.height * .9,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-                child: SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      CustomSearchBarWidget(
-                        controller: TextEditingController(),
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            history.historyApi(name: value.trim());
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: context.height * .81,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColor.grey999.withOpacity(.5),
-                                        spreadRadius: 0,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 1),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: AppColor.primary),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 11),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: AppText(
-                                          text: AppString.recent,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    var notifier = ref.read(historyProvider.notifier);
+                    notifier.historyApi(name: "");
+                  },
+                  child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        CustomSearchBarWidget(
+                          controller: TextEditingController(),
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              history.historyApi(name: value.trim());
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: context.height * .81,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
                                         ),
-                                      ),
-                                      history.recentHistoryList.isNotEmpty
-                                          ? SizedBox(
-                                              child: ListView.builder(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 3),
-                                                itemCount: history
-                                                    .recentHistoryList.length,
-                                                itemBuilder: (context, index) {
-                                                  var data = history
-                                                      .recentHistoryList[index];
-                                                  var timeAgo = getTimeAgo(
-                                                      data.createdAt);
-                                                  return Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    child: CustomTile(
-                                                      isHistory: true,
-                                                      time: timeAgo,
-                                                      title:
-                                                          data.profile?.name ??
-                                                              "",
-                                                      leadingIcon: '',
-                                                      subtitle: data.profile
-                                                              ?.designation ??
-                                                          "",
-                                                      onTap: () {
-                                                        toNamed(
-                                                            context,
-                                                            Routes
-                                                                .otherUserProfile,
-                                                            args: "52");
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                          : const SizedBox(
-                                              height: 100,
-                                              child: Center(
-                                                child: AppText(
-                                                    text:
-                                                        "No History on Recent time"),
-                                              ),
-                                            )
-                                    ],
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.recent,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        history.recentHistoryList.isNotEmpty
+                                            ? SizedBox(
+                                                child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 3),
+                                                  itemCount: history
+                                                      .recentHistoryList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var data = history
+                                                            .recentHistoryList[
+                                                        index];
+                                                    var timeAgo = getTimeAgo(
+                                                        data.createdAt);
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 5),
+                                                      child: CustomTile(
+                                                        isHistory: true,
+                                                        time: timeAgo,
+                                                        title: data.profile
+                                                                ?.name ??
+                                                            "",
+                                                        leadingIcon: data
+                                                                .profile
+                                                                ?.profilePhoto ??
+                                                            '',
+                                                        subtitle: data.profile
+                                                                ?.designation ??
+                                                            "",
+                                                        onTap: () {
+                                                          toNamed(
+                                                              context,
+                                                              Routes
+                                                                  .otherUserProfile,
+                                                              args: "52");
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child: AppText(
+                                                      text:
+                                                          "No History on Recent time"),
+                                                ),
+                                              )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColor.grey999.withOpacity(.5),
-                                        spreadRadius: 0,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 1),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: AppColor.primary),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 11),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: AppText(
-                                          text: AppString.lastWeek,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
                                         ),
-                                      ),
-                                      history.historyLastWeekTimeList.isNotEmpty
-                                          ? SizedBox(
-                                              child: ListView.builder(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 3),
-                                                itemCount: history
-                                                    .historyLastWeekTimeList
-                                                    .length,
-                                                itemBuilder: (context, index) {
-                                                  var data = history
-                                                          .historyLastWeekTimeList[
-                                                      index];
-                                                  var timeAgo = getTimeAgo(
-                                                      data.createdAt);
-                                                  return Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    child: CustomTile(
-                                                      isHistory: true,
-                                                      time: timeAgo,
-                                                      title:
-                                                          data.profile?.name ??
-                                                              "",
-                                                      leadingIcon: data.profile
-                                                                  ?.profilePhoto !=
-                                                              null
-                                                          ? (ApiConstants
-                                                                  .profileBaseUrl +
-                                                              data.profile!
-                                                                  .profilePhoto!)
-                                                          : '',
-                                                      subtitle: data.profile
-                                                              ?.designation ??
-                                                          "",
-                                                      onTap: () {
-                                                        toNamed(
-                                                            context,
-                                                            Routes
-                                                                .otherUserProfile,
-                                                            args: "52");
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                          : const SizedBox(
-                                              height: 100,
-                                              child: Center(
-                                                child: AppText(
-                                                    text:
-                                                        "No History on Last week"),
-                                              ),
-                                            )
-                                    ],
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.lastWeek,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        history.historyLastWeekTimeList
+                                                .isNotEmpty
+                                            ? SizedBox(
+                                                child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 3),
+                                                  itemCount: history
+                                                      .historyLastWeekTimeList
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var data = history
+                                                            .historyLastWeekTimeList[
+                                                        index];
+                                                    var timeAgo = getTimeAgo(
+                                                        data.createdAt);
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 5),
+                                                      child: CustomTile(
+                                                        isHistory: true,
+                                                        time: timeAgo,
+                                                        title: data.profile
+                                                                ?.name ??
+                                                            "",
+                                                        leadingIcon: data
+                                                                    .profile
+                                                                    ?.profilePhoto !=
+                                                                null
+                                                            ? (ApiConstants
+                                                                    .profileBaseUrl +
+                                                                data.profile!
+                                                                    .profilePhoto!)
+                                                            : '',
+                                                        subtitle: data.profile
+                                                                ?.designation ??
+                                                            "",
+                                                        onTap: () {
+                                                          toNamed(
+                                                              context,
+                                                              Routes
+                                                                  .otherUserProfile,
+                                                              args: "52");
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child: AppText(
+                                                      text:
+                                                          "No History on Last week"),
+                                                ),
+                                              )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColor.grey999.withOpacity(.5),
-                                        spreadRadius: 0,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 1),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: AppColor.primary),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 11),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: AppText(
-                                          text: AppString.lastMonth,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              AppColor.grey999.withOpacity(.5),
+                                          spreadRadius: 0,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 1),
                                         ),
-                                      ),
-                                      history.historyLastMonthTimeList
-                                              .isNotEmpty
-                                          ? SizedBox(
-                                              child: ListView.builder(
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                shrinkWrap: true,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 3),
-                                                itemCount: history
-                                                    .historyLastMonthTimeList
-                                                    .length,
-                                                itemBuilder: (context, index) {
-                                                  var data = history
-                                                          .historyLastMonthTimeList[
-                                                      index];
-                                                  var timeAgo = getTimeAgo(
-                                                      data.createdAt);
-                                                  return Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    child: CustomTile(
-                                                      isHistory: true,
-                                                      time: timeAgo,
-                                                      title:
-                                                          data.profile?.name ??
-                                                              "",
-                                                      leadingIcon: '',
-                                                      subtitle: data.profile
-                                                              ?.designation ??
-                                                          "",
-                                                      onTap: () {
-                                                        toNamed(
-                                                            context,
-                                                            Routes
-                                                                .otherUserProfile,
-                                                            args: "52");
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                          : const SizedBox(
-                                              height: 100,
-                                              child: Center(
-                                                child: AppText(
-                                                    text:
-                                                        "No History on Last month"),
-                                              ),
-                                            )
-                                    ],
+                                      ],
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: AppColor.primary),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 11),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: AppText(
+                                            text: AppString.lastMonth,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        history.historyLastMonthTimeList
+                                                .isNotEmpty
+                                            ? SizedBox(
+                                                child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 3),
+                                                  itemCount: history
+                                                      .historyLastMonthTimeList
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var data = history
+                                                            .historyLastMonthTimeList[
+                                                        index];
+                                                    var timeAgo = getTimeAgo(
+                                                        data.createdAt);
+                                                    return Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 5),
+                                                      child: CustomTile(
+                                                        isHistory: true,
+                                                        time: timeAgo,
+                                                        title: data.profile
+                                                                ?.name ??
+                                                            "",
+                                                        leadingIcon: '',
+                                                        subtitle: data.profile
+                                                                ?.designation ??
+                                                            "",
+                                                        onTap: () {
+                                                          toNamed(
+                                                              context,
+                                                              Routes
+                                                                  .otherUserProfile,
+                                                              args: "52");
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child: AppText(
+                                                      text:
+                                                          "No History on Last month"),
+                                                ),
+                                              )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

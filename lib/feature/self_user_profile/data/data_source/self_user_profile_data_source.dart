@@ -56,7 +56,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "OtherUserProfileLogin",
+        functionName: "updateSocialLink",
       ));
     }
   }
@@ -73,16 +73,6 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
             log("json in data source :-> $json");
 
             return json;
-            // print("json in data source :-> $json");
-
-            // if (json is Map<String, dynamic>) {
-            //   var myData = List<HistoryModel>.from(
-            //       json["data"].map((x) => HistoryModel.fromJson(x)));
-
-            //   log("mydata is :-. $myData");
-            //   return myData;
-            // }
-            // throw Exception("Unexpected API response format");
           });
       print("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
@@ -146,7 +136,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
       final dataResponse = await Getters.getHttpService.request<dynamic>(
           body: body,
           requestType: RequestType.post,
-          url: ApiConstants.updateSocialLink,
+          url: ApiConstants.deletePlatform,
           fromJson: (json) {
             log("json in data source :-> $json");
 
@@ -175,7 +165,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
     } catch (e) {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
-        functionName: "OtherUserProfileLogin",
+        functionName: "delete",
       ));
     }
   }

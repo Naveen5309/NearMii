@@ -15,6 +15,7 @@ class UserProfileModel {
   final int? isProfile;
   final String? token;
   final int? points;
+  final bool? isHide;
   final dynamic deviceType;
   final dynamic deviceToken;
   final String? lat;
@@ -52,6 +53,7 @@ class UserProfileModel {
     this.long,
     this.location,
     this.radius,
+    this.isHide,
     this.status,
     this.isSubscription,
     this.subscriptionPlan,
@@ -79,6 +81,7 @@ class UserProfileModel {
       isProfile: json["is_profile"],
       token: json["token"],
       points: json["points"],
+      isHide: json["isHide"],
       deviceType: json["device_type"],
       deviceToken: json["device_token"],
       lat: json["lat"],
@@ -120,6 +123,7 @@ class UserProfileModel {
       "long": long,
       "location": location,
       "radius": radius,
+      "isHide": isHide ?? false,
       "status": status,
       "isSubscription": isSubscription,
       "subscriptionPlan": subscriptionPlan,

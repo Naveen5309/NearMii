@@ -95,6 +95,8 @@ abstract final class AppString {
   static const String noLongerNeed = "I no longer need the account.";
   static const String others = "others";
 
+  static const String fieldCantEmpty = "Field can't be empty";
+
   static const String notUsingAppAnymore = "I am not using the app anymore.";
   static const String multipleAccountsSoNeedToRemove =
       "I have multiple accounts and want to remove this one";
@@ -107,6 +109,11 @@ abstract final class AppString {
   static const String somethingElse = "Something else";
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
+  static const String delete = "Delete";
+
+  static const String show = "Show";
+  static const String hide = "Hide";
+
   static const String fetchingLocation = "Fetching your location";
   static const String fetchingData = "Fetching data successfully";
   static const String logoutSuccess = "You are Logged Out";
@@ -126,7 +133,9 @@ abstract final class AppString {
   static const String logOut = "Logout";
   static const String enterYourCurrentPswd =
       "Select reason and Enter your current password to delete the account";
-  static const String hideAll = "Hide All";
+  static const String hideProfile = "Hide Profile";
+  static const String showProfile = "Show Profile";
+
   static const String someoneViewed = "Someone viewed your profile";
   static const String checkOutTheirProfile = "Check out their profile.";
   static const String recent = "Recent";
@@ -185,6 +194,15 @@ abstract final class AppString {
   static const String areYouSureLogOut = "Are you sure you want to \nLogout?";
   static const String areYouSureDelete =
       "Are you sure you want to delete your Account?";
+
+  static const String areYouSurePlatformDelete =
+      "Are you sure you want to delete this social profile?";
+
+  static const String areYouSureProfileHide =
+      "Are you sure you want to Hide your profile? ";
+
+  static const String areYouSureProfileShow =
+      "Are you sure you want to Show your profile? ";
 
   static const String otpVerifySuccess = "Otp sent successfully";
   static const String acceptTermsAndConditions = "Accept Terms & Conditions";

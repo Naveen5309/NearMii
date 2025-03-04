@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
@@ -23,10 +24,10 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   List<SelfPlatformData> businessList = [];
 
   TextEditingController searchTextController = TextEditingController();
+  TextEditingController platformTextController = TextEditingController();
 
   //SelfUserProfile US
-  Future<void> updateSocialLinksApi(
-      {required String id, required String url}) async {
+  Future<void> updateSocialLinksApi({required String id}) async {
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.updatePlatform,
     );
@@ -45,7 +46,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       }
       Map<String, dynamic> body = {
         "id": id,
-        "url": url,
+        "url": platformTextController.text.trim(),
       };
       final result =
           await selfUserProfileUsecases.callUpdateSocialProfile(body: body);
@@ -71,7 +72,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
     }
   }
 
-  //SelfUserProfile US
+  //HIDE ALL LINK
   Future<void> hideAllLinksApi() async {
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.hideAll,
@@ -110,6 +111,18 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
         error: e.toString(),
         selfProfileDataType: SelfProfileDataType.hideAll,
       );
+    }
+  }
+
+  //VALIDATE UPDATE PLATFORM
+  bool validateAddPlatform() {
+    bool isValid = Validator()
+        .addPlatformValidator(url: platformTextController.text.trim());
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
     }
   }
 
@@ -163,7 +176,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   }
 
   //SelfUserProfile US
-  Future<void> deleteApi({required String id}) async {
+  Future<void> deletePlatformApi({required String id}) async {
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.deletePlatform,
     );
