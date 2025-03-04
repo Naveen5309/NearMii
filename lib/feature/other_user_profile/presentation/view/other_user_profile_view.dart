@@ -1,16 +1,20 @@
 import 'dart:developer';
 
 import 'package:NearMii/config/app_utils.dart';
-import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
+import 'package:NearMii/config/debouncer.dart';
+import 'package:NearMii/config/enums.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/common_widgets/other_user_profile_grid_view.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/other_user_profile_provider.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
+import 'package:NearMii/feature/other_user_profile/presentation/states_notifier/other_user_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
@@ -42,7 +46,6 @@ class OtherUserProfileView extends ConsumerStatefulWidget {
 
 class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
   @override
-  @override
   void initState() {
     super.initState();
 
@@ -50,10 +53,18 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
       (timeStamp) {
         final notifier = ref.read(otherUserProfileProvider.notifier);
         notifier.otherUserProfileApi(widget.id ?? '');
-        // notifier.reportApi(
-        //     widget.reportedUserId ?? '', widget.somethingElse ?? '');
+        notifier.getOtherSocialPlatform(userId: widget.id ?? '');
       },
     );
+  }
+
+  final _debounce = Debouncer();
+
+  void onSearchChanged(String query) {
+    final notifier = ref.read(otherUserProfileProvider.notifier);
+    _debounce.run(() {
+      notifier.getOtherSocialPlatform(userId: widget.id ?? '');
+    });
   }
 
   @override
@@ -65,23 +76,21 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
     ref.listen(
       otherUserProfileProvider,
       (previous, next) {
-        if (next is OtherUserProfileApiLoading) {
+        if (next is OtherUserProfileApiLoading &&
+            ((next.otherUserType == OtherUserType.getProfile) ||
+                (next.otherUserType == OtherUserType.getPlatform))) {
           log("other user loading is called");
           Utils.showLoader();
-        } else if (next is OtherUserProfileApiSuccess) {
-          if (context.mounted) {
-            toast(msg: AppString.loginSuccess, isError: false);
-          }
-
+        } else if (next is OtherUserProfileApiSuccess &&
+            next.otherUserType == OtherUserType.getProfile) {
           Utils.hideLoader();
+        } else if (next is OtherUserProfileApiFailed &&
+            next.otherUserType == OtherUserType.getProfile) {
+          toast(msg: next.error);
 
-          // toNamed(context, Routes.bottomNavBar);
-        } else if (next is OtherUserProfileApiFailed) {
           if (context.mounted) {
             Utils.hideLoader();
           }
-
-          // toast(msg: next.error);
         }
       },
     );
@@ -96,15 +105,6 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
               scrollBehavior: const CupertinoScrollBehavior(),
               pinned: true,
               animationCurve: Curves.easeInOutCubicEmphasized,
-              // bottom: const PreferredSize(
-              //   preferredSize: Size.fromHeight(100),
-              //   child: Icon(
-              //     Icons.directions_boat,
-              //     color: Colors.blue,
-              //     size: 45,
-              //   ),
-              // ),
-              // collapsedBarHeight: 60,
               animationDuration: const Duration(milliseconds: 1),
               onCollapseStateChanged:
                   (isCollapsed, scrollingOffset, maxExtent) {},
@@ -119,7 +119,10 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
                 ),
               ),
               expandedContentHeight: context.height * .55,
-              expandedContent: profileSection(context: context),
+              expandedContent: profileSection(
+                  otherUserProfileProvider: otherUserData,
+                  context: context,
+                  profile: otherUserData.profile!),
               collapsedContent: otherUserData.profile != null
                   ? appBarWidgetSection(
                       context: context,
@@ -127,10 +130,12 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
                   : const SizedBox(
                       child: Text("loading"),
                     ),
-              body: const Text("No data")
-
-              //  bottomSection(loginNotifier: loginNotifier, context: context),
-              ),
+              body: bottomSection(
+                  profile: otherUserData.profile!,
+                  otherUserProfileNotifier: otherUserData,
+                  context: context,
+                  onSearchChanged: onSearchChanged),
+            ),
     );
   }
 }
@@ -320,8 +325,14 @@ Widget appBarWidgetSection(
 }
 
 //BOTTOM SECTION
-Widget bottomSection(
-    {required SignupNotifiers signupNotifier, required BuildContext context}) {
+Widget bottomSection({
+  required OtherUserProfileNotifier otherUserProfileNotifier,
+  required BuildContext context,
+  required OtherUserProfileModel? profile,
+  required Function(String) onSearchChanged,
+})
+//
+{
   return Container(
     color: AppColor.primary,
     width: context.width,
@@ -329,15 +340,49 @@ Widget bottomSection(
       padding: EdgeInsets.symmetric(horizontal: context.width * .04),
       child: Column(children: [
         CustomSearchBarWidget(
-          controller: signupNotifier.searchTextController,
+          controller: otherUserProfileNotifier.platformSearchController,
           onChanged: (value) {},
         ),
+
+        otherUserProfileNotifier.socialMediaList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OtherUserProfileGridView(
+                  notifier: otherUserProfileNotifier,
+                  controller: otherUserProfileNotifier.platformSearchController,
+                  title: AppString.socialMedia,
+                  socialMedia: otherUserProfileNotifier.socialMediaList,
+                ),
+              )
+            : const SizedBox(),
+        otherUserProfileNotifier.contactList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OtherUserProfileGridView(
+                  notifier: otherUserProfileNotifier,
+                  controller: otherUserProfileNotifier.platformSearchController,
+                  title: AppString.contactInformation,
+                  socialMedia: otherUserProfileNotifier.contactList,
+                ),
+              )
+            : const SizedBox(),
+        otherUserProfileNotifier.portfolioList.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OtherUserProfileGridView(
+                  notifier: otherUserProfileNotifier,
+                  controller: otherUserProfileNotifier.platformSearchController,
+                  title: AppString.portfolio,
+                  socialMedia: otherUserProfileNotifier.portfolioList,
+                ),
+              )
+            : const SizedBox()
         // Padding(
         //   padding: const EdgeInsets.all(8.0),
         //   child: ProfileGridView(
         //     title: AppString.socialMedia,
         //     isMyProfile: false,
-        //     socialMedia: signupNotifier.socialMediaList,
+        //     socialMedia: signupNotifier.socialMediaList.,
         //   ),
         // )
       ]),
@@ -346,8 +391,11 @@ Widget bottomSection(
 }
 
 //PROFILE SECTION
-Widget profileSection(
-    {required BuildContext context, OtherUserProfileModel? profile}) {
+Widget profileSection({
+  required BuildContext context,
+  required OtherUserProfileModel? profile,
+  required OtherUserProfileNotifier otherUserProfileProvider,
+}) {
   return Column(
       mainAxisSize:
           MainAxisSize.min, // Ensures column takes only necessary space
@@ -476,7 +524,10 @@ Widget profileSection(
           ),
           padding: const EdgeInsets.all(6),
           child: CustomCacheNetworkImage(
-            img: '',
+            dummyPadding: 30,
+            img: profile?.profilePhoto != null
+                ? "${ApiConstants.profileBaseUrl}${profile?.profilePhoto}"
+                : '',
             imageRadius: 150,
             height: 105.w,
             width: 105.w,
@@ -505,16 +556,28 @@ Widget profileSection(
           color: AppColor.whiteFFFFFF.withOpacity(.8),
         ),
         20.verticalSpace,
-        const Wrap(
+        Wrap(
           alignment: WrapAlignment.center,
           runSpacing: 8,
           spacing: 6,
           children: [
-            InfoChip(label: 'Social', value: ''),
-            InfoChip(label: 'Contact', value: ''),
-            InfoChip(label: 'Portfolio', value: ''),
-            InfoChip(label: 'Finance', value: ''),
-            InfoChip(label: 'Business', value: ''),
+            InfoChip(
+                label: 'Social',
+                value:
+                    otherUserProfileProvider.socialMediaList.length.toString()),
+            InfoChip(
+                label: 'Contact',
+                value: otherUserProfileProvider.contactList.length.toString()),
+            InfoChip(
+                label: 'Portfolio',
+                value:
+                    otherUserProfileProvider.portfolioList.length.toString()),
+            InfoChip(
+                label: 'Finance',
+                value: otherUserProfileProvider.financeList.length.toString()),
+            InfoChip(
+                label: 'Business',
+                value: otherUserProfileProvider.businessList.length.toString()),
           ],
         )
       ]);
@@ -530,7 +593,7 @@ Widget hideAllSection() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: AppString.hideAll,
+            text: AppString.hideProfile,
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),

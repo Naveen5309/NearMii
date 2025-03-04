@@ -1,5 +1,6 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class CustomTile extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         leading: isHistory == true
             ? CustomCacheNetworkImage(
-                img: leadingIcon,
+                img: ApiConstants.profileBaseUrl + leadingIcon,
                 imageRadius: 50,
                 height: 50,
                 width: 50,

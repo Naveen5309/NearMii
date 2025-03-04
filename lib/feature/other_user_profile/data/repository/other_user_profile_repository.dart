@@ -1,6 +1,6 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/other_user_profile/data/data_source/other_profile_data_source.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 
@@ -8,7 +8,7 @@ abstract class OtherUserProfileRepository {
   Future<Either<Failure, OtherUserProfileModel>> otherUserProfile(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, PlatformData>> getPlatform(
+  Future<Either<Failure, MyPlatformDataList>> getOtherPlatformApi(
       {required Map<String, dynamic> body});
   Future<Either<Failure, OtherUserProfileModel>> report(
       {required Map<String, dynamic> body});
@@ -36,13 +36,13 @@ class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
   }
 
   @override
-  Future<Either<Failure, PlatformData>> getPlatform(
+  Future<Either<Failure, MyPlatformDataList>> getOtherPlatformApi(
       {required Map<String, dynamic> body}) async {
     try {
-      final response = await dataSource.getPlatformApi();
+      final response = await dataSource.getOtherPlatformApi(body: body);
 
       if (response == null) {
-        return Left(ServerFailure(message: "No response from server"));
+        return const Left(ServerFailure(message: "No response from server"));
       }
 
       if (response.status == "success" && response.data != null) {

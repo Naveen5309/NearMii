@@ -35,8 +35,8 @@ abstract final class ApiConstants {
   static const String updateSocialLink = "$baseUrl/updateSocialLink";
   static const String hideAllLinks = "$baseUrl/hideAllLinks";
   static const String getSelfPlatform = "$baseUrl/getSelfPlatform";
-  // static const String completeProfile = "$baseUrl/completeProfile";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  static const String deletePlatform = "$baseUrl/deleteSocialLink";
+  static const String getOtherUserPlatform = "$baseUrl/getsocialprofile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

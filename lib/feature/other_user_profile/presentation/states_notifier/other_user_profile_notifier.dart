@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/data/domain/other_user_profile_usecases.dart';
@@ -15,6 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final OtherUserProfileUsecases otherUserProfileUsecases;
   final nameController = TextEditingController();
+  final platformSearchController = TextEditingController();
+
   final designationController = TextEditingController();
   final imageUrlController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -23,10 +25,16 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final financePasswordController = TextEditingController();
   final businessPasswordController = TextEditingController();
 
-  List<PlatformData> socialMediaList = [];
-  List<PlatformData> contactList = [];
+  // List<PlatformData> socialMediaList = [];
+  // List<PlatformData> contactList = [];
 
-  List<PlatformData> portfolioList = [];
+  // List<PlatformData> portfolioList = [];
+
+  List<SelfPlatformData> socialMediaList = [];
+  List<SelfPlatformData> contactList = [];
+  List<SelfPlatformData> portfolioList = [];
+  List<SelfPlatformData> financeList = [];
+  List<SelfPlatformData> businessList = [];
 
   OtherUserProfileModel? profile;
 
@@ -49,12 +57,12 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   //LOGIN
   Future<void> otherUserProfileApi(String id) async {
     state = const OtherUserProfileApiLoading(
-        otherUserType: OtherUserType.otherUserProfile);
+        otherUserType: OtherUserType.getProfile);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const OtherUserProfileApiFailed(
             error: AppString.noInternetConnection,
-            otherUserType: OtherUserType.otherUserProfile);
+            otherUserType: OtherUserType.getProfile);
         return;
       }
       if (await Getters.networkInfo.isSlow) {
@@ -71,53 +79,53 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
       state = result.fold((error) {
         log("login error:${error.message} ");
         return OtherUserProfileApiFailed(
-            error: error.message,
-            otherUserType: OtherUserType.otherUserProfile);
+            error: error.message, otherUserType: OtherUserType.getProfile);
       }, (result) {
         profile = result;
         return const OtherUserProfileApiSuccess(
-            otherUserType: OtherUserType.otherUserProfile);
+            otherUserType: OtherUserType.getProfile);
       });
     } catch (e) {
       state = OtherUserProfileApiFailed(
-          error: e.toString(), otherUserType: OtherUserType.otherUserProfile);
+          error: e.toString(), otherUserType: OtherUserType.getProfile);
     }
   }
 
   //GET SOCIAL PROFILES
-  Future<void> getSocialPlatform() async {
+  Future<void> getOtherSocialPlatform({required String userId}) async {
     state = const OtherUserProfileApiLoading(
-        otherUserType: OtherUserType.otherUserProfile);
+        otherUserType: OtherUserType.getPlatform);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const OtherUserProfileApiFailed(
             error: "No internet connection",
-            otherUserType: OtherUserType.otherUserProfile);
+            otherUserType: OtherUserType.getPlatform);
         return;
       }
 
-      final result = await otherUserProfileUsecases.getPlatformApi(body: {});
+      final result = await otherUserProfileUsecases.getOtherPlatformApi(body: {
+        "search": platformSearchController.text.trim(),
+        "user_id": userId
+      });
       state = result.fold((error) {
         return OtherUserProfileApiFailed(
-            error: error.message,
-            otherUserType: OtherUserType.otherUserProfile);
+            error: error.message, otherUserType: OtherUserType.getPlatform);
       }, (result) {
-        log("result is:-> $result");
+        socialMediaList = result.socialMedia ?? [];
+        contactList = result.contactInformation ?? [];
+        portfolioList = result.portfolio ?? [];
 
-        // socialMediaList = result.\ ?? [];
-        // portfolioList = result.portfolio ?? [];
-        // contactList = result.contactInformation ?? [];
-
-        log("result is 15:-> $socialMediaList");
-
-        // Update the list and notify UI by updating state
-        // platformDataList = result ?? [];
+        // historyDataList = result ?? [];
+        log("socialmedialist result is :->$result");
+        log("socialmedialist result is :->$socialMediaList");
+        log("socialmedialist result is :->$contactList");
+        log("socialmedialist result is :->$portfolioList");
         return const OtherUserProfileApiSuccess(
-            otherUserType: OtherUserType.otherUserProfile);
+            otherUserType: OtherUserType.getPlatform);
       });
     } catch (e) {
       state = OtherUserProfileApiFailed(
-          error: e.toString(), otherUserType: OtherUserType.otherUserProfile);
+          error: e.toString(), otherUserType: OtherUserType.getPlatform);
     }
   }
 

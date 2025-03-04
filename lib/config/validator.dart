@@ -142,7 +142,7 @@ class Validator {
     required String url,
   }) {
     if (url.isEmpty) {
-      error = AppString.pleaseEnterLink;
+      error = AppString.fieldCantEmpty;
       return false;
     }
 

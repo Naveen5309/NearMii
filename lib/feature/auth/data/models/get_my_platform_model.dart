@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final getMyPlatformData = getMyPlatformDataFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';

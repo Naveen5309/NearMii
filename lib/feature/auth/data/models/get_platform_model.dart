@@ -79,6 +79,7 @@ class PlatformData {
   String? type;
   int? categoryId;
   String? icon;
+
   int? status;
   DateTime? createdAt;
   DateTime? updatedAt;

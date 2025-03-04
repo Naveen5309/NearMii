@@ -1,10 +1,10 @@
 import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/network/http_service.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
@@ -295,6 +295,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   ? getDistance(data.distance.toString())
                                   : '',
                               onUnlockTap: () {
+                                toNamed(context, Routes.otherUserProfile,
+                                    args: data.id.toString());
                                 // print("Unlock Now Clicked!");
                               },
                             );

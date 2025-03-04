@@ -1,32 +1,38 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/state_notifier/self_user_profile_notifier.dart';
+import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ProfileGridView extends StatelessWidget {
+class ProfileGridView extends ConsumerWidget {
   final String title;
   final List<SelfPlatformData> socialMedia;
   final bool isMyProfile;
+  final TextEditingController controller;
+  final SelfUserProfileNotifier notifier;
 
   const ProfileGridView({
     super.key,
     required this.title,
     required this.socialMedia,
     required this.isMyProfile,
+    required this.controller,
+    required this.notifier,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 10,
@@ -78,6 +84,8 @@ class ProfileGridView extends StatelessWidget {
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
                         onTap: () {
+                          notifier.platformTextController.text =
+                              socialMedia[pIndex].url ?? '';
                           isMyProfile
                               ? showCustomBottomSheet(
                                   context: context,
@@ -106,37 +114,33 @@ class ProfileGridView extends StatelessWidget {
                                                   Assets.icCloseCircle))
                                         ],
                                       ),
-                                      // 10.verticalSpace,
-
-                                      Text(
-                                          "${socialMedia[pIndex].platform?.icon}"),
-                                      Padding(
+                                      const Padding(
                                         padding: EdgeInsets.symmetric(
-                                            vertical: context.height * .03),
-                                        child: CustomLabelTextField(
-                                            labelText: socialMedia[pIndex]
-                                                    .platform
-                                                    ?.type ??
-                                                '',
-                                            controller: TextEditingController(),
-                                            prefixWidget: CustomCacheNetworkImage(
-                                                img: socialMedia[pIndex]
-                                                            .platform
-                                                            ?.icon !=
-                                                        null
-                                                    ? ApiConstants
-                                                                .socialIconBaseUrl +
-                                                            socialMedia[pIndex]
-                                                                .platform!
-                                                                .icon! ??
-                                                        ''
-                                                    : '',
-                                                width: 25,
-                                                height: 25,
-                                                imageRadius: 10)),
+                                            vertical: 10.0),
+                                        child: Divider(),
                                       ),
+                                      // 10.verticalSpace,
+                                      CustomLabelTextField(
+                                          labelBckColor: AppColor.primary,
+                                          labelText:
+                                              "${socialMedia[pIndex].platform?.type}",
+                                          controller: controller,
+                                          prefixWidget: CustomCacheNetworkImage(
+                                              img: socialMedia[pIndex]
+                                                          .platform
+                                                          ?.icon !=
+                                                      null
+                                                  ? ApiConstants
+                                                          .socialIconBaseUrl +
+                                                      socialMedia[pIndex]
+                                                          .platform!
+                                                          .icon!
+                                                  : '',
+                                              width: 25,
+                                              height: 25,
+                                              imageRadius: 10)),
 
-                                      /**--------------------- CANCEL AND UPDATE  ---------------- **/
+                                      /**--------------------- DELETE AND UPDATE  ---------------- **/
                                       Padding(
                                         padding: EdgeInsets.only(
                                             bottom: context.height * .02),
@@ -150,9 +154,27 @@ class ProfileGridView extends StatelessWidget {
                                                     .green00C56524
                                                     .withOpacity(.14),
                                                 onTap: () {
-                                                  Navigator.pop(context);
+                                                  showCustomBottomSheet(
+                                                      context: context,
+                                                      content:
+                                                          DeleteAccountConfirmationView(
+                                                              btnText: AppString
+                                                                  .delete,
+                                                              title: AppString
+                                                                  .areYouSurePlatformDelete,
+                                                              delete: () {
+                                                                back(context);
+                                                                notifier.deletePlatformApi(
+                                                                    id: socialMedia[
+                                                                            pIndex]
+                                                                        .id
+                                                                        .toString());
+                                                              },
+                                                              onCancel: () {
+                                                                back(context);
+                                                              }));
                                                 },
-                                                title: AppString.cancel,
+                                                title: AppString.delete,
                                                 width: context.width,
                                               ),
                                             ),
@@ -161,7 +183,19 @@ class ProfileGridView extends StatelessWidget {
                                             //SEND INVITE
                                             Expanded(
                                               child: CommonAppBtn(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  var isValid = notifier
+                                                      .validateAddPlatform();
+
+                                                  if (isValid) {
+                                                    notifier
+                                                        .updateSocialLinksApi(
+                                                      id: socialMedia[pIndex]
+                                                          .id
+                                                          .toString(),
+                                                    );
+                                                  }
+                                                },
                                                 title: AppString.update,
                                                 width: context.width,
                                               ),
@@ -169,7 +203,6 @@ class ProfileGridView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-
                                       10.verticalSpace,
                                     ],
                                   ),

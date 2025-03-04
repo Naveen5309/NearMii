@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/debouncer.dart';
@@ -8,17 +10,18 @@ import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_switch_btn.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/profile_grid_view.dart';
-import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_platform_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state_notifier/self_user_profile_notifier.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
+import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +45,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
       // notifier.getSocialPlatform(query: '');
       notifier.getProfileApi();
-      final selfNotifier = ref.read(getSelfPlatformProvider.notifier);
+      final selfNotifier = ref.read(getSocialProfileProvider.notifier);
       selfNotifier.getSelfPlatformApi();
     });
   }
@@ -50,7 +53,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
   final _debounce = Debouncer();
 
   void onSearchChanged(String query) {
-    final notifier = ref.read(getSelfPlatformProvider.notifier);
+    final notifier = ref.read(getSocialProfileProvider.notifier);
     _debounce.run(() {
       notifier.getSelfPlatformApi();
     });
@@ -58,25 +61,70 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(getSelfPlatformProvider);
     ref.watch(getSocialProfileProvider);
 
-    final selfUserProfileNotifier = ref.read(getSelfPlatformProvider.notifier);
     final notifier = ref.read(getSocialProfileProvider.notifier);
     ref.listen(
       getSocialProfileProvider,
       (previous, next) {
-        if (next is SelfUserProfileApiLoading) {
+        if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.getProfile) {
           Utils.showLoader();
-        } else if (next is SelfUserProfileApiSuccess) {
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.getProfile) {
           // toast(msg: AppString.loginSuccess, isError: false);
           Utils.hideLoader();
 
           // toNamed(context, Routes.bottomNavBar);
-        } else if (next is SelfUserProfileApiFailed) {
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.getProfile) {
           Utils.hideLoader();
 
           // toast(msg: next.error);
+        } else if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+          // toast(msg: AppString.loginSuccess, isError: false);
+          Utils.hideLoader();
+          toast(msg: "Social profile updated successfully", isError: false);
+          back(context);
+          notifier.getSelfPlatformApi();
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+          Utils.hideLoader();
+          toast(msg: next.error);
+        } else if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.deletePlatform) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.deletePlatform) {
+          Utils.hideLoader();
+          back(context);
+          toast(msg: "Social profile deleted successfully", isError: false);
+          notifier.getSelfPlatformApi();
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.deletePlatform) {
+          Utils.hideLoader();
+          toast(msg: next.error);
+        } else if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.hideAll) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.hideAll) {
+          Utils.hideLoader();
+          back(context);
+          toast(msg: "Data updated", isError: false);
+          notifier.getSelfPlatformApi();
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.hideAll) {
+          Utils.hideLoader();
+          toast(msg: next.error);
         }
       },
     );
@@ -104,7 +152,11 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         backgroundColor: AppColor.primary,
         floatingActionButton: InkWell(
           onTap: () {
-            toNamed(context, Routes.selectSocialMedia, args: true);
+            toNamed(context, Routes.selectSocialMedia, args: true).then(
+              (value) {
+                notifier.getSelfPlatformApi();
+              },
+            );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -227,7 +279,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                 expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                 expandedContentHeight: context.height * .55,
                 expandedContent: profileSection(
-                    selfUserProfileNotifier: selfUserProfileNotifier,
+                    selfUserProfileNotifier: notifier,
                     context: context,
                     profile: notifier.userProfileModel),
                 collapsedContent: appBarWidgetSection(
@@ -235,7 +287,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                   context: context,
                 ),
                 body: bottomSection(
-                    selfUserProfileNotifier: selfUserProfileNotifier,
+                    profile: notifier.userProfileModel,
+                    selfUserProfileNotifier: notifier,
                     context: context,
                     onSearchChanged: onSearchChanged)));
   }
@@ -268,7 +321,7 @@ Widget appBarWidgetSection({
         padding: const EdgeInsets.all(3),
         child: CustomCacheNetworkImage(
           img: profile?.profilePhoto != null
-              ? ("${ApiConstants.getSelfProfile}${profile?.profilePhoto}")
+              ? ("${ApiConstants.profileBaseUrl}${profile?.profilePhoto}")
               : '',
           imageRadius: 150,
           height: 40.w,
@@ -302,6 +355,7 @@ Widget appBarWidgetSection({
 Widget bottomSection({
   required SelfUserProfileNotifier selfUserProfileNotifier,
   required BuildContext context,
+  required UserProfileModel? profile,
   required Function(String) onSearchChanged, // Add this parameter
 }) {
   return Container(
@@ -319,12 +373,17 @@ Widget bottomSection({
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: hideAllSection(),
+          child: hideAllSection(
+              context: context,
+              profile: profile,
+              selfUserProfileNotifier: selfUserProfileNotifier),
         ),
         selfUserProfileNotifier.socialMediaList.isNotEmpty
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProfileGridView(
+                  notifier: selfUserProfileNotifier,
+                  controller: selfUserProfileNotifier.platformTextController,
                   isMyProfile: true,
                   title: AppString.socialMedia,
                   socialMedia: selfUserProfileNotifier.socialMediaList,
@@ -335,6 +394,8 @@ Widget bottomSection({
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProfileGridView(
+                  notifier: selfUserProfileNotifier,
+                  controller: selfUserProfileNotifier.platformTextController,
                   isMyProfile: true,
                   title: AppString.contactInformation,
                   socialMedia: selfUserProfileNotifier.contactList,
@@ -345,6 +406,8 @@ Widget bottomSection({
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProfileGridView(
+                  notifier: selfUserProfileNotifier,
+                  controller: selfUserProfileNotifier.platformTextController,
                   isMyProfile: true,
                   title: AppString.portfolio,
                   socialMedia: selfUserProfileNotifier.portfolioList,
@@ -375,20 +438,27 @@ Widget profileSection(
         children: [
           SizedBox(height: context.height * .1),
           Align(
-              alignment: Alignment.centerLeft,
-              child: InkWell(
-                onTap: () {
-                  back(context);
-                },
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: () {
+                back(context);
+              },
+              child: SizedBox(
+                height: 30,
+                width: 30,
                 child: Padding(
-                  padding: EdgeInsets.only(left: context.width * .05),
+                  padding: EdgeInsets.only(
+                    left: context.width * .05,
+                  ),
                   child: SvgPicture.asset(
                     Assets.icBackBtn,
                     colorFilter: const ColorFilter.mode(
                         AppColor.primary, BlendMode.srcIn),
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
           SizedBox(height: context.height * .02),
           Container(
             decoration: const BoxDecoration(
@@ -399,7 +469,7 @@ Widget profileSection(
             child: CustomCacheNetworkImage(
               dummyPadding: 30,
               img: profile?.profilePhoto != null
-                  ? ("${ApiConstants.getSelfProfile}${profile?.profilePhoto}")
+                  ? "${ApiConstants.profileBaseUrl}${profile?.profilePhoto}"
                   : '',
               imageRadius: 150,
               height: 105.w,
@@ -489,7 +559,11 @@ Widget profileSection(
 
 // HIDE ALL SECTION
 
-Widget hideAllSection() {
+Widget hideAllSection({
+  required BuildContext context,
+  required UserProfileModel? profile,
+  required SelfUserProfileNotifier selfUserProfileNotifier,
+}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -497,13 +571,17 @@ Widget hideAllSection() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppText(
-            text: AppString.hideAll,
+            text: profile != null
+                ? ((profile.isHide == true)
+                    ? AppString.showProfile
+                    : AppString.hideProfile)
+                : AppString.hideProfile,
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
           5.verticalSpace,
           AppText(
-            text: "Lorem ipsum dolor sit amet consectetur.",
+            text: "Hide/Show your profile to other users",
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
             color: AppColor.grey999,
@@ -514,8 +592,27 @@ Widget hideAllSection() {
       //SWITCH BUTTON
 
       ToggleSwitchBtn(
-        isToggled: false,
-        onToggled: (isToggled) {},
+        isToggled:
+            profile != null ? ((profile.isHide == true) ? false : true) : false,
+        onToggled: (isToggled) {
+          log("toggle called");
+
+          showCustomBottomSheet(
+              context: context,
+              content: DeleteAccountConfirmationView(
+                  btnText: profile != null
+                      ? ((profile.isHide == true)
+                          ? AppString.show
+                          : AppString.hide)
+                      : AppString.hide,
+                  title: AppString.areYouSureProfileHide,
+                  delete: () {
+                    selfUserProfileNotifier.hideAllLinksApi();
+                  },
+                  onCancel: () {
+                    back(context);
+                  }));
+        },
       ),
     ],
   );

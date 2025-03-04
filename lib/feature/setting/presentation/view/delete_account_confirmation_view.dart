@@ -9,9 +9,15 @@ import 'package:flutter_svg/svg.dart';
 class DeleteAccountConfirmationView extends StatelessWidget {
   final VoidCallback delete;
   final VoidCallback onCancel;
+  final String? title;
+  final String? btnText;
 
   const DeleteAccountConfirmationView(
-      {super.key, required this.delete, required this.onCancel});
+      {super.key,
+      required this.delete,
+      required this.onCancel,
+      this.title,
+      this.btnText});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class DeleteAccountConfirmationView extends StatelessWidget {
             ),
           ),
           AppText(
-              text: AppString.areYouSureDelete,
+              text: title ?? AppString.areYouSureDelete,
               fontSize: 20.sp,
               lineHeight: 1.5,
               textAlign: TextAlign.center,
@@ -61,7 +67,7 @@ class DeleteAccountConfirmationView extends StatelessWidget {
                 Expanded(
                   child: CommonAppBtn(
                     onTap: delete,
-                    title: AppString.deleteAccount,
+                    title: btnText ?? AppString.deleteAccount,
                     width: context.width,
                   ),
                 ),

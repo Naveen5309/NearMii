@@ -90,17 +90,21 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
             horizontal: context.width * .05, vertical: context.height * .01),
         child: CommonAppBtn(
           onTap: () async {
-            await Getters.getLocalStorage.saveIsLogin(true);
-            await Getters.getLocalStorage.saveFirstIn(false);
+            if (widget.isFromProfile) {
+              back(context);
+            } else {
+              await Getters.getLocalStorage.saveIsLogin(true);
+              await Getters.getLocalStorage.saveFirstIn(false);
 
-            if (context.mounted) {
-              offAllNamed(context, Routes.bottomNavBar, args: true);
+              if (context.mounted) {
+                offAllNamed(context, Routes.bottomNavBar, args: true);
+                toast(msg: AppString.signupSuccess, isError: false);
+              }
+
               toast(msg: AppString.signupSuccess, isError: false);
             }
-
-            toast(msg: AppString.signupSuccess, isError: false);
           },
-          title: AppString.next,
+          title: widget.isFromProfile ? AppString.done : AppString.next,
           textSize: 16.sp,
         ),
       ),
