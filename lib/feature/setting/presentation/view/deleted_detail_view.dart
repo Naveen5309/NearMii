@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -12,9 +10,7 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
-import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
-import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/delete_account_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
@@ -24,8 +20,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DeletedDetailView extends ConsumerStatefulWidget {
-  final String socialId;
-  const DeletedDetailView({super.key, required this.socialId});
+  // final String socialId;
+  const DeletedDetailView({
+    super.key,
+    // required this.socialId
+  });
 
   @override
   ConsumerState<DeletedDetailView> createState() => _DeletedDetailViewState();
@@ -89,123 +88,123 @@ class _DeletedDetailViewState extends ConsumerState<DeletedDetailView> {
 
               Column(
                 children: [
-                  Consumer(builder: (context, ref, child) {
-                    var deleteAccountNotifier =
-                        ref.read(deleteAccountProvider.notifier);
+                  // Consumer(builder: (context, ref, child) {
+                  //   var deleteAccountNotifier =
+                  //       ref.read(deleteAccountProvider.notifier);
 
-                    int selected = ref.watch(selectedDeleteIndex);
+                  //   int selected = ref.watch(selectedDeleteIndex);
 
-                    return CustomLabelTextField(
-                      onChanged: (value) {
-                        log("delete reason:-> $value");
-                      },
-                      prefixIcon: Assets.icLock,
-                      readOnly: true,
-                      suffixIcon: Assets.icArrowDown,
+                  //   return CustomLabelTextField(
+                  //     onChanged: (value) {
+                  //       log("delete reason:-> $value");
+                  //     },
+                  //     prefixIcon: Assets.icLock,
+                  //     readOnly: true,
+                  //     suffixIcon: Assets.icArrowDown,
 
-                      controller: deleteAccountNotifier.reasonController,
-                      labelText: AppString.reason,
-                      onTap: () {
-                        showCustomBottomSheet(
-                          context: context,
-                          content: Consumer(
-                            builder: (context, ref, child) {
-                              int selected = ref.watch(selectedDeleteIndex);
+                  //     controller: deleteAccountNotifier.reasonController,
+                  //     labelText: AppString.reason,
+                  //     onTap: () {
+                  //       showCustomBottomSheet(
+                  //         context: context,
+                  //         content: Consumer(
+                  //           builder: (context, ref, child) {
+                  //             int selected = ref.watch(selectedDeleteIndex);
 
-                              return SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SvgPicture.asset(Assets.reportNavClose),
-                                    15.verticalSpace,
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                          vertical: context.height * .02),
-                                      child: AppText(
-                                          text: AppString.reason,
-                                          fontSize: 20.sp,
-                                          color: AppColor.black1A1C1E,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    CustomReportTile(
-                                      title: AppString.noLongerNeed,
-                                      check: selected == 0,
-                                      ontap: () {
-                                        ref
-                                            .read(selectedDeleteIndex.notifier)
-                                            .state = 0;
+                  //             return SingleChildScrollView(
+                  //               child: Column(
+                  //                 mainAxisSize: MainAxisSize.min,
+                  //                 children: [
+                  //                   SvgPicture.asset(Assets.reportNavClose),
+                  //                   15.verticalSpace,
+                  //                   Padding(
+                  //                     padding: EdgeInsets.symmetric(
+                  //                         horizontal: 4,
+                  //                         vertical: context.height * .02),
+                  //                     child: AppText(
+                  //                         text: AppString.reason,
+                  //                         fontSize: 20.sp,
+                  //                         color: AppColor.black1A1C1E,
+                  //                         fontWeight: FontWeight.w700),
+                  //                   ),
+                  //                   CustomReportTile(
+                  //                     title: AppString.noLongerNeed,
+                  //                     check: selected == 0,
+                  //                     ontap: () {
+                  //                       ref
+                  //                           .read(selectedDeleteIndex.notifier)
+                  //                           .state = 0;
 
-                                        deleteAccountNotifier.reasonController
-                                            .text = AppString.noLongerNeed;
-                                        back(context);
-                                      },
-                                    ),
-                                    CustomReportTile(
-                                      title: AppString.notUsingAppAnymore,
-                                      check: selected == 1,
-                                      ontap: () {
-                                        ref
-                                            .read(selectedDeleteIndex.notifier)
-                                            .state = 1;
+                  //                       deleteAccountNotifier.reasonController
+                  //                           .text = AppString.noLongerNeed;
+                  //                       back(context);
+                  //                     },
+                  //                   ),
+                  //                   CustomReportTile(
+                  //                     title: AppString.notUsingAppAnymore,
+                  //                     check: selected == 1,
+                  //                     ontap: () {
+                  //                       ref
+                  //                           .read(selectedDeleteIndex.notifier)
+                  //                           .state = 1;
 
-                                        deleteAccountNotifier
-                                                .reasonController.text =
-                                            AppString.notUsingAppAnymore;
-                                        back(context);
-                                      },
-                                    ),
-                                    CustomReportTile(
-                                      maxlines: 2,
-                                      title: AppString
-                                          .multipleAccountsSoNeedToRemove,
-                                      check: selected == 2,
-                                      ontap: () {
-                                        ref
-                                            .read(selectedDeleteIndex.notifier)
-                                            .state = 2;
-                                        deleteAccountNotifier
-                                                .reasonController.text =
-                                            AppString
-                                                .multipleAccountsSoNeedToRemove;
-                                        back(context);
-                                      },
-                                    ),
-                                    CustomReportTile(
-                                      maxlines: 2,
-                                      title: AppString.createNewAccount,
-                                      check: selected == 3,
-                                      ontap: () {
-                                        ref
-                                            .read(selectedDeleteIndex.notifier)
-                                            .state = 3;
-                                        deleteAccountNotifier.reasonController
-                                            .text = AppString.createNewAccount;
-                                        back(context);
-                                      },
-                                    ),
-                                    const SizedBox(height: 12),
-                                    5.verticalSpace,
-                                    // CommonAppBtn(
-                                    //   title: AppString.addReason,
-                                    //   onTap: () {
-                                    //     back(context);
-                                    //   },
-                                    // ),
-                                    10.verticalSpace
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                  //                       deleteAccountNotifier
+                  //                               .reasonController.text =
+                  //                           AppString.notUsingAppAnymore;
+                  //                       back(context);
+                  //                     },
+                  //                   ),
+                  //                   CustomReportTile(
+                  //                     maxlines: 2,
+                  //                     title: AppString
+                  //                         .multipleAccountsSoNeedToRemove,
+                  //                     check: selected == 2,
+                  //                     ontap: () {
+                  //                       ref
+                  //                           .read(selectedDeleteIndex.notifier)
+                  //                           .state = 2;
+                  //                       deleteAccountNotifier
+                  //                               .reasonController.text =
+                  //                           AppString
+                  //                               .multipleAccountsSoNeedToRemove;
+                  //                       back(context);
+                  //                     },
+                  //                   ),
+                  //                   CustomReportTile(
+                  //                     maxlines: 2,
+                  //                     title: AppString.createNewAccount,
+                  //                     check: selected == 3,
+                  //                     ontap: () {
+                  //                       ref
+                  //                           .read(selectedDeleteIndex.notifier)
+                  //                           .state = 3;
+                  //                       deleteAccountNotifier.reasonController
+                  //                           .text = AppString.createNewAccount;
+                  //                       back(context);
+                  //                     },
+                  //                   ),
+                  //                   const SizedBox(height: 12),
+                  //                   5.verticalSpace,
+                  //                   // CommonAppBtn(
+                  //                   //   title: AppString.addReason,
+                  //                   //   onTap: () {
+                  //                   //     back(context);
+                  //                   //   },
+                  //                   // ),
+                  //                   10.verticalSpace
+                  //                 ],
+                  //               ),
+                  //             );
+                  //           },
+                  //         ),
+                  //       );
+                  //     },
 
-                      // suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
-                    );
-                  }),
+                  //     // suffixIcon: isVisible ? Assets.icEye : Assets.icEyeOff,
+                  //   );
+                  // }),
                   Visibility(
-                    visible: widget.socialId.isEmpty,
+                    // visible: widget.socialId.isEmpty,
                     child: Consumer(builder: (context, ref, child) {
                       var isVisible = ref.watch(isCurrentPasswordVisible);
 
@@ -239,34 +238,60 @@ class _DeletedDetailViewState extends ConsumerState<DeletedDetailView> {
               const SizedBox(height: 20),
               CommonAppBtn(
                 onTap: () {
-                  if (widget.socialId.isNotEmpty) {
+                  final isDeleteAccount =
+                      deleteAccountNotifier.validateDeleteAccountSocial();
+
+                  if (isDeleteAccount) {
+                    showCustomBottomSheet(
+                        context: context,
+                        content: DeleteAccountConfirmationView(delete: () {
+                          deleteAccountNotifier.deleteAccountApi();
+                        }, onCancel: () {
+                          back(context);
+                        }));
+                  } else {
                     final isDeleteAccount =
-                        deleteAccountNotifier.validateDeleteAccountSocial();
+                        deleteAccountNotifier.validateDeleteAccount();
 
                     if (isDeleteAccount) {
                       showCustomBottomSheet(
                           context: context,
                           content: DeleteAccountConfirmationView(delete: () {
-                            deleteAccountNotifier.deleteAccountApi(
-                                socialId: widget.socialId);
+                            deleteAccountNotifier.deleteAccountApi();
                           }, onCancel: () {
                             back(context);
                           }));
-                    } else {
-                      final isDeleteAccount =
-                          deleteAccountNotifier.validateDeleteAccount();
-
-                      if (isDeleteAccount) {
-                        showCustomBottomSheet(
-                            context: context,
-                            content: DeleteAccountConfirmationView(delete: () {
-                              deleteAccountNotifier.deleteAccountApi();
-                            }, onCancel: () {
-                              back(context);
-                            }));
-                      }
                     }
                   }
+                  //   if (widget.socialId.isNotEmpty) {
+                  //     final isDeleteAccount =
+                  //         deleteAccountNotifier.validateDeleteAccountSocial();
+
+                  //     if (isDeleteAccount) {
+                  //       showCustomBottomSheet(
+                  //           context: context,
+                  //           content: DeleteAccountConfirmationView(delete: () {
+                  //             deleteAccountNotifier.deleteAccountApi(
+                  //                 // socialId: widget.socialId
+                  //                 );
+                  //           }, onCancel: () {
+                  //             back(context);
+                  //           }));
+                  //     } else {
+                  //       final isDeleteAccount =
+                  //           deleteAccountNotifier.validateDeleteAccount();
+
+                  //       if (isDeleteAccount) {
+                  //         showCustomBottomSheet(
+                  //             context: context,
+                  //             content: DeleteAccountConfirmationView(delete: () {
+                  //               deleteAccountNotifier.deleteAccountApi();
+                  //             }, onCancel: () {
+                  //               back(context);
+                  //             }));
+                  //       }
+                  //     }
+                  //   }
                 },
                 title: AppString.done,
               )

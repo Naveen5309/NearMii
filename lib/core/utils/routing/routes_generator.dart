@@ -6,6 +6,7 @@ import 'package:NearMii/feature/auth/presentation/views/onboard_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/change_password_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/complete_edit_profile.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
+import 'package:NearMii/feature/setting/presentation/view/delete_account_reason.dart';
 import 'package:NearMii/feature/setting/presentation/view/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/radius_view.dart';
@@ -91,9 +92,15 @@ class RouteGenerator {
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
       case Routes.deleteAccount:
+        // final args = settings.arguments as dynamic;
+        return MaterialPageRoute(
+            builder: (_) => const DeletedDetailView(
+                // socialId: args,
+                ));
+      case Routes.deleteAccountReason:
         final args = settings.arguments as dynamic;
         return MaterialPageRoute(
-            builder: (_) => DeletedDetailView(
+            builder: (_) => DeleteReasonView(
                   socialId: args,
                 ));
       // case Routes.share:

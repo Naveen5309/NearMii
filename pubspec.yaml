@@ -90,6 +90,12 @@ flutter:
       fonts:
         - asset: assets/fonts/BalooPaaji2-Regular.ttf
           weight: 400
+    - family: Hanken Grotesk
+      fonts:
+        - asset: assets/fonts/HankenGrotesk-Black.ttf
+          weight: 900  
+        - asset: assets/fonts/HankenGrotesk-SemiBold.ttf
+          weight: 600         
     - family: MADE TOMMY
       fonts:
         - asset: assets/fonts/MADE TOMMY Black_PERSONAL USE.otf

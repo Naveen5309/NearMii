@@ -122,6 +122,8 @@ abstract final class AppString {
   static const String reachOutToSupport = "Reach out to our support team";
   static const String checkHowOur = "Check how our organization works";
   static const String deleteAccount = "Delete Account";
+  static const String deleteReason = "Delete Reason";
+
   static const String deleteYourAccount = "Delete your account";
   static const String logOut = "Logout";
   static const String enterYourCurrentPswd =
@@ -189,14 +191,14 @@ abstract final class AppString {
   static const String otpVerifySuccess = "Otp sent successfully";
   static const String acceptTermsAndConditions = "Accept Terms & Conditions";
   static const String signupSuccess = "Signup Success";
-  static const String chooseImage = "Choose image source";
+  static const String chooseImage = "Change profile image ";
   static const String camera = "Camera";
   static const String radiusUpdateSuccess = "Radius update successfully";
 
   static const String gallery = "Gallery";
   static const String accountDeleted = "Account deleted";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  static const String uploadfromGallery = "Upload from gallery";
+  static const String takeAPhoto = "Take a photo";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
