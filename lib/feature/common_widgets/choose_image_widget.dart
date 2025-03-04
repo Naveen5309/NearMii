@@ -60,7 +60,7 @@ class ChooseImageWidget extends StatelessWidget {
                           fontSize: 16.sp,
                           fontFamily: Constants.fontFamilyHankenGrotesk,
                           fontWeight: FontWeight.w600,
-                          color: AppColor.grey212121.withValues(alpha: 0.5),
+                          color: AppColor.grey212121.withOpacity(.5),
                         ),
                       ),
                       Image.asset(Assets.iconArrowRight)
@@ -89,7 +89,7 @@ class ChooseImageWidget extends StatelessWidget {
                           text: AppString.uploadfromGallery,
                           fontFamily: Constants.fontFamilyHankenGrotesk,
                           fontWeight: FontWeight.w600,
-                          color: AppColor.grey212121.withValues(alpha: 0.5),
+                          color: AppColor.grey212121.withOpacity(0.5),
                         ),
                       ),
                       Image.asset(Assets.iconArrowRight)
