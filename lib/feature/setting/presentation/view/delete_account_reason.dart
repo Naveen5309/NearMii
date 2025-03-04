@@ -1,10 +1,12 @@
 import 'package:NearMii/config/app_utils.dart';
+import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/common_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
@@ -16,6 +18,7 @@ import 'package:NearMii/feature/setting/presentation/view/delete_account_confirm
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DeleteReasonView extends ConsumerStatefulWidget {
   final String? socialId;
@@ -65,7 +68,7 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // SvgPicture.asset(Assets.deleteAccount),
+              SvgPicture.asset(Assets.deleteAccount),
               // const SizedBox(height: 20),
               // AppText(
               //     text: AppString.deleteAccount,
@@ -92,14 +95,20 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                     // SvgPicture.asset(Assets.reportNavClose),
                     15.verticalSpace,
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 4, vertical: context.height * .02),
+                      padding:
+                          EdgeInsets.symmetric(vertical: context.height * .01),
                       child: AppText(
-                          text: AppString.selectDeleteReason,
-                          fontSize: 20.sp,
+                          text: AppString.giveReason,
+                          fontSize: 18.5.sp,
                           color: AppColor.black1A1C1E,
-                          fontWeight: FontWeight.w700),
+                          fontWeight: FontWeight.w500),
                     ),
+                    AppText(
+                        text: AppString.tellReason,
+                        fontSize: 14.5.sp,
+                        color: AppColor.black1A1C1E,
+                        fontWeight: FontWeight.w400),
+                    20.verticalSpace,
                     CustomReportTile(
                       title: AppString.noLongerNeed,
                       check: selected == 0,
@@ -152,7 +161,38 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                     //     back(context);
                     //   },
                     // ),
-                    10.verticalSpace
+                    Row(
+                      children: [
+                        AppText(
+                            text: AppString.somethingElse,
+                            fontSize: 14.sp,
+                            color: AppColor.black1A1C1E,
+                            fontWeight: FontWeight.w400),
+                      ],
+                    ),
+                    4.verticalSpace,
+                    CustomTextFieldWidget(
+                        // enableBorder: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(20),
+                        // ),
+                        enableBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 3, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        // Set border for focused state
+                        focusBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 3, color: Colors.red),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        minLines: 2,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        fillColor: AppColor.greyEEEEEE,
+                        hintText: "Lorem ipsum dolor sit......",
+                        onChanged: (value) {}),
                   ],
                 ));
               }),
