@@ -1,19 +1,17 @@
-import 'package:NearMii/config/assets.dart';
-import 'package:NearMii/config/helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:shimmer/shimmer.dart'; // Import the shimmer package
 
 class CustomCacheNetworkImage extends StatelessWidget {
   final String img;
   final double? size;
   final double? height;
   final double? dummyPadding;
-
   final double? width;
   final Color? backgroundColor;
   final Color? color;
-
   final double imageRadius;
   final BoxFit? fit;
 
@@ -40,28 +38,30 @@ class CustomCacheNetworkImage extends StatelessWidget {
               width: width,
               height: height,
               decoration: BoxDecoration(
-                color: backgroundColor ?? AppColor.greenc3e4cc,
+                color: backgroundColor ?? Colors.grey[300], // Fallback color
                 borderRadius: BorderRadius.all(
                   Radius.circular(imageRadius),
                 ),
               ),
               child: Padding(
                 padding: EdgeInsets.all(dummyPadding ?? 15),
-                child: SvgPicture.asset(Assets.userDummy),
+                child: SvgPicture.asset(
+                    'assets/icons/dummy_user.svg'), // Update with your asset
               ),
             ),
           )
         : Container(
             width: width,
             height: height,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(imageRadius),
+            ),
             alignment: Alignment.center,
             child: img.contains(".svg")
                 ? SvgPicture.network(
                     img,
                     placeholderBuilder: (context) => const Icon(Icons.error),
                     fit: BoxFit.cover,
-                    // placeholderBuilder: (context) => const Icon(Icons.error),
                   )
                 : CachedNetworkImage(
                     fit: fit,
@@ -79,19 +79,30 @@ class CustomCacheNetworkImage extends StatelessWidget {
                       ),
                     ),
                     progressIndicatorBuilder: (context, url, downloadProgress) {
+                      // Show shimmer while the image is loading
                       return SizedBox(
                         height: height,
                         width: width,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                            backgroundColor: Colors.red,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            width: width,
+                            height: height,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(imageRadius),
+                            ),
                           ),
                         ),
                       );
                     },
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                    errorWidget: (context, url, error) {
+                      // Only show error when the image failed to load completely
+                      return const Center(
+                        child: Icon(Icons.error),
+                      );
+                    },
                   ),
           );
   }

@@ -36,7 +36,9 @@ class CustomTile extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         leading: isHistory == true
             ? CustomCacheNetworkImage(
-                img: ApiConstants.profileBaseUrl + leadingIcon,
+                img: leadingIcon.isNotEmpty
+                    ? ApiConstants.profileBaseUrl + leadingIcon
+                    : '',
                 imageRadius: 50,
                 height: 50,
                 width: 50,

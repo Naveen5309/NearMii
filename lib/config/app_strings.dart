@@ -129,7 +129,7 @@ abstract final class AppString {
   static const String reachOutToSupport = "Reach out to our support team";
   static const String checkHowOur = "Check how our organization works";
   static const String deleteAccount = "Delete Account";
-  static const String deleteReason = "Delete Reason";
+  // static const String deleteReason = "Delete Reason";
 
   static const String deleteYourAccount = "Delete your account";
   static const String logOut = "Logout";
@@ -145,6 +145,9 @@ abstract final class AppString {
   static const String lastMonth = "Last Month";
   static const String vipMembership = "VIP Membership";
   static const String reason = "Reason";
+  static const String selectDeleteReason =
+      "Why you want to delete your account";
+
   static const String skip = "Skip >";
   static const String pswd = "Password";
   static const String dontHaveAnAccount = "Don’t have an account?";

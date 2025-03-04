@@ -61,6 +61,7 @@ class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
       final dataResponse =
           await Getters.getHttpService.request<MyPlatformDataList>(
               url: ApiConstants.getOtherUserPlatform,
+              body: body,
               fromJson: (json) {
                 log("json in data source :-> $json");
 

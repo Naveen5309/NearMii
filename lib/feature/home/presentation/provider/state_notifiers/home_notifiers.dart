@@ -77,10 +77,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
       state = const UpdateLocation(locationType: LocationType.loading);
       List<Placemark> placemarks = await getPlaceMark();
       if (placemarks.isNotEmpty) {
-        printLog("locality is :-> ${placemarks[0].locality}");
+        printLog("locality is :--------> ");
+        printLog(placemarks[0].administrativeArea ??
+            " ,${placemarks[0].locality ?? ''}--->");
         loader = false;
-        addressName = placemarks[0].administrativeArea ??
-            " ,${placemarks[0].locality ?? ''}--->";
+        addressName =
+            '${placemarks[0].administrativeArea}, ${placemarks[0].locality}';
+
         location =
             '${placemarks[0].name}, ${placemarks[0].subAdministrativeArea}, ${placemarks[0].subLocality}';
 
@@ -109,9 +112,9 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
     log("address is :-> $addressName");
 
-    // if (addressName.isEmpty || location.isEmpty) {
-    getLocation();
-    // }
+    if (addressName.isEmpty || location.isEmpty) {
+      getLocation();
+    }
 
     state = UpdateLocation2();
   }

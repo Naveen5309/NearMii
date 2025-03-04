@@ -22,7 +22,6 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
@@ -60,7 +59,7 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 
   final _debounce = Debouncer();
 
-  void onSearchChanged(String query) {
+  void onSearchChanged(query) {
     final notifier = ref.read(otherUserProfileProvider.notifier);
     _debounce.run(() {
       notifier.getOtherSocialPlatform(userId: widget.id ?? '');
@@ -77,8 +76,7 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
       otherUserProfileProvider,
       (previous, next) {
         if (next is OtherUserProfileApiLoading &&
-            ((next.otherUserType == OtherUserType.getProfile) ||
-                (next.otherUserType == OtherUserType.getPlatform))) {
+            ((next.otherUserType == OtherUserType.getProfile))) {
           log("other user loading is called");
           Utils.showLoader();
         } else if (next is OtherUserProfileApiSuccess &&
@@ -102,22 +100,14 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
             )
           : SliverSnap(
               stretch: true,
-              scrollBehavior: const CupertinoScrollBehavior(),
+              scrollBehavior: const MaterialScrollBehavior(),
               pinned: true,
               animationCurve: Curves.easeInOutCubicEmphasized,
-              animationDuration: const Duration(milliseconds: 1),
+              animationDuration: const Duration(milliseconds: 5),
               onCollapseStateChanged:
                   (isCollapsed, scrollingOffset, maxExtent) {},
               collapsedBackgroundColor: AppColor.btnColor,
               expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-              backdropWidget: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(Assets.background),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
               expandedContentHeight: context.height * .55,
               expandedContent: profileSection(
                   otherUserProfileProvider: otherUserData,
@@ -131,11 +121,11 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
                       child: Text("loading"),
                     ),
               body: bottomSection(
-                  profile: otherUserData.profile!,
-                  otherUserProfileNotifier: otherUserData,
-                  context: context,
-                  onSearchChanged: onSearchChanged),
-            ),
+                profile: otherUserData.profile!,
+                otherUserProfileNotifier: otherUserData,
+                context: context,
+                onSearchChanged: onSearchChanged,
+              )),
     );
   }
 }
@@ -164,7 +154,9 @@ Widget appBarWidgetSection(
         ),
         padding: const EdgeInsets.all(3),
         child: CustomCacheNetworkImage(
-          img: '',
+          img: otherUserProfileData.profilePhoto != null
+              ? "${ApiConstants.profileBaseUrl}${otherUserProfileData.profilePhoto}"
+              : '',
           imageRadius: 150,
           height: 40.w,
           width: 40.w,
@@ -341,9 +333,10 @@ Widget bottomSection({
       child: Column(children: [
         CustomSearchBarWidget(
           controller: otherUserProfileNotifier.platformSearchController,
-          onChanged: (value) {},
+          onChanged: (value) {
+            onSearchChanged(value);
+          },
         ),
-
         otherUserProfileNotifier.socialMediaList.isNotEmpty
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -377,14 +370,6 @@ Widget bottomSection({
                 ),
               )
             : const SizedBox()
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: ProfileGridView(
-        //     title: AppString.socialMedia,
-        //     isMyProfile: false,
-        //     socialMedia: signupNotifier.socialMediaList.,
-        //   ),
-        // )
       ]),
     ),
   );
@@ -396,191 +381,202 @@ Widget profileSection({
   required OtherUserProfileModel? profile,
   required OtherUserProfileNotifier otherUserProfileProvider,
 }) {
-  return Column(
-      mainAxisSize:
-          MainAxisSize.min, // Ensures column takes only necessary space
-      children: [
-        SizedBox(height: context.height * .1),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InkWell(
-              onTap: () {
-                back(context);
-              },
-              child: Padding(
-                padding: EdgeInsets.only(left: context.width * .05),
-                child: SvgPicture.asset(
-                  Assets.icBackBtn,
-                  colorFilter:
-                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+  return Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage(Assets.background),
+        fit: BoxFit.fill,
+      ),
+    ),
+    child: Column(
+        mainAxisSize:
+            MainAxisSize.min, // Ensures column takes only necessary space
+        children: [
+          SizedBox(height: context.height * .1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  back(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: context.width * .05),
+                  child: SvgPicture.asset(
+                    Assets.icBackBtn,
+                    colorFilter: const ColorFilter.mode(
+                        AppColor.primary, BlendMode.srcIn),
+                  ),
                 ),
               ),
-            ),
-            PopupMenuButton(
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(4), // Adjust the radius as needed
-              ),
-              position: PopupMenuPosition.under,
-              padding: EdgeInsets.zero,
-              onSelected: (value) {
-                showCustomBottomSheet(
-                    context: context,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(Assets.reportNavClose),
-                        15.verticalSpace,
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 4, vertical: context.height * .02),
-                          child: AppText(
-                              text: AppString.report,
-                              fontSize: 20.sp,
-                              color: AppColor.black1A1C1E,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        const CustomReportTile(
-                          title: AppString.theyArePretending,
-                          check: true,
-                        ),
-                        const CustomReportTile(
-                          title: AppString.theyAreUnderTheAge,
-                          check: false,
-                        ),
-                        const CustomReportTile(
-                          title: AppString.violenceAndDangerous,
-                          check: false,
-                        ),
-                        const CustomReportTile(
-                          title: AppString.hateSpeech,
-                          check: false,
-                        ),
-                        const CustomReportTile(
-                          title: AppString.nudity,
-                          check: false,
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            AppText(
-                                text: "Something Else",
-                                fontSize: 14.sp,
+              PopupMenuButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(4), // Adjust the radius as needed
+                ),
+                position: PopupMenuPosition.under,
+                padding: EdgeInsets.zero,
+                onSelected: (value) {
+                  showCustomBottomSheet(
+                      context: context,
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(Assets.reportNavClose),
+                          15.verticalSpace,
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 4, vertical: context.height * .02),
+                            child: AppText(
+                                text: AppString.report,
+                                fontSize: 20.sp,
                                 color: AppColor.black1A1C1E,
                                 fontWeight: FontWeight.w700),
-                          ],
-                        ),
-                        CustomTextFieldWidget(
-                          enableBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
                           ),
-                          minLines: 2,
-                          fillColor: AppColor.whiteF0F5FE,
-                          hintText: "Lorem ipsum dolor sit......",
-                        ),
-                        5.verticalSpace,
-                        // CommonAppBtn(
-                        //   title: AppString.submit,
-                        //   onTap: () {
-                        //     back(context);
-                        //   },
-                        // ),
-                        10.verticalSpace
-                      ],
-                    ));
-              },
-              itemBuilder: (BuildContext bc) {
-                return [
-                  const PopupMenuItem(
-                      value: AppString.report,
-                      child: AppText(
-                        text: AppString.report,
-                        color: AppColor.redFF3B30,
-                      )),
-                ];
-              },
-              child: Padding(
-                padding: EdgeInsets.only(right: context.width * .05),
-                child: SvgPicture.asset(
-                  Assets.icMore,
-                  colorFilter:
-                      const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+                          const CustomReportTile(
+                            title: AppString.theyArePretending,
+                            check: true,
+                          ),
+                          const CustomReportTile(
+                            title: AppString.theyAreUnderTheAge,
+                            check: false,
+                          ),
+                          const CustomReportTile(
+                            title: AppString.violenceAndDangerous,
+                            check: false,
+                          ),
+                          const CustomReportTile(
+                            title: AppString.hateSpeech,
+                            check: false,
+                          ),
+                          const CustomReportTile(
+                            title: AppString.nudity,
+                            check: false,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              AppText(
+                                  text: "Something Else",
+                                  fontSize: 14.sp,
+                                  color: AppColor.black1A1C1E,
+                                  fontWeight: FontWeight.w700),
+                            ],
+                          ),
+                          CustomTextFieldWidget(
+                            enableBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            minLines: 2,
+                            fillColor: AppColor.whiteF0F5FE,
+                            hintText: "Lorem ipsum dolor sit......",
+                          ),
+                          5.verticalSpace,
+                          // CommonAppBtn(
+                          //   title: AppString.submit,
+                          //   onTap: () {
+                          //     back(context);
+                          //   },
+                          // ),
+                          10.verticalSpace
+                        ],
+                      ));
+                },
+                itemBuilder: (BuildContext bc) {
+                  return [
+                    const PopupMenuItem(
+                        value: AppString.report,
+                        child: AppText(
+                          text: AppString.report,
+                          color: AppColor.redFF3B30,
+                        )),
+                  ];
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: context.width * .05),
+                  child: SvgPicture.asset(
+                    Assets.icMore,
+                    colorFilter: const ColorFilter.mode(
+                        AppColor.primary, BlendMode.srcIn),
+                  ),
                 ),
               ),
+            ],
+          ),
+          SizedBox(height: context.height * .02),
+          Container(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xff69DDA5),
             ),
-          ],
-        ),
-        SizedBox(height: context.height * .02),
-        Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xff69DDA5),
+            padding: const EdgeInsets.all(6),
+            child: CustomCacheNetworkImage(
+              dummyPadding: 30,
+              img: profile?.profilePhoto != null
+                  ? "${ApiConstants.profileBaseUrl}${profile?.profilePhoto}"
+                  : '',
+              imageRadius: 150,
+              height: 105.w,
+              width: 105.w,
+            ),
           ),
-          padding: const EdgeInsets.all(6),
-          child: CustomCacheNetworkImage(
-            dummyPadding: 30,
-            img: profile?.profilePhoto != null
-                ? "${ApiConstants.profileBaseUrl}${profile?.profilePhoto}"
-                : '',
-            imageRadius: 150,
-            height: 105.w,
-            width: 105.w,
+          10.verticalSpace,
+          AppText(
+            color: AppColor.whiteFFFFFF,
+            text: profile?.name ?? "",
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
           ),
-        ),
-        10.verticalSpace,
-        AppText(
-          color: AppColor.whiteFFFFFF,
-          text: profile?.name ?? "",
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w500,
-        ),
-        5.verticalSpace,
-        AppText(
-          text: profile?.designation ?? '',
-          fontWeight: FontWeight.w500,
-          fontSize: 16.sp,
-          color: AppColor.whiteFFFFFF.withOpacity(.8),
-        ),
-        25.verticalSpace,
-        AppText(
-          text: profile?.bio ?? "",
-          textAlign: TextAlign.center,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColor.whiteFFFFFF.withOpacity(.8),
-        ),
-        20.verticalSpace,
-        Wrap(
-          alignment: WrapAlignment.center,
-          runSpacing: 8,
-          spacing: 6,
-          children: [
-            InfoChip(
-                label: 'Social',
-                value:
-                    otherUserProfileProvider.socialMediaList.length.toString()),
-            InfoChip(
-                label: 'Contact',
-                value: otherUserProfileProvider.contactList.length.toString()),
-            InfoChip(
-                label: 'Portfolio',
-                value:
-                    otherUserProfileProvider.portfolioList.length.toString()),
-            InfoChip(
-                label: 'Finance',
-                value: otherUserProfileProvider.financeList.length.toString()),
-            InfoChip(
-                label: 'Business',
-                value: otherUserProfileProvider.businessList.length.toString()),
-          ],
-        )
-      ]);
+          5.verticalSpace,
+          AppText(
+            text: profile?.designation ?? '',
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          ),
+          25.verticalSpace,
+          AppText(
+            text: profile?.bio ?? "",
+            textAlign: TextAlign.center,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          ),
+          20.verticalSpace,
+          Wrap(
+            alignment: WrapAlignment.center,
+            runSpacing: 8,
+            spacing: 6,
+            children: [
+              InfoChip(
+                  label: 'Social',
+                  value: otherUserProfileProvider.socialMediaList.length
+                      .toString()),
+              InfoChip(
+                  label: 'Contact',
+                  value:
+                      otherUserProfileProvider.contactList.length.toString()),
+              InfoChip(
+                  label: 'Portfolio',
+                  value:
+                      otherUserProfileProvider.portfolioList.length.toString()),
+              InfoChip(
+                  label: 'Finance',
+                  value:
+                      otherUserProfileProvider.financeList.length.toString()),
+              InfoChip(
+                  label: 'Business',
+                  value:
+                      otherUserProfileProvider.businessList.length.toString()),
+            ],
+          )
+        ]),
+  );
 }
 
 // HIDE ALL SECTION

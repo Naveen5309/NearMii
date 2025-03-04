@@ -169,28 +169,29 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
     }
   }
 
-  void updateCheck(int index) {
-    if (state is OtherUserProfileApiSuccess) {
-      final currentState = state as OtherUserProfileApiSuccess;
+//UPDATE CHECK
+  // void updateCheck(int index) {
+  //   if (state is OtherUserProfileApiSuccess) {
+  //     final currentState = state as OtherUserProfileApiSuccess;
 
-      if (index < 0 || index >= (currentState.reasons.length ?? 0)) return;
+  //     if (index < 0 || index >= (currentState.reasons.length ?? 0)) return;
 
-      final updatedReasons =
-          List<CustomReportTile>.from(currentState.reasons ?? []);
+  //     final updatedReasons =
+  //         List<CustomReportTile>.from(currentState.reasons ?? []);
 
-      updatedReasons[index] = CustomReportTile(
-        title: updatedReasons[index].title,
-        check: !updatedReasons[index].check, // ✅ Toggle karein
-        ontap: () => updateCheck(index),
-      );
+  //     updatedReasons[index] = CustomReportTile(
+  //       title: updatedReasons[index].title,
+  //       check: !updatedReasons[index].check,
+  //       ontap: () => updateCheck(index),
+  //     );
 
-      // State ko update karein
-      state = OtherUserProfileApiSuccess(
-        otherUserType: currentState.otherUserType,
-        reasons: updatedReasons,
-      );
-    }
-  }
+  //     // UPDATE STATE
+  //     state = OtherUserProfileApiSuccess(
+  //       otherUserType: currentState.otherUserType,
+  //       reasons: updatedReasons,
+  //     );
+  //   }
+  // }
 
   void clearAllChecks() {
     if (state is OtherUserProfileApiSuccess) {

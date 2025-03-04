@@ -1,10 +1,10 @@
 import 'package:NearMii/config/assets.dart';
-import 'package:NearMii/config/countries.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../feature/common_widgets/custom_toast.dart';
 
 class Utils {
@@ -83,5 +83,13 @@ class Utils {
 
   static void hideBottomSheet(context) {
     back(context);
+  }
+
+  static Future<void> launchURL(Uri uri) async {
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch ${uri.path}';
+    }
   }
 }

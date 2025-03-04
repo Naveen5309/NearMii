@@ -6,6 +6,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/history/data/model/history_model.dart';
 import 'package:NearMii/feature/history/domain/usecases/history_usecases.dart';
 import 'package:NearMii/feature/history/presentation/provider/states/history_state.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HistoryNotifier extends StateNotifier<HistoryState> {
@@ -19,8 +20,10 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   List<HistoryModel> historyLastWeekTimeList = [];
   List<HistoryModel> historyLastMonthTimeList = [];
 
+  TextEditingController historySearchController = TextEditingController();
+
   //History US
-  Future<void> historyApi({required String name}) async {
+  Future<void> historyApi() async {
     state = const HistoryApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -35,7 +38,7 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
         );
       }
       Map<String, dynamic> body = {
-        "name": name,
+        "name": historySearchController.text.trim(),
       };
       final result = await historyUsecases.callHistory(body: body);
       state = result.fold((error) {

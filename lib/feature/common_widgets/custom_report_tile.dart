@@ -49,7 +49,7 @@ class CustomReportTile extends ConsumerWidget {
                   color: AppColor.black272727.withOpacity(.9),
                 ),
               ),
-              5.horizontalSpace,
+              10.horizontalSpace,
               GestureDetector(
                 onTap: ontap,
                 child: check

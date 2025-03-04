@@ -55,7 +55,9 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
     );
 
     return Scaffold(
-      appBar: const CustomAppBar(title: AppString.deleteReason),
+      appBar: const CustomAppBar(
+        title: '',
+      ),
       backgroundColor: AppColor.greyf9f9f9,
       body: SingleChildScrollView(
         child: Padding(
@@ -93,7 +95,7 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 4, vertical: context.height * .02),
                       child: AppText(
-                          text: AppString.reason,
+                          text: AppString.selectDeleteReason,
                           fontSize: 20.sp,
                           color: AppColor.black1A1C1E,
                           fontWeight: FontWeight.w700),

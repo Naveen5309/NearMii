@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states_notifier/other_user_profile_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/helper.dart';
@@ -74,7 +75,10 @@ class OtherUserProfileGridView extends ConsumerWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Utils.launchURL(
+                              Uri.parse(socialMedia[pIndex].url ?? ''));
+                        },
                         child: ProfileSocialMedia(
                           isToggled: socialMedia[pIndex].platform?.status == 1
                               ? true
