@@ -16,6 +16,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final OtherUserProfileUsecases otherUserProfileUsecases;
   final nameController = TextEditingController();
   final platformSearchController = TextEditingController();
+  final reasonController = TextEditingController();
 
   final designationController = TextEditingController();
   final imageUrlController = TextEditingController();
@@ -131,7 +132,9 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
   //Report
   Future<void> reportApi(
-      {required String reportedUserId, required String somethingElse}) async {
+      {required String reportedUserId,
+      required String somethingElse,
+      required String reason}) async {
     state =
         const OtherUserProfileApiLoading(otherUserType: OtherUserType.report);
     try {
@@ -148,6 +151,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
       }
       Map<String, dynamic> body = {
         "reported_user_id": reportedUserId,
+        "reason": reason,
         "something_else": somethingElse,
       };
 
@@ -160,6 +164,8 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
         return OtherUserProfileApiFailed(
             error: error.message, otherUserType: OtherUserType.report);
       }, (result) {
+        print("result is::$result");
+
         return const OtherUserProfileApiSuccess(
             otherUserType: OtherUserType.report);
       });

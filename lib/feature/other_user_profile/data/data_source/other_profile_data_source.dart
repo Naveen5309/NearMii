@@ -90,24 +90,17 @@ class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
   }
 
   @override
-  Future<ResponseWrapper<OtherUserProfileModel>?> getReport(
+  Future<ResponseWrapper<dynamic>?> getReport(
       {required Map<String, dynamic> body}) async {
     try {
-      final dataResponse =
-          await Getters.getHttpService.request<OtherUserProfileModel>(
-              body: body,
-              url: ApiConstants.report,
-              fromJson: (json) {
-                log("json in data source :-> $json");
-
-                if (json is Map<String, dynamic>) {
-                  var myData = OtherUserProfileModel.fromJson(json["data"]);
-
-                  log("mydata is :-. ${myData.name}");
-                  return OtherUserProfileModel.fromJson(json["data"]);
-                }
-                throw Exception("Unexpected API response format");
-              });
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+          body: body,
+          requestType: RequestType.post,
+          url: ApiConstants.report,
+          fromJson: (json) {
+            log("json in data source :-> $json");
+            return json;
+          });
       print("dataResponse===>${dataResponse.data!.name}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");

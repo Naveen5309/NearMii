@@ -134,7 +134,7 @@ abstract final class AppString {
   static const String deleteYourAccount = "Delete your account";
   static const String logOut = "Logout";
   static const String enterYourCurrentPswd =
-      "Select reason and Enter your current password to delete the account";
+      "Enter your current password to delete the account";
   static const String hideProfile = "Hide Profile";
   static const String showProfile = "Show Profile";
 

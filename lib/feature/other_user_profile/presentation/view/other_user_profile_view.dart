@@ -116,7 +116,8 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
               collapsedContent: otherUserData.profile != null
                   ? appBarWidgetSection(
                       context: context,
-                      otherUserProfileData: otherUserData.profile!)
+                      otherUserProfileData: otherUserData.profile!,
+                      id: widget.id)
                   : const SizedBox(
                       child: Text("loading"),
                     ),
@@ -131,9 +132,11 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 }
 
 //APP BAR WIDGET SECTION
-Widget appBarWidgetSection(
-    {required BuildContext context,
-    required OtherUserProfileModel otherUserProfileData}) {
+Widget appBarWidgetSection({
+  required BuildContext context,
+  required OtherUserProfileModel otherUserProfileData,
+  required String? id,
+}) {
   return Row(
     children: [
       GestureDetector(
@@ -186,9 +189,8 @@ Widget appBarWidgetSection(
         final somethingTextController = TextEditingController();
 
         ref.watch(reportProvider);
-        ref.watch(selectedReportIndex);
 
-        int selected = ref.read(selectedReportIndex);
+        // int selected = ref.read(selectedReportIndex);
         return PopupMenuButton(
           shape: RoundedRectangleBorder(
             borderRadius:
@@ -199,98 +201,124 @@ Widget appBarWidgetSection(
           onSelected: (value) {
             showCustomBottomSheet(
                 context: context,
-                content: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset(Assets.reportNavClose),
-                      15.verticalSpace,
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 4, vertical: context.height * .02),
-                        child: AppText(
-                            text: AppString.report,
-                            fontSize: 20.sp,
-                            color: AppColor.black1A1C1E,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      CustomReportTile(
-                        title: AppString.theyArePretending,
-                        check: selected == 0,
-                        ontap: () {
-                          ref.read(selectedReportIndex.notifier).state = 0;
-                        },
-                      ),
-                      CustomReportTile(
-                        title: AppString.theyAreUnderTheAge,
-                        check: selected == 1,
-                        ontap: () {
-                          ref.read(selectedReportIndex.notifier).state = 1;
-                        },
-                      ),
-                      CustomReportTile(
-                        title: AppString.violenceAndDangerous,
-                        check: selected == 2,
-                        ontap: () {
-                          ref.read(selectedReportIndex.notifier).state = 2;
-                        },
-                      ),
-                      CustomReportTile(
-                        title: AppString.hateSpeech,
-                        check: selected == 3,
-                        ontap: () {
-                          ref.read(selectedReportIndex.notifier).state = 3;
-                        },
-                      ),
-                      CustomReportTile(
-                        title: AppString.nudity,
-                        check: selected == 4,
-                        ontap: () {
-                          ref.read(selectedReportIndex.notifier).state = 4;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          AppText(
-                              text: "Something Else",
-                              fontSize: 14.sp,
+                content: Consumer(builder: (context, ref, child) {
+                  // ref.watch(selectedReportIndex);
+
+                  int selected = ref.watch(selectedReportIndex);
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(Assets.reportNavClose),
+                        15.verticalSpace,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4, vertical: context.height * .02),
+                          child: AppText(
+                              text: AppString.report,
+                              fontSize: 20.sp,
                               color: AppColor.black1A1C1E,
                               fontWeight: FontWeight.w700),
-                        ],
-                      ),
-                      CustomTextFieldWidget(
-                          controller: somethingTextController,
-                          // enableBorder: OutlineInputBorder(
-                          //   borderRadius: BorderRadius.circular(20),
-                          // ),
-                          minLines: 2,
-                          fillColor: AppColor.whiteF0F5FE,
-                          hintText: "Lorem ipsum dolor sit......",
-                          onChanged: (value) {
-                            if (value!.isNotEmpty) {
-                              reportNotifier.clearAllChecks();
+                        ),
+                        CustomReportTile(
+                          title: AppString.theyArePretending,
+                          check: selected == 0,
+                          ontap: () {
+                            ref.read(selectedReportIndex.notifier).state = 0;
+                            reportNotifier.reasonController.text =
+                                AppString.theyArePretending;
+                            // back(context);
+                          },
+                        ),
+                        CustomReportTile(
+                          title: AppString.theyAreUnderTheAge,
+                          check: selected == 1,
+                          ontap: () {
+                            ref.read(selectedReportIndex.notifier).state = 1;
+                            reportNotifier.reasonController.text =
+                                AppString.theyAreUnderTheAge;
+                          },
+                        ),
+                        CustomReportTile(
+                          title: AppString.violenceAndDangerous,
+                          check: selected == 2,
+                          ontap: () {
+                            ref.read(selectedReportIndex.notifier).state = 2;
+                            reportNotifier.reasonController.text =
+                                AppString.violenceAndDangerous;
+                          },
+                        ),
+                        CustomReportTile(
+                          title: AppString.hateSpeech,
+                          check: selected == 3,
+                          ontap: () {
+                            ref.read(selectedReportIndex.notifier).state = 3;
+                            reportNotifier.reasonController.text =
+                                AppString.hateSpeech;
+                          },
+                        ),
+                        CustomReportTile(
+                          title: AppString.nudity,
+                          check: selected == 4,
+                          ontap: () {
+                            ref.read(selectedReportIndex.notifier).state = 4;
+                            reportNotifier.reasonController.text =
+                                AppString.nudity;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            AppText(
+                                text: "Something Else",
+                                fontSize: 14.sp,
+                                color: AppColor.black1A1C1E,
+                                fontWeight: FontWeight.w700),
+                          ],
+                        ),
+                        CustomTextFieldWidget(
+                            controller: somethingTextController,
+                            // enableBorder: OutlineInputBorder(
+                            //   borderRadius: BorderRadius.circular(20),
+                            // ),
+                            minLines: 2,
+                            fillColor: AppColor.whiteF0F5FE,
+                            hintText: "Lorem ipsum dolor sit......",
+                            onChanged: (value) {
+                              if (value!.isNotEmpty) {
+                                reportNotifier.clearAllChecks();
+                              }
+                            }),
+                        5.verticalSpace,
+                        CommonAppBtn(
+                          title: AppString.submit,
+                          onTap: () {
+                            int selected = ref.watch(selectedReportIndex);
+
+                            if (selected == -1) {
+                              toast(msg: "Select report ");
+                              return;
+                            } else {
+                              print("object");
+                              reportNotifier.reportApi(
+                                  reportedUserId: id ?? '',
+                                  somethingElse: somethingTextController.text,
+                                  reason: reportNotifier.reasonController.text);
+
+                              // back(context);
                             }
-                          }),
-                      5.verticalSpace,
-                      CommonAppBtn(
-                        title: AppString.submit,
-                        onTap: () {
-                          print("object");
-                          reportNotifier.reportApi(
-                              reportedUserId: '', somethingElse: '');
-                          // back(context);
-                        },
-                      ),
-                      10.verticalSpace
-                    ],
-                  ),
-                ));
+                          },
+                        ),
+                        10.verticalSpace
+                      ],
+                    ),
+                  );
+                }));
           },
           itemBuilder: (BuildContext bc) {
             return [
