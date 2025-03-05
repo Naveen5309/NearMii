@@ -139,10 +139,30 @@ class CustomTextFieldWidget extends StatelessWidget {
             //       borderSide:
             //           BorderSide(color: AppColor.appThemeColor, width: 1.5),
             //       borderRadius: BorderRadius.all(Radius.circular(50.0)),
-            //     ),
-            enabledBorder: InputBorder.none,
-            border: InputBorder.none, // Removes the default underline
-            focusedBorder: InputBorder.none,
+            //     ),border: border ??
+            border: border ??
+                OutlineInputBorder(
+                  borderRadius:
+                      BorderRadius.circular(50.0), // Adjust radius as needed
+                  borderSide:
+                      const BorderSide(color: AppColor.transparent, width: 0),
+                ),
+            enabledBorder: enableBorder ??
+                OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                  borderSide:
+                      const BorderSide(color: AppColor.transparent, width: 0.0),
+                ),
+            focusedBorder: focusBorder ??
+                OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.0),
+                  borderSide:
+                      const BorderSide(color: AppColor.transparent, width: 0.0),
+                ),
+
+            // enabledBorder: InputBorder.none,
+            // border: InputBorder.none, // Removes the default underline
+            // focusedBorder: InputBorder.none,
             floatingLabelStyle: TextStyle(
                 color: AppColor.appThemeColor,
                 fontSize: 12.sp,

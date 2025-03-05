@@ -10,8 +10,7 @@ abstract class OtherUserProfileRepository {
 
   Future<Either<Failure, MyPlatformDataList>> getOtherPlatformApi(
       {required Map<String, dynamic> body});
-  Future<Either<Failure, OtherUserProfileModel>> report(
-      {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> report({required Map<String, dynamic> body});
 }
 
 class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
@@ -57,7 +56,7 @@ class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
   }
 
   @override
-  Future<Either<Failure, OtherUserProfileModel>> report(
+  Future<Either<Failure, dynamic>> report(
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.getReport(body: body);
