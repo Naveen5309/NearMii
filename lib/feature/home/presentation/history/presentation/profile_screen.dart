@@ -119,10 +119,27 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
           back(context);
           toast(msg: "Data updated", isError: false);
           notifier.getSelfPlatformApi();
+          notifier.getProfileApi();
 
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is SelfUserProfileApiFailed &&
             next.selfProfileDataType == SelfProfileDataType.hideAll) {
+          Utils.hideLoader();
+          toast(msg: next.error);
+        } else if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.hidePlatform) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.hidePlatform) {
+          Utils.hideLoader();
+          back(context);
+          toast(msg: "Data updated", isError: false);
+          notifier.getSelfPlatformApi();
+          notifier.getProfileApi();
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.hidePlatform) {
           Utils.hideLoader();
           toast(msg: next.error);
         }
@@ -572,9 +589,9 @@ Widget hideAllSection({
         children: [
           AppText(
             text: profile != null
-                ? ((profile.isHide == true)
-                    ? AppString.showProfile
-                    : AppString.hideProfile)
+                ? ((profile.hideProfile == 0)
+                    ? AppString.hideProfile
+                    : AppString.showProfile)
                 : AppString.hideProfile,
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,
@@ -592,8 +609,9 @@ Widget hideAllSection({
       //SWITCH BUTTON
 
       ToggleSwitchBtn(
-        isToggled:
-            profile != null ? ((profile.isHide == true) ? false : true) : false,
+        isToggled: profile != null
+            ? ((profile.hideProfile == 0) ? true : false)
+            : false,
         onToggled: (isToggled) {
           log("toggle called");
 
@@ -601,13 +619,16 @@ Widget hideAllSection({
               context: context,
               content: DeleteAccountConfirmationView(
                   btnText: profile != null
-                      ? ((profile.isHide == true)
-                          ? AppString.show
-                          : AppString.hide)
+                      ? ((profile.hideProfile == 0)
+                          ? AppString.hide
+                          : AppString.show)
                       : AppString.hide,
-                  title: AppString.areYouSureProfileHide,
+                  title: profile?.hideProfile == 0
+                      ? AppString.areYouSureProfileHide
+                      : AppString.areYouSureProfileShow,
                   delete: () {
-                    selfUserProfileNotifier.hideAllLinksApi();
+                    selfUserProfileNotifier.hideAllLinksApi(
+                        hideProfile: profile?.hideProfile == 0 ? 1 : 0);
                   },
                   onCancel: () {
                     back(context);

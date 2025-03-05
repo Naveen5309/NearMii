@@ -13,6 +13,9 @@ abstract class SelfUserProfileDataSource {
       {required Map<String, dynamic> body});
   Future<ResponseWrapper<dynamic>> hideAllLinks(
       {required Map<String, dynamic> body});
+
+  Future<ResponseWrapper<dynamic>> hidePlatform(
+      {required Map<String, dynamic> body});
   Future<ResponseWrapper> getSelfPlatform({required Map<String, dynamic> body});
   Future<ResponseWrapper<dynamic>> delete({required Map<String, dynamic> body});
   Future<ResponseWrapper<dynamic>> getSocialProfile(
@@ -68,7 +71,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
       final dataResponse = await Getters.getHttpService.request<dynamic>(
           body: body,
           requestType: RequestType.post,
-          url: ApiConstants.hideAllLinks,
+          url: ApiConstants.hideAllProfile,
           fromJson: (json) {
             log("json in data source :-> $json");
 
@@ -88,6 +91,37 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "OtherUserProfileLogin",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<dynamic>> hidePlatform(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+          body: body,
+          requestType: RequestType.post,
+          url: ApiConstants.hidePlatform,
+          fromJson: (json) {
+            log("json in data source :-> $json");
+
+            return json;
+          });
+      print("dataResponse===>${dataResponse.data}");
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "hidePlatform",
       ));
     }
   }

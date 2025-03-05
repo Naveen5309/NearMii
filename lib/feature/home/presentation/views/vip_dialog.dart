@@ -89,7 +89,7 @@ class VIPMembershipDialog extends StatelessWidget {
                     children: [
                       AppText(
                         text: "\$19.99",
-                        fontSize: 30.sp,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),
@@ -103,6 +103,7 @@ class VIPMembershipDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: AppString.subscriptionDataList.length,
                     itemBuilder: (context, index) {
@@ -118,7 +119,8 @@ class VIPMembershipDialog extends StatelessWidget {
                             const SizedBox(width: 5),
                             AppText(
                                 text: AppString.subscriptionDataList[index],
-                                fontSize: 12.sp,
+                                fontSize: 14.sp,
+                                overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.w400,
                                 color: AppColor.whiteFFFFFF),
                           ],

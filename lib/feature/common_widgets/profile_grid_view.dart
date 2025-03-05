@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
@@ -210,6 +212,14 @@ class ProfileGridView extends ConsumerWidget {
                               : null;
                         },
                         child: ProfileSocialMedia(
+                          onToggleChanged: (val) {
+                            log("p0 :-> $val");
+                            notifier.hidePlatformApi(
+                                platformId: socialMedia[pIndex]
+                                    .platform!
+                                    .id
+                                    .toString());
+                          },
                           isToggled: socialMedia[pIndex].platform?.status == 1
                               ? true
                               : false,

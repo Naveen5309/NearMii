@@ -18,8 +18,8 @@ import '../states/auth_states.dart';
 class LoginNotifier extends StateNotifier<AuthState> {
   final AuthUseCase authUseCase;
   final phoneController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
+  // final firstNameController = TextEditingController();
+  final fullNameController = TextEditingController();
   final emailController = TextEditingController();
   final referralController = TextEditingController();
   final passwordController = TextEditingController();
@@ -29,6 +29,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
   String profilePic = '';
   String name = '';
   UserModel? userModel;
+
+  String socialName = '';
+  String socialImg = '';
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
   //VALIDATE SIGN UP
@@ -205,7 +208,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
       }
       if (await Getters.networkInfo.isSlow) {}
       GoogleSignIn googleSignIn = GoogleSignIn(
-        scopes: ['email'],
+        scopes: ['email', 'profile'],
       );
       if (await googleSignIn.isSignedIn()) {
         await googleSignIn.signOut();
@@ -219,10 +222,19 @@ class LoginNotifier extends StateNotifier<AuthState> {
         );
 
         log("social credential :-> $credential");
-        return _signInWithCredential(credential,
-            socialType: "google",
-            userName: result.displayName,
-            email: result.email);
+
+        // Extract user details
+        // String? name = result.displayName;
+        // String? email = result.email;
+        // String? photoUrl = result.photoUrl;
+        fullNameController.text = result.displayName ?? '';
+        socialImg = result.photoUrl ?? '';
+
+        // printLog("profile data is:-> $name, $email , $photoUrl");
+        return _signInWithCredential(
+          credential,
+          socialType: "google",
+        );
       }
       return null;
     } catch (e, s) {
@@ -235,8 +247,13 @@ class LoginNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<UserModel?> _signInWithCredential(OAuthCredential oauthCredential,
-      {String? userName, String? email, required String socialType}) async {
+  Future<UserModel?> _signInWithCredential(
+    OAuthCredential oauthCredential, {
+    // String? userName,
+    // String? email,
+    required String socialType,
+    // String? imgUrl
+  }) async {
     try {
       Utils.showLoader();
       final userCredential = await _signInWithFirebase(oauthCredential);

@@ -9,6 +9,9 @@ abstract class SelfUserProfileRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> isHideAllLinks(
       {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> hidePlatform(
+      {required Map<String, dynamic> body});
   Future<Either<Failure, MyPlatformDataList>> isGetSelfPlatform(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> isDelete(
@@ -43,6 +46,22 @@ class SelfUserProfileRepoImpl implements SelfUserProfileRepository {
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.hideAllLinks(body: body);
+
+      if (data.status == "success") {
+        return Right(data.data);
+      } else {
+        return Left(ServerFailure(message: data.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> hidePlatform(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.hidePlatform(body: body);
 
       if (data.status == "success") {
         return Right(data.data);

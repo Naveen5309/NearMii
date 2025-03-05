@@ -73,7 +73,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   }
 
   //HIDE ALL LINK
-  Future<void> hideAllLinksApi() async {
+  Future<void> hideAllLinksApi({required int hideProfile}) async {
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.hideAll,
     );
@@ -83,6 +83,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
           error: AppString.noInternetConnection,
           selfProfileDataType: SelfProfileDataType.hideAll,
         );
+
         return;
       }
       if (await Getters.networkInfo.isSlow) {
@@ -90,7 +91,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
           msg: AppString.networkSlow,
         );
       }
-      Map<String, dynamic> body = {};
+      Map<String, dynamic> body = {"hideProfile": hideProfile};
       final result = await selfUserProfileUsecases.callHideAllLinks(body: body);
 
       state = result.fold((error) {
@@ -110,6 +111,48 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       state = SelfUserProfileApiFailed(
         error: e.toString(),
         selfProfileDataType: SelfProfileDataType.hideAll,
+      );
+    }
+  }
+
+  //HIDE PLATFORM
+  Future<void> hidePlatformApi({required String platformId}) async {
+    state = const SelfUserProfileApiLoading(
+      selfProfileDataType: SelfProfileDataType.hidePlatform,
+    );
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SelfUserProfileApiFailed(
+          error: AppString.noInternetConnection,
+          selfProfileDataType: SelfProfileDataType.hidePlatform,
+        );
+
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {"platform_id": platformId};
+      final result = await selfUserProfileUsecases.hidePlatform(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message}");
+        return SelfUserProfileApiFailed(
+          error: error.message,
+          selfProfileDataType: SelfProfileDataType.hidePlatform,
+        );
+      }, (result) {
+        // historyDataList = result ?? [];
+        log("SelfUserProfile result is :->$result");
+        return const SelfUserProfileApiSuccess(
+          selfProfileDataType: SelfProfileDataType.hidePlatform,
+        );
+      });
+    } catch (e) {
+      state = SelfUserProfileApiFailed(
+        error: e.toString(),
+        selfProfileDataType: SelfProfileDataType.hidePlatform,
       );
     }
   }

@@ -1,3 +1,4 @@
+import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/views/auth_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/complete_profile_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/forgot_password_view.dart';
@@ -61,7 +62,11 @@ class RouteGenerator {
       case Routes.resetPassword:
         return MaterialPageRoute(builder: (_) => const ResetPasswordView());
       case Routes.completeProfile:
-        return MaterialPageRoute(builder: (_) => const CompleteProfileView());
+        final args = settings.arguments as SocialProfileModel;
+        return MaterialPageRoute(
+            builder: (_) => CompleteProfileView(
+                  profileData: args,
+                ));
       case Routes.selectSocialMedia:
         final args = settings.arguments as bool;
         return MaterialPageRoute(
@@ -92,10 +97,10 @@ class RouteGenerator {
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
       case Routes.deleteAccount:
-        // final args = settings.arguments as dynamic;
+        final args = settings.arguments as dynamic;
         return MaterialPageRoute(
-            builder: (_) => const DeletedDetailView(
-                // socialId: args,
+            builder: (_) => DeletedDetailView(
+                  socialId: args,
                 ));
       case Routes.deleteAccountReason:
         final args = settings.arguments as dynamic;

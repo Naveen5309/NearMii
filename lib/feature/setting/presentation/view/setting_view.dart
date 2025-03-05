@@ -212,10 +212,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
                               onTap: () =>
                                   toNamed(context, Routes.changePassword),
                             )
-                          : const Text(""),
+                          : const SizedBox.shrink(),
                       notifier.userProfileModel?.socialId == null
                           ? 10.verticalSpace
-                          : const Text(" "),
+                          : const SizedBox.shrink(),
 
                       //CONTACT US
                       CustomTile(
@@ -244,9 +244,8 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         subtitle: AppString.deleteYourAccount,
                         trailingIcon: Assets.iconArrowRight,
                         onTap: () => toNamed(
-                          context, Routes.deleteAccountReason,
-                          // args: notifier.userProfileModel?.socialId ?? ''
-                        ),
+                            context, Routes.deleteAccountReason,
+                            args: notifier.userProfileModel?.socialId ?? ''),
                       ),
                       15.verticalSpace,
 

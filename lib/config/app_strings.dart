@@ -123,7 +123,7 @@ abstract final class AppString {
   static const String contactUs = "Contact Us";
   static const String howItWorks = "How it works";
   static const String updateProfile = "Update your profile info";
-  static const String get15points = "Get 5 Points";
+  static const String get15points = "Get 5 Credits";
   static const String viewOurPolicies = "View our Policies  ";
   static const String resetYourPswd = "Reset your password";
   static const String reachOutToSupport = "Reach out to our support team";

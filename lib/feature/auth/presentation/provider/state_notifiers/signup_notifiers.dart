@@ -44,6 +44,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   String countryFlag = '🇺🇸';
   String profilePic = '';
   String name = '';
+  String socialImage = '';
 
   final urlController = TextEditingController();
 
@@ -93,6 +94,16 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     timer?.cancel();
     enableResend = true;
     secondsRemaining = 30;
+  }
+
+  updateSocialData({
+    required String img,
+    required String name,
+  }) {
+    printLog("update social data called:> $img ,$name");
+    fullNameController.text = name;
+
+    socialImage = img;
   }
 
   //VALIDATE Change Password

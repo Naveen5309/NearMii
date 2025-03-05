@@ -32,6 +32,8 @@ enum Setting { contactUs, deleteAccount, radius, getProfile }
 
 enum SelfProfileDataType {
   hideAll,
+  hidePlatform,
+
   updatePlatform,
   getProfile,
   getPlatform,

@@ -8,6 +8,9 @@ abstract class SelfUserProfileUsecases {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> callHideAllLinks(
       {required Map<String, dynamic> body});
+
+  Future<Either<Failure, dynamic>> hidePlatform(
+      {required Map<String, dynamic> body});
   Future<Either<Failure, MyPlatformDataList>> callGetSelfPlatform(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> callDelete(
@@ -34,6 +37,15 @@ class SelfUserProfileUseCaseImpl implements SelfUserProfileUsecases {
   Future<Either<Failure, dynamic>> callHideAllLinks(
       {required Map<String, dynamic> body}) async {
     final result = await repository.isHideAllLinks(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> hidePlatform(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.hidePlatform(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

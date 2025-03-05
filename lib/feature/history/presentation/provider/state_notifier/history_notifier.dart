@@ -20,10 +20,13 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   List<HistoryModel> historyLastWeekTimeList = [];
   List<HistoryModel> historyLastMonthTimeList = [];
 
+  bool isHistoryLoading = false;
+
   TextEditingController historySearchController = TextEditingController();
 
   //History US
   Future<void> historyApi() async {
+    isHistoryLoading = true;
     state = const HistoryApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -74,10 +77,13 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
         log("Recent History (Last 7 Days): ${recentHistoryList.length}");
         log("Last Week History (7-14 Days): ${historyLastWeekTimeList.length}");
         log("Last Month History (14-30 Days): ${historyLastMonthTimeList.length}");
+        isHistoryLoading = false;
 
         return const HistoryApiSuccess();
       });
     } catch (e) {
+      isHistoryLoading = false;
+
       state = HistoryApiFailed(error: e.toString());
     }
   }

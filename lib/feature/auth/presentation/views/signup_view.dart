@@ -5,6 +5,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
@@ -56,7 +57,16 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
 
           // toast(msg: AppString.signupSuccess, isError: false);
           // back(context);
-          toNamed(context, Routes.completeProfile);
+          // toNamed(context, Routes.completeProfile);
+
+          final loginNotifier = ref.read(loginProvider.notifier);
+          toNamed(
+            context,
+            Routes.completeProfile,
+            args: SocialProfileModel(
+                img: loginNotifier.socialImg,
+                name: loginNotifier.fullNameController.text),
+          );
         } else if (next is AuthApiFailed && next.authType == AuthType.signup) {
           Utils.hideLoader();
 

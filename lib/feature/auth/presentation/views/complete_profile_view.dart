@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -27,11 +29,31 @@ import 'package:image_picker/image_picker.dart';
 
 import '../provider/states/country_code_provider.dart';
 
-class CompleteProfileView extends ConsumerWidget {
-  const CompleteProfileView({super.key});
+class CompleteProfileView extends ConsumerStatefulWidget {
+  final SocialProfileModel? profileData;
+  const CompleteProfileView({super.key, this.profileData});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CompleteProfileView> createState() =>
+      _CompleteProfileViewState();
+}
+
+class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
+  @override
+  void initState() {
+    printLog("update social data called:> ${widget.profileData?.name} ");
+    if (widget.profileData != null) {
+      final createProfileNotifier = ref.read(signupProvider.notifier);
+
+      createProfileNotifier.updateSocialData(
+          img: widget.profileData?.img ?? '',
+          name: widget.profileData?.name ?? '');
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final createProfileNotifier = ref.read(signupProvider.notifier);
 
     ref.watch(signupProvider);
@@ -85,9 +107,6 @@ class CompleteProfileView extends ConsumerWidget {
                       SizedBox(
                         height: totalHeight,
                       ),
-                      //Logo
-
-                      // const Text("APPlOGO"),
 
                       Align(
                         alignment: Alignment.topCenter,
@@ -119,6 +138,7 @@ class CompleteProfileView extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: context.height * .04),
                         child: profileSection(
+                          imgUrl: widget.profileData?.img ?? '',
                           image: createProfileNotifier.image,
                           onTap: () => showCustomBottomSheet(
                               context: context,
@@ -174,10 +194,8 @@ class CompleteProfileView extends ConsumerWidget {
 
   //PROFILE SECTION
 
-  Widget profileSection({
-    required VoidCallback onTap,
-    XFile? image,
-  }) {
+  Widget profileSection(
+      {required VoidCallback onTap, XFile? image, String? imgUrl, d}) {
     return Row(
       children: [
         image != null
@@ -194,8 +212,8 @@ class CompleteProfileView extends ConsumerWidget {
                       ),
                       fit: BoxFit.cover,
                     )))
-            : const CustomCacheNetworkImage(
-                img: '',
+            : CustomCacheNetworkImage(
+                img: imgUrl ?? '',
                 imageRadius: 120,
                 height: 100,
                 width: 100,

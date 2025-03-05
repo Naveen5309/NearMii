@@ -11,6 +11,8 @@ class ProfileSocialMedia extends StatelessWidget {
   final String name;
   final int index;
   final bool? isToggled;
+  final Function(bool)
+      onToggleChanged; // Callback to pass the toggle state back
 
   final bool isMyProfile;
 
@@ -20,6 +22,7 @@ class ProfileSocialMedia extends StatelessWidget {
       required this.name,
       required this.index,
       this.isToggled,
+      required this.onToggleChanged,
       required this.isMyProfile});
 
   @override
@@ -63,7 +66,7 @@ class ProfileSocialMedia extends StatelessWidget {
                 alignment: Alignment.center,
                 child: ToggleSwitchBtn(
                   isToggled: isToggled ?? false,
-                  onToggled: (bool isToggled) {},
+                  onToggled: onToggleChanged,
                 ),
               )
             : const SizedBox()

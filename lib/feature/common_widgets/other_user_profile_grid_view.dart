@@ -80,6 +80,7 @@ class OtherUserProfileGridView extends ConsumerWidget {
                               Uri.parse(socialMedia[pIndex].url ?? ''));
                         },
                         child: ProfileSocialMedia(
+                          onToggleChanged: (p0) {},
                           isToggled: socialMedia[pIndex].platform?.status == 1
                               ? true
                               : false,

@@ -99,9 +99,10 @@ class CustomCacheNetworkImage extends StatelessWidget {
                     },
                     errorWidget: (context, url, error) {
                       // Only show error when the image failed to load completely
-                      return const Center(
-                        child: Icon(Icons.error),
-                      );
+                      return Padding(
+                          padding: EdgeInsets.all(dummyPadding ?? 15),
+                          child:
+                              SvgPicture.asset('assets/icons/dummy_user.svg'));
                     },
                   ),
           );

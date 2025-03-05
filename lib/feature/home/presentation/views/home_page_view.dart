@@ -203,8 +203,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                     height: context.height * .03,
                   ),
                   LocationCard(
-                    location: notifier.addressName,
-                    address: notifier.location,
+                    location: notifier.location,
+                    address: notifier.addressName,
                   ),
                 ],
               ),

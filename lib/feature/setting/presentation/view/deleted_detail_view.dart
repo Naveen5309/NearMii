@@ -20,11 +20,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DeletedDetailView extends ConsumerStatefulWidget {
-  // final String socialId;
-  const DeletedDetailView({
-    super.key,
-    // required this.socialId
-  });
+  final String socialId;
+  const DeletedDetailView({super.key, required this.socialId});
 
   @override
   ConsumerState<DeletedDetailView> createState() => _DeletedDetailViewState();

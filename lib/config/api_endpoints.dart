@@ -34,10 +34,12 @@ abstract final class ApiConstants {
   static const String updateCoordinates = "$baseUrl/updateLocation";
   static const String updateSocialLink = "$baseUrl/updateSocialLink";
   static const String hideAllLinks = "$baseUrl/hideAllLinks";
+  static const String hideAllProfile = "$baseUrl/hideProfile";
+
   static const String getSelfPlatform = "$baseUrl/getSelfPlatform";
   static const String deletePlatform = "$baseUrl/deleteSocialLink";
   static const String getOtherUserPlatform = "$baseUrl/getsocialprofile";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  static const String hidePlatform = "$baseUrl/hidePlatform";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

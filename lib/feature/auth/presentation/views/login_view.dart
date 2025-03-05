@@ -6,6 +6,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/login_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
@@ -64,7 +65,18 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 msg: AppString.completeYourProfile,
                 isError: false,
                 isInfo: true);
-            toNamed(context, Routes.completeProfile);
+            toNamed(
+              context,
+              Routes.completeProfile,
+              args: SocialProfileModel(
+                  img: loginNotifier.socialImg,
+                  name: loginNotifier.fullNameController.text),
+            );
+
+            // SocialProfileModel(
+
+            // )
+            //  {"name"loginNotifier.fullNameController.text:,"img":loginNotifier.profilePic});
           }
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {
           // back(context);
