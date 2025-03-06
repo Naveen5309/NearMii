@@ -27,10 +27,10 @@ final changePasswordProvider =
   final authUseCase = ref.watch(authUseCaseProvider);
   return SignupNotifiers(authUseCase: authUseCase);
 });
-final isPswdConfirmVisible = StateProvider.autoDispose<bool>((ref) => false,
+final isPswdConfirmVisible = StateProvider.autoDispose<bool>((ref) => true,
     name: "isPswdConfirmVisible");
 
 final isNewPswdVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "isPswdVisible");
+    StateProvider.autoDispose<bool>((ref) => true, name: "isPswdVisible");
 final isCurrentPasswordVisible =
-    StateProvider.autoDispose<bool>((ref) => false, name: "rememberMeProvider");
+    StateProvider.autoDispose<bool>((ref) => true, name: "rememberMeProvider");

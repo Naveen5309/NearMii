@@ -76,7 +76,8 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
                   back(context);
                   final isDeleteAccount =
                       deleteAccountNotifier.validateDeleteAccountSocial();
-
+                  final isDeleteAccountt =
+                      deleteAccountNotifier.validateDeleteAccount();
                   if (isDeleteAccount) {
                     showCustomBottomSheet(
                         context: context,
@@ -85,20 +86,18 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
                         }, onCancel: () {
                           back(context);
                         }));
-                  } else {
-                    final isDeleteAccount =
-                        deleteAccountNotifier.validateDeleteAccount();
-
-                    if (isDeleteAccount) {
-                      showCustomBottomSheet(
-                          context: context,
-                          content: DeleteAccountConfirmationView(delete: () {
-                            deleteAccountNotifier.deleteAccountApi();
-                          }, onCancel: () {
-                            back(context);
-                          }));
-                    }
                   }
+
+                  if (isDeleteAccountt) {
+                    showCustomBottomSheet(
+                        context: context,
+                        content: DeleteAccountConfirmationView(delete: () {
+                          deleteAccountNotifier.deleteAccountApi();
+                        }, onCancel: () {
+                          back(context);
+                        }));
+                  }
+
                   //   if (widget.socialId.isNotEmpty) {
                   //     final isDeleteAccount =
                   //         deleteAccountNotifier.validateDeleteAccountSocial();

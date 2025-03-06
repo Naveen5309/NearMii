@@ -2,8 +2,6 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/utils/routing/routes.dart';
-import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar.dart';
@@ -13,8 +11,6 @@ import 'package:NearMii/feature/setting/presentation/provider/change_password_pr
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../auth/presentation/provider/signup_provider.dart';
 
 class ChangePasswordView extends ConsumerWidget {
   const ChangePasswordView({super.key});
@@ -76,13 +72,13 @@ class ChangePasswordView extends ConsumerWidget {
               return CustomLabelTextField(
                 onTapOnSuffixIcon: () {
                   ref.read(isCurrentPasswordVisible.notifier).state =
-                      !isVisible;
+                      !ref.read(isCurrentPasswordVisible.notifier).state;
                 },
                 isObscure: isVisible,
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.currentPasswordController,
                 labelText: AppString.currentPassword,
-                suffixIcon: !isVisible ? Assets.icEye : Assets.icEyeOff,
+                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             Consumer(
@@ -102,11 +98,11 @@ class ChangePasswordView extends ConsumerWidget {
             }),
             Consumer(
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              var isVisible = ref.watch(isConfirmPswdVisible);
+              var isVisible = ref.watch(isPswdConfirmVisible);
               return CustomLabelTextField(
                 onTapOnSuffixIcon: () {
-                  ref.read(isConfirmPswdVisible.notifier).state =
-                      !ref.read(isConfirmPswdVisible.notifier).state;
+                  ref.read(isPswdConfirmVisible.notifier).state =
+                      !ref.read(isPswdConfirmVisible.notifier).state;
                 },
                 isObscure: isVisible,
                 prefixIcon: Assets.icLock,

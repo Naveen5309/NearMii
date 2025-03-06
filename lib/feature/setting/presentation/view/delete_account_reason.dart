@@ -357,7 +357,7 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                 //     args:
                 //         deleteAccountNotifier.userProfileModel?.socialId ?? ''),
                 onTap: () {
-                  if (widget.socialId == null) {
+                  if (widget.socialId != null) {
                     deleteAccountNotifier.currentPasswordController.clear();
                     int selected = ref.watch(selectedDeleteIndex);
 
