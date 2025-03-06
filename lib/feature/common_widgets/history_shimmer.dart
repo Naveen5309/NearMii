@@ -7,6 +7,7 @@ class HistoryShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       itemCount: 10, // Number of shimmer rows
       itemBuilder: (context, index) {
         return Padding(
@@ -34,7 +35,7 @@ class HistoryShimmer extends StatelessWidget {
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
                       child: Container(
-                        height: 15,
+                        height: 20,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -49,7 +50,7 @@ class HistoryShimmer extends StatelessWidget {
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
                       child: Container(
-                        height: 10,
+                        height: 20,
                         width: 150,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -66,7 +67,7 @@ class HistoryShimmer extends StatelessWidget {
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
                 child: Container(
-                  height: 10,
+                  height: 20,
                   width: 40,
                   decoration: BoxDecoration(
                     color: Colors.white,

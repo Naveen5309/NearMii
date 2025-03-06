@@ -1,4 +1,3 @@
-import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states_notifier/other_user_profile_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/helper.dart';
@@ -8,6 +7,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OtherUserProfileGridView extends ConsumerWidget {
   final String title;
@@ -75,8 +75,8 @@ class OtherUserProfileGridView extends ConsumerWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
-                        onTap: () {
-                          Utils.launchURL(
+                        onTap: () async {
+                          await launchUrl(
                               Uri.parse(socialMedia[pIndex].url ?? ''));
                         },
                         child: ProfileSocialMedia(

@@ -39,6 +39,8 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
   OtherUserProfileModel? profile;
 
+  bool isLoading = true;
+
   OtherUserProfileNotifier({required this.otherUserProfileUsecases})
       : super(OtherUserProfileInitial());
   //VALIDATE SIGN UP
@@ -59,6 +61,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   Future<void> otherUserProfileApi(String id) async {
     state = const OtherUserProfileApiLoading(
         otherUserType: OtherUserType.getProfile);
+    isLoading = true;
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const OtherUserProfileApiFailed(
@@ -79,14 +82,20 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
       );
       state = result.fold((error) {
         log("login error:${error.message} ");
+        isLoading = false;
+
         return OtherUserProfileApiFailed(
             error: error.message, otherUserType: OtherUserType.getProfile);
       }, (result) {
         profile = result;
+        isLoading = false;
+
         return const OtherUserProfileApiSuccess(
             otherUserType: OtherUserType.getProfile);
       });
     } catch (e) {
+      isLoading = false;
+
       state = OtherUserProfileApiFailed(
           error: e.toString(), otherUserType: OtherUserType.getProfile);
     }
