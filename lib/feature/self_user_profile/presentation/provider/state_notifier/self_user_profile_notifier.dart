@@ -134,7 +134,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
           msg: AppString.networkSlow,
         );
       }
-      Map<String, dynamic> body = {"platform_id": platformId};
+      Map<String, dynamic> body = {"id": platformId};
       final result = await selfUserProfileUsecases.hidePlatform(body: body);
       state = result.fold((error) {
         log("login error:${error.message}");

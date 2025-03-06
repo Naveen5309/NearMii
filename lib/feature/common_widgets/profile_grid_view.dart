@@ -74,13 +74,9 @@ class ProfileGridView extends ConsumerWidget {
                     topRight: Radius.circular(16.0),
                   ),
                 ),
-                // margin: const EdgeInsets.all(10.0),
                 child: GridView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
-
-                  // physics: const NeverScrollableScrollPhysics(),
-
                   itemCount: socialMedia.length,
                   shrinkWrap: true,
                   itemBuilder: (context, pIndex) {
@@ -215,14 +211,10 @@ class ProfileGridView extends ConsumerWidget {
                           onToggleChanged: (val) {
                             log("p0 :-> $val");
                             notifier.hidePlatformApi(
-                                platformId: socialMedia[pIndex]
-                                    .platform!
-                                    .id
-                                    .toString());
+                                platformId: socialMedia[pIndex].id.toString());
                           },
-                          isToggled: socialMedia[pIndex].platform?.status == 1
-                              ? true
-                              : false,
+                          isToggled:
+                              socialMedia[pIndex].status == 1 ? true : false,
                           isMyProfile: isMyProfile,
                           index: pIndex,
                           icon: socialMedia[pIndex].platform?.icon ?? '',

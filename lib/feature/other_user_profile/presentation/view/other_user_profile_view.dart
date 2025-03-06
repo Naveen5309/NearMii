@@ -1,8 +1,4 @@
-import 'dart:developer';
-
-import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/debouncer.dart';
-import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/common_text_field.dart';
@@ -10,10 +6,10 @@ import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/other_user_profile_grid_view.dart';
+import 'package:NearMii/feature/common_widgets/profile_shimmer.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/other_user_profile_provider.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
-import 'package:NearMii/feature/other_user_profile/presentation/states/other_user_profile_states.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states_notifier/other_user_profile_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -72,32 +68,30 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
 
     final otherUserData = ref.watch(otherUserProfileProvider.notifier);
 
-    ref.listen(
-      otherUserProfileProvider,
-      (previous, next) {
-        if (next is OtherUserProfileApiLoading &&
-            ((next.otherUserType == OtherUserType.getProfile))) {
-          log("other user loading is called");
-          Utils.showLoader();
-        } else if (next is OtherUserProfileApiSuccess &&
-            next.otherUserType == OtherUserType.getProfile) {
-          Utils.hideLoader();
-        } else if (next is OtherUserProfileApiFailed &&
-            next.otherUserType == OtherUserType.getProfile) {
-          toast(msg: next.error);
+    // ref.listen(
+    //   otherUserProfileProvider,
+    //   (previous, next) {
+    //     if (next is OtherUserProfileApiLoading &&
+    //         ((next.otherUserType == OtherUserType.getProfile))) {
+    //       log("other user loading is called");
+    //       Utils.showLoader();
+    //     } else if (next is OtherUserProfileApiSuccess &&
+    //         next.otherUserType == OtherUserType.getProfile) {
+    //       Utils.hideLoader();
+    //     } else if (next is OtherUserProfileApiFailed &&
+    //         next.otherUserType == OtherUserType.getProfile) {
+    //       toast(msg: next.error);
 
-          if (context.mounted) {
-            Utils.hideLoader();
-          }
-        }
-      },
-    );
+    //       if (context.mounted) {
+    //         Utils.hideLoader();
+    //       }
+    //     }
+    //   },
+    // );
 
     return Scaffold(
-      body: otherUserData.profile == null
-          ? Center(
-              child: Text("Loading data1 ${otherUserData.profile?.name}"),
-            )
+      body: ((otherUserData.profile == null) || (otherUserData.isLoading))
+          ? const ProfileShimmer()
           : SliverSnap(
               stretch: true,
               scrollBehavior: const MaterialScrollBehavior(),
@@ -746,27 +740,25 @@ Widget profileWidget({
   );
 }
 
+// void toggleCheck(int index) {
+//   state = [
+//     for (int i = 0; i < state.length; i++)
+//       if (i == index)
+//         state[i].copyWith(isChecked: !state[i].isChecked)
+//       else
+//         state[i]
+//   ];
+// }
 
-
-  // void toggleCheck(int index) {
-  //   state = [
-  //     for (int i = 0; i < state.length; i++)
-  //       if (i == index)
-  //         state[i].copyWith(isChecked: !state[i].isChecked)
-  //       else
-  //         state[i]
-  //   ];
-  // }
-
-  // void uncheckAll() {
-  //   state = state.map((e) => e.copyWith(isChecked: false)).toList();
-  // }
+// void uncheckAll() {
+//   state = state.map((e) => e.copyWith(isChecked: false)).toList();
+// }
 //  onChanged: (value) {
 //           if (value.isNotEmpty) {
 //             reportNotifier.clearReason(); // Uncheck all if user types
 //           }
 //         },
-        
+
 //   onTap: () {
 //           reportNotifier.reportApi(
 //             reportedUserId: '',

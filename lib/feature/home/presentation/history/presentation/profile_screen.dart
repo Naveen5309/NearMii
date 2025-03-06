@@ -132,10 +132,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         } else if (next is SelfUserProfileApiSuccess &&
             next.selfProfileDataType == SelfProfileDataType.hidePlatform) {
           Utils.hideLoader();
-          back(context);
-          toast(msg: "Data updated", isError: false);
           notifier.getSelfPlatformApi();
-          notifier.getProfileApi();
 
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is SelfUserProfileApiFailed &&
