@@ -10,6 +10,8 @@ abstract class HomeDataSource {
   Future<ResponseWrapper?> getHomeData({required Map<String, dynamic> body});
   Future<ResponseWrapper?> updateCoordinates(
       {required Map<String, dynamic> body});
+  Future<ResponseWrapper?> getAddSubscription(
+      {required Map<String, dynamic> body});
 }
 
 class HomeDataSourceImpl extends HomeDataSource {
@@ -99,6 +101,32 @@ class HomeDataSourceImpl extends HomeDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "userLogin",
+      ));
+    }
+  }
+
+  //Add Subscription
+  @override
+  Future<ResponseWrapper<dynamic>?> getAddSubscription(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+        url: '',
+        // ApiConstants.updateCoordinates,
+        body: body,
+        requestType: RequestType.post,
+        fromJson: (json) => json,
+      );
+      if (dataResponse.status == "success") {
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "addSubscription",
       ));
     }
   }

@@ -315,7 +315,7 @@ Widget appBarWidgetSection({
                                       somethingElseText.isEmpty)) {
                                 toast(
                                     msg:
-                                        "Select either a report or enter something in 'Something Else', not both.");
+                                        "Select either a report or enter something in 'Something Else'");
                                 return;
                               }
                               String finalReason = selected != -1

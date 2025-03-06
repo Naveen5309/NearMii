@@ -1,10 +1,10 @@
+import 'package:NearMii/feature/home/domain/usecases/get_home_usecases.dart';
 import 'package:NearMii/feature/home/presentation/provider/state_notifiers/home_notifiers.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/data_source/home_data_source.dart';
 import '../../data/models/preferance_model.dart';
 import '../../data/repositories/home_repo_implementation.dart';
-import '../../domain/usecases/get_home.dart';
 
 // Define a Provider for HomeDataSource
 final homeDataProvider =

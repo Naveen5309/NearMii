@@ -28,23 +28,8 @@ final bottomNavIndexProvider = Provider.autoDispose<HomeUseCase>((ref) {
 });
 
 // Define a StateNotifierProvider for LoginNotifier
-final homeProvider =
+final addSubscriptionProvider =
     StateNotifierProvider.autoDispose<HomeNotifier, HomeState>((ref) {
   final homeUseCase = ref.watch(homeUseCaseProvider);
   return HomeNotifier(homeUseCase: homeUseCase);
 });
-
-// final getHomeDataProvider =
-//     FutureProvider.autoDispose<List<PreferencesModel>>((ref) async {
-//   final getUserHomeCase = ref.watch(homeUseCaseProvider);
-//   final res = await getUserHomeCase.callGetPreference();
-//   return res.fold(
-//     (error) {
-//       print("Error: ${error.message}");
-//       throw Exception(error.toString());
-//     },
-//     (data) {
-//       return data?.preferences ?? [];
-//     },
-//   );
-// });
