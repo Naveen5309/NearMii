@@ -35,9 +35,6 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final searchTextController = TextEditingController();
-
-  // final imageController = TextEditingController();
-  EditProfileModel? editProfileModel;
   String countryCode = '+1';
   String countryNameCode = 'US';
 
@@ -310,6 +307,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
             : '',
         "token": referralController.text.trim(),
         "bio": bioController.text.trim(),
+        "social_image": socialImage
       };
       final result = await authUseCase.completeProfile(
           body: body, imagePath: image?.path ?? '');
@@ -641,16 +639,23 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     genderController.text = getProfile?.gender ?? '';
     bioController.text = getProfile?.bio ?? '';
     imageUrl = getProfile?.profilePhoto ?? '';
+    socialImage = getProfile?.socialImage ?? '';
+
     socialId = getProfile?.socialId ?? '';
     countryCode = (getProfile?.phoneNumber).toString().split(' ').first;
     countryFlag = getFlagByDialCode(
             (getProfile?.phoneNumber).toString().split(' ').first) ??
         '🇺🇸';
+
+    printLog("social img is :-> ${getProfile?.socialId}");
+    printLog("social img is :-> ${getProfile?.name}");
+    printLog("social img is :-> ${getProfile?.socialImage}");
   }
 
   void saveToLocalStorage() async {
     await Getters.getLocalStorage.saveName(name);
     await Getters.getLocalStorage.saveProfileImg(profilePic);
+    await Getters.getLocalStorage.saveSocialImg(socialImage);
   }
 
   clearFormFields() {

@@ -14,7 +14,7 @@ class ProfileShimmer extends StatelessWidget {
         Container(
           height: context.height * .5, // Adjust height according to your UI
           width: context.width,
-          color: const Color(0xff69DDA5),
+          color: Colors.green,
           child: Column(
             children: [
               SizedBox(height: context.height * .1), // Adjust for spacing

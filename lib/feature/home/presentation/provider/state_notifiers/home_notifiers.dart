@@ -29,11 +29,14 @@ class HomeNotifier extends StateNotifier<HomeState> {
   bool loader = true;
 
   String profilePic = '';
+  String socialImg = '';
+
   String name = '';
 
   void getFromLocalStorage() async {
     name = Getters.getLocalStorage.getName() ?? '';
     profilePic = Getters.getLocalStorage.getProfilePic() ?? '';
+    socialImg = Getters.getLocalStorage.getSocialProfilePic() ?? '';
   }
 
 // Function to get the current location and update the state

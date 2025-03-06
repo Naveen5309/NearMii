@@ -342,5 +342,6 @@ class LoginNotifier extends StateNotifier<AuthState> {
   void saveToLocalStorage() async {
     await Getters.getLocalStorage.saveName(name);
     await Getters.getLocalStorage.saveProfileImg(profilePic);
+    await Getters.getLocalStorage.saveSocialImg(socialImg);
   }
 }

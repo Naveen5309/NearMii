@@ -30,7 +30,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   void onSearchChanged(query) {
     final notifier = ref.read(historyProvider.notifier);
     _debounce.run(() {
-      notifier.historyApi();
+      notifier.historyApi(isFromSear: true);
     });
   }
 
@@ -42,7 +42,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
         final notifier = ref.read(historyProvider.notifier);
 
         // if (notifier.recentHistoryList.isEmpty) {
-        notifier.historyApi();
+        notifier.historyApi(isFromSear: false);
         // }
       },
     );
@@ -55,15 +55,19 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
 
     return Scaffold(
       backgroundColor: AppColor.greyf9f9f9,
-      body: history.isHistoryLoading
+      body: (history.isHistoryLoading && (history.isFromSearch == false))
           ? Column(
               children: [
                 const CustomAppbarWidget(
                   title: AppString.history,
                 ),
-                CustomSearchBarWidget(
-                  controller: history.historySearchController,
-                  onChanged: onSearchChanged,
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: context.width * .05),
+                  child: CustomSearchBarWidget(
+                    controller: history.historySearchController,
+                    onChanged: onSearchChanged,
+                  ),
                 ),
                 const Expanded(child: HistoryShimmer()),
               ],

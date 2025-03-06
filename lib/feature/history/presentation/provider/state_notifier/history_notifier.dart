@@ -21,11 +21,13 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
   List<HistoryModel> historyLastMonthTimeList = [];
 
   bool isHistoryLoading = false;
+  bool isFromSearch = false;
 
   TextEditingController historySearchController = TextEditingController();
 
   //History US
-  Future<void> historyApi() async {
+  Future<void> historyApi({required bool isFromSear}) async {
+    isFromSearch = isFromSear;
     isHistoryLoading = true;
     state = const HistoryApiLoading();
     try {

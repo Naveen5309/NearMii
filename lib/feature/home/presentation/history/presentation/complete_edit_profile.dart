@@ -122,7 +122,6 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                       fontSize: 14.sp,
                       color: AppColor.grey999,
                     ),
-
                     Padding(
                       padding: EdgeInsets.only(top: context.height * .02),
                       child: profileSection(
@@ -131,7 +130,6 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                               context: context,
                               content: ChooseImageWidget(
                                 onClickOnCamera: () {
-                                  print('shvjdsvbj');
                                   editProfileNotifier.pickAndCropImage(
                                       context: context,
                                       source: ImageSource.camera);
@@ -264,7 +262,9 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
                         img: editProfileNotifier.imageUrl.isNotEmpty
                             ? ApiConstants.profileBaseUrl +
                                 editProfileNotifier.imageUrl
-                            : '',
+                            : editProfileNotifier.socialImage.isNotEmpty
+                                ? editProfileNotifier.socialImage
+                                : '',
                         imageRadius: 120,
                         height: 100,
                         width: 100,

@@ -14,6 +14,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/delete_account_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
+import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/view/show_box_delete_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -356,50 +357,28 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                 //     args:
                 //         deleteAccountNotifier.userProfileModel?.socialId ?? ''),
                 onTap: () {
-                  deleteAccountNotifier.currentPasswordController.clear();
-                  int selected = ref.watch(selectedDeleteIndex);
+                  if (widget.socialId == null) {
+                    deleteAccountNotifier.currentPasswordController.clear();
+                    int selected = ref.watch(selectedDeleteIndex);
 
-                  if (selected == -1) {
-                    toast(msg: "Select reason for delete account");
-                    return;
+                    if (selected == -1) {
+                      toast(msg: "Select reason for delete account");
+                      return;
+                    }
+
+                    showCustomBottomSheet(
+                        context: context,
+                        content: const DeleteAccountBottomSheet());
+                  } else {
+                    showCustomBottomSheet(
+                        context: context,
+                        content: DeleteAccountConfirmationView(delete: () {
+                          deleteAccountNotifier.deleteAccountApi(
+                              socialId: widget.socialId);
+                        }, onCancel: () {
+                          back(context);
+                        }));
                   }
-
-                  showCustomBottomSheet(
-                      context: context,
-                      content: const DeleteAccountBottomSheet());
-                  //   if (widget.socialId?.isNotEmpty ?? false) {
-                  //     final isDeleteAccount =
-                  //         deleteAccountNotifier.validateDeleteAccountSocial();
-
-                  //     if (isDeleteAccount) {
-                  //       showCustomBottomSheet(
-                  //           context: context,
-                  //           content: DeleteAccountConfirmationView(delete: () {
-                  //             deleteAccountNotifier.deleteAccountApi(
-                  //                 socialId: widget.socialId);
-                  //           }, onCancel: () {
-                  //             back(context);
-                  //           }));
-                  //     } else {
-                  //       final isDeleteAccount =
-                  //           deleteAccountNotifier.validateDeleteAccount();
-
-                  //       if (isDeleteAccount) {
-                  //         showCustomBottomSheet(
-                  //             context: context,
-                  //             content: DeleteAccountConfirmationView(delete: () {
-                  //               deleteAccountNotifier.deleteAccountApi();
-                  //             }, onCancel: () {
-                  //               back(context);
-                  //             }));
-                  //       }
-                  //     }
-                  //   } else {
-                  //     toNamed(context, Routes.deleteAccount,
-                  //         args:
-                  //             deleteAccountNotifier.userProfileModel?.socialId ??
-                  //                 '');
-                  //   }
                 },
                 title: AppString.next,
               )

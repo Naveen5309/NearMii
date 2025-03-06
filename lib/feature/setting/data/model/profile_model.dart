@@ -25,6 +25,8 @@ class UserProfileModel {
   final String? status;
   final int? isSubscription;
   final String? subscriptionPlan;
+  final String? socialImage;
+
   final String? paymentToken;
   final DateTime? startDate;
   final DateTime? endDate;
@@ -37,6 +39,7 @@ class UserProfileModel {
     this.emailVerifiedAt,
     this.socialId,
     this.socialType,
+    this.socialImage,
     this.designation,
     this.phoneNumber,
     this.profilePhoto,
@@ -80,6 +83,7 @@ class UserProfileModel {
       otp: json["otp"],
       isProfile: json["is_profile"],
       token: json["token"],
+      socialImage: json["social_image"] ?? json["socialImage"],
       points: json["points"],
       hideProfile: json["hideProfile"],
       deviceType: json["device_type"],
@@ -131,6 +135,7 @@ class UserProfileModel {
       "startDate": startDate?.toIso8601String(),
       "endDate": endDate?.toIso8601String(),
       "price": price,
+      "socialImage": socialImage
     };
   }
 }

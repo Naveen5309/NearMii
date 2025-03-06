@@ -229,6 +229,7 @@ class SettingNotifier extends StateNotifier<SettingStates> {
         return SettingApiFailed(
             error: error.message, settingType: Setting.getProfile);
       }, (result) {
+        log("result is :-> $result");
         userProfileModel = result;
 
         if (userProfileModel?.phoneNumber != null) {
@@ -239,6 +240,9 @@ class SettingNotifier extends StateNotifier<SettingStates> {
           Getters.getLocalStorage.saveName(userProfileModel?.name);
           Getters.getLocalStorage
               .saveProfileImg(userProfileModel?.profilePhoto ?? '');
+
+          Getters.getLocalStorage
+              .saveSocialImg(userProfileModel?.socialImage ?? '');
         }
 
         return const SettingApiSuccess(settingType: Setting.getProfile);

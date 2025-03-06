@@ -114,7 +114,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                             notifier.userProfileModel?.profilePhoto != null
                                 ? ApiConstants.profileBaseUrl +
                                     notifier.userProfileModel!.profilePhoto!
-                                : '',
+                                : notifier.userProfileModel?.socialImage ?? '',
                         name: notifier.userProfileModel?.name ?? '',
                         points: notifier.userProfileModel?.points ?? 0,
                         isVip: isVIP,

@@ -495,7 +495,7 @@ Widget profileSection(
             padding: EdgeInsets.symmetric(horizontal: context.width * .05),
             child: AppText(
               color: AppColor.whiteFFFFFF,
-              text: profile?.name,
+              text: profile?.name ?? '',
               fontSize: 20.sp,
               textAlign: TextAlign.center,
               fontWeight: FontWeight.w500,

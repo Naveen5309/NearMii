@@ -18,6 +18,8 @@ abstract class HiveConst {
 
   static const String location = 'location';
   static const String profilePic = 'profilePic';
+  static const String socialImg = 'socialImg';
+
   static const String name = 'name';
 }
 
@@ -38,12 +40,18 @@ abstract class LocalStorage {
 
   String? getLocation();
   String? getProfilePic();
+
+  String? getSocialProfilePic();
+
   String? getName();
 
   Future<void> saveToken(String token);
   Future<void> saveAddress(String address);
   Future<void> saveLocation(String location);
-  Future<void> saveProfileImg(String profilePic);
+  Future<void> saveProfileImg(String socialImg);
+
+  Future<void> saveSocialImg(String pic);
+
   Future<void> saveName(String name);
 
   Future<void> saveIsLogin(bool isLogin);
@@ -77,6 +85,11 @@ class HiveStorageImp extends LocalStorage {
   }
 
   @override
+  Future<void> saveSocialImg(String socialImg) async {
+    await userBox.put(HiveConst.socialImg, socialImg);
+  }
+
+  @override
   Future<void> saveAddress(String address) async {
     await userBox.put(HiveConst.address, address);
     printLog("==============address==========> $address ");
@@ -104,6 +117,12 @@ class HiveStorageImp extends LocalStorage {
   String? getProfilePic() {
     final profilePic = userBox.get(HiveConst.profilePic);
     return profilePic;
+  }
+
+  @override
+  String? getSocialProfilePic() {
+    final socialImg = userBox.get(HiveConst.socialImg);
+    return socialImg;
   }
 
   @override

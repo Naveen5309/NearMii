@@ -195,7 +195,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                               img: notifier.profilePic.isNotEmpty
                                   ? ApiConstants.profileBaseUrl +
                                       notifier.profilePic
-                                  : '',
+                                  : notifier.socialImg.isNotEmpty
+                                      ? notifier.socialImg
+                                      : '',
                               imageRadius: 40)),
                     ],
                   ),

@@ -6,6 +6,7 @@ import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
+import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/provider/login_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -22,6 +23,7 @@ class AuthView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.watch(loginProvider.notifier);
     ref.listen(
       loginProvider,
       (previous, next) {
@@ -30,9 +32,27 @@ class AuthView extends ConsumerWidget {
         } else if (next is AuthApiSuccess && next.authType == AuthType.login) {
           log("login success");
           Utils.hideLoader();
-          toast(msg: AppString.loginSuccess, isError: false);
+
           // back(context);
-          offAllNamed(context, Routes.bottomNavBar, args: true);
+
+          // offAllNamed(context, Routes.bottomNavBar, args: true);
+
+          if (loginNotifier.userModel?.isProfile == 1) {
+            toast(msg: AppString.loginSuccess, isError: false);
+            toNamed(context, Routes.bottomNavBar, args: true);
+          } else if (loginNotifier.userModel?.isProfile == 0) {
+            toast(
+                msg: AppString.completeYourProfile,
+                isError: false,
+                isInfo: true);
+            toNamed(
+              context,
+              Routes.completeProfile,
+              args: SocialProfileModel(
+                  img: loginNotifier.socialImg,
+                  name: loginNotifier.fullNameController.text),
+            );
+          }
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {
           Utils.hideLoader();
 
