@@ -11,6 +11,8 @@ abstract class HomeRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> updateCoordinates(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> addSubscription(
+      {required Map<String, dynamic> body});
 }
 
 class HomeRepoImpl implements HomeRepository {
@@ -53,6 +55,22 @@ class HomeRepoImpl implements HomeRepository {
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.updateCoordinates(body: body);
+      if (data?.status == "success") {
+        return Right(data?.data);
+      } else {
+        return Left(ServerFailure(message: data?.message ?? ""));
+      }
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  //UPDATE COORDINATES
+  @override
+  Future<Either<Failure, dynamic>> addSubscription(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final data = await dataSource.getAddSubscription(body: body);
       if (data?.status == "success") {
         return Right(data?.data);
       } else {

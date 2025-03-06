@@ -20,13 +20,9 @@ enum LocationType {
   error,
 }
 
-enum HomeType { home, coordinates }
+enum HomeType { home, coordinates, getAddSubscription }
 
-enum OtherUserType {
-  getProfile,
-  report,
-  getPlatform,
-}
+enum OtherUserType { getProfile, report, getPlatform }
 
 enum Setting { contactUs, deleteAccount, radius, getProfile }
 

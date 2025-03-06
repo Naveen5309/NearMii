@@ -5,7 +5,7 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/data/models/home_data_model.dart';
-import 'package:NearMii/feature/home/domain/usecases/get_home.dart';
+import 'package:NearMii/feature/home/domain/usecases/get_home_usecases.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -242,4 +242,39 @@ class HomeNotifier extends StateNotifier<HomeState> {
   //         error: e.toString(), locationType: LocationType.homeData);
   //   }
   // }
+  // AddSubscription
+  Future<void> addSubscription() async {
+    state = const HomeApiLoading(homeType: HomeType.getAddSubscription);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const HomeApiFailed(
+            error: AppString.noInternetConnection,
+            homeType: HomeType.getAddSubscription);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+      Map<String, dynamic> body = {};
+
+      log("body is :->$body");
+      final result = await homeUseCase.calAddSubscription(
+        body: body,
+      );
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return HomeApiFailed(
+            error: error.message, homeType: HomeType.getAddSubscription);
+      }, (result) {
+        print("result is::$result");
+
+        return const HomeApiSuccess(homeType: HomeType.getAddSubscription);
+      });
+    } catch (e) {
+      state = HomeApiFailed(
+          error: e.toString(), homeType: HomeType.getAddSubscription);
+    }
+  }
 }

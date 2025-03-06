@@ -11,6 +11,8 @@ abstract class HomeUseCase {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> updateCoordinates(
       {required Map<String, dynamic> body});
+  Future<Either<Failure, dynamic>> calAddSubscription(
+      {required Map<String, dynamic> body});
 }
 
 class HomeUseCaseImpl implements HomeUseCase {
@@ -37,6 +39,15 @@ class HomeUseCaseImpl implements HomeUseCase {
   Future<Either<Failure, dynamic>> updateCoordinates(
       {required Map<String, dynamic> body}) async {
     final result = await repository.updateCoordinates(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+  @override
+  Future<Either<Failure, dynamic>> calAddSubscription(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.addSubscription(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });
