@@ -116,35 +116,35 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
 
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: 15, vertical: context.height * .01),
+                horizontal: 5, vertical: context.height * .01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppText(
-                  text: "20 m",
+                  text: "   20 m",
                   fontSize: 12.sp,
                   color: (_currentRadius - 20).abs() < 10
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
                 AppText(
-                  text: "  40 m",
+                  text: "         50 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 40).abs() < 1
+                  color: (_currentRadius - 50).abs() < 3
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
+                // AppText(
+                //   text: "   60 m",
+                //   fontSize: 12.sp,
+                //   color: (_currentRadius - 60).abs() < 1
+                //       ? AppColor.green00C56524
+                //       : AppColor.black000000.withOpacity(0.3),
+                // ),
                 AppText(
-                  text: "   60 m",
+                  text: "           80 m",
                   fontSize: 12.sp,
-                  color: (_currentRadius - 60).abs() < 1
-                      ? AppColor.green00C56524
-                      : AppColor.black000000.withOpacity(0.3),
-                ),
-                AppText(
-                  text: "   80 m",
-                  fontSize: 12.sp,
-                  color: (_currentRadius - 80).abs() < 1
+                  color: (_currentRadius - 80).abs() < 3
                       ? AppColor.green00C56524
                       : AppColor.black000000.withOpacity(0.3),
                 ),
@@ -182,8 +182,10 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
             },
             onChanged: (dynamic value) {
               setState(() {
-                _currentRadius = value;
-                //  _getNearestValue(value);
+                _currentRadius = _getNearestValue(value);
+
+                // _currentRadius = value;
+                // _getNearestValue(value);
               });
             },
           ),
@@ -205,10 +207,10 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
     );
   }
 
-  // double _getNearestValue(double value) {
-  //   if (value <= 30) return 0;
-  //   if (value > 30 && value <= 60) return 32;
-  //   if (value > 60 && value <= 90) return 63;
-  //   return 100;
-  // }
+  double _getNearestValue(double value) {
+    if (value <= 35) return 20;
+    if (value > 35 && value <= 65) return 50;
+    if (value > 65 && value <= 90) return 80;
+    return 100;
+  }
 }
