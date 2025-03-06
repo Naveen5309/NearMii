@@ -221,6 +221,7 @@ Widget appBarWidgetSection({
                             ref.read(selectedReportIndex.notifier).state = 0;
                             reportNotifier.reasonController.text =
                                 AppString.theyArePretending;
+                            somethingTextController.clear();
                             // back(context);
                           },
                         ),
@@ -231,6 +232,7 @@ Widget appBarWidgetSection({
                             ref.read(selectedReportIndex.notifier).state = 1;
                             reportNotifier.reasonController.text =
                                 AppString.theyAreUnderTheAge;
+                            somethingTextController.clear();
                           },
                         ),
                         CustomReportTile(
@@ -240,6 +242,7 @@ Widget appBarWidgetSection({
                             ref.read(selectedReportIndex.notifier).state = 2;
                             reportNotifier.reasonController.text =
                                 AppString.violenceAndDangerous;
+                            somethingTextController.clear();
                           },
                         ),
                         CustomReportTile(
@@ -249,6 +252,7 @@ Widget appBarWidgetSection({
                             ref.read(selectedReportIndex.notifier).state = 3;
                             reportNotifier.reasonController.text =
                                 AppString.hateSpeech;
+                            somethingTextController.clear();
                           },
                         ),
                         CustomReportTile(
@@ -258,6 +262,7 @@ Widget appBarWidgetSection({
                             ref.read(selectedReportIndex.notifier).state = 4;
                             reportNotifier.reasonController.text =
                                 AppString.nudity;
+                            somethingTextController.clear();
                           },
                         ),
                         const SizedBox(
@@ -285,29 +290,40 @@ Widget appBarWidgetSection({
                             hintText: "Lorem ipsum dolor sit......",
                             onChanged: (value) {
                               if (value!.isNotEmpty) {
-                                reportNotifier.clearAllChecks();
+                                ref.read(selectedReportIndex.notifier).state =
+                                    -1;
                               }
                             }),
                         5.verticalSpace,
                         CommonAppBtn(
-                          title: AppString.submit,
-                          onTap: () {
-                            int selected = ref.watch(selectedReportIndex);
+                            title: AppString.submit,
+                            onTap: () {
+                              int selected = ref.watch(selectedReportIndex);
 
-                            if (selected == -1) {
-                              toast(msg: "Select report ");
-                              return;
-                            } else {
-                              print("object");
+                              String somethingElseText =
+                                  somethingTextController.text.trim();
+
+                              if ((selected != -1 &&
+                                      somethingElseText.isNotEmpty) ||
+                                  (selected == -1 &&
+                                      somethingElseText.isEmpty)) {
+                                toast(
+                                    msg:
+                                        "Select either a report or enter something in 'Something Else', not both.");
+                                return;
+                              }
+                              String finalReason = selected != -1
+                                  ? reportNotifier.reasonController.text
+                                  : '';
+                              String finalSomethingElse =
+                                  selected == -1 ? somethingElseText : '';
+
                               reportNotifier.reportApi(
-                                  reportedUserId: id ?? '',
-                                  somethingElse: somethingTextController.text,
-                                  reason: reportNotifier.reasonController.text);
-
-                              // back(context);
-                            }
-                          },
-                        ),
+                                reportedUserId: id ?? '',
+                                reason: finalReason,
+                                somethingElse: finalSomethingElse,
+                              );
+                            }),
                         10.verticalSpace
                       ],
                     ),

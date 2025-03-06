@@ -101,7 +101,7 @@ class OtherUserProfileDataSourceImpl extends OtherUserProfileDataSource {
             log("json in data source :-> $json");
             return json;
           });
-      print("dataResponse===>${dataResponse.data!.name}");
+      print("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
