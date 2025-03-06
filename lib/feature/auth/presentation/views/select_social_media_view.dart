@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -41,6 +43,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      log("get platfoem called");
       final notifier = ref.read(signupProvider.notifier);
       notifier.getSocialPlatform();
     });
@@ -62,18 +65,19 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
     final signupPro = ref.watch(signupProvider.notifier);
 
     ref.listen(
-      loginProvider,
+      signupProvider,
       (previous, next) {
-        if (next is AuthApiLoading && next.authType == AuthType.socialMedia) {
+        printLog("next in auth is :-> $next");
+        if (next is AuthApiLoading && next.authType == AuthType.addPlatform) {
           Utils.showLoader();
         } else if (next is AuthApiSuccess &&
-            next.authType == AuthType.socialMedia) {
-          // toast(msg: AppString.loginSuccess, isError: false);
+            next.authType == AuthType.addPlatform) {
           Utils.hideLoader();
+          back(context);
 
-          // toNamed(context, Routes.bottomNavBar);
+          printLog("add platform success called");
         } else if (next is AuthApiFailed &&
-            next.authType == AuthType.socialMedia) {
+            next.authType == AuthType.addPlatform) {
           Utils.hideLoader();
 
           // toast(msg: next.error);
