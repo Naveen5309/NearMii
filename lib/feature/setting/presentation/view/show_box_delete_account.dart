@@ -15,7 +15,11 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
   final String? title;
   final String? btnText;
 
-  const DeleteAccountBottomSheet({super.key, this.title, this.btnText});
+  const DeleteAccountBottomSheet({
+    super.key,
+    this.title,
+    this.btnText,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,61 +77,61 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: context.height * .02),
               child: CommonAppBtn(
                 onTap: () {
-                  back(context);
-                  final isDeleteAccount =
-                      deleteAccountNotifier.validateDeleteAccountSocial();
-                  final isDeleteAccountt =
-                      deleteAccountNotifier.validateDeleteAccount();
-                  if (isDeleteAccount) {
+                  // back(context);
+
+                  // final isDeleteAccount =
+                  //     deleteAccountNotifier.validateDeleteAccountSocial();
+                  // final isDeleteAccountt =
+                  //     deleteAccountNotifier.validateDeleteAccount();
+                  // if (isDeleteAccount) {
+                  //   showCustomBottomSheet(
+                  //       context: context,
+                  //       content: DeleteAccountConfirmationView(delete: () {
+                  //         deleteAccountNotifier.deleteAccountApi();
+                  //       }, onCancel: () {
+                  //         back(context);
+                  //       }));
+                  // }
+
+                  // if (isDeleteAccountt) {
+                  //   showCustomBottomSheet(
+                  //       context: context,
+                  //       content: DeleteAccountConfirmationView(delete: () {
+                  //         deleteAccountNotifier.deleteAccountApi();
+                  //       }, onCancel: () {
+                  //         back(context);
+                  //       }));
+                  // }
+
+                  // if (socialId!.isEmpty) {
+                  final isValid = deleteAccountNotifier.validateDeleteAccount();
+
+                  if (isValid) {
                     showCustomBottomSheet(
                         context: context,
                         content: DeleteAccountConfirmationView(delete: () {
-                          deleteAccountNotifier.deleteAccountApi();
+                          deleteAccountNotifier.deleteAccountApi(
+                              // socialId: widget.socialId
+                              );
                         }, onCancel: () {
                           back(context);
                         }));
+                  } else {
+                    // final isDeleteAccount =
+                    //     deleteAccountNotifier.validateDeleteAccount();
+
+                    // if (isDeleteAccount) {
+                    //   showCustomBottomSheet(
+                    //       context: context,
+                    //       content: DeleteAccountConfirmationView(delete: () {
+                    //         deleteAccountNotifier.deleteAccountApi();
+                    //       }, onCancel: () {
+                    //         back(context);
+                    //       }));
+                    // }
                   }
-
-                  if (isDeleteAccountt) {
-                    showCustomBottomSheet(
-                        context: context,
-                        content: DeleteAccountConfirmationView(delete: () {
-                          deleteAccountNotifier.deleteAccountApi();
-                        }, onCancel: () {
-                          back(context);
-                        }));
-                  }
-
-                  //   if (widget.socialId.isNotEmpty) {
-                  //     final isDeleteAccount =
-                  //         deleteAccountNotifier.validateDeleteAccountSocial();
-
-                  //     if (isDeleteAccount) {
-                  //       showCustomBottomSheet(
-                  //           context: context,
-                  //           content: DeleteAccountConfirmationView(delete: () {
-                  //             deleteAccountNotifier.deleteAccountApi(
-                  //                 // socialId: widget.socialId
-                  //                 );
-                  //           }, onCancel: () {
-                  //             back(context);
-                  //           }));
-                  //     } else {
-                  //       final isDeleteAccount =
-                  //           deleteAccountNotifier.validateDeleteAccount();
-
-                  //       if (isDeleteAccount) {
-                  //         showCustomBottomSheet(
-                  //             context: context,
-                  //             content: DeleteAccountConfirmationView(delete: () {
-                  //               deleteAccountNotifier.deleteAccountApi();
-                  //             }, onCancel: () {
-                  //               back(context);
-                  //             }));
-                  //       }
-                  //     }
-                  //   }
                 },
+                // },
                 title: AppString.done,
               )),
           const SizedBox(height: 20),

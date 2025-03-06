@@ -96,12 +96,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ContactUsView());
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordView());
-      case Routes.deleteAccount:
-        final args = settings.arguments as dynamic;
-        return MaterialPageRoute(
-            builder: (_) => DeletedDetailView(
-                  socialId: args,
-                ));
+      // case Routes.deleteAccount:
+      //   final args = settings.arguments as dynamic;
+      //   return MaterialPageRoute(
+      //       builder: (_) => DeletedDetailView(
+      //             socialId: args,
+      //           ));
       case Routes.deleteAccountReason:
         final args = settings.arguments as dynamic;
         return MaterialPageRoute(

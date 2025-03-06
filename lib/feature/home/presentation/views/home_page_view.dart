@@ -34,17 +34,18 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        builder: (context) => const VIPMembershipDialog(),
-      );
       var notifier = ref.watch(homeProvider.notifier);
 
       if (notifier.homeUserDataList.isEmpty) {
-        // final homeDataNotifier = ref.read(homeProvider.notifier);
+        final homeDataNotifier = ref.read(homeProvider.notifier);
 
         if (widget.isFromAuth) {
           notifier.updateCoordinates(radius: '');
+          showDialog(
+            context: context,
+            builder: (context) => const VIPMembershipDialog(),
+          );
+          homeDataNotifier.getHomeDataApi();
         } else {
           // homeDataNotifier.getHomeDataApi();
         }
@@ -202,12 +203,13 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                     ],
                   ),
                   SizedBox(
-                    height: context.height * .03,
+                    height: context.height * .025,
                   ),
                   LocationCard(
                     location: notifier.location,
                     address: notifier.addressName,
                   ),
+                  10.verticalSpace
                 ],
               ),
             ),
@@ -292,7 +294,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                       data.profilePhoto!
                                   : '', // Replace with actual image
                               name: data.name ?? "Name",
-                              designation: data.designation ?? "designation",
+                              designation: data.designation ?? "",
                               distance: data.distance != null
                                   ? getDistance(data.distance.toString())
                                   : '',

@@ -76,9 +76,8 @@ class VIPMembershipDialog extends StatelessWidget {
 
             10.verticalSpace,
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 30),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.2, vertical: 30),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
               decoration: BoxDecoration(
                 color: AppColor.green009E51,
                 borderRadius: BorderRadius.circular(11),

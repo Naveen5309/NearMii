@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -22,7 +24,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DeleteReasonView extends ConsumerStatefulWidget {
-  final String? socialId;
+  final String socialId;
   const DeleteReasonView({super.key, required this.socialId});
 
   @override
@@ -357,7 +359,9 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                 //     args:
                 //         deleteAccountNotifier.userProfileModel?.socialId ?? ''),
                 onTap: () {
-                  if (widget.socialId != null) {
+                  log("social profile is :-. ${widget.socialId}");
+                  if (widget.socialId.isEmpty) {
+                    log("delete show 1");
                     deleteAccountNotifier.currentPasswordController.clear();
                     int selected = ref.watch(selectedDeleteIndex);
 
@@ -370,6 +374,7 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                         context: context,
                         content: const DeleteAccountBottomSheet());
                   } else {
+                    log("delete show 2");
                     showCustomBottomSheet(
                         context: context,
                         content: DeleteAccountConfirmationView(delete: () {
