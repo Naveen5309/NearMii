@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 
@@ -127,20 +128,24 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
   }
 
   @override
-  Future<ResponseWrapper<MyPlatformDataList>> getSelfPlatform(
+  Future<ResponseWrapper<List<SelfPlatformCatagoryData>>> getSelfPlatform(
       {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
-          await Getters.getHttpService.request<MyPlatformDataList>(
+          await Getters.getHttpService.request<List<SelfPlatformCatagoryData>>(
         body: body,
         requestType: RequestType.post,
         url: ApiConstants.getSelfPlatform,
         fromJson: (json) {
           log("json in data source :-> $json");
 
-          // Ensure the response is a map and correctly map it to MyPlatformDataList
-          if (json is Map<String, dynamic>) {
-            return MyPlatformDataList.fromJson(json["data"]);
+          // Ensure the response is a map and corrsectly map it to MyPlatformDataList
+          if (json is Map<String, dynamic> && json["data"] is List) {
+            // Map the response data into a List<PlatformCatagory>
+            return (json["data"] as List)
+                .map((item) => SelfPlatformCatagoryData.fromJson(
+                    item as Map<String, dynamic>))
+                .toList();
           }
           throw Exception("Unexpected API response format");
         },

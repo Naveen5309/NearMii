@@ -2,6 +2,7 @@ import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dar
 import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
 import '../../../../core/error/failure.dart';
@@ -31,7 +32,7 @@ abstract class AuthRepository {
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> resetPassword(
       {required Map<String, dynamic> body});
-  Future<Either<Failure, GetPlatformData>> getPlatform(
+  Future<Either<Failure, List<PlatformCatagory>>> getPlatform(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> logOut();
 
@@ -164,7 +165,7 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, GetPlatformData>> getPlatform(
+  Future<Either<Failure, List<PlatformCatagory>>> getPlatform(
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.getPlatformApi(body: body);

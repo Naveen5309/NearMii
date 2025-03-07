@@ -1,4 +1,5 @@
 import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
+import 'package:NearMii/feature/auth/presentation/views/add_new_social_media_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/auth_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/complete_profile_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/forgot_password_view.dart';
@@ -72,6 +73,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => SelectSocialMediaView(
             isFromProfile: args,
+          ),
+        );
+
+      case Routes.addNewSocialMedia:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => AddNewSocialMediaView(
+            oldPlatformData: args,
           ),
         );
       case Routes.profile:

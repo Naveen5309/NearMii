@@ -40,6 +40,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         final homeDataNotifier = ref.read(homeProvider.notifier);
 
         if (widget.isFromAuth) {
+          log("IS FROM AUTH:-> ${widget.isFromAuth}");
           notifier.updateCoordinates(radius: '');
           showDialog(
             context: context,

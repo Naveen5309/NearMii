@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
-import 'package:NearMii/feature/common_widgets/custom_report_tile.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/data/domain/other_user_profile_usecases.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
@@ -26,16 +25,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final financePasswordController = TextEditingController();
   final businessPasswordController = TextEditingController();
 
-  // List<PlatformData> socialMediaList = [];
-  // List<PlatformData> contactList = [];
-
-  // List<PlatformData> portfolioList = [];
-
-  List<SelfPlatformData> socialMediaList = [];
-  List<SelfPlatformData> contactList = [];
-  List<SelfPlatformData> portfolioList = [];
-  List<SelfPlatformData> financeList = [];
-  List<SelfPlatformData> businessList = [];
+  List<SelfPlatformCatagoryData> newPlatformLists = [];
 
   OtherUserProfileModel? profile;
 
@@ -44,18 +34,6 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   OtherUserProfileNotifier({required this.otherUserProfileUsecases})
       : super(OtherUserProfileInitial());
   //VALIDATE SIGN UP
-  // bool validateLogin() {
-  //   bool isValid = Validator().loginValidator(
-  //       email: emailController.text.trim(),
-  //       password: passwordController.text.trim());
-  //   if (isValid) {
-  //     return true;
-  //   } else {
-  //     toast(msg: Validator().error, isError: true);
-  //     return false;
-  //   }
-  // }
-  // SIGN UP
 
   //LOGIN
   Future<void> otherUserProfileApi(String id) async {
@@ -121,15 +99,15 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
         return OtherUserProfileApiFailed(
             error: error.message, otherUserType: OtherUserType.getPlatform);
       }, (result) {
-        socialMediaList = result.socialMedia ?? [];
-        contactList = result.contactInformation ?? [];
-        portfolioList = result.portfolio ?? [];
+        newPlatformLists = result;
+        newPlatformLists = newPlatformLists
+            .where((platformCatagory) =>
+                platformCatagory.list != null &&
+                platformCatagory.list!.isNotEmpty)
+            .toList();
 
-        // historyDataList = result ?? [];
-        log("socialmedialist result is :->$result");
-        log("socialmedialist result is :->$socialMediaList");
-        log("socialmedialist result is :->$contactList");
-        log("socialmedialist result is :->$portfolioList");
+        log("social media result is:->1 platfomlist $result");
+
         return const OtherUserProfileApiSuccess(
             otherUserType: OtherUserType.getPlatform);
       });

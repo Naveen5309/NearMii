@@ -6,8 +6,9 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -55,9 +56,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   String socialId = '';
 
-  List<PlatformData> socialMediaList = [];
-  List<PlatformData> contactList = [];
-  List<PlatformData> portfolioList = [];
+  // List<PlatformData> socialMediaList = [];
+  // List<PlatformData> contactList = [];
+  // List<PlatformData> portfolioList = [];
+
+  List<PlatformCatagory> newPlatformLists = [];
 
   List<int> selectedPlatform = [];
 
@@ -194,15 +197,101 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         return AuthApiFailed(
             error: error.message, authType: AuthType.socialMedia);
       }, (result) {
-        log("result is:-> $result");
-        socialMediaList = result.socialMedia ?? [];
-        portfolioList = result.portfolio ?? [];
-        contactList = result.contactInformation ?? [];
+        log("social media result is:->1 $result");
 
-        log("result is 15:-> $socialMediaList");
+        newPlatformLists = result;
+
+        newPlatformLists = newPlatformLists
+            .where((platformCatagory) =>
+                platformCatagory.list != null &&
+                platformCatagory.list!.isNotEmpty)
+            .toList();
+
+        log("social media result is:->1 platfomlist $result");
+
+        // Convert "data" into a list containing its key-value pairs
+
+        // Wrap the transformed list inside a new "data" key
+        // Map<String, dynamic> newData = {"data": transformedData};
+
+        // log("social media result is:->2 $platformLists");
+
+        // socialMediaList = result.socialMedia ?? [];
+        // portfolioList = result.portfolio ?? [];
+        // contactList = result.contactInformation ?? [];
+
+        // log("result is 15:-> $socialMediaList");
 
         // Update the list and notify UI by updating state
         // platformDataList = result ?? [];
+        return const AuthApiSuccess(
+          authType: AuthType.socialMedia,
+        );
+      });
+    } catch (e) {
+      state =
+          AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
+    }
+  }
+
+//GET SOCIAL PROFILES
+  Future<void> getAddNewSocialPlatform({
+    required List<SelfPlatformCatagoryData> myPlatformList,
+  }) async {
+    state = const AuthApiLoading(authType: AuthType.socialMedia);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const AuthApiFailed(
+            error: "No internet connection", authType: AuthType.socialMedia);
+        return;
+      }
+      Map<String, dynamic> body = {
+        "search": searchTextController.text.trim(),
+      };
+
+      final result = await authUseCase.getPlatform(body: body);
+      state = result.fold((error) {
+        return AuthApiFailed(
+            error: error.message, authType: AuthType.socialMedia);
+      }, (result) {
+        log("result is:-> $result");
+
+        log("social media result is:->1 $result");
+
+        newPlatformLists = result;
+
+        newPlatformLists = newPlatformLists
+            .where((platformCatagory) =>
+                platformCatagory.list != null &&
+                platformCatagory.list!.isNotEmpty)
+            .toList();
+
+        newPlatformLists.removeWhere((platformCategory) {
+          bool shouldRemove = platformCategory.list?.any((platformData) {
+                return myPlatformList.any((myPlatform) {
+                  return myPlatform.list?.any((data) {
+                        // Print both IDs before comparison
+                        print(
+                            "Comparing platformData.id: ${platformData.id} with data.id: ${data.platform?.id}");
+
+                        return data.id == platformData.id;
+                      }) ??
+                      false;
+                });
+              }) ??
+              false;
+
+          if (shouldRemove) {
+            print("Removing: $platformCategory");
+          } else {
+            print("Not removing: $platformCategory");
+          }
+
+          return shouldRemove;
+        });
+
+        printLog("my new platform uypdate list :-> $newPlatformLists");
+
         return const AuthApiSuccess(
           authType: AuthType.socialMedia,
         );

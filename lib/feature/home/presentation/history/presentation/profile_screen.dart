@@ -166,7 +166,13 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         backgroundColor: AppColor.primary,
         floatingActionButton: InkWell(
           onTap: () {
-            toNamed(context, Routes.selectSocialMedia, args: true).then(
+            toNamed(context, Routes.addNewSocialMedia, args: {
+              // "socialMedia": notifier.socialMediaList,
+              // "contactInformation": notifier.contactList,
+              // "portfolio": notifier.portfolioList,
+
+              "myPlatformList": notifier.newPlatformLists
+            }).then(
               (value) {
                 notifier.getSelfPlatformApi();
               },
@@ -385,6 +391,7 @@ Widget bottomSection({
             onSearchChanged(value);
           },
         ),
+
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: hideAllSection(
@@ -392,42 +399,63 @@ Widget bottomSection({
               profile: profile,
               selfUserProfileNotifier: selfUserProfileNotifier),
         ),
-        selfUserProfileNotifier.socialMediaList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProfileGridView(
-                  notifier: selfUserProfileNotifier,
-                  controller: selfUserProfileNotifier.platformTextController,
-                  isMyProfile: true,
-                  title: AppString.socialMedia,
-                  socialMedia: selfUserProfileNotifier.socialMediaList,
-                ),
-              )
-            : const SizedBox(),
-        selfUserProfileNotifier.contactList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProfileGridView(
-                  notifier: selfUserProfileNotifier,
-                  controller: selfUserProfileNotifier.platformTextController,
-                  isMyProfile: true,
-                  title: AppString.contactInformation,
-                  socialMedia: selfUserProfileNotifier.contactList,
-                ),
-              )
-            : const SizedBox(),
-        selfUserProfileNotifier.portfolioList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProfileGridView(
-                  notifier: selfUserProfileNotifier,
-                  controller: selfUserProfileNotifier.platformTextController,
-                  isMyProfile: true,
-                  title: AppString.portfolio,
-                  socialMedia: selfUserProfileNotifier.portfolioList,
-                ),
-              )
-            : const SizedBox()
+
+        SizedBox(
+          height: context.height * .8,
+          child: ListView.builder(
+              hitTestBehavior: HitTestBehavior.translucent,
+              padding: EdgeInsets.zero,
+              itemCount: selfUserProfileNotifier.newPlatformLists.length,
+              itemBuilder: (context, index) {
+                var data = selfUserProfileNotifier.newPlatformLists[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfileGridView(
+                    notifier: selfUserProfileNotifier,
+                    controller: selfUserProfileNotifier.platformTextController,
+                    isMyProfile: true,
+                    title: data.title ?? '',
+                    socialMedia: data.list ?? [],
+                  ),
+                );
+              }),
+        )
+        // selfUserProfileNotifier.socialMediaList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: ProfileGridView(
+        //           notifier: selfUserProfileNotifier,
+        //           controller: selfUserProfileNotifier.platformTextController,
+        //           isMyProfile: true,
+        //           title: AppString.socialMedia,
+        //           socialMedia: selfUserProfileNotifier.socialMediaList,
+        //         ),
+        //       )
+        //     : const SizedBox(),
+        // selfUserProfileNotifier.contactList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: ProfileGridView(
+        //           notifier: selfUserProfileNotifier,
+        //           controller: selfUserProfileNotifier.platformTextController,
+        //           isMyProfile: true,
+        //           title: AppString.contactInformation,
+        //           socialMedia: selfUserProfileNotifier.contactList,
+        //         ),
+        //       )
+        //     : const SizedBox(),
+        // selfUserProfileNotifier.portfolioList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: ProfileGridView(
+        //           notifier: selfUserProfileNotifier,
+        //           controller: selfUserProfileNotifier.platformTextController,
+        //           isMyProfile: true,
+        //           title: AppString.portfolio,
+        //           socialMedia: selfUserProfileNotifier.portfolioList,
+        //         ),
+        //       )
+        //     : const SizedBox()
       ]),
     ),
   );
@@ -524,31 +552,31 @@ Widget profileSection(
             ),
           ),
           20.verticalSpace,
-          Wrap(
-            alignment: WrapAlignment.center,
-            runSpacing: 8,
-            spacing: 6,
-            children: [
-              InfoChip(
-                  label: 'Social',
-                  value: selfUserProfileNotifier.socialMediaList.length
-                      .toString()),
-              InfoChip(
-                  label: 'Contact',
-                  value: selfUserProfileNotifier.contactList.length.toString()),
-              InfoChip(
-                  label: 'Portfolio',
-                  value:
-                      selfUserProfileNotifier.portfolioList.length.toString()),
-              InfoChip(
-                  label: 'Finance',
-                  value: selfUserProfileNotifier.financeList.length.toString()),
-              InfoChip(
-                  label: 'Business',
-                  value:
-                      selfUserProfileNotifier.businessList.length.toString()),
-            ],
-          )
+          // Wrap(
+          //   alignment: WrapAlignment.center,
+          //   runSpacing: 8,
+          //   spacing: 6,
+          //   children: [
+          //     InfoChip(
+          //         label: 'Social',
+          //         value: selfUserProfileNotifier.socialMediaList.length
+          //             .toString()),
+          //     InfoChip(
+          //         label: 'Contact',
+          //         value: selfUserProfileNotifier.contactList.length.toString()),
+          //     InfoChip(
+          //         label: 'Portfolio',
+          //         value:
+          //             selfUserProfileNotifier.portfolioList.length.toString()),
+          //     InfoChip(
+          //         label: 'Finance',
+          //         value: selfUserProfileNotifier.financeList.length.toString()),
+          //     InfoChip(
+          //         label: 'Business',
+          //         value:
+          //             selfUserProfileNotifier.businessList.length.toString()),
+          //   ],
+          // )
         ]),
   );
 

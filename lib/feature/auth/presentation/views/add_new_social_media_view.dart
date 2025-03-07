@@ -5,8 +5,6 @@ import 'package:NearMii/config/constants.dart';
 import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -16,34 +14,33 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
-import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SelectSocialMediaView extends ConsumerStatefulWidget {
-  final bool isFromProfile;
-
-  const SelectSocialMediaView({
+class AddNewSocialMediaView extends ConsumerStatefulWidget {
+  final Map<String, dynamic> oldPlatformData;
+  const AddNewSocialMediaView({
     super.key,
-    required this.isFromProfile,
+    required this.oldPlatformData,
   });
 
   @override
-  ConsumerState<SelectSocialMediaView> createState() =>
-      _SelectSocialMediaViewState();
+  ConsumerState<AddNewSocialMediaView> createState() =>
+      _AddNewSocialMediaViewState();
 }
 
-class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
+class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      log("get platfoem called");
       final notifier = ref.read(signupProvider.notifier);
-      notifier.getSocialPlatform();
+
+      notifier.getAddNewSocialPlatform(
+          myPlatformList: widget.oldPlatformData["myPlatformList"]);
     });
   }
 
@@ -52,7 +49,8 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
   void _onSearchChanged(String query) {
     final notifier = ref.read(signupProvider.notifier);
     _debounce.run(() {
-      notifier.getSocialPlatform();
+      notifier.getAddNewSocialPlatform(
+          myPlatformList: widget.oldPlatformData["myPlatformList"]);
     });
   }
 
@@ -92,21 +90,9 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
             horizontal: context.width * .05, vertical: context.height * .01),
         child: CommonAppBtn(
           onTap: () async {
-            if (widget.isFromProfile) {
-              back(context);
-            } else {
-              await Getters.getLocalStorage.saveIsLogin(true);
-              await Getters.getLocalStorage.saveFirstIn(false);
-
-              if (context.mounted) {
-                offAllNamed(context, Routes.bottomNavBar, args: true);
-                toast(msg: AppString.signupSuccess, isError: false);
-              }
-
-              toast(msg: AppString.signupSuccess, isError: false);
-            }
+            back(context);
           },
-          title: widget.isFromProfile ? AppString.done : AppString.next,
+          title: AppString.done,
           textSize: 16.sp,
         ),
       ),
@@ -129,19 +115,9 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       children: [
                         const CommonBackBtn(),
                         InkWell(
-                          onTap: () async {
-                            await Getters.getLocalStorage.saveIsLogin(true);
-                            await Getters.getLocalStorage.saveFirstIn(false);
-
-                            if (context.mounted) {
-                              offAllNamed(context, Routes.bottomNavBar,
-                                  args: true);
-                              toast(
-                                  msg: AppString.signupSuccess, isError: false);
-                            }
-                          },
+                          onTap: () async {},
                           child: AppText(
-                            text: widget.isFromProfile ? " " : AppString.skip,
+                            text: " ",
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                           ),
@@ -256,6 +232,15 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                                                     ],
                                                   ),
                                                 );
+
+                                                // ListTile(
+                                                //   title: Text(
+                                                //     AppString
+                                                //         .profileUrls[index],
+                                                //     style: const TextStyle(
+                                                //         fontSize: 16),
+                                                //   ),
+                                                // );
                                               },
                                             ),
                                           ),
@@ -280,32 +265,28 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       },
                     ),
 
-                    SizedBox(
-                      height: context.height * .6,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        // physics: const NeverScrollableScrollPhysics(),
-                        itemCount: signupPro.newPlatformLists.length +
-                            1, // Add 1 for the extra item
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          if (index == signupPro.newPlatformLists.length) {
-                            return SizedBox(
-                              width: context.width,
-                              height: context.height * .1, // Add extra space
-                            );
-                          }
+// newPlatformLists
 
-                          var data = signupPro.newPlatformLists[index];
-
-                          return CustomSocialGridview(
-                            title: data.title ?? '',
-                            socialMedia: data.list ?? [],
-                            notifier: signupPro,
-                          );
-                        },
-                      ),
-                    )
+                    signupPro.newPlatformLists.isNotEmpty
+                        ? SizedBox(
+                            height: context.height * .8,
+                            child: ListView.builder(
+                              itemCount: signupPro.newPlatformLists.length,
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                var data = signupPro.newPlatformLists[index];
+                                return CustomSocialGridview(
+                                  title: data.title ?? '',
+                                  socialMedia: data.list ?? [],
+                                  notifier: signupPro,
+                                );
+                              },
+                            ),
+                          )
+                        : const SizedBox(
+                            child: AppText(text: "No Data found"),
+                          ),
 
                     //SOCIAL MEDIA
 
@@ -336,7 +317,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     //         title: AppString.portfolio,
                     //         socialMedia: signupPro.portfolioList,
                     //       ),
-                    ,
+
                     SizedBox(
                       height: context.height * .05,
                     ),

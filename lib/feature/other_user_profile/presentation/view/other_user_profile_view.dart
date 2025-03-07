@@ -375,39 +375,58 @@ Widget bottomSection({
             onSearchChanged(value);
           },
         ),
-        otherUserProfileNotifier.socialMediaList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OtherUserProfileGridView(
-                  notifier: otherUserProfileNotifier,
-                  controller: otherUserProfileNotifier.platformSearchController,
-                  title: AppString.socialMedia,
-                  socialMedia: otherUserProfileNotifier.socialMediaList,
-                ),
-              )
-            : const SizedBox(),
-        otherUserProfileNotifier.contactList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OtherUserProfileGridView(
-                  notifier: otherUserProfileNotifier,
-                  controller: otherUserProfileNotifier.platformSearchController,
-                  title: AppString.contactInformation,
-                  socialMedia: otherUserProfileNotifier.contactList,
-                ),
-              )
-            : const SizedBox(),
-        otherUserProfileNotifier.portfolioList.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OtherUserProfileGridView(
-                  notifier: otherUserProfileNotifier,
-                  controller: otherUserProfileNotifier.platformSearchController,
-                  title: AppString.portfolio,
-                  socialMedia: otherUserProfileNotifier.portfolioList,
-                ),
-              )
-            : const SizedBox()
+
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: otherUserProfileNotifier.newPlatformLists.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            var data = otherUserProfileNotifier.newPlatformLists[index];
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: OtherUserProfileGridView(
+                notifier: otherUserProfileNotifier,
+                controller: otherUserProfileNotifier.platformSearchController,
+                title: data.title ?? '',
+                socialMedia: data.list ?? [],
+              ),
+            );
+          },
+        )
+
+        // otherUserProfileNotifier.socialMediaList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: OtherUserProfileGridView(
+        //           notifier: otherUserProfileNotifier,
+        //           controller: otherUserProfileNotifier.platformSearchController,
+        //           title: AppString.socialMedia,
+        //           socialMedia: otherUserProfileNotifier.socialMediaList,
+        //         ),
+        //       )
+        //     : const SizedBox(),
+        // otherUserProfileNotifier.contactList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: OtherUserProfileGridView(
+        //           notifier: otherUserProfileNotifier,
+        //           controller: otherUserProfileNotifier.platformSearchController,
+        //           title: AppString.contactInformation,
+        //           socialMedia: otherUserProfileNotifier.contactList,
+        //         ),
+        //       )
+        //     : const SizedBox(),
+        // otherUserProfileNotifier.portfolioList.isNotEmpty
+        //     ? Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: OtherUserProfileGridView(
+        //           notifier: otherUserProfileNotifier,
+        //           controller: otherUserProfileNotifier.platformSearchController,
+        //           title: AppString.portfolio,
+        //           socialMedia: otherUserProfileNotifier.portfolioList,
+        //         ),
+        //       )
+        //     : const SizedBox()
       ]),
     ),
   );
@@ -586,33 +605,34 @@ Widget profileSection({
             color: AppColor.whiteFFFFFF.withOpacity(.8),
           ),
           20.verticalSpace,
-          Wrap(
-            alignment: WrapAlignment.center,
-            runSpacing: 8,
-            spacing: 6,
-            children: [
-              InfoChip(
-                  label: 'Social',
-                  value: otherUserProfileProvider.socialMediaList.length
-                      .toString()),
-              InfoChip(
-                  label: 'Contact',
-                  value:
-                      otherUserProfileProvider.contactList.length.toString()),
-              InfoChip(
-                  label: 'Portfolio',
-                  value:
-                      otherUserProfileProvider.portfolioList.length.toString()),
-              InfoChip(
-                  label: 'Finance',
-                  value:
-                      otherUserProfileProvider.financeList.length.toString()),
-              InfoChip(
-                  label: 'Business',
-                  value:
-                      otherUserProfileProvider.businessList.length.toString()),
-            ],
-          )
+          // Wrap(
+          //   alignment: WrapAlignment.center,
+          //   runSpacing: 8,
+          //   spacing: 6,
+          //   children: [
+          //     InfoChip(
+          //         label: 'Social',
+          //         value: otherUserProfileProvider.socialMediaList.length
+          //             .toString()),
+          //     InfoChip(
+          //         label: 'Contact',
+          //         value:
+          //             otherUserProfileProvider.contactList.length.toString()),
+          //     InfoChip(
+          //         label: 'Portfolio',
+          //         value:
+          //             otherUserProfileProvider.portfolioList.length.toString()),
+          //     InfoChip(
+          //         label: 'Finance',
+          //         value:
+          //             otherUserProfileProvider.financeList.length.toString()),
+          //     InfoChip(
+          //         label: 'Business',
+          //         value:
+          //             otherUserProfileProvider.businessList.length.toString()),
+
+          //   ],
+          // )
         ]),
   );
 }

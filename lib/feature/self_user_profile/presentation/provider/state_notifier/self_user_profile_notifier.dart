@@ -4,6 +4,7 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/self_user_profile/domain/usecases/self_user_profile_usecases.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
@@ -17,14 +18,16 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   SelfUserProfileNotifier({required this.selfUserProfileUsecases})
       : super(SelfUserProfileInitial());
   UserProfileModel? userProfileModel;
-  List<SelfPlatformData> socialMediaList = [];
-  List<SelfPlatformData> contactList = [];
-  List<SelfPlatformData> portfolioList = [];
-  List<SelfPlatformData> financeList = [];
-  List<SelfPlatformData> businessList = [];
+  // List<SelfPlatformData> socialMediaList = [];
+  // List<SelfPlatformData> contactList = [];
+  // List<SelfPlatformData> portfolioList = [];
+  // List<SelfPlatformData> financeList = [];
+  // List<SelfPlatformData> businessList = [];
 
   TextEditingController searchTextController = TextEditingController();
   TextEditingController platformTextController = TextEditingController();
+
+  List<SelfPlatformCatagoryData> newPlatformLists = [];
 
   //SelfUserProfile US
   Future<void> updateSocialLinksApi({required String id}) async {
@@ -198,15 +201,21 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
             error: error.message,
             selfProfileDataType: SelfProfileDataType.getPlatform);
       }, (result) {
-        socialMediaList = result.socialMedia ?? [];
-        contactList = result.contactInformation ?? [];
-        portfolioList = result.portfolio ?? [];
+        newPlatformLists = result;
+        newPlatformLists = newPlatformLists
+            .where((platformCatagory) =>
+                platformCatagory.list != null &&
+                platformCatagory.list!.isNotEmpty)
+            .toList();
+        // socialMediaList = result.socialMedia ?? [];
+        // contactList = result.contactInformation ?? [];
+        // portfolioList = result.portfolio ?? [];
 
-        // historyDataList = result ?? [];
-        log("socialmedialist result is :->$result");
-        log("socialmedialist result is :->$socialMediaList");
-        log("socialmedialist result is :->$contactList");
-        log("socialmedialist result is :->$portfolioList");
+        // // historyDataList = result ?? [];
+        // log("socialmedialist result is :->$result");
+        // log("socialmedialist result is :->$socialMediaList");
+        // log("socialmedialist result is :->$contactList");
+        // log("socialmedialist result is :->$portfolioList");
 
         return const SelfUserProfileApiSuccess(
             selfProfileDataType: SelfProfileDataType.getPlatform);

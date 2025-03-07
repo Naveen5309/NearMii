@@ -4,6 +4,7 @@ import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dar
 import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
@@ -339,19 +340,20 @@ class AuthDataSourceImpl extends AuthDataSource {
 
 //GET PLATFORM
   @override
-  Future<ResponseWrapper<GetPlatformData>> getPlatformApi(
+  Future<ResponseWrapper<dynamic>> getPlatformApi(
       {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
-          await Getters.getHttpService.request<GetPlatformData>(
+          await Getters.getHttpService.request<List<PlatformCatagory>>(
               body: body,
               url: ApiConstants.getPlatform,
               fromJson: (json) {
-                log("json in data source :-> $json");
-
-                // Ensure the response is a map and correctly map it to GetPlatformData
-                if (json is Map<String, dynamic>) {
-                  return GetPlatformData.fromJson(json["data"]);
+                if (json is Map<String, dynamic> && json["data"] is List) {
+                  // Map the response data into a List<PlatformCatagory>
+                  return (json["data"] as List)
+                      .map((item) => PlatformCatagory.fromJson(
+                          item as Map<String, dynamic>))
+                      .toList();
                 }
                 throw Exception("Unexpected API response format");
               },

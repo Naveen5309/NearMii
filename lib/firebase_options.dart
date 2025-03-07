@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDfzVGkiRYKr3kfjPOilGear6iGhrJhWRw',
-    appId: '1:1062687805374:android:9a2aeeb9582d767dacf3ef',
-    messagingSenderId: '1062687805374',
-    projectId: 'nearmii-ad7b9',
-    storageBucket: 'nearmii-ad7b9.firebasestorage.app',
+    apiKey: 'AIzaSyC5gb4AlR_EIBMKCVcLsSAI0ZW6i-R05nk',
+    appId: '1:259954320200:android:fae28ca28fb50b809f097d',
+    messagingSenderId: '259954320200',
+    projectId: 'nearmii-c6bb7',
+    storageBucket: 'nearmii-c6bb7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDIbVfME1HzmpjMOUjiWtwpaQis1xdd53U',
-    appId: '1:1062687805374:ios:cab88c7cddc7d710acf3ef',
-    messagingSenderId: '1062687805374',
-    projectId: 'nearmii-ad7b9',
-    storageBucket: 'nearmii-ad7b9.firebasestorage.app',
-    iosBundleId: 'com.example.riverpodBoilerplateFlutter',
+    apiKey: 'AIzaSyAxcZSDP-pq_Ui0uiOYv-mRCspIo5pMNEE',
+    appId: '1:259954320200:ios:59c2325a4d7f71309f097d',
+    messagingSenderId: '259954320200',
+    projectId: 'nearmii-c6bb7',
+    storageBucket: 'nearmii-c6bb7.firebasestorage.app',
+    iosBundleId: 'com.cap.capture',
   );
+
 }

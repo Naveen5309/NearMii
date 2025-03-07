@@ -1,6 +1,7 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 
 import 'package:NearMii/feature/self_user_profile/data/data_source/self_user_profile_data_source.dart';
 
@@ -12,7 +13,7 @@ abstract class SelfUserProfileRepository {
 
   Future<Either<Failure, dynamic>> hidePlatform(
       {required Map<String, dynamic> body});
-  Future<Either<Failure, MyPlatformDataList>> isGetSelfPlatform(
+  Future<Either<Failure, List<SelfPlatformCatagoryData>>> isGetSelfPlatform(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> isDelete(
       {required Map<String, dynamic> body});
@@ -74,7 +75,7 @@ class SelfUserProfileRepoImpl implements SelfUserProfileRepository {
   }
 
   @override
-  Future<Either<Failure, MyPlatformDataList>> isGetSelfPlatform(
+  Future<Either<Failure, List<SelfPlatformCatagoryData>>> isGetSelfPlatform(
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.getSelfPlatform(body: body);

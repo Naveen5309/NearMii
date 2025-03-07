@@ -1,48 +1,56 @@
 {
   "project_info": {
-    "project_number": "1062687805374",
-    "project_id": "nearmii-ad7b9",
-    "storage_bucket": "nearmii-ad7b9.firebasestorage.app"
+    "project_number": "259954320200",
+    "project_id": "nearmii-c6bb7",
+    "storage_bucket": "nearmii-c6bb7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062687805374:android:9a2aeeb9582d767dacf3ef",
+        "mobilesdk_app_id": "1:259954320200:android:fae28ca28fb50b809f097d",
         "android_client_info": {
-          "package_name": "com.near.nearme"
+          "package_name": "com.nearme.nearme"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1062687805374-rf5g3op032vl7oo08p4ii0gqajft0a0l.apps.googleusercontent.com",
+          "client_id": "259954320200-bk22f9iu268fucvjk87t4a689rbs61dq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.near.nearme",
+            "package_name": "com.nearme.nearme",
             "certificate_hash": "5d297f80ef20d5c09fbc71476b80e64da0400386"
           }
         },
         {
-          "client_id": "1062687805374-c646o4q8vpgkv34m4fc0j3chhuig46eo.apps.googleusercontent.com",
+          "client_id": "259954320200-rp5t8tih4eblmurigcru5ndue8tlv20h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nearme.nearme",
+            "certificate_hash": "09c348269092fc331e5a121e0e5457abf60d0f05"
+          }
+        },
+        {
+          "client_id": "259954320200-6b341n3k0rtq543q689j8il2j4e8epv7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDfzVGkiRYKr3kfjPOilGear6iGhrJhWRw"
+          "current_key": "AIzaSyC5gb4AlR_EIBMKCVcLsSAI0ZW6i-R05nk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1062687805374-c646o4q8vpgkv34m4fc0j3chhuig46eo.apps.googleusercontent.com",
+              "client_id": "259954320200-6b341n3k0rtq543q689j8il2j4e8epv7.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1062687805374-kip3naduu2vvj6fl6apa9cmh83oohmaj.apps.googleusercontent.com",
+              "client_id": "259954320200-hnb23gclj978bp30pbjmao2sr5kmrnl9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.riverpodBoilerplateFlutter"
+                "bundle_id": "com.cap.capture"
               }
             }
           ]

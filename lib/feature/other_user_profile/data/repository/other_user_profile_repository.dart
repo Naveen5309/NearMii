@@ -1,6 +1,7 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/other_user_profile/data/data_source/other_profile_data_source.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 
@@ -8,7 +9,7 @@ abstract class OtherUserProfileRepository {
   Future<Either<Failure, OtherUserProfileModel>> otherUserProfile(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, MyPlatformDataList>> getOtherPlatformApi(
+  Future<Either<Failure, List<SelfPlatformCatagoryData>>> getOtherPlatformApi(
       {required Map<String, dynamic> body});
   Future<Either<Failure, dynamic>> report({required Map<String, dynamic> body});
 }
@@ -35,7 +36,7 @@ class OtherUserProfileRepoImpl implements OtherUserProfileRepository {
   }
 
   @override
-  Future<Either<Failure, MyPlatformDataList>> getOtherPlatformApi(
+  Future<Either<Failure, List<SelfPlatformCatagoryData>>> getOtherPlatformApi(
       {required Map<String, dynamic> body}) async {
     try {
       final response = await dataSource.getOtherPlatformApi(body: body);

@@ -12,6 +12,8 @@ class Routes {
   static const String completeProfile = '/completeProfile';
   static const String addSocialProfile = '/addSocialProfile';
   static const String selectSocialMedia = '/selectSocialMedia';
+  static const String addNewSocialMedia = '/addNewSocialMedia';
+
   static const String bottomNavBar = '/bottomNavBar';
   static const String profile = '/profile';
   static const String editProfile = '/editProfile';
