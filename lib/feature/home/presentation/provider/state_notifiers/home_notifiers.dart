@@ -8,6 +8,8 @@ import 'package:NearMii/feature/home/data/models/home_data_model.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home_usecases.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
+import 'package:NearMii/main.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -43,23 +45,62 @@ class HomeNotifier extends StateNotifier<HomeState> {
   Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+
+    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      bool shouldOpenSettings =
+          await showLocationDialog(navigatorKey.currentState!.context);
+      if (shouldOpenSettings) {
+        await Geolocator.openLocationSettings();
+      }
       return Future.error('Location services are disabled.');
     }
+
+    // Check location permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        return Future.error('Location permissions are denied.');
       }
     }
+
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are denied');
+      return Future.error(
+          'Location permissions are permanently denied. Enable them from settings.');
     }
+
+    // Get the current position
     return await Geolocator.getCurrentPosition(
         locationSettings:
             const LocationSettings(accuracy: LocationAccuracy.high));
+  }
+
+// Function to show a dialog asking the user to enable location services
+  Future<bool> showLocationDialog(BuildContext context) async {
+    return await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Enable Location"),
+              content: const Text(
+                  "Location services are disabled. Please enable them to continue."),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Open Settings"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; // Default to false if the user dismisses the dialog
   }
 
   double? distance;
