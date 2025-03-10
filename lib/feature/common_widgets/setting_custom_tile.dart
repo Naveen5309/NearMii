@@ -31,6 +31,9 @@ class CustomTile extends StatelessWidget {
       // margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       // padding: EdgeInsets.symmetric(vertical: 1),
       child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
         leading: SvgPicture.asset(leadingIcon),
         title: AppText(
           text: title,
