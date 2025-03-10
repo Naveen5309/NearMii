@@ -70,7 +70,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
               Routes.completeProfile,
               args: SocialProfileModel(
                   img: loginNotifier.socialImg,
-                  name: loginNotifier.fullNameController.text),
+                  name: loginNotifier.fullNameController.text,
+                  email: loginNotifier.socialEmail),
             );
 
             // SocialProfileModel(

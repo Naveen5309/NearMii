@@ -20,12 +20,13 @@ class CountryPickerNotifier extends StateNotifier<CountryPickerState> {
   }
 
   void updateInitialCountry(String code) {
+    print("updateInitialCountry====>>>>  $code");
+
     final myCountry = allCountries.firstWhere(
         (element) => element.dialCode == code,
         orElse: () => country);
     country = myCountry;
     state = const CountryPickerLoading();
-    print("updateInitialCountry====>>>>  ${country.code}");
   }
 
   CountryPickerNotifier() : super(CountryPickerInitial());

@@ -65,7 +65,8 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
             Routes.completeProfile,
             args: SocialProfileModel(
                 img: loginNotifier.socialImg,
-                name: loginNotifier.fullNameController.text),
+                name: loginNotifier.fullNameController.text,
+                email: loginNotifier.socialEmail),
           );
         } else if (next is AuthApiFailed && next.authType == AuthType.signup) {
           Utils.hideLoader();

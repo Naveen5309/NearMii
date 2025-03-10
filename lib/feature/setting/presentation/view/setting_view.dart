@@ -73,23 +73,6 @@ class _SettingViewState extends ConsumerState<SettingView> {
       }
     });
 
-    // ref.listen(getProfileProvider, (previous, next) async {
-    //   if (next is SettingApiLoading) {
-    //     printLog("other user loading is called");
-    //     Utils.showLoader();
-    //   } else if (next is SettingApiSuccess) {
-    //     Utils.hideLoader();
-
-    //     // toNamed(context, Routes.bottomNavBar);
-    //   } else if (next is SettingApiFailed) {
-    //     if (context.mounted) {
-    //       Utils.hideLoader();
-    //     }
-
-    //     toast(msg: next.error);
-    //   }
-    // }
-    // )
     final isVIP = notifier.userProfileModel != null
         ? notifier.userProfileModel?.isSubscription == 1
         : false;

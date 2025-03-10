@@ -81,21 +81,24 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
           Utils.hideLoader();
 
           // toast(msg: next.error);
-        } else if (next is SelfUserProfileApiLoading &&
-            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-          Utils.showLoader();
-        } else if (next is SelfUserProfileApiSuccess &&
-            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-          // toast(msg: AppString.loginSuccess, isError: false);
-          Utils.hideLoader();
-          toast(msg: "Social profile updated successfully", isError: false);
-          back(context);
-          notifier.getSelfPlatformApi();
-        } else if (next is SelfUserProfileApiFailed &&
-            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-          Utils.hideLoader();
-          toast(msg: next.error);
-        } else if (next is SelfUserProfileApiLoading &&
+        }
+
+        // else if (next is SelfUserProfileApiLoading &&
+        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+        //   Utils.showLoader();
+        // } else if (next is SelfUserProfileApiSuccess &&
+        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+        //   // toast(msg: AppString.loginSuccess, isError: false);
+        //   Utils.hideLoader();
+        //   toast(msg: "Social profile updated successfully", isError: false);
+        //   back(context);
+        //   notifier.getSelfPlatformApi();
+        // } else if (next is SelfUserProfileApiFailed &&
+        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+        //   Utils.hideLoader();
+        //   toast(msg: next.error);
+        // }
+        else if (next is SelfUserProfileApiLoading &&
             next.selfProfileDataType == SelfProfileDataType.deletePlatform) {
           Utils.showLoader();
         } else if (next is SelfUserProfileApiSuccess &&
@@ -411,8 +414,6 @@ Widget bottomSection({
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ProfileGridView(
-                    notifier: selfUserProfileNotifier,
-                    controller: selfUserProfileNotifier.platformTextController,
                     isMyProfile: true,
                     title: data.title ?? '',
                     socialMedia: data.list ?? [],
@@ -552,31 +553,26 @@ Widget profileSection(
             ),
           ),
           20.verticalSpace,
-          // Wrap(
-          //   alignment: WrapAlignment.center,
-          //   runSpacing: 8,
-          //   spacing: 6,
-          //   children: [
-          //     InfoChip(
-          //         label: 'Social',
-          //         value: selfUserProfileNotifier.socialMediaList.length
-          //             .toString()),
-          //     InfoChip(
-          //         label: 'Contact',
-          //         value: selfUserProfileNotifier.contactList.length.toString()),
-          //     InfoChip(
-          //         label: 'Portfolio',
-          //         value:
-          //             selfUserProfileNotifier.portfolioList.length.toString()),
-          //     InfoChip(
-          //         label: 'Finance',
-          //         value: selfUserProfileNotifier.financeList.length.toString()),
-          //     InfoChip(
-          //         label: 'Business',
-          //         value:
-          //             selfUserProfileNotifier.businessList.length.toString()),
-          //   ],
-          // )
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: selfUserProfileNotifier.newPlatformLists.map((entry) {
+              return InfoChip(
+                  label: entry.title ?? "Unknown",
+                  value: entry.list?.length.toString() ?? '0');
+            }).toList(),
+          ),
+
+//    Wrap(
+//   alignment: WrapAlignment.center,
+//   runSpacing: 8,
+//   spacing: 6,
+//   children: [
+//     // Generate dynamic InfoChips
+//     ..._buildDynamicChips(selfUserProfileNotifier),
+//   ],
+// ),
         ]),
   );
 

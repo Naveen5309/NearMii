@@ -12,6 +12,7 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/social_media_profile.dart';
 import 'package:flutter/material.dart';
@@ -113,37 +114,138 @@ class CustomSocialGridview extends ConsumerWidget {
                                 isInfo: true);
                           } else {
                             notifier.urlController.clear();
-                            showCustomBottomSheet(
-                              context: context,
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      AppText(
-                                        text: socialMedia[pIndex].name ?? '',
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w500,
+                            notifier.countryCode = "+1";
+                            notifier.countryFlag = '🇺🇸';
+                            notifier.countryNameCode = 'US';
+
+                            // notifier.updateCountryData(
+                            //   dialCode: "+1",
+                            //   countryNmCode: 'US',
+                            // );
+
+                            if (socialMedia[pIndex].type ==
+                                'Enter phone number') {
+                              showCustomBottomSheet(
+                                context: context,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        AppText(
+                                          text: socialMedia[pIndex].name ?? '',
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            onTap: () {
+                                              back(context);
+                                            },
+                                            child: SvgPicture.asset(
+                                                Assets.icCloseCircle))
+                                      ],
+                                    ),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Divider(),
+                                    ),
+                                    // 10.verticalSpace,
+
+                                    CustomPhoneNumber(
+                                      selectedCountryCode: notifier.countryCode,
+                                      selectedCountryFlag: notifier.countryFlag,
+                                      prefixIcon: Assets.icGender,
+                                      controller: notifier.urlController,
+                                      labelText: AppString.phoneNumber,
+                                    ),
+                                    10.verticalSpace,
+
+                                    /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: context.height * .02),
+                                      child: Row(
+                                        children: [
+                                          //GO BACK
+                                          Expanded(
+                                            child: CommonAppBtn(
+                                              textColor: AppColor.btnColor,
+                                              backGroundColor: AppColor
+                                                  .green00C56524
+                                                  .withOpacity(.14),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              title: AppString.cancel,
+                                              width: context.width,
+                                            ),
+                                          ),
+                                          10.horizontalSpace,
+
+                                          //SEND INVITE
+                                          Expanded(
+                                            child: CommonAppBtn(
+                                              onTap: () {
+                                                var isValid = notifier
+                                                    .validateAddPlatform();
+
+                                                if (isValid) {
+                                                  notifier.addPlatform(
+                                                      isPhone: true,
+                                                      platformId:
+                                                          socialMedia[pIndex]
+                                                              .id
+                                                              .toString());
+                                                }
+                                              },
+                                              title: AppString.save,
+                                              width: context.width,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          onTap: () {
-                                            back(context);
-                                          },
-                                          child: SvgPicture.asset(
-                                              Assets.icCloseCircle))
-                                    ],
-                                  ),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 10.0),
-                                    child: Divider(),
-                                  ),
-                                  // 10.verticalSpace,
-                                  CustomLabelTextField(
+                                    ),
+                                    10.verticalSpace,
+                                  ],
+                                ),
+                              );
+                            } else {
+                              showCustomBottomSheet(
+                                context: context,
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        AppText(
+                                          text: socialMedia[pIndex].name ?? '',
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            onTap: () {
+                                              back(context);
+                                            },
+                                            child: SvgPicture.asset(
+                                                Assets.icCloseCircle))
+                                      ],
+                                    ),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10.0),
+                                      child: Divider(),
+                                    ),
+                                    // 10.verticalSpace,
+                                    CustomLabelTextField(
                                       labelBckColor: AppColor.primary,
                                       labelText: "${socialMedia[pIndex].type}",
                                       controller: notifier.urlController,
@@ -152,56 +254,59 @@ class CustomSocialGridview extends ConsumerWidget {
                                               socialMedia[pIndex].icon!,
                                           width: 25,
                                           height: 25,
-                                          imageRadius: 10)),
-
-                                  /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: context.height * .02),
-                                    child: Row(
-                                      children: [
-                                        //GO BACK
-                                        Expanded(
-                                          child: CommonAppBtn(
-                                            textColor: AppColor.btnColor,
-                                            backGroundColor: AppColor
-                                                .green00C56524
-                                                .withOpacity(.14),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            title: AppString.cancel,
-                                            width: context.width,
-                                          ),
-                                        ),
-                                        10.horizontalSpace,
-
-                                        //SEND INVITE
-                                        Expanded(
-                                          child: CommonAppBtn(
-                                            onTap: () {
-                                              var isValid = notifier
-                                                  .validateAddPlatform();
-
-                                              if (isValid) {
-                                                notifier.addPlatform(
-                                                    platformId:
-                                                        socialMedia[pIndex]
-                                                            .id
-                                                            .toString());
-                                              }
-                                            },
-                                            title: AppString.save,
-                                            width: context.width,
-                                          ),
-                                        ),
-                                      ],
+                                          imageRadius: 10),
                                     ),
-                                  ),
-                                  10.verticalSpace,
-                                ],
-                              ),
-                            );
+
+                                    /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: context.height * .02),
+                                      child: Row(
+                                        children: [
+                                          //GO BACK
+                                          Expanded(
+                                            child: CommonAppBtn(
+                                              textColor: AppColor.btnColor,
+                                              backGroundColor: AppColor
+                                                  .green00C56524
+                                                  .withOpacity(.14),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              title: AppString.cancel,
+                                              width: context.width,
+                                            ),
+                                          ),
+                                          10.horizontalSpace,
+
+                                          //SEND INVITE
+                                          Expanded(
+                                            child: CommonAppBtn(
+                                              onTap: () {
+                                                var isValid = notifier
+                                                    .validateAddPlatform();
+
+                                                if (isValid) {
+                                                  notifier.addPlatform(
+                                                      isPhone: false,
+                                                      platformId:
+                                                          socialMedia[pIndex]
+                                                              .id
+                                                              .toString());
+                                                }
+                                              },
+                                              title: AppString.save,
+                                              width: context.width,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    10.verticalSpace,
+                                  ],
+                                ),
+                              );
+                            }
                           }
                         },
                         child: SizedBox(

@@ -46,8 +46,10 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
       final createProfileNotifier = ref.read(signupProvider.notifier);
 
       createProfileNotifier.updateSocialData(
-          img: widget.profileData?.img ?? '',
-          name: widget.profileData?.name ?? '');
+        img: widget.profileData?.img ?? '',
+        name: widget.profileData?.name ?? '',
+        email: widget.profileData?.email ?? '',
+      );
     }
     super.initState();
   }

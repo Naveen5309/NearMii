@@ -1,28 +1,26 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/network/http_service.dart';
+
 import 'package:NearMii/feature/common_widgets/app_text.dart';
-import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CustomTile extends StatelessWidget {
+class NotificationTile extends StatelessWidget {
   final String leadingIcon;
   final String title;
   final String subtitle;
   final String time;
-  final bool isHistory;
   final VoidCallback? onTap;
   final String? type;
 
-  const CustomTile({
+  const NotificationTile({
     super.key,
     required this.leadingIcon,
     required this.title,
     required this.subtitle,
     required this.time,
-    required this.isHistory,
     this.onTap,
     this.type,
   });
@@ -34,18 +32,9 @@ class CustomTile extends StatelessWidget {
       onTap: onTap,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: isHistory == true
-            ? CustomCacheNetworkImage(
-                img: leadingIcon.isNotEmpty
-                    ? ApiConstants.profileBaseUrl + leadingIcon
-                    : '',
-                imageRadius: 50,
-                height: 50,
-                width: 50,
-              )
-            : SvgPicture.asset(type == "1"
-                ? Assets.searchNotication
-                : Assets.locationNotification),
+        leading: SvgPicture.asset(type == "1"
+            ? Assets.searchNotication
+            : Assets.locationNotification),
 
         //Name
         title: AppText(

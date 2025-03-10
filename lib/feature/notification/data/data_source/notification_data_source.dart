@@ -1,33 +1,33 @@
 import 'dart:developer';
 
 import 'package:NearMii/feature/history/data/model/history_model.dart';
+import 'package:NearMii/feature/notification/data/model/notification_response_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
 import '../../../../core/network/http_service.dart';
 import '../../../../core/response_wrapper/data_response.dart';
 
 abstract class NotificationDataSource {
-  Future<ResponseWrapper<List<HistoryModel>>?> notification(
+  Future<ResponseWrapper<List<NotificationData>>?> notification(
       {required Map<String, dynamic> body});
 }
 
 class NotificationDataSourceImpl extends NotificationDataSource {
   @override
-  Future<ResponseWrapper<List<HistoryModel>>?> notification(
+  Future<ResponseWrapper<List<NotificationData>>?> notification(
       {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
-          await Getters.getHttpService.request<List<HistoryModel>>(
+          await Getters.getHttpService.request<List<NotificationData>>(
               body: body,
-              requestType: RequestType.get,
-              url: '',
-              //  ApiConstants.notification,
+              requestType: RequestType.post,
+              url: ApiConstants.getNotifications,
               fromJson: (json) {
                 print("json in data source :-> $json");
 
                 if (json is Map<String, dynamic>) {
-                  var myData = List<HistoryModel>.from(
-                      json["data"].map((x) => HistoryModel.fromJson(x)));
+                  var myData = List<NotificationData>.from(
+                      json["data"].map((x) => NotificationData.fromJson(x)));
 
                   log("mydata is :-. $myData");
                   return myData;

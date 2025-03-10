@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:NearMii/firebase_options.dart';
+import 'package:NearMii/notification/notification_service.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,8 @@ void main() async {
     await Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform, name: "Nearmii")
         .then((value) async {
-      // final NotificationService service = NotificationService();
+      final NotificationService service = NotificationService();
+      await service.init();
       // await service.initNotification();
       // await service.initPushNotificationListeners();
     });
@@ -30,7 +32,9 @@ void main() async {
       name: "Nearmii",
       options: DefaultFirebaseOptions.currentPlatform,
     ).then((value) async {
-      // final NotificationService service = NotificationService();
+      final NotificationService service = NotificationService();
+      await service.init();
+
       // await service.initNotification();
       // await service.initPushNotificationListeners();
     });

@@ -32,6 +32,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
 
   String socialName = '';
   String socialImg = '';
+  String socialEmail = '';
 
   LoginNotifier({required this.authUseCase}) : super(AuthInitial());
   //VALIDATE SIGN UP
@@ -229,8 +230,9 @@ class LoginNotifier extends StateNotifier<AuthState> {
         // String? photoUrl = result.photoUrl;
         fullNameController.text = result.displayName ?? '';
         socialImg = result.photoUrl ?? '';
+        socialEmail = result.email ?? '';
 
-        // printLog("profile data is:-> $name, $email , $photoUrl");
+        printLog("profile data is:-> $name, $socialImg , $socialEmail");
         return _signInWithCredential(
           credential,
           socialType: "google",

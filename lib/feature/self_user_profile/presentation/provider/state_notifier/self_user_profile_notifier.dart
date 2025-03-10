@@ -1,9 +1,9 @@
 import 'dart:developer';
+import 'package:NearMii/config/countries.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/self_user_profile/domain/usecases/self_user_profile_usecases.dart';
@@ -28,9 +28,17 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   TextEditingController platformTextController = TextEditingController();
 
   List<SelfPlatformCatagoryData> newPlatformLists = [];
+  String countryCode = '+1';
+  String countryNameCode = 'US';
+
+  String countryFlag = '🇺🇸';
 
   //SelfUserProfile US
-  Future<void> updateSocialLinksApi({required String id}) async {
+  Future<void> updateSocialLinksApi(
+      {required String id,
+      required Country county,
+      required bool isPhone}) async {
+    printLog("country is:-. ${county.dialCode}");
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.updatePlatform,
     );
@@ -49,8 +57,12 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       }
       Map<String, dynamic> body = {
         "id": id,
-        "url": platformTextController.text.trim(),
+        "url": isPhone
+            ? "${county.dialCode} ${platformTextController.text.trim()}"
+            : platformTextController.text.trim(),
       };
+
+      printLog("update platform is :-> $body");
       final result =
           await selfUserProfileUsecases.callUpdateSocialProfile(body: body);
 
@@ -207,15 +219,6 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
                 platformCatagory.list != null &&
                 platformCatagory.list!.isNotEmpty)
             .toList();
-        // socialMediaList = result.socialMedia ?? [];
-        // contactList = result.contactInformation ?? [];
-        // portfolioList = result.portfolio ?? [];
-
-        // // historyDataList = result ?? [];
-        // log("socialmedialist result is :->$result");
-        // log("socialmedialist result is :->$socialMediaList");
-        // log("socialmedialist result is :->$contactList");
-        // log("socialmedialist result is :->$portfolioList");
 
         return const SelfUserProfileApiSuccess(
             selfProfileDataType: SelfProfileDataType.getPlatform);
@@ -313,5 +316,12 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
         selfProfileDataType: SelfProfileDataType.getProfile,
       );
     }
+  }
+
+  updateUserPhone({required String phoneNumber}) {
+    platformTextController.text = phoneNumber.split(' ').last;
+    countryCode = phoneNumber.split(' ').first;
+
+    printLog("phone :-> $phoneNumber");
   }
 }

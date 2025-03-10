@@ -29,6 +29,8 @@ abstract final class ApiConstants {
   static const String updateProfile = "$baseUrl/updateProfile";
   static const String report = "$baseUrl/report";
   static const String getHistory = "$baseUrl/history";
+  static const String getNotifications = "$baseUrl/getNotifications";
+
   static const String getHomeUserData = "$baseUrl/userIndex";
   static const String getSelfProfile = "$baseUrl/getSelfProfile";
   static const String updateCoordinates = "$baseUrl/updateLocation";

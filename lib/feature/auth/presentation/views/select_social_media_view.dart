@@ -125,9 +125,9 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     ),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const CommonBackBtn(),
+                        // const CommonBackBtn(),
                         InkWell(
                           onTap: () async {
                             await Getters.getLocalStorage.saveIsLogin(true);

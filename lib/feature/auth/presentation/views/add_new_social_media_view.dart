@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -7,6 +6,7 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/country_code_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
@@ -59,6 +59,7 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
     // final authState = ref.watch(loginProvider);
     ref.watch(signupProvider);
     final signupPro = ref.watch(signupProvider.notifier);
+    ref.watch(countryPickerProvider);
 
     ref.listen(
       signupProvider,
@@ -110,23 +111,32 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                       height: totalHeight,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CommonBackBtn(),
-                        InkWell(
-                          onTap: () async {},
-                          child: AppText(
-                            text: " ",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        back(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: context.height * .02),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const CommonBackBtn(),
+                            InkWell(
+                              onTap: () async {},
+                              child: AppText(
+                                text: " ",
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
 
                     SizedBox(
-                      height: context.height * .05,
+                      height: context.height * .02,
                     ),
                     //Logo
 
@@ -273,6 +283,9 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                             child: ListView.builder(
                               itemCount: signupPro.newPlatformLists.length,
                               padding: EdgeInsets.zero,
+                              physics:
+                                  const ClampingScrollPhysics(), // Keeps inner scroll smooth
+
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 var data = signupPro.newPlatformLists[index];

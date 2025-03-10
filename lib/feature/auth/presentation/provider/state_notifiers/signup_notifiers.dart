@@ -6,7 +6,6 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
@@ -43,6 +42,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   String profilePic = '';
   String name = '';
   String socialImage = '';
+  String socialEmail = '';
 
   final urlController = TextEditingController();
 
@@ -55,10 +55,6 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   String imageUrl = '';
 
   String socialId = '';
-
-  // List<PlatformData> socialMediaList = [];
-  // List<PlatformData> contactList = [];
-  // List<PlatformData> portfolioList = [];
 
   List<PlatformCatagory> newPlatformLists = [];
 
@@ -99,11 +95,13 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   updateSocialData({
     required String img,
     required String name,
+    required String email,
   }) {
     printLog("update social data called:> $img ,$name");
     fullNameController.text = name;
 
     socialImage = img;
+    socialEmail = email;
   }
 
   //VALIDATE Change Password
@@ -266,32 +264,32 @@ class SignupNotifiers extends StateNotifier<AuthState> {
                 platformCatagory.list!.isNotEmpty)
             .toList();
 
-        newPlatformLists.removeWhere((platformCategory) {
-          bool shouldRemove = platformCategory.list?.any((platformData) {
-                return myPlatformList.any((myPlatform) {
-                  return myPlatform.list?.any((data) {
-                        // Print both IDs before comparison
-                        print(
-                            "Comparing platformData.id: ${platformData.id} with data.id: ${data.platform?.id}");
+        for (var platformCategory in newPlatformLists) {
+          platformCategory.list?.removeWhere((platformData) {
+            bool isMatched = myPlatformList.any((myPlatform) {
+              return myPlatform.list?.any((data) {
+                    printLog(
+                        "Comparing platformData.id: ${platformData.id} with data.id: ${data.platformId}");
 
-                        return data.id == platformData.id;
-                      }) ??
-                      false;
-                });
-              }) ??
-              false;
+                    printLog(
+                        "matched data :-> ${data.platformId == platformData.id}");
+                    return data.platformId == platformData.id;
+                  }) ??
+                  false;
+            });
 
-          if (shouldRemove) {
-            print("Removing: $platformCategory");
-          } else {
-            print("Not removing: $platformCategory");
-          }
+            if (isMatched) {
+              print("Removing platformData with id: ${platformData.id}");
+            }
 
-          return shouldRemove;
-        });
-
-        printLog("my new platform uypdate list :-> $newPlatformLists");
-
+            return isMatched;
+          });
+        }
+        newPlatformLists = newPlatformLists
+            .where((platformCatagory) =>
+                platformCatagory.list != null &&
+                platformCatagory.list!.isNotEmpty)
+            .toList();
         return const AuthApiSuccess(
           authType: AuthType.socialMedia,
         );
@@ -334,7 +332,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 // ADD PLATFORM
-  Future<void> addPlatform({required String platformId}) async {
+  Future<void> addPlatform({
+    required String platformId,
+    required bool isPhone,
+  }) async {
     state = const AuthApiLoading(authType: AuthType.addPlatform);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -350,7 +351,9 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       }
       Map<String, dynamic> body = {
         "platform_id": platformId,
-        "url": urlController.text.trim(),
+        "url": isPhone
+            ? "$countryCode ${urlController.text.trim()}"
+            : urlController.text.trim(),
       };
       final result = await authUseCase.addPlatformApi(body: body);
       state = result.fold((error) {
@@ -396,7 +399,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
             : '',
         "token": referralController.text.trim(),
         "bio": bioController.text.trim(),
-        "social_image": socialImage
+        "social_image": socialImage,
+        if (socialEmail.isNotEmpty) "email": socialEmail
       };
       final result = await authUseCase.completeProfile(
           body: body, imagePath: image?.path ?? '');

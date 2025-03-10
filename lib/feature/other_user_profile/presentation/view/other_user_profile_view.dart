@@ -605,34 +605,16 @@ Widget profileSection({
             color: AppColor.whiteFFFFFF.withOpacity(.8),
           ),
           20.verticalSpace,
-          // Wrap(
-          //   alignment: WrapAlignment.center,
-          //   runSpacing: 8,
-          //   spacing: 6,
-          //   children: [
-          //     InfoChip(
-          //         label: 'Social',
-          //         value: otherUserProfileProvider.socialMediaList.length
-          //             .toString()),
-          //     InfoChip(
-          //         label: 'Contact',
-          //         value:
-          //             otherUserProfileProvider.contactList.length.toString()),
-          //     InfoChip(
-          //         label: 'Portfolio',
-          //         value:
-          //             otherUserProfileProvider.portfolioList.length.toString()),
-          //     InfoChip(
-          //         label: 'Finance',
-          //         value:
-          //             otherUserProfileProvider.financeList.length.toString()),
-          //     InfoChip(
-          //         label: 'Business',
-          //         value:
-          //             otherUserProfileProvider.businessList.length.toString()),
-
-          //   ],
-          // )
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: otherUserProfileProvider.newPlatformLists.map((entry) {
+              return InfoChip(
+                  label: entry.title ?? "Unknown",
+                  value: entry.list?.length.toString() ?? '0');
+            }).toList(),
+          ),
         ]),
   );
 }

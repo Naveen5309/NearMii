@@ -49,8 +49,10 @@ class AuthView extends ConsumerWidget {
               context,
               Routes.completeProfile,
               args: SocialProfileModel(
-                  img: loginNotifier.socialImg,
-                  name: loginNotifier.fullNameController.text),
+                img: loginNotifier.socialImg,
+                name: loginNotifier.fullNameController.text,
+                email: loginNotifier.socialEmail,
+              ),
             );
           }
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {

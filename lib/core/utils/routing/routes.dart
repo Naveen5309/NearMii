@@ -31,4 +31,5 @@ class Routes {
   static const String deleteAccountReason = '/deleteAccountReason';
 
   static const String share = '/share';
+  static const String notification = '/notification';
 }

@@ -1,4 +1,3 @@
-import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/network/http_service.dart';
@@ -491,32 +490,3 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     );
   }
 }
-
-// // Simulated Backend Data Fetching
-// Future<List<TileModel>> fetchTilesFromBackend() async {
-//   await Future.delayed(const Duration(seconds: 2));
-
-//   return [
-//     TileModel(
-//       title: 'Ramesh',
-//       subtitle: 'dehli',
-//       time: '1h ago',
-//       imageUrl: 'https://picsum.photos/250?image=9',
-//       type: 'image',
-//     ),
-//     TileModel(
-//       title: 'Watch',
-//       subtitle: 'punjab',
-//       time: '1h ago',
-//       icon: 'search',
-//       type: 'icon',
-//     ),
-//     TileModel(
-//       title: 'amit',
-//       subtitle: 'Manager',
-//       time: '2h ago',
-//       icon: 'location',
-//       type: 'icon',
-//     ),
-//   ];
-// }
