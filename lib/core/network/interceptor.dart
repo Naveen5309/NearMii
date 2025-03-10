@@ -90,21 +90,21 @@ class LoggingInterceptors extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print(
+    printLog(
         "<-- ${response.statusCode} ${(response.requestOptions.baseUrl.isNotEmpty ? (response.requestOptions.baseUrl + response.requestOptions.path) : 'URL')}");
-    print("Headers:");
-    response.headers.forEach((k, v) => print('$k: $v'));
-    print("Response: ${response.data}");
-    print("<-- END HTTP");
+    printLog("Headers:");
+    response.headers.forEach((k, v) => printLog('$k: $v'));
+    printLog("Response: ${response.data}");
+    printLog("<-- END HTTP");
     return super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    print(
+    printLog(
         "<-- ${err.message} ${(err.response?.requestOptions != null ? (err.response!.requestOptions.baseUrl + err.response!.requestOptions.path) : 'URL')}");
-    print("${err.response != null ? err.response!.data : 'Unknown Error'}");
-    print("<-- End error");
+    printLog("${err.response != null ? err.response!.data : 'Unknown Error'}");
+    printLog("<-- End error");
     if (err.response?.statusCode == 401) {
       navigatorKey.currentState?.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const LoginView()),

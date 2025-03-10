@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/constants.dart';
@@ -28,7 +27,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shimmer/shimmer.dart';
 
 class SettingView extends ConsumerStatefulWidget {
   const SettingView({super.key});
@@ -64,7 +62,10 @@ class _SettingViewState extends ConsumerState<SettingView> {
         Utils.hideLoader();
 
         // back(context);
-        offAllNamed(context, Routes.login);
+
+        if (context.mounted) {
+          offAllNamed(context, Routes.login);
+        }
       } else if (next is AuthApiFailed && next.authType == AuthType.logOut) {
         Utils.hideLoader();
 
@@ -72,22 +73,23 @@ class _SettingViewState extends ConsumerState<SettingView> {
       }
     });
 
-    ref.listen(getProfileProvider, (previous, next) async {
-      if (next is SettingApiLoading) {
-        print("other user loading is called");
-        Utils.showLoader();
-      } else if (next is SettingApiSuccess) {
-        Utils.hideLoader();
+    // ref.listen(getProfileProvider, (previous, next) async {
+    //   if (next is SettingApiLoading) {
+    //     printLog("other user loading is called");
+    //     Utils.showLoader();
+    //   } else if (next is SettingApiSuccess) {
+    //     Utils.hideLoader();
 
-        // toNamed(context, Routes.bottomNavBar);
-      } else if (next is SettingApiFailed) {
-        if (context.mounted) {
-          Utils.hideLoader();
-        }
+    //     // toNamed(context, Routes.bottomNavBar);
+    //   } else if (next is SettingApiFailed) {
+    //     if (context.mounted) {
+    //       Utils.hideLoader();
+    //     }
 
-        toast(msg: next.error);
-      }
-    });
+    //     toast(msg: next.error);
+    //   }
+    // }
+    // )
     final isVIP = notifier.userProfileModel != null
         ? notifier.userProfileModel?.isSubscription == 1
         : false;
@@ -111,7 +113,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                     children: [
                       notifier.userProfileModel == null
                           // notifier.userProfileModel?.profilePhoto == null
-                          ? const ShimmerLoader()
+                          ? const SettingProfileShimmer()
                           : profileWidget(
                               imageUrl: notifier
                                           .userProfileModel?.profilePhoto !=
