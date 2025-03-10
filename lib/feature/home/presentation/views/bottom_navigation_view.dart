@@ -132,7 +132,7 @@ class BottomNavigationView extends ConsumerWidget {
                             ),
 
                             //PROFILE
-                            GestureDetector(
+                            InkWell(
                                 onTap: () {
                                   toNamed(context, Routes.profile);
 
@@ -206,11 +206,18 @@ class BottomNavigationView extends ConsumerWidget {
       required String icon,
       required VoidCallback onTap,
       required BuildContext context}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        icon,
-        height: 26,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        splashColor: AppColor.whiteFFFFFF.withOpacity(0.3),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SvgPicture.asset(
+            icon,
+            height: 26,
+          ),
+        ),
       ),
     );
   }

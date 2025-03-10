@@ -23,10 +23,12 @@ import 'package:NearMii/feature/home/presentation/history/presentation/invite_fr
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
+import 'package:NearMii/feature/setting/presentation/view/shimmer_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SettingView extends ConsumerStatefulWidget {
   const SettingView({super.key});
@@ -107,18 +109,21 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       const EdgeInsets.symmetric(vertical: 18, horizontal: 11),
                   child: Column(
                     children: [
-                      //PROFILE SECTION
-
-                      profileWidget(
-                        imageUrl:
-                            notifier.userProfileModel?.profilePhoto != null
-                                ? ApiConstants.profileBaseUrl +
-                                    notifier.userProfileModel!.profilePhoto!
-                                : notifier.userProfileModel?.socialImage ?? '',
-                        name: notifier.userProfileModel?.name ?? '',
-                        points: notifier.userProfileModel?.points ?? 0,
-                        isVip: isVIP,
-                      ),
+                      notifier.userProfileModel == null
+                          // notifier.userProfileModel?.profilePhoto == null
+                          ? const ShimmerLoader()
+                          : profileWidget(
+                              imageUrl: notifier
+                                          .userProfileModel?.profilePhoto !=
+                                      null
+                                  ? ApiConstants.profileBaseUrl +
+                                      notifier.userProfileModel!.profilePhoto!
+                                  : notifier.userProfileModel?.socialImage ??
+                                      '',
+                              name: notifier.userProfileModel?.name ?? '',
+                              points: notifier.userProfileModel?.points ?? 0,
+                              isVip: isVIP,
+                            ),
                       28.verticalSpace,
                       dottedContainer(context, isVIP),
                       35.verticalSpace,

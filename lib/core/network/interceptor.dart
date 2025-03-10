@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:NearMii/feature/auth/presentation/views/login_view.dart';
+import 'package:NearMii/main.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import '../helpers/all_getter.dart';
 import '../../config/helper.dart';
 
@@ -86,15 +89,6 @@ class LoggingInterceptors extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    print(
-        "<-- ${err.message} ${(err.response?.requestOptions != null ? (err.response!.requestOptions.baseUrl + err.response!.requestOptions.path) : 'URL')}");
-    print("${err.response != null ? err.response!.data : 'Unknown Error'}");
-    print("<-- End error");
-    return super.onError(err, handler);
-  }
-
-  @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     print(
         "<-- ${response.statusCode} ${(response.requestOptions.baseUrl.isNotEmpty ? (response.requestOptions.baseUrl + response.requestOptions.path) : 'URL')}");
@@ -103,5 +97,20 @@ class LoggingInterceptors extends Interceptor {
     print("Response: ${response.data}");
     print("<-- END HTTP");
     return super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    print(
+        "<-- ${err.message} ${(err.response?.requestOptions != null ? (err.response!.requestOptions.baseUrl + err.response!.requestOptions.path) : 'URL')}");
+    print("${err.response != null ? err.response!.data : 'Unknown Error'}");
+    print("<-- End error");
+    if (err.response?.statusCode == 401) {
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginView()),
+        (route) => false,
+      );
+    }
+    return super.onError(err, handler);
   }
 }
