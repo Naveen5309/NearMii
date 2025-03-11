@@ -140,12 +140,11 @@ class NotificationService {
       if (Platform.isIOS || (Getters.authToken?.isEmpty ?? true)) {
         return;
       }
-      printLog("Foreground notification received:  ${message.data}");
-      NotificationEntity notificationEntity =
-          NotificationEntity.fromJson(message.data);
+      printLog("Foreground notification received:  ${message.notification}");
+      NotificationEntity notificationEntity = NotificationEntity();
       printLog(message.data.toString());
-      notificationEntity.title = notificationEntity.title ?? "NearMii";
-      notificationEntity.body = notificationEntity.body;
+      notificationEntity.title = message.notification?.title ?? "NearMii";
+      notificationEntity.body = message.notification?.body ?? '';
       _showNotifications(notificationEntity);
     });
   }

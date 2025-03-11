@@ -21,7 +21,6 @@ import 'package:NearMii/feature/common_widgets/setting_custom_tile.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/invite_friend.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
-import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:NearMii/feature/setting/presentation/view/shimmer_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

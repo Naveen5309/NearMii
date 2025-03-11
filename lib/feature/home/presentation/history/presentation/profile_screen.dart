@@ -325,17 +325,25 @@ Widget appBarWidgetSection({
 }) {
   return Row(
     children: [
-      GestureDetector(
+      InkWell(
         onTap: () {
           back(context);
         },
-        child: SvgPicture.asset(
-          Assets.icBackBtn,
-          colorFilter:
-              const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+        child: Container(
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 15.w,
+              top: 15,
+              bottom: 15,
+            ),
+            child: SvgPicture.asset(
+              Assets.icBackBtn,
+              colorFilter:
+                  const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+            ),
+          ),
         ),
       ),
-      15.horizontalSpace,
       Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
@@ -479,30 +487,38 @@ Widget profileSection(
         mainAxisSize:
             MainAxisSize.min, // Ensures column takes only necessary space
         children: [
-          SizedBox(height: context.height * .1),
+          // SizedBox(height: context.height * .1),
           Align(
             alignment: Alignment.centerLeft,
             child: InkWell(
               onTap: () {
                 back(context);
               },
-              child: SizedBox(
-                height: 30,
-                width: 30,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                width: context.width,
                 child: Padding(
                   padding: EdgeInsets.only(
-                    left: context.width * .05,
-                  ),
-                  child: SvgPicture.asset(
-                    Assets.icBackBtn,
-                    colorFilter: const ColorFilter.mode(
-                        AppColor.primary, BlendMode.srcIn),
+                      top: context.height * .1, bottom: context.height * .02),
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: context.width * .05,
+                      ),
+                      child: SvgPicture.asset(
+                        Assets.icBackBtn,
+                        colorFilter: const ColorFilter.mode(
+                            AppColor.primary, BlendMode.srcIn),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: context.height * .02),
+          // SizedBox(height: context.height * .02),
           Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,

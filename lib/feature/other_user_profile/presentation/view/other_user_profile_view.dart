@@ -133,17 +133,24 @@ Widget appBarWidgetSection({
 }) {
   return Row(
     children: [
-      GestureDetector(
+      InkWell(
         onTap: () {
           back(context);
         },
-        child: SvgPicture.asset(
-          Assets.icBackBtn,
-          colorFilter:
-              const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 20.w,
+            top: 15,
+            bottom: 15,
+          ),
+          child: SvgPicture.asset(
+            Assets.icBackBtn,
+            colorFilter:
+                const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
+          ),
         ),
       ),
-      15.horizontalSpace,
+      // 15.horizontalSpace,
       Container(
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
@@ -457,12 +464,16 @@ Widget profileSection({
                 onTap: () {
                   back(context);
                 },
-                child: Padding(
-                  padding: EdgeInsets.only(left: context.width * .05),
-                  child: SvgPicture.asset(
-                    Assets.icBackBtn,
-                    colorFilter: const ColorFilter.mode(
-                        AppColor.primary, BlendMode.srcIn),
+                child: SizedBox(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.width * .05,
+                        vertical: context.height * .02),
+                    child: SvgPicture.asset(
+                      Assets.icBackBtn,
+                      colorFilter: const ColorFilter.mode(
+                          AppColor.primary, BlendMode.srcIn),
+                    ),
                   ),
                 ),
               ),
@@ -565,7 +576,6 @@ Widget profileSection({
               ),
             ],
           ),
-          SizedBox(height: context.height * .02),
           Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,

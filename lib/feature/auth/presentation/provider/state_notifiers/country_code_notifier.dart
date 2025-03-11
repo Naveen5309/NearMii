@@ -22,11 +22,26 @@ class CountryPickerNotifier extends StateNotifier<CountryPickerState> {
   void updateInitialCountry(String code) {
     print("updateInitialCountry====>>>>  $code");
 
-    final myCountry = allCountries.firstWhere(
-        (element) => element.dialCode == code,
-        orElse: () => country);
+    final myCountry = (code == "+1")
+        ? const Country(
+            name: "United States",
+            flag: "🇺🇸",
+            code: "US",
+            dialCode: "+1",
+            minLength: 10,
+            maxLength: 10,
+          )
+        : allCountries.firstWhere(
+            (element) => element.dialCode == code,
+            orElse: () => country, // Use the default country if no match found
+          );
     country = myCountry;
     state = const CountryPickerLoading();
+    // final myCountry = allCountries.firstWhere(
+    //     (element) => element.dialCode == code,
+    //     orElse: () => country);
+    // country = myCountry;
+    // state = const CountryPickerLoading();
   }
 
   CountryPickerNotifier() : super(CountryPickerInitial());

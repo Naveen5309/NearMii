@@ -64,6 +64,9 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   int secondsRemaining = 30;
   bool enableResend = false;
+
+  bool isSocialLoading = true;
+
   Timer? timer;
 
   void startTimer() {
@@ -237,6 +240,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     required List<SelfPlatformCatagoryData> myPlatformList,
   }) async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);
+    isSocialLoading = true;
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const AuthApiFailed(
@@ -249,6 +253,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
       final result = await authUseCase.getPlatform(body: body);
       state = result.fold((error) {
+        isSocialLoading = false;
         return AuthApiFailed(
             error: error.message, authType: AuthType.socialMedia);
       }, (result) {
@@ -290,11 +295,15 @@ class SignupNotifiers extends StateNotifier<AuthState> {
                 platformCatagory.list != null &&
                 platformCatagory.list!.isNotEmpty)
             .toList();
+        isSocialLoading = false;
+
         return const AuthApiSuccess(
           authType: AuthType.socialMedia,
         );
       });
     } catch (e) {
+      isSocialLoading = false;
+
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
     }

@@ -393,7 +393,12 @@ class ProfileGridView extends ConsumerWidget {
                           isMyProfile: isMyProfile,
                           index: pIndex,
                           icon: socialMedia[pIndex].platform?.icon ?? '',
-                          name: socialMedia[pIndex].platform?.name ?? '',
+                          name: socialMedia[pIndex]
+                                  .platform
+                                  ?.name
+                                  ?.split(' ')
+                                  .first ??
+                              '',
                         ));
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

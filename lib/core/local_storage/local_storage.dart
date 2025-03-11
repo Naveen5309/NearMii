@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import '../../config/helper.dart';
@@ -14,6 +13,9 @@ abstract class HiveConst {
   static const String editPrfileUserData = 'EditPrfileUserData';
 
   static const String isLogin = 'isLogin';
+  static const String isSubscription = 'isSubscription';
+  static const String credits = 'credits';
+
   static const String address = 'address';
 
   static const String location = 'location';
@@ -55,7 +57,13 @@ abstract class LocalStorage {
   Future<void> saveName(String name);
 
   Future<void> saveIsLogin(bool isLogin);
+  Future<void> saveCredits(int credits);
+
+  Future<void> saveIsSubscription(bool isSubscription);
+
   bool? getIsLogin();
+  bool? getIsSubscription();
+  int? getCredits();
 
   Future<void> saveIsProfileComplete(int isComplete);
   int? getIsProfileComplete();
@@ -216,5 +224,27 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> saveFirstIn(bool isOnboard) async {
     await userBox.put(HiveConst.isOnboard, isOnboard);
+  }
+
+  @override
+  bool? getIsSubscription() {
+    final isSubscription = userBox.get(HiveConst.isSubscription);
+    return isSubscription;
+  }
+
+  @override
+  Future<void> saveIsSubscription(bool isSubscription) async {
+    await userBox.put(HiveConst.isOnboard, isSubscription);
+  }
+
+  @override
+  int? getCredits() {
+    final credits = userBox.get(HiveConst.credits);
+    return credits;
+  }
+
+  @override
+  Future<void> saveCredits(int credits) async {
+    await userBox.put(HiveConst.credits, credits);
   }
 }

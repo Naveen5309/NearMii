@@ -9,7 +9,6 @@ import 'package:NearMii/feature/setting/presentation/view/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../../config/assets.dart';
 import '../../../../../config/helper.dart';
 
@@ -135,13 +134,6 @@ class BottomNavigationView extends ConsumerWidget {
                             InkWell(
                                 onTap: () {
                                   toNamed(context, Routes.profile);
-
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) =>
-                                  //           const NewProfileScreen(),
-                                  //     ));
                                 },
                                 child: const CustomProfileWidget()),
                             // NOTIFICATION
@@ -209,7 +201,8 @@ class BottomNavigationView extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        splashColor: AppColor.whiteFFFFFF.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(10),
+        splashColor: AppColor.green00C56524.withOpacity(.5),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(8.0),

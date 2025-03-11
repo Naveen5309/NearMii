@@ -13,6 +13,8 @@ class CustomProfileCard extends StatelessWidget {
   final String name;
   final String designation;
   final String distance;
+  final bool isSubscription;
+
   final VoidCallback onUnlockTap;
 
   const CustomProfileCard({
@@ -21,6 +23,7 @@ class CustomProfileCard extends StatelessWidget {
     required this.name,
     required this.designation,
     required this.distance,
+    required this.isSubscription,
     required this.onUnlockTap,
   });
 
@@ -62,7 +65,7 @@ class CustomProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ImageFiltered(
-                    enabled: false,
+                    enabled: !isSubscription,
                     imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 2),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

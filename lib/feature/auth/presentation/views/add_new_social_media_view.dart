@@ -14,11 +14,13 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
+import 'package:NearMii/feature/common_widgets/social_shimmer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 class AddNewSocialMediaView extends ConsumerStatefulWidget {
   final Map<String, dynamic> oldPlatformData;
@@ -86,22 +88,28 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton:
           //login
-          Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: context.width * .05, vertical: context.height * .01),
-        child: CommonAppBtn(
-          onTap: () async {
-            back(context);
-          },
-          title: AppString.done,
-          textSize: 16.sp,
-        ),
-      ),
+          signupPro.newPlatformLists.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.width * .05,
+                      vertical: context.height * .01),
+                  child: CommonAppBtn(
+                    onTap: () async {
+                      back(context);
+                    },
+                    title: AppString.done,
+                    textSize: 16.sp,
+                  ),
+                )
+              : const SizedBox(),
       body: BgImageContainer(
           bgImage: Assets.icProfileBg,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: context.width * .05),
             child: SingleChildScrollView(
+              physics: signupPro.newPlatformLists.isNotEmpty
+                  ? const AlwaysScrollableScrollPhysics()
+                  : const NeverScrollableScrollPhysics(),
               child: Consumer(builder:
                   (BuildContext context, WidgetRef ref, Widget? child) {
                 return Column(
@@ -142,194 +150,197 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
 
                     //ADD SOCIAL PROFILES TEXT
 
-                    AppText(
-                      text: AppString.addSocialProfiles,
-                      fontSize: 32.sp,
-                    ),
+                    signupPro.newPlatformLists.isNotEmpty
+                        ? AppText(
+                            text: AppString.addSocialProfiles,
+                            fontSize: 32.sp,
+                          )
+                        : const SizedBox(),
 
                     10.verticalSpace,
 
-                    RichText(
-                      text: TextSpan(
-                        text: 'Upload the URL of your profiles. ',
-                        style: TextStyle(
-                          color: AppColor.grey999,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Learn More',
-                            style: TextStyle(
-                              color: AppColor.btnColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle the tap action here
+                    signupPro.newPlatformLists.isNotEmpty
+                        ? RichText(
+                            text: TextSpan(
+                              text: 'Upload the URL of your profiles. ',
+                              style: TextStyle(
+                                color: AppColor.grey999,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Learn More',
+                                  style: TextStyle(
+                                    color: AppColor.btnColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      // Handle the tap action here
 
-                                showCustomBottomSheet(
-                                    context: context,
-                                    content: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: .0, vertical: 15),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              AppText(
-                                                text:
-                                                    "Steps to Add Profile Link",
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              InkWell(
-                                                  onTap: () {
-                                                    back(context);
-                                                  },
-                                                  child: SvgPicture.asset(
-                                                      height: 30,
-                                                      width: 30,
-                                                      Assets.icCloseCircle))
-                                            ],
-                                          ),
-                                          12.verticalSpace,
-                                          SizedBox(
-                                            height: context.height * .8,
-                                            child: ListView.builder(
-                                              itemCount:
-                                                  AppString.stepsList.length,
-                                              itemBuilder: (context, index) {
-                                                var data =
-                                                    AppString.stepsList[index];
-                                                return Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 8.0),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      5.verticalSpace,
-                                                      AppText(
-                                                          fontFamily: Constants
-                                                              .fontFamily,
-                                                          fontSize: 15.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          text: data["step"] ??
-                                                              ''),
-                                                      5.verticalSpace,
-                                                      AppText(
-                                                          fontFamily: Constants
-                                                              .fontFamily,
-                                                          fontSize: 12.sp,
-                                                          lineHeight: 1.5,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: AppColor
-                                                              .black000000
-                                                              .withOpacity(.6),
-                                                          text: data["msg"] ??
-                                                              ''),
-                                                    ],
+                                      showCustomBottomSheet(
+                                          context: context,
+                                          content: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: .0, vertical: 15),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    AppText(
+                                                      text:
+                                                          "Steps to Add Profile Link",
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                    InkWell(
+                                                        onTap: () {
+                                                          back(context);
+                                                        },
+                                                        child: SvgPicture.asset(
+                                                            height: 30,
+                                                            width: 30,
+                                                            Assets
+                                                                .icCloseCircle))
+                                                  ],
+                                                ),
+                                                12.verticalSpace,
+                                                SizedBox(
+                                                  height: context.height * .8,
+                                                  child: ListView.builder(
+                                                    itemCount: AppString
+                                                        .stepsList.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var data = AppString
+                                                          .stepsList[index];
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 8.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            5.verticalSpace,
+                                                            AppText(
+                                                                fontFamily:
+                                                                    Constants
+                                                                        .fontFamily,
+                                                                fontSize: 15.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                text: data[
+                                                                        "step"] ??
+                                                                    ''),
+                                                            5.verticalSpace,
+                                                            AppText(
+                                                                fontFamily:
+                                                                    Constants
+                                                                        .fontFamily,
+                                                                fontSize: 12.sp,
+                                                                lineHeight: 1.5,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: AppColor
+                                                                    .black000000
+                                                                    .withOpacity(
+                                                                        .6),
+                                                                text: data[
+                                                                        "msg"] ??
+                                                                    ''),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
                                                   ),
-                                                );
-
-                                                // ListTile(
-                                                //   title: Text(
-                                                //     AppString
-                                                //         .profileUrls[index],
-                                                //     style: const TextStyle(
-                                                //         fontSize: 16),
-                                                //   ),
-                                                // );
-                                              },
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ));
+                                          ));
 
-                                // You can add any navigation or action here, e.g., navigate to a new screen
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
+                                      // You can add any navigation or action here, e.g., navigate to a new screen
+                                    },
+                                ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
 
                     15.verticalSpace,
 
                     //SEARCH FIELD
-                    CustomSearchBarWidget(
-                      controller: signupPro.searchTextController,
-                      onChanged: (value) {
-                        _onSearchChanged(value);
-                      },
-                    ),
-
-// newPlatformLists
-
                     signupPro.newPlatformLists.isNotEmpty
-                        ? SizedBox(
-                            height: context.height * .8,
-                            child: ListView.builder(
-                              itemCount: signupPro.newPlatformLists.length,
-                              padding: EdgeInsets.zero,
-                              physics:
-                                  const ClampingScrollPhysics(), // Keeps inner scroll smooth
-
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                var data = signupPro.newPlatformLists[index];
-                                return CustomSocialGridview(
-                                  title: data.title ?? '',
-                                  socialMedia: data.list ?? [],
-                                  notifier: signupPro,
-                                );
-                              },
-                            ),
+                        ? CustomSearchBarWidget(
+                            controller: signupPro.searchTextController,
+                            onChanged: (value) {
+                              _onSearchChanged(value);
+                            },
                           )
-                        : const SizedBox(
-                            child: AppText(text: "No Data found"),
-                          ),
+                        : const SizedBox(),
 
+                    // newPlatformLists
+
+                    ((signupPro.isSocialLoading) &&
+                            (signupPro.newPlatformLists.isNotEmpty))
+                        ? const SocialMediaShimmer()
+                        : signupPro.newPlatformLists.isNotEmpty
+                            ? SizedBox(
+                                height: context.height * .8,
+                                child: ListView.builder(
+                                  itemCount: signupPro.newPlatformLists.length,
+                                  padding: EdgeInsets.zero,
+                                  physics:
+                                      const ClampingScrollPhysics(), // Keeps inner scroll smooth
+
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    var data =
+                                        signupPro.newPlatformLists[index];
+                                    return CustomSocialGridview(
+                                      title: data.title ?? '',
+                                      socialMedia: data.list ?? [],
+                                      notifier: signupPro,
+                                    );
+                                  },
+                                ),
+                              )
+                            : SizedBox(
+                                height: context.height,
+                                width: context.width,
+                                child: Center(
+                                  child: Column(
+                                    children: [
+                                      20.verticalSpace,
+                                      Lottie.asset(Assets.emptyAnimation,
+                                          backgroundLoading: true,
+                                          height: context.height * .4,
+                                          width: context.width,
+                                          fit: BoxFit.fill),
+                                      AppText(
+                                        text: "No more social profile to add",
+                                        color: AppColor.black000000,
+                                        fontSize: 16.sp,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                     //SOCIAL MEDIA
-
-                    // signupPro.socialMediaList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         title: AppString.socialMedia,
-                    //         socialMedia: signupPro.socialMediaList,
-                    //         notifier: signupPro,
-                    //       ),
-
-                    // //CONTACT INFORMATION
-
-                    // signupPro.contactList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         notifier: signupPro,
-                    //         title: AppString.contactInformation,
-                    //         socialMedia: signupPro.contactList,
-                    //       ),
-
-                    // //PORTFOLIO
-
-                    // signupPro.portfolioList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         notifier: signupPro,
-                    //         title: AppString.portfolio,
-                    //         socialMedia: signupPro.portfolioList,
-                    //       ),
 
                     SizedBox(
                       height: context.height * .05,

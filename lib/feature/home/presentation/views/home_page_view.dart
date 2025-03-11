@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -15,10 +16,12 @@ import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
+import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePageView extends ConsumerStatefulWidget {
@@ -30,9 +33,12 @@ class HomePageView extends ConsumerStatefulWidget {
 }
 
 class _HomePageViewState extends ConsumerState<HomePageView> {
+  RewardedAd? _rewardedAd;
+  int rewardedCount = 0;
   @override
   void initState() {
     super.initState();
+    _loadRewardedAd();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var notifier = ref.watch(homeProvider.notifier);
 
@@ -51,6 +57,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
           // homeDataNotifier.getHomeDataApi();
         }
       }
+      ref.watch(getProfileProvider.notifier).getProfileApi();
 
       notifier.getFromLocalStorage();
 
@@ -59,6 +66,49 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       notifier.checkAddress();
       // }
     });
+  }
+
+  @override
+  void dispose() {
+    _rewardedAd?.dispose();
+    super.dispose();
+  }
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId: AdHelper.rewardedAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          printLog("add load :-> $ad");
+          _rewardedAd = ad;
+        },
+        onAdFailedToLoad: (err) {
+          printLog("add load :-> $err");
+        },
+      ),
+    );
+  }
+
+  void _showRewardedAd({required String id}) {
+    if (_rewardedAd != null) {
+      _rewardedAd?.show(onUserEarnedReward: (ad, reward) {
+        toNamed(context, Routes.otherUserProfile, args: id.toString());
+        // toNamed(context, rou);
+      }
+          // setState(() {
+          //   rewardedCount++;
+          // }),
+          );
+      _rewardedAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _loadRewardedAd();
+      }, onAdFailedToShowFullScreenContent: ((ad, error) {
+        ad.dispose();
+        _loadRewardedAd();
+      }));
+    }
   }
 
   @override
@@ -265,6 +315,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
           //       ),
 
           RefreshIndicator(
+            displacement: 10,
+            triggerMode: RefreshIndicatorTriggerMode.onEdge,
+            color: AppColor.appThemeColor,
             onRefresh: () async {
               var notifier = ref.read(homeProvider.notifier);
               notifier.updateCoordinates(radius: '');
@@ -293,15 +346,30 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                               profileImage: data.profilePhoto != null
                                   ? ApiConstants.profileBaseUrl +
                                       data.profilePhoto!
-                                  : '', // Replace with actual image
-                              name: data.name ?? "Name",
+                                  : '',
+                              isSubscription: notifier
+                                  .isSubscription, // Replace with actual image
+                              name: data.name ?? "",
                               designation: data.designation ?? "",
                               distance: data.distance != null
                                   ? getDistance(data.distance.toString())
                                   : '',
                               onUnlockTap: () {
-                                toNamed(context, Routes.otherUserProfile,
-                                    args: data.id.toString());
+                                if (notifier.isSubscription) {
+                                  toNamed(context, Routes.otherUserProfile,
+                                      args: data.id.toString());
+                                } else if (notifier.credits > 0) {
+                                  toNamed(context, Routes.otherUserProfile,
+                                      args: data.id.toString());
+                                } else {
+                                  _showRewardedAd(id: data.id.toString());
+                                  // showDialog(
+                                  //   context: context,
+                                  //   builder: (context) =>
+                                  //       const VIPMembershipDialog(),
+                                  // );
+                                }
+
                                 // print("Unlock Now Clicked!");
                               },
                             );
@@ -344,5 +412,17 @@ class PreferenceList extends ConsumerWidget {
         );
       },
     );
+  }
+}
+
+class AdHelper {
+  static String get rewardedAdUnitId {
+    if (Platform.isAndroid) {
+      return "ca-app-pub-3940256099942544/5224354917"; // Your rewarderAdUnitId for Android
+    } else if (Platform.isIOS) {
+      return "ca-app-pub-3940256099942544/1712485313"; // Your rewarderAdUnitId for Ios
+    } else {
+      throw UnsupportedError("Unsupported platform");
+    }
   }
 }

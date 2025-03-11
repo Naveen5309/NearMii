@@ -242,6 +242,11 @@ class SettingNotifier extends StateNotifier<SettingStates> {
               .saveProfileImg(userProfileModel?.profilePhoto ?? '');
 
           Getters.getLocalStorage
+              .saveIsSubscription(userProfileModel?.isSubscription == 1);
+
+          Getters.getLocalStorage.saveCredits(userProfileModel?.points ?? 0);
+
+          Getters.getLocalStorage
               .saveSocialImg(userProfileModel?.socialImage ?? '');
         }
 

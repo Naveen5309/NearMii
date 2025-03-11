@@ -7,6 +7,7 @@ import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart';
 import 'package:NearMii/feature/auth/presentation/provider/state_notifiers/signup_notifiers.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
+import 'package:NearMii/feature/auth/presentation/provider/states/country_code_provider.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
@@ -118,6 +119,11 @@ class CustomSocialGridview extends ConsumerWidget {
                             notifier.countryFlag = '🇺🇸';
                             notifier.countryNameCode = 'US';
 
+                            final countryNotifier =
+                                ref.read(countryPickerProvider.notifier);
+
+                            countryNotifier.updateInitialCountry('+1');
+
                             // notifier.updateCountryData(
                             //   dialCode: "+1",
                             //   countryNmCode: 'US',
@@ -187,7 +193,7 @@ class CustomSocialGridview extends ConsumerWidget {
                                           ),
                                           10.horizontalSpace,
 
-                                          //SEND INVITE
+                                          //ADD/SAVE PLATFORM
                                           Expanded(
                                             child: CommonAppBtn(
                                               onTap: () {
@@ -316,7 +322,9 @@ class CustomSocialGridview extends ConsumerWidget {
                             SocialMediaProfile(
                               index: pIndex,
                               icon: socialMedia[pIndex].icon ?? '',
-                              name: socialMedia[pIndex].name ?? '',
+                              name:
+                                  socialMedia[pIndex].name?.split(' ').first ??
+                                      '',
                             ),
                             Visibility(
                               visible: notifier.selectedPlatform

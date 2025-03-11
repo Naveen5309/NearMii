@@ -32,6 +32,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   String profilePic = '';
   String socialImg = '';
+  bool isSubscription = false;
+  int credits = 0;
 
   String name = '';
 
@@ -39,6 +41,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
     name = Getters.getLocalStorage.getName() ?? '';
     profilePic = Getters.getLocalStorage.getProfilePic() ?? '';
     socialImg = Getters.getLocalStorage.getSocialProfilePic() ?? '';
+    isSubscription = Getters.getLocalStorage.getIsSubscription() ?? false;
+    credits = Getters.getLocalStorage.getCredits() ?? 0;
   }
 
 // Function to get the current location and update the state

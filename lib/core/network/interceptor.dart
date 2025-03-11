@@ -106,6 +106,9 @@ class LoggingInterceptors extends Interceptor {
     printLog("${err.response != null ? err.response!.data : 'Unknown Error'}");
     printLog("<-- End error");
     if (err.response?.statusCode == 401) {
+      Getters.getLocalStorage.saveIsLogin(false);
+      Getters.getLocalStorage.clearLoginData();
+
       navigatorKey.currentState?.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const LoginView()),
         (route) => false,
