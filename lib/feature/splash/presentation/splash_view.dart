@@ -38,6 +38,7 @@ class _SplashViewState extends ConsumerState<SplashView>
 
   Future<bool> checkLogin() async {
     bool isLogin = Getters.getLocalStorage.getIsLogin() ?? false;
+
     return isLogin;
   }
 
@@ -48,6 +49,10 @@ class _SplashViewState extends ConsumerState<SplashView>
 
     log("is first onboard:-> $isFirstOnboard");
     return isFirstOnboard;
+  }
+
+  updateIsShowVip() {
+    Getters.getLocalStorage.saveIShowVip(true);
   }
 
   @override
@@ -68,6 +73,7 @@ class _SplashViewState extends ConsumerState<SplashView>
       // Navigate to the next screen (replace with your next screen logic)
       bool isLogin = await checkLogin();
       bool isFirstOnboard = await checkIsOnBoard();
+      updateIsShowVip();
 
       if (!isMounted) return;
 

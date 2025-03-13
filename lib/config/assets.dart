@@ -184,6 +184,13 @@ class Assets {
   static const String icInfo = 'assets/icons/info.svg';
   static const String lineBar = 'assets/icons/line_bar.svg';
   static const String emptyAnimation = 'assets/animation/empty_animation.json';
+  static const String requestLocationJson =
+      'assets/animation/location_request.json';
+  static const String icAccountSuspend = 'assets/icons/account_suspend.svg';
+  // static const String checkFalse = 'assets/icons/check_false.svg';
+  // static const String checkFalse = 'assets/icons/check_false.svg';
+  // static const String checkFalse = 'assets/icons/check_false.svg';
+  // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';
   // static const String checkFalse = 'assets/icons/check_false.svg';

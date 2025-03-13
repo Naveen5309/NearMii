@@ -13,6 +13,7 @@ import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.da
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
+import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_rich_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
@@ -38,6 +39,95 @@ class _LoginViewState extends ConsumerState<LoginView> {
       },
     );
     super.initState();
+  }
+
+  void showCustomBottomSheet(
+      {required BuildContext context,
+      required Widget content,
+      Color? color,
+      final EdgeInsetsGeometry? contentPadding,
+      double? radius}) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      context: context,
+      isScrollControlled: true,
+      builder: (
+        BuildContext context,
+      ) {
+        return Container(
+            decoration: color != null
+                ? BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(radius ?? 20),
+                      topRight: Radius.circular(radius ?? 20),
+                    ),
+                    color: color)
+                : const BoxDecoration(
+                    color: AppColor.primary,
+
+                    // gradient: LinearGradient(
+                    //   colors: AppColor.splashGradientColor,
+                    //   begin: Alignment.topCenter,
+                    //   end: Alignment.bottomCenter,
+                    // ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context)
+                    .viewInsets
+                    .bottom, // Adjusts for the keyboard
+              ),
+              child: CustomBottomSheet(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 8,
+                      width: context.width * .5,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(.4),
+                          borderRadius: BorderRadius.circular(100)),
+                    ),
+                    20.verticalSpace,
+                    SvgPicture.asset(Assets.icAccountSuspend),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
+                      child: AppText(
+                        text: AppString.accountSuspended,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    const AppText(
+                      text: AppString.yourAccountIsSuspend,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                      textAlign: TextAlign.center,
+                    ),
+                    20.verticalSpace,
+                    CommonAppBtn(
+                      height: 50,
+                      width: context.width * .6,
+                      title: AppString.contactUs,
+                      onTap: () {
+                        final loginNotifier = ref.read(loginProvider.notifier);
+                        loginNotifier.clearLoginFields();
+                        back(context);
+                        toNamed(context, Routes.contactUs);
+                      },
+                    ),
+                    20.verticalSpace,
+                  ],
+                ),
+                color: color,
+                contentPadding: contentPadding,
+              ),
+            ));
+      },
+    );
   }
 
   @override
@@ -82,7 +172,13 @@ class _LoginViewState extends ConsumerState<LoginView> {
         } else if (next is AuthApiFailed && next.authType == AuthType.login) {
           // back(context);
           Utils.hideLoader();
-          toast(msg: next.error);
+          // toast(msg: next.error);
+
+          if (next.error == "Your account has been suspended") {
+            showCustomBottomSheet(content: const Text("df"), context: context);
+          } else {
+            toast(msg: next.error);
+          }
         }
       },
     );

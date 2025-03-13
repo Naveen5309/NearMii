@@ -1,21 +1,10 @@
 part of 'helper.dart';
 
-class AppImagesInitialize {
-  AppImagesInitialize._();
-
-/*  static assetsImagesInitialize(BuildContext context) {
-    precacheImage(const AssetImage(Assets.forgotPassImage), context);
-    precacheImage(AssetImage(Assets.setPassImage), context);
-    precacheImage(AssetImage(Assets.loginImage), context);
-  }*/
-}
-
-abstract final class AppString {
+final class AppString {
   static const String fontFamily = "Rubik";
   static const String fontFamilyUrbanist = "Urbanist";
   static const String appName = "App Name";
   static const String addReason = "App reason";
-
   static const String localDirectory = "appname";
   static const String addYourPersonalInfo = "Add Your Personal Information";
   static const String createYourUniqueProfile =
@@ -30,10 +19,8 @@ abstract final class AppString {
       "You're all set! Hit refresh to discover people around you. Browse profiles, check out their social links, and start connecting!";
   static const String getStarted = "Get Started";
   static const String signUp = "Sign up";
-
   static const String signIn = "Sign in";
   static const String networkSlow = "Network is slow";
-
   static const String iHaveAnAccount = "I have an account";
   static const String or = "or";
   static const String signInWithGoogle = "Sign in with Google";
@@ -91,7 +78,7 @@ abstract final class AppString {
   static const String listView = "List View";
   static const String report = "Report";
   static const String theyArePretending =
-      "They are pretending to be  someone else";
+      "They are pretending to be someone else";
   static const String noLongerNeed = "I no longer need the account.";
   static const String others = "others";
 
@@ -110,6 +97,7 @@ abstract final class AppString {
   static const String radius = "Radius";
   static const String buyNow = "Buy Now";
   static const String delete = "Delete";
+  static const String accountSuspended = "Account Suspended!!";
 
   static const String show = "Show";
   static const String hide = "Hide";
@@ -191,7 +179,7 @@ abstract final class AppString {
   static const String profileUpdateSuccess = "Profile Updated Successfully ";
   static const String updatePasswordSuccess = " Update Password Successfully ";
   //  static const String localDirectory="Lorem ipsum dolor sit amet consectetur. Semper vel interdum et posuere venenatis.";
-  // static const String report = "Report";
+  static const String reportSubmitted = "Report submitted";
   //  static const String localDirectory="appname";
   static const String name = "Name";
   static const String email = "Email";
@@ -223,8 +211,9 @@ abstract final class AppString {
   static const String giveReason = "Give reason for deleting the account";
   static const String tellReason =
       "Tell us the reason before deleting the account.";
-  //  static const String localDirectory="appname";
-  //  static const String localDirectory="appname";
+  static const String noNearbyUser = "No nearby user found";
+  static const String yourAccountIsSuspend =
+      "Your account is suspended by the admin, please contact us for more information.";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";
   //  static const String localDirectory="appname";

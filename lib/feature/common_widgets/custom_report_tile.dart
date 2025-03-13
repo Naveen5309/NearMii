@@ -23,7 +23,7 @@ class CustomReportTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(selectedReportIndex);
+    // ref.watch(selectedReportIndex);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       padding: const EdgeInsets.all(5),

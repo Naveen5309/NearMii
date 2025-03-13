@@ -25,6 +25,8 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final financePasswordController = TextEditingController();
   final businessPasswordController = TextEditingController();
 
+  final somethingElseController = TextEditingController();
+
   List<SelfPlatformCatagoryData> newPlatformLists = [];
 
   OtherUserProfileModel? profile;
@@ -151,7 +153,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
         return OtherUserProfileApiFailed(
             error: error.message, otherUserType: OtherUserType.report);
       }, (result) {
-        print("result is::$result");
+        printLog("result is::$result");
 
         return const OtherUserProfileApiSuccess(
             otherUserType: OtherUserType.report);
@@ -161,30 +163,6 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
           error: e.toString(), otherUserType: OtherUserType.report);
     }
   }
-
-//UPDATE CHECK
-  // void updateCheck(int index) {
-  //   if (state is OtherUserProfileApiSuccess) {
-  //     final currentState = state as OtherUserProfileApiSuccess;
-
-  //     if (index < 0 || index >= (currentState.reasons.length ?? 0)) return;
-
-  //     final updatedReasons =
-  //         List<CustomReportTile>.from(currentState.reasons ?? []);
-
-  //     updatedReasons[index] = CustomReportTile(
-  //       title: updatedReasons[index].title,
-  //       check: !updatedReasons[index].check,
-  //       ontap: () => updateCheck(index),
-  //     );
-
-  //     // UPDATE STATE
-  //     state = OtherUserProfileApiSuccess(
-  //       otherUserType: currentState.otherUserType,
-  //       reasons: updatedReasons,
-  //     );
-  //   }
-  // }
 
   void clearAllChecks() {
     if (state is OtherUserProfileApiSuccess) {

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
@@ -7,6 +6,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/data/models/home_data_model.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home_usecases.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
+import 'package:NearMii/feature/location/location_service.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-class HomeNotifier extends StateNotifier<HomeState> {
+class HomeNotifier extends StateNotifier<HomeState>
+    with WidgetsBindingObserver {
   final HomeUseCase homeUseCase;
-  HomeNotifier({required this.homeUseCase}) : super(HomeInitial());
+  HomeNotifier({required this.homeUseCase}) : super(HomeInitial()) {
+    WidgetsBinding.instance.addObserver(this);
+  }
   List<HomeData> homeUserDataList = [];
   UserProfileModel? userProfileModel;
 
@@ -29,13 +32,46 @@ class HomeNotifier extends StateNotifier<HomeState> {
   String location = '';
 
   bool loader = true;
-
+  Position? currentPosition;
   String profilePic = '';
   String socialImg = '';
   bool isSubscription = false;
+  bool isHomeLoading = true;
+
   int credits = 0;
 
   String name = '';
+
+  /// **Detect when app returns from background**
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      printLog("resumed called");
+      // Re-fetch location when returning from settings
+      LocationService()
+          .getCurrentLocation(navigatorKey.currentState!.context)
+          .then((position) {
+        if (position != null) {
+          printLog("Resumed and got location: $position");
+          currentPosition = position;
+
+          updateCoordinates(radius: '');
+        }
+      });
+    }
+  }
+
+  Future<void> fetchLocation({required BuildContext context}) async {
+    await Future.delayed(Duration.zero); // Ensures context is available
+    Position? position = await LocationService().getCurrentLocation(context);
+    // setState(() {
+    currentPosition = position;
+
+    printLog("current location data :-> $position");
+
+    updateCoordinates(radius: '');
+    // });
+  }
 
   void getFromLocalStorage() async {
     name = Getters.getLocalStorage.getName() ?? '';
@@ -185,8 +221,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
         );
       }
       Map<String, dynamic> body = {
-        "lat": lat,
-        "long": long,
+        "lat": LocationService().currentPosition?.latitude ?? 0.0,
+        "long": LocationService().currentPosition?.longitude ?? 0.0,
         if (radius.isNotEmpty) "radius": radius
       };
       final result = await homeUseCase.updateCoordinates(
@@ -212,9 +248,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   // Home Data Api
   Future<void> getHomeDataApi() async {
+    isHomeLoading = true;
     state = const HomeApiLoading(homeType: HomeType.home);
     try {
+      checkAddress();
       if (!(await Getters.networkInfo.isConnected)) {
+        isHomeLoading = false;
+
         state = const HomeApiFailed(
           homeType: HomeType.home,
           error: AppString.noInternetConnection,
@@ -234,6 +274,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
       final result = await homeUseCase.callGetHome(body: body);
       state = result.fold((error) {
         log("login error:${error.message} ");
+        isHomeLoading = false;
+
         return HomeApiFailed(
           homeType: HomeType.home,
           error: error.message,
@@ -245,9 +287,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
           homeUserDataList = [];
         }
         log("history result is :->$homeUserDataList");
+        isHomeLoading = false;
+
         return const HomeApiSuccess(homeType: HomeType.home);
       });
     } catch (e) {
+      isHomeLoading = false;
+
       state = HomeApiFailed(error: e.toString(), homeType: HomeType.home);
     }
   }

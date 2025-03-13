@@ -23,6 +23,7 @@ abstract class HiveConst {
   static const String socialImg = 'socialImg';
 
   static const String name = 'name';
+  static const String isShowVip = 'isShowVip';
 }
 
 abstract class LocalStorage {
@@ -33,6 +34,7 @@ abstract class LocalStorage {
   UserModel? getLoginUser();
   UserProfileModel? getUserProfileData();
   bool? getFirstOnboard();
+  Future<void> saveIShowVip(bool isShowVip);
 
   Future<void> clearAllBox();
   Future<void> clearLoginData();
@@ -62,6 +64,8 @@ abstract class LocalStorage {
   Future<void> saveIsSubscription(bool isSubscription);
 
   bool? getIsLogin();
+  bool? getIsSaveVip();
+
   bool? getIsSubscription();
   int? getCredits();
 
@@ -246,5 +250,16 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> saveCredits(int credits) async {
     await userBox.put(HiveConst.credits, credits);
+  }
+
+  @override
+  bool? getIsSaveVip() {
+    final isShowVip = userBox.get(HiveConst.isShowVip);
+    return isShowVip;
+  }
+
+  @override
+  Future<void> saveIShowVip(bool isShowVip) async {
+    await userBox.put(HiveConst.isShowVip, isShowVip);
   }
 }

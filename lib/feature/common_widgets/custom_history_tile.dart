@@ -30,46 +30,54 @@ class CustomTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(10.0),
-      onTap: onTap,
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: isHistory == true
-            ? CustomCacheNetworkImage(
-                img: leadingIcon.isNotEmpty
-                    ? ApiConstants.profileBaseUrl + leadingIcon
-                    : '',
-                imageRadius: 50,
-                height: 50,
-                width: 50,
-              )
-            : SvgPicture.asset(type == "1"
-                ? Assets.searchNotication
-                : Assets.locationNotification),
-
-        //Name
-        title: AppText(
-          text: title,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w500,
-        ),
-
-        //DESIGNATION
-        subtitle: AppText(
-          text: subtitle,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColor.black000000.withOpacity(.37),
-        ),
-
-        trailing: AppText(
-          text: time,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColor.black000000.withOpacity(.18),
-        ),
+        borderRadius: BorderRadius.circular(10.0),
         onTap: onTap,
-      ),
-    );
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: isHistory == true
+              ? CustomCacheNetworkImage(
+                  img: leadingIcon.isNotEmpty
+                      ? ApiConstants.profileBaseUrl + leadingIcon
+                      : '',
+                  imageRadius: 50,
+                  height: 50,
+                  width: 50,
+                )
+              : SvgPicture.asset(
+                  type == "1"
+                      ? Assets.searchNotication
+                      : Assets.locationNotification,
+                ),
+          title: Column(
+            mainAxisAlignment: subtitle.isNotEmpty
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center, // Center if no subtitle
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppText(
+                text: title,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              if (subtitle.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: AppText(
+                    text: subtitle,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.black000000.withOpacity(.37),
+                  ),
+                ),
+            ],
+          ),
+          trailing: AppText(
+            text: time,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColor.black000000.withOpacity(.18),
+          ),
+          onTap: onTap,
+        ));
   }
 }

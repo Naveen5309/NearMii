@@ -1,20 +1,17 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
-import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_address_tile.dart';
 import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_profile_card.dart';
-import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/dummy_profile_card.dart';
+import 'package:NearMii/feature/common_widgets/home_shimmer.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
-import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/main.dart';
@@ -42,21 +39,25 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var notifier = ref.watch(homeProvider.notifier);
 
-      if (notifier.homeUserDataList.isEmpty) {
-        final homeDataNotifier = ref.read(homeProvider.notifier);
+      // notifier.fetchLocation(context: context);
+      // if (notifier.homeUserDataList.isEmpty) {
+      final homeDataNotifier = ref.read(homeProvider.notifier);
 
-        if (widget.isFromAuth) {
-          log("IS FROM AUTH:-> ${widget.isFromAuth}");
-          notifier.updateCoordinates(radius: '');
-          showDialog(
-            context: context,
-            builder: (context) => const VIPMembershipDialog(),
-          );
-          homeDataNotifier.getHomeDataApi();
-        } else {
-          // homeDataNotifier.getHomeDataApi();
-        }
+      notifier.updateCoordinates(radius: '');
+      bool? isTrue = Getters.getLocalStorage.getIsSaveVip();
+      if (isTrue!) {
+        showDialog(
+          context: context,
+          builder: (context) => const VIPMembershipDialog(),
+        ).then(
+          (value) {
+            Getters.getLocalStorage.saveIShowVip(false);
+          },
+        );
       }
+      homeDataNotifier.getHomeDataApi();
+
+      // }
       ref.watch(getProfileProvider.notifier).getProfileApi();
 
       notifier.getFromLocalStorage();
@@ -117,64 +118,64 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       ref.watch(homeProvider);
       var notifier = ref.watch(homeProvider.notifier);
 
-      ref.listen(
-        homeProvider,
-        (previous, next) {
-          log("next is :-> $next");
-          log("next is :-> ${widget.isFromAuth}");
+      // ref.listen(
+      //   homeProvider,
+      //   (previous, next) {
+      //     log("next is :-> $next");
+      //     log("next is :-> ${widget.isFromAuth}");
 
-          if (next is UpdateLocation &&
-              next.locationType == LocationType.loading) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        // color: AppColor.btnColor,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset(Assets.locationAnimation,
-                              backgroundLoading: true,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          } else if (next is UpdateLocation &&
-              next.locationType == LocationType.updated) {
-            back(context);
-          } else if (next is UpdateLocation &&
-              next.locationType == LocationType.error) {
-            back(context);
-          }
+      //     if (next is UpdateLocation &&
+      //         next.locationType == LocationType.loading) {
+      //       showDialog(
+      //         context: context,
+      //         builder: (context) {
+      //           return Center(
+      //             child: Container(
+      //               decoration: BoxDecoration(
+      //                   // color: AppColor.btnColor,
+      //                   borderRadius: BorderRadius.circular(100)),
+      //               child: Padding(
+      //                 padding: const EdgeInsets.all(8.0),
+      //                 child: Column(
+      //                   mainAxisSize: MainAxisSize.min,
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     Lottie.asset(Assets.locationAnimation,
+      //                         backgroundLoading: true,
+      //                         height: 100,
+      //                         width: 100,
+      //                         fit: BoxFit.cover),
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       );
+      //     } else if (next is UpdateLocation &&
+      //         next.locationType == LocationType.updated) {
+      //       back(context);
+      //     } else if (next is UpdateLocation &&
+      //         next.locationType == LocationType.error) {
+      //       back(context);
+      //     }
 
-          if (next is HomeApiLoading && ((next.homeType == HomeType.home))) {
-            log("home loader called");
-            Utils.showLoader();
-          } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
-            Utils.hideLoader();
+      //     if (next is HomeApiLoading && ((next.homeType == HomeType.home))) {
+      //       log("home loader called");
+      //       Utils.showLoader();
+      //     } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
+      //       Utils.hideLoader();
 
-            // toNamed(context, Routes.bottomNavBar);
-          } else if (next is HomeApiFailed && next.homeType == HomeType.home) {
-            if (context.mounted) {
-              Utils.hideLoader();
-            }
+      //       // toNamed(context, Routes.bottomNavBar);
+      //     } else if (next is HomeApiFailed && next.homeType == HomeType.home) {
+      //       if (context.mounted) {
+      //         Utils.hideLoader();
+      //       }
 
-            toast(msg: next.error);
-          }
-        },
-      );
+      //       toast(msg: next.error);
+      //     }
+      //   },
+      // );
 
       return Scaffold(
           body: Column(
@@ -314,71 +315,93 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
           //         ],
           //       ),
 
-          RefreshIndicator(
-            displacement: 10,
-            triggerMode: RefreshIndicatorTriggerMode.onEdge,
-            color: AppColor.appThemeColor,
-            onRefresh: () async {
-              var notifier = ref.read(homeProvider.notifier);
-              notifier.updateCoordinates(radius: '');
-            },
-            child: notifier.homeUserDataList.isEmpty
-                ? SizedBox(
-                    height: context.height * .6,
-                    child: const Center(child: AppText(text: "No user found")),
-                  )
-                : Column(
-                    children: [
-                      SizedBox(
-                        height: context.height * .69,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemCount: notifier.homeUserDataList.length + 1,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            if (index == notifier.homeUserDataList.length) {
-                              // Last index, show "No Data"
-                              return const DummyProfileCard();
-                            }
-                            var data = notifier.homeUserDataList[index];
+          notifier.isHomeLoading
+              ? SizedBox(
+                  height: context.height * .69, child: const HomeShimmer())
+              : RefreshIndicator(
+                  displacement: 10,
+                  triggerMode: RefreshIndicatorTriggerMode.onEdge,
+                  color: AppColor.appThemeColor,
+                  onRefresh: () async {
+                    var notifier = ref.read(homeProvider.notifier);
+                    notifier.updateCoordinates(radius: '');
+                  },
+                  child: notifier.homeUserDataList.isEmpty
+                      ? SizedBox(
+                          height: context.height * .55,
+                          width: context.width * .55,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(Assets.emptyAnimation,
+                                  backgroundLoading: true,
+                                  // height: context.height * .4,
+                                  width: context.width * .6,
+                                  fit: BoxFit.fill),
+                              AppText(
+                                text: AppString.noNearbyUser,
+                                color: AppColor.black000000,
+                                fontSize: 16.sp,
+                              )
+                            ],
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            SizedBox(
+                              height: context.height * .69,
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: notifier.homeUserDataList.length + 1,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  if (index ==
+                                      notifier.homeUserDataList.length) {
+                                    // Last index, show "No Data"
+                                    return const DummyProfileCard();
+                                  }
+                                  var data = notifier.homeUserDataList[index];
 
-                            return CustomProfileCard(
-                              profileImage: data.profilePhoto != null
-                                  ? ApiConstants.profileBaseUrl +
-                                      data.profilePhoto!
-                                  : '',
-                              isSubscription: notifier
-                                  .isSubscription, // Replace with actual image
-                              name: data.name ?? "",
-                              designation: data.designation ?? "",
-                              distance: data.distance != null
-                                  ? getDistance(data.distance.toString())
-                                  : '',
-                              onUnlockTap: () {
-                                if (notifier.isSubscription) {
-                                  toNamed(context, Routes.otherUserProfile,
-                                      args: data.id.toString());
-                                } else if (notifier.credits > 0) {
-                                  toNamed(context, Routes.otherUserProfile,
-                                      args: data.id.toString());
-                                } else {
-                                  _showRewardedAd(id: data.id.toString());
-                                  // showDialog(
-                                  //   context: context,
-                                  //   builder: (context) =>
-                                  //       const VIPMembershipDialog(),
-                                  // );
-                                }
+                                  return CustomProfileCard(
+                                    profileImage: data.profilePhoto != null
+                                        ? ApiConstants.profileBaseUrl +
+                                            data.profilePhoto!
+                                        : '',
+                                    isSubscription: notifier
+                                        .isSubscription, // Replace with actual image
+                                    name: data.name ?? "",
+                                    designation: data.designation ?? "",
+                                    distance: data.distance != null
+                                        ? getDistance(data.distance.toString())
+                                        : '',
+                                    onUnlockTap: () {
+                                      if (notifier.isSubscription) {
+                                        toNamed(
+                                            context, Routes.otherUserProfile,
+                                            args: data.id.toString());
+                                      } else if (notifier.credits > 0) {
+                                        toNamed(
+                                            context, Routes.otherUserProfile,
+                                            args: data.id.toString());
+                                      } else {
+                                        _showRewardedAd(id: data.id.toString());
+                                        // showDialog(
+                                        //   context: context,
+                                        //   builder: (context) =>
+                                        //       const VIPMembershipDialog(),
+                                        // );
+                                      }
 
-                                // print("Unlock Now Clicked!");
-                              },
-                            );
-                          },
+                                      // print("Unlock Now Clicked!");
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-          )
+                )
 
           // Image.asset(Assets.map)
         ],

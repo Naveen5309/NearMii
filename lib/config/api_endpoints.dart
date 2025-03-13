@@ -25,7 +25,7 @@ abstract final class ApiConstants {
 
   static const String addPlatform = "$baseUrl/socialprofile";
 
-  static const String contactus = "$baseUrl/contactus";
+  static const String contactus = "$url/api/contactus";
   static const String updateProfile = "$baseUrl/updateProfile";
   static const String report = "$baseUrl/report";
   static const String getHistory = "$baseUrl/history";

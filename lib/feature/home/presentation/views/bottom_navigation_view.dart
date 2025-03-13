@@ -55,7 +55,6 @@ class BottomNavigationView extends ConsumerWidget {
                   clipBehavior: Clip.antiAlias,
                   child: Container(
                     padding: const EdgeInsets.only(top: 20),
-                    // margin: const EdgeInsets.only(left: 30),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       color: AppColor.primary,
@@ -65,11 +64,7 @@ class BottomNavigationView extends ConsumerWidget {
                     child: Consumer(
                       builder: (context, ref, child) {
                         return const Padding(
-                          padding: EdgeInsets.only(
-                              // bottom: context.height * .03,
-                              // left: context.width * .02,
-                              // right: context.width * .02
-                              ),
+                          padding: EdgeInsets.only(),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -81,8 +76,6 @@ class BottomNavigationView extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  // padding: const EdgeInsets.only(top: 10),
-                  // margin: const EdgeInsets.only(left: 30),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
 
@@ -94,11 +87,7 @@ class BottomNavigationView extends ConsumerWidget {
                     builder: (context, ref, child) {
                       var indexSelected = ref.watch(selectedIndex);
                       return Padding(
-                        padding: const EdgeInsets.only(
-                            // bottom: context.height * .03,
-                            // left: context.width * .02,
-                            // right: context.width * .02
-                            ),
+                        padding: const EdgeInsets.only(),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
