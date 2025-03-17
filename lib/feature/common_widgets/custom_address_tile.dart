@@ -47,16 +47,20 @@ class LocationCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //location
-              AppText(
-                text: location,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColor.black000000,
+              //LOCATION
+              SizedBox(
+                width: context.width * .7,
+                child: AppText(
+                  text: location,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColor.black000000,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               5.verticalSpace,
 
-              //address
+              //ADDRESS
 
               AppText(
                 text: address,

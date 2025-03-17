@@ -76,8 +76,18 @@ class OtherUserProfileGridView extends ConsumerWidget {
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
                         onTap: () async {
-                          await launchUrl(
-                              Uri.parse(socialMedia[pIndex].url ?? ''));
+                          printLog(
+                              "Click on url is :-> ${socialMedia[pIndex].platform?.name}");
+                          printLog(
+                              "Click on url is :-> ${socialMedia[pIndex].url}");
+
+                          if (socialMedia[pIndex].platform?.name ==
+                              "Whatsapp") {
+                            await launchUrl(Uri.parse(
+                                "https://wa.me/${socialMedia[pIndex].url}"));
+                          }
+                          // await launchUrl(
+                          //     Uri.parse(socialMedia[pIndex].url ?? ''));
                         },
                         child: ProfileSocialMedia(
                           onToggleChanged: (p0) {},

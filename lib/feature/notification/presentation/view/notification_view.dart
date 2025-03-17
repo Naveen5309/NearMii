@@ -201,7 +201,7 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                                 const EdgeInsets.symmetric(vertical: 5),
                                                                             child:
                                                                                 NotificationTile(
-                                                                              type: "${data.message}",
+                                                                              type: "${data.type}",
                                                                               onTap: () {},
                                                                               time: timeAgo,
                                                                               title: data.message ?? '',

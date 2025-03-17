@@ -143,13 +143,15 @@ class HomeNotifier extends StateNotifier<HomeState>
         false; // Default to false if the user dismisses the dialog
   }
 
-  double? distance;
   Future<List<Placemark>> getPlaceMark() async {
     Position position = await determinePosition();
     final lat = position.latitude;
     final lng = position.longitude;
     printLog('lat: $lat <--> lng: $lng');
     placemarks = await placemarkFromCoordinates(lat, lng);
+    GeocodingPlatform.instance!.setLocaleIdentifier(
+      "en_US",
+    );
 
     printLog(placemarks);
 
@@ -169,7 +171,7 @@ class HomeNotifier extends StateNotifier<HomeState>
             '${placemarks[0].administrativeArea}, ${placemarks[0].locality}';
 
         location =
-            '${placemarks[0].name}, ${placemarks[0].subAdministrativeArea}, ${placemarks[0].subLocality}';
+            '${placemarks[0].street ?? placemarks[0].name}, ${placemarks[0].subAdministrativeArea}, ${placemarks[0].subLocality}';
 
         await Getters.getLocalStorage.saveAddress(addressName);
         await Getters.getLocalStorage.saveLocation(location);

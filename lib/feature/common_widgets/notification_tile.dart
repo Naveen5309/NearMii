@@ -32,6 +32,7 @@ class NotificationTile extends StatelessWidget {
       onTap: onTap,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
+
         leading: SvgPicture.asset(type == "1"
             ? Assets.searchNotication
             : Assets.locationNotification),
@@ -39,7 +40,7 @@ class NotificationTile extends StatelessWidget {
         //Name
         title: AppText(
           text: title,
-          fontSize: 14.sp,
+          fontSize: 13.sp,
           fontWeight: FontWeight.w500,
         ),
 

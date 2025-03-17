@@ -18,6 +18,7 @@ import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
@@ -349,54 +350,80 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                         )
                       : Column(
                           children: [
-                            SizedBox(
-                              height: context.height * .69,
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: notifier.homeUserDataList.length + 1,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  if (index ==
-                                      notifier.homeUserDataList.length) {
-                                    // Last index, show "No Data"
-                                    return const DummyProfileCard();
-                                  }
-                                  var data = notifier.homeUserDataList[index];
-
-                                  return CustomProfileCard(
-                                    profileImage: data.profilePhoto != null
-                                        ? ApiConstants.profileBaseUrl +
-                                            data.profilePhoto!
-                                        : '',
-                                    isSubscription: notifier
-                                        .isSubscription, // Replace with actual image
-                                    name: data.name ?? "",
-                                    designation: data.designation ?? "",
-                                    distance: data.distance != null
-                                        ? getDistance(data.distance.toString())
-                                        : '',
-                                    onUnlockTap: () {
-                                      if (notifier.isSubscription) {
-                                        toNamed(
-                                            context, Routes.otherUserProfile,
-                                            args: data.id.toString());
-                                      } else if (notifier.credits > 0) {
-                                        toNamed(
-                                            context, Routes.otherUserProfile,
-                                            args: data.id.toString());
-                                      } else {
-                                        _showRewardedAd(id: data.id.toString());
-                                        // showDialog(
-                                        //   context: context,
-                                        //   builder: (context) =>
-                                        //       const VIPMembershipDialog(),
-                                        // );
+                            AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              width: context.width,
+                              constraints: BoxConstraints(
+                                  maxHeight: context.height * .69),
+                              child: SizedBox(
+                                height: context.height * .69,
+                                child: AnimationLimiter(
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount:
+                                        notifier.homeUserDataList.length + 1,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      if (index ==
+                                          notifier.homeUserDataList.length) {
+                                        // Last index, show "No Data"
+                                        return const DummyProfileCard();
                                       }
+                                      var data =
+                                          notifier.homeUserDataList[index];
 
-                                      // print("Unlock Now Clicked!");
+                                      return AnimationConfiguration
+                                          .staggeredList(
+                                        position: index,
+                                        child: SlideAnimation(
+                                          curve: Curves.easeInOutCirc,
+                                          horizontalOffset: -100,
+                                          child: FadeInAnimation(
+                                            child: CustomProfileCard(
+                                              profileImage:
+                                                  data.profilePhoto != null
+                                                      ? ApiConstants
+                                                              .profileBaseUrl +
+                                                          data.profilePhoto!
+                                                      : '',
+                                              isSubscription: notifier
+                                                  .isSubscription, // Replace with actual image
+                                              name: data.name ?? "",
+                                              designation:
+                                                  data.designation ?? "",
+                                              distance: data.distance != null
+                                                  ? getDistance(
+                                                      data.distance.toString())
+                                                  : '',
+                                              onUnlockTap: () {
+                                                if (notifier.isSubscription) {
+                                                  toNamed(context,
+                                                      Routes.otherUserProfile,
+                                                      args: data.id.toString());
+                                                } else if (notifier.credits >
+                                                    0) {
+                                                  toNamed(context,
+                                                      Routes.otherUserProfile,
+                                                      args: data.id.toString());
+                                                } else {
+                                                  _showRewardedAd(
+                                                      id: data.id.toString());
+                                                  // showDialog(
+                                                  //   context: context,
+                                                  //   builder: (context) =>
+                                                  //       const VIPMembershipDialog(),
+                                                  // );
+                                                }
+
+                                                // print("Unlock Now Clicked!");
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                     },
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
                             ),
                           ],

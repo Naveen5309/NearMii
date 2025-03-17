@@ -161,6 +161,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                                   "Invite & Earn, get 5 credits for each invite, and your friend gets 2 credits when they sign up!",
                             )),
                       ),
+
                       10.verticalSpace,
 
                       //SET RADIUS
@@ -227,6 +228,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                         },
                       ),
                       10.verticalSpace,
+
                       CustomTile(
                         leadingIcon: Assets.iconDelete,
                         title: AppString.deleteAccount,
