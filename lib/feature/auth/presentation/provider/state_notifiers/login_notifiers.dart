@@ -230,7 +230,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
         // String? photoUrl = result.photoUrl;
         fullNameController.text = result.displayName ?? '';
         socialImg = result.photoUrl ?? '';
-        socialEmail = result.email ?? '';
+        socialEmail = result.email;
 
         printLog("profile data is:-> $name, $socialImg , $socialEmail");
         return _signInWithCredential(
@@ -279,7 +279,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
     } catch (e, s) {
       Utils.hideLoader();
       blocLog(
-        msg: 'Sign-in with credential error: $e',
+        msg: 'Sign-in with credential error: $e' "$s",
         bloc: "AuthServices2",
       );
       return null;
@@ -293,7 +293,7 @@ class LoginNotifier extends StateNotifier<AuthState> {
       return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
     } catch (e, s) {
       blocLog(
-        msg: 'Firebase sign-in error: $e',
+        msg: 'Firebase sign-in error: $e,$s',
         bloc: "AuthServices3",
       );
       rethrow;

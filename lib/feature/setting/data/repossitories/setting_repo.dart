@@ -1,6 +1,5 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
-import 'package:NearMii/feature/home/domain/profile_model.dart';
 import 'package:NearMii/feature/setting/data/data_source/setting_data_source.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 

@@ -284,7 +284,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
             });
 
             if (isMatched) {
-              print("Removing platformData with id: ${platformData.id}");
+              printLog("Removing platformData with id: ${platformData.id}");
             }
 
             return isMatched;
@@ -721,7 +721,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         return AuthApiFailed(
             error: error.message, authType: AuthType.editProfile);
       }, (result) {
-        print(result);
+        printLog(result);
         return const AuthApiSuccess(authType: AuthType.editProfile);
       });
     } catch (e) {
@@ -735,8 +735,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
     fullNameController.text = getProfile?.name ?? '';
     designationController.text = getProfile?.designation ?? '';
-    phoneController.text =
-        (getProfile?.phoneNumber).toString().split(' ').last ?? "";
+    phoneController.text = (getProfile?.phoneNumber).toString().split(' ').last;
     dobController.text = formatDob(getProfile?.dob ?? '');
     genderController.text = getProfile?.gender ?? '';
     bioController.text = getProfile?.bio ?? '';

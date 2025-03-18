@@ -395,77 +395,81 @@ Widget bottomSection({
     child: Padding(
       padding: EdgeInsets.symmetric(
           horizontal: context.width * .04, vertical: context.width * .01),
-      child: Column(children: [
-        CustomSearchBarWidget(
-          controller: selfUserProfileNotifier.searchTextController,
-          onChanged: (value) {
-            onSearchChanged(value);
-          },
-        ),
+      child: SingleChildScrollView(
+        child: Column(children: [
+          CustomSearchBarWidget(
+            controller: selfUserProfileNotifier.searchTextController,
+            onChanged: (value) {
+              onSearchChanged(value);
+            },
+          ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: hideAllSection(
-              context: context,
-              profile: profile,
-              selfUserProfileNotifier: selfUserProfileNotifier),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: hideAllSection(
+                context: context,
+                profile: profile,
+                selfUserProfileNotifier: selfUserProfileNotifier),
+          ),
 
-        SizedBox(
-          height: context.height * .8,
-          child: ListView.builder(
-              hitTestBehavior: HitTestBehavior.translucent,
-              padding: EdgeInsets.zero,
-              itemCount: selfUserProfileNotifier.newPlatformLists.length,
-              itemBuilder: (context, index) {
-                var data = selfUserProfileNotifier.newPlatformLists[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileGridView(
-                    isMyProfile: true,
-                    title: data.title ?? '',
-                    socialMedia: data.list ?? [],
-                  ),
-                );
-              }),
-        )
-        // selfUserProfileNotifier.socialMediaList.isNotEmpty
-        //     ? Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: ProfileGridView(
-        //           notifier: selfUserProfileNotifier,
-        //           controller: selfUserProfileNotifier.platformTextController,
-        //           isMyProfile: true,
-        //           title: AppString.socialMedia,
-        //           socialMedia: selfUserProfileNotifier.socialMediaList,
-        //         ),
-        //       )
-        //     : const SizedBox(),
-        // selfUserProfileNotifier.contactList.isNotEmpty
-        //     ? Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: ProfileGridView(
-        //           notifier: selfUserProfileNotifier,
-        //           controller: selfUserProfileNotifier.platformTextController,
-        //           isMyProfile: true,
-        //           title: AppString.contactInformation,
-        //           socialMedia: selfUserProfileNotifier.contactList,
-        //         ),
-        //       )
-        //     : const SizedBox(),
-        // selfUserProfileNotifier.portfolioList.isNotEmpty
-        //     ? Padding(
-        //         padding: const EdgeInsets.all(8.0),
-        //         child: ProfileGridView(
-        //           notifier: selfUserProfileNotifier,
-        //           controller: selfUserProfileNotifier.platformTextController,
-        //           isMyProfile: true,
-        //           title: AppString.portfolio,
-        //           socialMedia: selfUserProfileNotifier.portfolioList,
-        //         ),
-        //       )
-        //     : const SizedBox()
-      ]),
+          SizedBox(
+            height: context.height * .8,
+            child: ListView.builder(
+                shrinkWrap: true, // Allow wrapping content height
+                physics: const NeverScrollableScrollPhysics(),
+                hitTestBehavior: HitTestBehavior.translucent,
+                padding: EdgeInsets.zero,
+                itemCount: selfUserProfileNotifier.newPlatformLists.length,
+                itemBuilder: (context, index) {
+                  var data = selfUserProfileNotifier.newPlatformLists[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfileGridView(
+                      isMyProfile: true,
+                      title: data.title ?? '',
+                      socialMedia: data.list ?? [],
+                    ),
+                  );
+                }),
+          )
+          // selfUserProfileNotifier.socialMediaList.isNotEmpty
+          //     ? Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: ProfileGridView(
+          //           notifier: selfUserProfileNotifier,
+          //           controller: selfUserProfileNotifier.platformTextController,
+          //           isMyProfile: true,
+          //           title: AppString.socialMedia,
+          //           socialMedia: selfUserProfileNotifier.socialMediaList,
+          //         ),
+          //       )
+          //     : const SizedBox(),
+          // selfUserProfileNotifier.contactList.isNotEmpty
+          //     ? Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: ProfileGridView(
+          //           notifier: selfUserProfileNotifier,
+          //           controller: selfUserProfileNotifier.platformTextController,
+          //           isMyProfile: true,
+          //           title: AppString.contactInformation,
+          //           socialMedia: selfUserProfileNotifier.contactList,
+          //         ),
+          //       )
+          //     : const SizedBox(),
+          // selfUserProfileNotifier.portfolioList.isNotEmpty
+          //     ? Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: ProfileGridView(
+          //           notifier: selfUserProfileNotifier,
+          //           controller: selfUserProfileNotifier.platformTextController,
+          //           isMyProfile: true,
+          //           title: AppString.portfolio,
+          //           socialMedia: selfUserProfileNotifier.portfolioList,
+          //         ),
+          //       )
+          //     : const SizedBox()
+        ]),
+      ),
     ),
   );
 }

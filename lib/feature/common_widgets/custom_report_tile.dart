@@ -1,7 +1,6 @@
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
-import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

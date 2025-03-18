@@ -64,26 +64,26 @@ class LoggingInterceptors extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print(
+    printLog(
         "--> ${options.method.toUpperCase()} ${"${options.baseUrl}${options.path}"}");
-    print("Headers:");
-    options.headers.forEach((k, v) => print('$k: $v'));
-    print("queryParameters:");
-    options.queryParameters.forEach((k, v) => print('$k: $v'));
+    printLog("Headers:");
+    options.headers.forEach((k, v) => printLog('$k: $v'));
+    printLog("queryParameters:");
+    options.queryParameters.forEach((k, v) => printLog('$k: $v'));
     if (options.data != null) {
       try {
         FormData formData = options.data as FormData;
-        print("Body:");
+        printLog("Body:");
         var buffer = [];
         for (MapEntry<String, String> pair in formData.fields) {
           buffer.add('${pair.key}:${pair.value}');
         }
-        print("Body:{${buffer.join(', ')}}");
+        printLog("Body:{${buffer.join(', ')}}");
       } catch (e) {
-        print("Body: ${printObject(options.data)}");
+        printLog("Body: ${printObject(options.data)}");
       }
     }
-    print(
+    printLog(
         "--> END ${options.method.isNotEmpty ? options.method.toUpperCase() : 'METHOD'}");
     return super.onRequest(options, handler);
   }

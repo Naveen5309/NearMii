@@ -1,4 +1,5 @@
 import 'package:NearMii/config/countries.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/country_code_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +21,7 @@ class CountryPickerNotifier extends StateNotifier<CountryPickerState> {
   }
 
   void updateInitialCountry(String code) {
-    print("updateInitialCountry====>>>>  $code");
+    printLog("updateInitialCountry====>>>>  $code");
 
     final myCountry = (code == "+1")
         ? const Country(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
@@ -140,7 +138,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
           child: CommonAppBtn(
             onTap: () {
               final isForget = forgetPasswordNotifier.validateForgetPassword();
-              print(isForget);
+              printLog(isForget);
               if (isForget) {
                 forgetPasswordNotifier.forgotPasswordApi(
                     authType: AuthType.forgotPassword);

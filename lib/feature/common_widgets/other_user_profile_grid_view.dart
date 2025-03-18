@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
-
 import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,9 +84,10 @@ class OtherUserProfileGridView extends ConsumerWidget {
                               "Whatsapp") {
                             await launchUrl(Uri.parse(
                                 "https://wa.me/${socialMedia[pIndex].url}"));
+                          } else {
+                            await launchUrl(
+                                Uri.parse(socialMedia[pIndex].url ?? ''));
                           }
-                          // await launchUrl(
-                          //     Uri.parse(socialMedia[pIndex].url ?? ''));
                         },
                         child: ProfileSocialMedia(
                           onToggleChanged: (p0) {},

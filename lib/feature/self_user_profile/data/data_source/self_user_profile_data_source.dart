@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
@@ -47,7 +47,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
             // }
             // throw Exception("Unexpected API response format");
           });
-      print("dataResponse===>${dataResponse.data}");
+      printLog("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -78,7 +78,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
 
             return json;
           });
-      print("dataResponse===>${dataResponse.data}");
+      printLog("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -109,7 +109,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
 
             return json;
           });
-      print("dataResponse===>${dataResponse.data}");
+      printLog("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -150,7 +150,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
           throw Exception("Unexpected API response format");
         },
       );
-      print("dataResponse===>${dataResponse.data}");
+      printLog("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -191,7 +191,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
             // }
             // throw Exception("Unexpected API response format");
           });
-      print("dataResponse===>${dataResponse.data}");
+      printLog("dataResponse===>${dataResponse.data}");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -224,7 +224,7 @@ class SelfUserProfileDataSourceImpl extends SelfUserProfileDataSource {
                 }
                 throw Exception("Unexpected API response format");
               });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         return getSuccessResponseWrapper(dataResponse);
       } else {

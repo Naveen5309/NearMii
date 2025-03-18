@@ -75,6 +75,9 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
                 history.createdAt!.isBefore(last14Days))
             .toList();
 
+        printLog(
+            "last week list are:-> ${notificationLastWeekTimeList[0].createdAt}");
+
         isNotificationLoading = false;
 
         return const NotificationApiSuccess();

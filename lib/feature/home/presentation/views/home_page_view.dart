@@ -13,7 +13,6 @@ import 'package:NearMii/feature/common_widgets/home_shimmer.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
-import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -59,7 +58,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       homeDataNotifier.getHomeDataApi();
 
       // }
-      ref.watch(getProfileProvider.notifier).getProfileApi();
+      // ref.watch(getProfileProvider.notifier).getProfileApi();
 
       notifier.getFromLocalStorage();
 
@@ -377,7 +376,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                         position: index,
                                         child: SlideAnimation(
                                           curve: Curves.easeInOutCirc,
-                                          horizontalOffset: -100,
+                                          horizontalOffset:
+                                              index % 2 == 0 ? -100 : 100,
                                           child: FadeInAnimation(
                                             child: CustomProfileCard(
                                               profileImage:
@@ -396,15 +396,25 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                       data.distance.toString())
                                                   : '',
                                               onUnlockTap: () {
+                                                printLog(
+                                                    "points are:-> ${notifier.credits}");
                                                 if (notifier.isSubscription) {
                                                   toNamed(context,
                                                       Routes.otherUserProfile,
                                                       args: data.id.toString());
                                                 } else if (notifier.credits >
                                                     0) {
-                                                  toNamed(context,
-                                                      Routes.otherUserProfile,
-                                                      args: data.id.toString());
+                                                  toNamed(
+                                                          context,
+                                                          Routes
+                                                              .otherUserProfile,
+                                                          args: data.id
+                                                              .toString())
+                                                      .then(
+                                                    (value) {
+                                                      notifier.getHomeDataApi();
+                                                    },
+                                                  );
                                                 } else {
                                                   _showRewardedAd(
                                                       id: data.id.toString());

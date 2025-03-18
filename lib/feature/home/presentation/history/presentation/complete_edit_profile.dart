@@ -46,7 +46,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
       (value) {
         WidgetsBinding.instance.addPostFrameCallback(
           (timeStamp) async {
-            print("==========>>>>> ${editProfileNotifier.countryCode}");
+            printLog("==========>>>>> ${editProfileNotifier.countryCode}");
             countryNotifier
                 .updateInitialCountry(editProfileNotifier.countryCode);
           },

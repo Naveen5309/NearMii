@@ -1,6 +1,5 @@
 import 'package:NearMii/core/error/failure.dart';
 import 'package:NearMii/core/utils/dartz/either.dart';
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 
 import 'package:NearMii/feature/self_user_profile/data/data_source/self_user_profile_data_source.dart';

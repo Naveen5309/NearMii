@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:NearMii/feature/history/data/model/history_model.dart';
 import 'package:NearMii/feature/notification/data/model/notification_response_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';

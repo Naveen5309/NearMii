@@ -1,7 +1,6 @@
 import 'package:NearMii/feature/auth/data/models/add_platform_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/complete_profile_response_model.dart';
 import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
-import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/user_register_response_model.dart';
 

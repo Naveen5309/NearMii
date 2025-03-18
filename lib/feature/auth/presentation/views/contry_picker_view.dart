@@ -30,7 +30,7 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
   @override
   Widget build(BuildContext context) {
     final county = ref.watch(countryPickerProvider);
-    final updateCode = ref.watch(signupProvider.notifier);
+    ref.watch(signupProvider.notifier);
     return Scaffold(
       appBar: AppBar(
           elevation: 1,

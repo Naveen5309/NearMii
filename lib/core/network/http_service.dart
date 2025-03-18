@@ -63,6 +63,7 @@ class ApiProvider {
           message: response.data["message"] ?? '',
           status: response.data["status"],
           data: parsedData,
+          userPoints: response.data["user_points"],
           token: response.data["token"] ?? '');
       return dataResponse;
     } catch (err, c) {

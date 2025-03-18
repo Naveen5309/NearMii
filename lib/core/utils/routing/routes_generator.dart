@@ -1,3 +1,4 @@
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/auth/data/models/social_profile_model.dart';
 import 'package:NearMii/feature/auth/presentation/views/add_new_social_media_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/auth_view.dart';
@@ -10,7 +11,6 @@ import 'package:NearMii/feature/home/presentation/history/presentation/complete_
 import 'package:NearMii/feature/home/presentation/history/presentation/contact_us_view.dart';
 import 'package:NearMii/feature/notification/presentation/view/notification_view.dart';
 import 'package:NearMii/feature/setting/presentation/view/delete_account_reason.dart';
-import 'package:NearMii/feature/setting/presentation/view/deleted_detail_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/profile_screen.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/radius_view.dart';
 import 'package:NearMii/feature/home/presentation/history/presentation/terms_condition_view.dart';
@@ -27,8 +27,8 @@ import 'routes.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    final args = settings.arguments;
-    print('Current Screen: ${settings.name}');
+    // final args = settings.arguments;
+    printLog('Current Screen: ${settings.name}');
     switch (settings.name) {
       case Routes.splash:
         return MaterialPageRoute(builder: (_) => const SplashView());

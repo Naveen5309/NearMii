@@ -1,7 +1,6 @@
 import 'dart:developer';
 
-import 'package:NearMii/feature/auth/data/models/edit_profile_model.dart';
-import 'package:NearMii/feature/home/domain/profile_model.dart';
+import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 
 import '../../../../core/helpers/all_getter.dart';
@@ -29,7 +28,7 @@ class SettingDataSourceImpl extends SettingDataSource {
             log("json in data source :-> $json");
             return json["data"];
           });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -58,7 +57,7 @@ class SettingDataSourceImpl extends SettingDataSource {
             log("json in data source :-> $json");
             return json["data"];
           });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -87,7 +86,7 @@ class SettingDataSourceImpl extends SettingDataSource {
             log("json in data source :-> $json");
             return json["data"];
           });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -116,7 +115,7 @@ class SettingDataSourceImpl extends SettingDataSource {
             log("json in data source :-> $json");
             return json["data"];
           });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         log("user data is:-> ${dataResponse.data}");
 
@@ -149,7 +148,7 @@ class SettingDataSourceImpl extends SettingDataSource {
                 }
                 throw Exception("Unexpected API response format");
               });
-      print("dataResponse===>$dataResponse");
+      printLog("dataResponse===>$dataResponse");
       if (dataResponse.status == "success") {
         UserProfileModel model = dataResponse.data!;
 

@@ -9,6 +9,7 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NotificationView extends ConsumerStatefulWidget {
@@ -77,6 +78,7 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                       const CustomAppbarWidget(
                         title: AppString.notification,
                       ),
+                      13.verticalSpace,
                       ((notification.recentNotificationList.isEmpty) &&
                               (notification
                                   .notificationLastWeekTimeList.isEmpty) &&
@@ -200,13 +202,22 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                             padding:
                                                                                 const EdgeInsets.symmetric(vertical: 5),
                                                                             child:
-                                                                                NotificationTile(
-                                                                              type: "${data.type}",
-                                                                              onTap: () {},
-                                                                              time: timeAgo,
-                                                                              title: data.message ?? '',
-                                                                              leadingIcon: "",
-                                                                              subtitle: 'Check out their profile.',
+                                                                                AnimationConfiguration.staggeredList(
+                                                                              position: index,
+                                                                              child: SlideAnimation(
+                                                                                curve: Curves.easeInOutCirc,
+                                                                                horizontalOffset: -100,
+                                                                                child: FadeInAnimation(
+                                                                                  child: NotificationTile(
+                                                                                    type: "${data.type}",
+                                                                                    onTap: () {},
+                                                                                    time: timeAgo,
+                                                                                    title: data.message ?? '',
+                                                                                    leadingIcon: "",
+                                                                                    subtitle: 'Check out their profile.',
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           );
 
@@ -328,13 +339,22 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                             padding:
                                                                                 const EdgeInsets.symmetric(vertical: 5),
                                                                             child:
-                                                                                NotificationTile(
-                                                                              type: "",
-                                                                              onTap: () {},
-                                                                              time: "1h ago",
-                                                                              title: "Someone viewed your profile",
-                                                                              leadingIcon: "",
-                                                                              subtitle: 'Check out their profile.',
+                                                                                AnimationConfiguration.staggeredList(
+                                                                              position: index,
+                                                                              child: SlideAnimation(
+                                                                                curve: Curves.easeInOutCirc,
+                                                                                horizontalOffset: 100,
+                                                                                child: FadeInAnimation(
+                                                                                  child: NotificationTile(
+                                                                                    type: "${data.type}",
+                                                                                    onTap: () {},
+                                                                                    time: timeAgo,
+                                                                                    title: data.message ?? '',
+                                                                                    leadingIcon: "",
+                                                                                    subtitle: 'Check out their profile.',
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           );
                                                                         },
@@ -441,13 +461,22 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                             padding:
                                                                                 const EdgeInsets.symmetric(vertical: 5),
                                                                             child:
-                                                                                NotificationTile(
-                                                                              type: "",
-                                                                              onTap: () {},
-                                                                              time: timeAgo,
-                                                                              title: data.message ?? '',
-                                                                              leadingIcon: "",
-                                                                              subtitle: 'Check out their profile.',
+                                                                                AnimationConfiguration.staggeredList(
+                                                                              position: index,
+                                                                              child: SlideAnimation(
+                                                                                curve: Curves.easeInOutCirc,
+                                                                                horizontalOffset: -100,
+                                                                                child: FadeInAnimation(
+                                                                                  child: NotificationTile(
+                                                                                    type: "${data.type}",
+                                                                                    onTap: () {},
+                                                                                    time: timeAgo,
+                                                                                    title: data.message ?? '',
+                                                                                    leadingIcon: "",
+                                                                                    subtitle: 'Check out their profile.',
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           );
                                                                         },

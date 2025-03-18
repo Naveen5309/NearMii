@@ -23,7 +23,6 @@ import 'package:NearMii/feature/common_widgets/custom_cache_network.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:sliver_snap/widgets/sliver_snap.dart';
 
 class OtherUserProfileView extends ConsumerStatefulWidget {
@@ -44,6 +43,9 @@ class OtherUserProfileView extends ConsumerStatefulWidget {
 }
 
 class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
+  final ScrollController _scrollController =
+      ScrollController(); // Add ScrollController
+
   @override
   void initState() {
     super.initState();
@@ -242,31 +244,39 @@ Widget bottomSection({
     width: context.width,
     child: Padding(
       padding: EdgeInsets.symmetric(horizontal: context.width * .04),
-      child: Column(children: [
-        CustomSearchBarWidget(
-          controller: otherUserProfileNotifier.platformSearchController,
-          onChanged: (value) {
-            onSearchChanged(value);
-          },
+      child: SingleChildScrollView(
+        // Enable full scrolling
+        child: Column(
+          children: [
+            CustomSearchBarWidget(
+              controller: otherUserProfileNotifier.platformSearchController,
+              onChanged: (value) {
+                onSearchChanged(value);
+              },
+            ),
+            ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: otherUserProfileNotifier.newPlatformLists.length,
+              shrinkWrap: true, // Allow wrapping content height
+              physics:
+                  const NeverScrollableScrollPhysics(), // Prevent nested scrolling conflicts
+              itemBuilder: (context, index) {
+                var data = otherUserProfileNotifier.newPlatformLists[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OtherUserProfileGridView(
+                    notifier: otherUserProfileNotifier,
+                    controller:
+                        otherUserProfileNotifier.platformSearchController,
+                    title: data.title ?? '',
+                    socialMedia: data.list ?? [],
+                  ),
+                );
+              },
+            )
+          ],
         ),
-        ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: otherUserProfileNotifier.newPlatformLists.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            var data = otherUserProfileNotifier.newPlatformLists[index];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OtherUserProfileGridView(
-                notifier: otherUserProfileNotifier,
-                controller: otherUserProfileNotifier.platformSearchController,
-                title: data.title ?? '',
-                socialMedia: data.list ?? [],
-              ),
-            );
-          },
-        )
-      ]),
+      ),
     ),
   );
 }

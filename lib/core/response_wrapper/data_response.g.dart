@@ -16,6 +16,7 @@ ResponseWrapper<TModel> _$ResponseWrapperFromJson<TModel>(
       message: json['message'] as String?,
       data: _$nullableGenericFromJson(json['data'], fromJsonTModel),
       token: json['token'] as String?,
+      userPoints: json['user_points'] as int?,
     );
 
 Map<String, dynamic> _$ResponseWrapperToJson<TModel>(
@@ -35,6 +36,7 @@ Map<String, dynamic> _$ResponseWrapperToJson<TModel>(
   writeNotNull('statusCode', instance.statusCode);
   writeNotNull('data', _$nullableGenericToJson(instance.data, toJsonTModel));
   writeNotNull('token', instance.token);
+  writeNotNull('userPoints', instance.userPoints);
 
   return val;
 }

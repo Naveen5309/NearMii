@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:NearMii/config/helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../feature/common_widgets/custom_toast.dart';
-
 
 abstract class NetworkInfo {
   Future<bool> get isConnected;
@@ -18,33 +18,34 @@ class NetworkInfoImplementation implements NetworkInfo {
   @override
   Future<bool> get isConnected async {
     final result = await connectivity.checkConnectivity();
-      for (var element in result){
-      print("Internet connection result is:$element");
-      }
-      switch (result.first) {
-        case ConnectivityResult.mobile:
-        case ConnectivityResult.wifi:
-        case ConnectivityResult.ethernet:
-        case ConnectivityResult.bluetooth:
-        case ConnectivityResult.vpn:
-          return true;
-        case ConnectivityResult.none:
-          toast(msg: "Internet not available",isError: true);
-          return false;
-        default:
-          return false;
-      }
-      }
-
-      @override
-      Future<bool> get isSlow async {
-        try {
-          final stopwatch = Stopwatch()..start();
-          await InternetAddress.lookup('example.com'); // Replace with a reliable address
-          final duration = stopwatch.elapsedMilliseconds;
-          return duration > slowThreshold;
-        } on SocketException catch (_) {
-          return true; // Consider slow if lookup fails
-        }
-      }
+    for (var element in result) {
+      printLog("Internet connection result is:$element");
     }
+    switch (result.first) {
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.wifi:
+      case ConnectivityResult.ethernet:
+      case ConnectivityResult.bluetooth:
+      case ConnectivityResult.vpn:
+        return true;
+      case ConnectivityResult.none:
+        toast(msg: "Internet not available", isError: true);
+        return false;
+      default:
+        return false;
+    }
+  }
+
+  @override
+  Future<bool> get isSlow async {
+    try {
+      final stopwatch = Stopwatch()..start();
+      await InternetAddress.lookup(
+          'example.com'); // Replace with a reliable address
+      final duration = stopwatch.elapsedMilliseconds;
+      return duration > slowThreshold;
+    } on SocketException catch (_) {
+      return true; // Consider slow if lookup fails
+    }
+  }
+}

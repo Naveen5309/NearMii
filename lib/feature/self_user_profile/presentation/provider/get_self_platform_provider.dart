@@ -1,7 +1,6 @@
 import 'package:NearMii/feature/self_user_profile/data/data_source/self_user_profile_data_source.dart';
 import 'package:NearMii/feature/self_user_profile/data/repository/self_user_profile_repository.dart';
 import 'package:NearMii/feature/self_user_profile/domain/usecases/self_user_profile_usecases.dart';
-import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state_notifier/self_user_profile_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

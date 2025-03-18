@@ -11,7 +11,6 @@ import 'package:NearMii/feature/auth/presentation/provider/signup_provider.dart'
 import 'package:NearMii/feature/auth/presentation/provider/states/auth_states.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/bg_image_container.dart';
-import 'package:NearMii/feature/common_widgets/common_back_btn.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';

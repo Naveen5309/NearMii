@@ -223,8 +223,8 @@ class HomeNotifier extends StateNotifier<HomeState>
         );
       }
       Map<String, dynamic> body = {
-        "lat": LocationService().currentPosition?.latitude ?? 0.0,
-        "long": LocationService().currentPosition?.longitude ?? 0.0,
+        "lat": LocationService().currentPosition?.latitude ?? 30.710446,
+        "long": LocationService().currentPosition?.longitude ?? 76.71935,
         if (radius.isNotEmpty) "radius": radius
       };
       final result = await homeUseCase.updateCoordinates(
@@ -283,8 +283,17 @@ class HomeNotifier extends StateNotifier<HomeState>
           error: error.message,
         );
       }, (result) {
-        if (result != null) {
-          homeUserDataList = result;
+        log("getHomeDataApi result is :->2 $result");
+        log("getHomeDataApi result is :->1 ${result["user_points"]}");
+
+        // log("getHomeDataApi result is :->2 ${result["data "]}");
+
+        if (result != null && result["data"] != null) {
+          homeUserDataList = (result["data"] as List)
+              .map((item) => HomeData.fromJson(item))
+              .toList();
+
+          credits = result["user_points"] ?? 0;
         } else {
           homeUserDataList = [];
         }
@@ -294,6 +303,7 @@ class HomeNotifier extends StateNotifier<HomeState>
         return const HomeApiSuccess(homeType: HomeType.home);
       });
     } catch (e) {
+      printLog("catch called");
       isHomeLoading = false;
 
       state = HomeApiFailed(error: e.toString(), homeType: HomeType.home);
@@ -361,7 +371,7 @@ class HomeNotifier extends StateNotifier<HomeState>
         return HomeApiFailed(
             error: error.message, homeType: HomeType.getAddSubscription);
       }, (result) {
-        print("result is::$result");
+        printLog("result is::$result");
 
         return const HomeApiSuccess(homeType: HomeType.getAddSubscription);
       });

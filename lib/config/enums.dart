@@ -1,7 +1,6 @@
 enum AuthType {
   login,
   logOut,
-
   signup,
   socialMedia,
   completeProfile,

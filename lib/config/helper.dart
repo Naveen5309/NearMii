@@ -170,7 +170,7 @@ String formatDOBforUpdate(String dob) {
 
     return DateFormat("yyyy-MM-dd").format(parsedDate);
   } catch (e) {
-    print("Error parsing date: $e");
+    printLog("Error parsing date: $e");
     return ""; // Handle error gracefully
   }
 }

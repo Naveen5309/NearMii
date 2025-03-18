@@ -1,6 +1,5 @@
 import 'package:NearMii/config/debouncer.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
@@ -12,6 +11,7 @@ import 'package:NearMii/feature/history/presentation/provider/state_notifier/his
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
@@ -164,56 +164,61 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                                           history.recentHistoryList
                                                                   .isNotEmpty
                                                               ? SizedBox(
-                                                                  child: ListView
-                                                                      .builder(
-                                                                    physics:
-                                                                        const NeverScrollableScrollPhysics(),
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        vertical:
-                                                                            3),
-                                                                    itemCount: history
-                                                                        .recentHistoryList
-                                                                        .length,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            index) {
-                                                                      var data =
-                                                                          history
-                                                                              .recentHistoryList[index];
-                                                                      var timeAgo =
-                                                                          getTimeAgo(
-                                                                              data.createdAt);
-                                                                      return Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                5),
-                                                                        child:
-                                                                            CustomTile(
-                                                                          isHistory:
-                                                                              true,
-                                                                          time:
-                                                                              timeAgo,
-                                                                          title:
-                                                                              data.profile?.name ?? "",
-                                                                          leadingIcon:
-                                                                              data.profile?.profilePhoto ?? '',
-                                                                          subtitle:
-                                                                              data.profile?.designation ?? "",
-                                                                          onTap:
-                                                                              () {
-                                                                            toNamed(
-                                                                              context,
-                                                                              Routes.otherUserProfile,
-                                                                              args: data.profile!.id.toString(),
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      );
-                                                                    },
+                                                                  child:
+                                                                      AnimationLimiter(
+                                                                    child: ListView
+                                                                        .builder(
+                                                                      physics:
+                                                                          const NeverScrollableScrollPhysics(),
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              3),
+                                                                      itemCount: history
+                                                                          .recentHistoryList
+                                                                          .length,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        var data =
+                                                                            history.recentHistoryList[index];
+                                                                        var timeAgo =
+                                                                            getTimeAgo(data.createdAt);
+                                                                        return Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              vertical: 5),
+                                                                          child:
+                                                                              AnimationConfiguration.staggeredList(
+                                                                            position:
+                                                                                index,
+                                                                            child:
+                                                                                SlideAnimation(
+                                                                              curve: Curves.easeInOutCirc,
+                                                                              horizontalOffset: -100,
+                                                                              child: FadeInAnimation(
+                                                                                child: CustomTile(
+                                                                                  isHistory: true,
+                                                                                  time: timeAgo,
+                                                                                  title: data.profile?.name ?? "",
+                                                                                  leadingIcon: data.profile?.profilePhoto ?? '',
+                                                                                  subtitle: data.profile?.designation ?? "",
+                                                                                  onTap: () {
+                                                                                    toNamed(
+                                                                                      context,
+                                                                                      Routes.otherUserProfile,
+                                                                                      args: data.profile!.id.toString(),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    ),
                                                                   ),
                                                                 )
                                                               : const SizedBox(
@@ -310,27 +315,34 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                                                             .symmetric(
                                                                             vertical:
                                                                                 5),
-                                                                        child:
-                                                                            CustomTile(
-                                                                          isHistory:
-                                                                              true,
-                                                                          time:
-                                                                              timeAgo,
-                                                                          title:
-                                                                              data.profile?.name ?? "",
-                                                                          leadingIcon: data.profile?.profilePhoto != null
-                                                                              ? (ApiConstants.profileBaseUrl + data.profile!.profilePhoto!)
-                                                                              : '',
-                                                                          subtitle:
-                                                                              data.profile?.designation ?? "",
-                                                                          onTap:
-                                                                              () {
-                                                                            toNamed(
-                                                                              context,
-                                                                              Routes.otherUserProfile,
-                                                                              args: data.profile!.id.toString(),
-                                                                            );
-                                                                          },
+                                                                        child: AnimationConfiguration
+                                                                            .staggeredList(
+                                                                          position:
+                                                                              index,
+                                                                          child:
+                                                                              SlideAnimation(
+                                                                            curve:
+                                                                                Curves.easeInOutCirc,
+                                                                            horizontalOffset:
+                                                                                100,
+                                                                            child:
+                                                                                FadeInAnimation(
+                                                                              child: CustomTile(
+                                                                                isHistory: true,
+                                                                                time: timeAgo,
+                                                                                title: data.profile?.name ?? "",
+                                                                                leadingIcon: data.profile?.profilePhoto ?? '',
+                                                                                subtitle: data.profile?.designation ?? "",
+                                                                                onTap: () {
+                                                                                  toNamed(
+                                                                                    context,
+                                                                                    Routes.otherUserProfile,
+                                                                                    args: data.profile!.id.toString(),
+                                                                                  );
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       );
                                                                     },
