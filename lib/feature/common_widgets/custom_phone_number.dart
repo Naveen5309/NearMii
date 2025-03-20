@@ -21,6 +21,7 @@ class CustomPhoneNumber extends StatefulWidget {
   final String prefixIcon;
   final String? suffixIcon;
   final bool? readOnly;
+  final int maxLength;
   final VoidCallback? onTapOnSuffixIcon;
   final VoidCallback? onTapOnPrefixIcon;
   final Function(String, String)? onCountryCodeChanged;
@@ -40,6 +41,7 @@ class CustomPhoneNumber extends StatefulWidget {
     this.onTapOnSuffixIcon,
     required this.prefixIcon,
     this.onCountryCodeChanged,
+    required this.maxLength,
     required this.selectedCountryCode, // Required parameter
     required this.selectedCountryFlag, // Required parameter
   });
@@ -120,6 +122,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                     if (result != null) {
                       log("data s :-. ${result.dialCode}");
                       ref.read(signupProvider.notifier).updateCountryData(
+                          maLength: result.maxLength ?? 10,
                           dialCode: result.dialCode ?? "+1",
                           countryNmCode: result.code ?? "US");
                     }
@@ -161,7 +164,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                     padding: const EdgeInsets.only(left: 10),
                     child: TextField(
                       keyboardType: TextInputType.phone,
-                      maxLength: 15,
+                      maxLength: widget.maxLength,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       readOnly: widget.readOnly ?? false,
                       focusNode: _focusNode,

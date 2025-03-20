@@ -46,6 +46,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       notifier.updateCoordinates(radius: '');
       bool? isTrue = Getters.getLocalStorage.getIsSaveVip();
       if (isTrue!) {
+        notifier.checkAddress();
         showDialog(
           context: context,
           builder: (context) => const VIPMembershipDialog(),
@@ -64,7 +65,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
-      notifier.checkAddress();
+
       // }
     });
   }

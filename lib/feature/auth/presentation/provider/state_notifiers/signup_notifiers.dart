@@ -37,6 +37,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   final searchTextController = TextEditingController();
   String countryCode = '+1';
   String countryNameCode = 'US';
+  int maxLength = 10;
 
   String countryFlag = '🇺🇸';
   String profilePic = '';
@@ -765,17 +766,18 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     confirmPswdController.clear();
   }
 
-  void updateCountryData({
-    required String dialCode,
-    required String countryNmCode,
-  }) async {
+  void updateCountryData(
+      {required String dialCode,
+      required String countryNmCode,
+      required int maLength}) async {
     log("update code called");
     state = UpdateCodeLoading();
     countryCode = dialCode;
     countryNameCode = countryNmCode;
+    maxLength = maLength;
 
     state = UpdateCodeLoaded();
 
-    log("update code called :-> $countryCode, $countryFlag, $countryNameCode");
+    log("update code called :-> $countryCode, $countryFlag, $countryNameCode, $maLength");
   }
 }

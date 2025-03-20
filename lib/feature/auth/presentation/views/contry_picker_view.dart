@@ -86,6 +86,7 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
                     contentPadding: const EdgeInsets.only(left: 20, right: 20),
                     onTap: () {
                       log("selected country:-> ${data.dialCode}");
+                      log("selected country:-> ${data.maxLength}");
 
                       ref
                           .read(countryPickerProvider.notifier)

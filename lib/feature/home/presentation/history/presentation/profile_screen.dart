@@ -61,12 +61,11 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(getSocialProfileProvider);
-
     final notifier = ref.read(getSocialProfileProvider.notifier);
     ref.listen(
       getSocialProfileProvider,
       (previous, next) {
+        printLog("next is :-> $next");
         if (next is SelfUserProfileApiLoading &&
             next.selfProfileDataType == SelfProfileDataType.getProfile) {
           Utils.showLoader();
@@ -81,24 +80,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
           Utils.hideLoader();
 
           // toast(msg: next.error);
-        }
-
-        // else if (next is SelfUserProfileApiLoading &&
-        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        //   Utils.showLoader();
-        // } else if (next is SelfUserProfileApiSuccess &&
-        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        //   // toast(msg: AppString.loginSuccess, isError: false);
-        //   Utils.hideLoader();
-        //   toast(msg: "Social profile updated successfully", isError: false);
-        //   back(context);
-        //   notifier.getSelfPlatformApi();
-        // } else if (next is SelfUserProfileApiFailed &&
-        //     next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        //   Utils.hideLoader();
-        //   toast(msg: next.error);
-        // }
-        else if (next is SelfUserProfileApiLoading &&
+        } else if (next is SelfUserProfileApiLoading &&
             next.selfProfileDataType == SelfProfileDataType.deletePlatform) {
           Utils.showLoader();
         } else if (next is SelfUserProfileApiSuccess &&
@@ -145,6 +127,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         }
       },
     );
+
     ref.listen(
       loginProvider,
       (previous, next) {
@@ -164,7 +147,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         }
       },
     );
-
+    ref.watch(getSocialProfileProvider);
     return Scaffold(
         backgroundColor: AppColor.primary,
         floatingActionButton: InkWell(
@@ -403,7 +386,6 @@ Widget bottomSection({
               onSearchChanged(value);
             },
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: hideAllSection(
@@ -411,9 +393,8 @@ Widget bottomSection({
                 profile: profile,
                 selfUserProfileNotifier: selfUserProfileNotifier),
           ),
-
           SizedBox(
-            height: context.height * .8,
+            // height: context.height * .8,
             child: ListView.builder(
                 shrinkWrap: true, // Allow wrapping content height
                 physics: const NeverScrollableScrollPhysics(),
@@ -432,42 +413,6 @@ Widget bottomSection({
                   );
                 }),
           )
-          // selfUserProfileNotifier.socialMediaList.isNotEmpty
-          //     ? Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: ProfileGridView(
-          //           notifier: selfUserProfileNotifier,
-          //           controller: selfUserProfileNotifier.platformTextController,
-          //           isMyProfile: true,
-          //           title: AppString.socialMedia,
-          //           socialMedia: selfUserProfileNotifier.socialMediaList,
-          //         ),
-          //       )
-          //     : const SizedBox(),
-          // selfUserProfileNotifier.contactList.isNotEmpty
-          //     ? Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: ProfileGridView(
-          //           notifier: selfUserProfileNotifier,
-          //           controller: selfUserProfileNotifier.platformTextController,
-          //           isMyProfile: true,
-          //           title: AppString.contactInformation,
-          //           socialMedia: selfUserProfileNotifier.contactList,
-          //         ),
-          //       )
-          //     : const SizedBox(),
-          // selfUserProfileNotifier.portfolioList.isNotEmpty
-          //     ? Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: ProfileGridView(
-          //           notifier: selfUserProfileNotifier,
-          //           controller: selfUserProfileNotifier.platformTextController,
-          //           isMyProfile: true,
-          //           title: AppString.portfolio,
-          //           socialMedia: selfUserProfileNotifier.portfolioList,
-          //         ),
-          //       )
-          //     : const SizedBox()
         ]),
       ),
     ),
@@ -577,42 +522,15 @@ Widget profileSection(
             alignment: WrapAlignment.center,
             spacing: 12,
             runSpacing: 12,
-            children: selfUserProfileNotifier.newPlatformLists.map((entry) {
+            children:
+                selfUserProfileNotifier.newPlatformListsProfile.map((entry) {
               return InfoChip(
                   label: entry.title ?? "Unknown",
                   value: entry.list?.length.toString() ?? '0');
             }).toList(),
           ),
-
-//    Wrap(
-//   alignment: WrapAlignment.center,
-//   runSpacing: 8,
-//   spacing: 6,
-//   children: [
-//     // Generate dynamic InfoChips
-//     ..._buildDynamicChips(selfUserProfileNotifier),
-//   ],
-// ),
         ]),
   );
-
-  // background: Container(
-  //   width: MediaQuery.of(context).size.width,
-  //   padding: EdgeInsets.only(
-  //     left: 12.w,
-  //     right: 12.w,
-  //     top: context.height * .1,
-  //     bottom: context.height * .025,
-  //   ),
-  //   decoration: const BoxDecoration(
-  //     image: DecorationImage(
-  //       image: AssetImage(Assets.background),
-  //       fit: BoxFit.fill,
-  //     ),
-  // ),
-  // ),
-  // )
-  // ),
 }
 
 // HIDE ALL SECTION

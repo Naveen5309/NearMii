@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeNotifier extends StateNotifier<HomeState>
     with WidgetsBindingObserver {
@@ -42,24 +43,24 @@ class HomeNotifier extends StateNotifier<HomeState>
 
   String name = '';
 
-  /// **Detect when app returns from background**
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      printLog("resumed called");
-      // Re-fetch location when returning from settings
-      LocationService()
-          .getCurrentLocation(navigatorKey.currentState!.context)
-          .then((position) {
-        if (position != null) {
-          printLog("Resumed and got location: $position");
-          currentPosition = position;
+  // / **Detect when app returns from background**
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.resumed) {
+  //     printLog("resumed called");
+  //     // Re-fetch location when returning from settings
+  //     LocationService()
+  //         .getCurrentLocation(navigatorKey.currentState!.context)
+  //         .then((position) {
+  //       if (position != null) {
+  //         printLog("Resumed and got location: $position");
+  //         currentPosition = position;
 
-          updateCoordinates(radius: '');
-        }
-      });
-    }
-  }
+  //         updateCoordinates(radius: '');
+  //       }
+  //     });
+  //   }
+  // }
 
   Future<void> fetchLocation({required BuildContext context}) async {
     await Future.delayed(Duration.zero); // Ensures context is available
@@ -192,18 +193,61 @@ class HomeNotifier extends StateNotifier<HomeState>
     }
   }
 
-  checkAddress() async {
-    addressName = Getters.getLocalStorage.getAddress() ?? '';
-    location = Getters.getLocalStorage.getLocation() ?? '';
+//Check address
+  Future<void> checkAddress() async {
+    // Check location permission
+    PermissionStatus permission = await Permission.location.status;
 
-    log("address is :-> $addressName");
+    if (permission.isGranted) {
+      await _checkLocationServiceAndProceed();
+    } else {
+      // Request location permission
+      PermissionStatus newPermission = await Permission.location.request();
+      if (newPermission.isGranted) {
+        checkAddress(); // Re-run function after permission is granted
+      } else {
+        print("Location permission denied");
+      }
+    }
+  }
 
-    if (addressName.isEmpty || location.isEmpty) {
+  Future<void> _checkLocationServiceAndProceed() async {
+    bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!isLocationEnabled) {
+      bool shouldOpenSettings = await Geolocator.openLocationSettings();
+
+      if (shouldOpenSettings) {
+        // Wait a few seconds for the user to turn on location and then recheck
+        Future.delayed(const Duration(seconds: 3), () async {
+          bool isEnabledNow = await Geolocator.isLocationServiceEnabled();
+          if (isEnabledNow) {
+            getLocation();
+          } else {
+            print("User did not enable location services");
+          }
+        });
+      } else {
+        print("User chose not to open location settings");
+      }
+    } else {
+      // If location is already enabled, proceed to get location
       getLocation();
     }
-
-    state = UpdateLocation2();
   }
+
+  // checkAddress() async {
+  //   // addressName = Getters.getLocalStorage.getAddress() ?? '';
+  //   // location = Getters.getLocalStorage.getLocation() ?? '';
+
+  //   // log("address is :-> $addressName");
+
+  //   // if (addressName.isEmpty || location.isEmpty) {
+  //   getLocation();
+  //   // }
+
+  //   state = UpdateLocation2();
+  // }
 
   //UPDATE COORDINATES
   Future<void> updateCoordinates({required String radius}) async {

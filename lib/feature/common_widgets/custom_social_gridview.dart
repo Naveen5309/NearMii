@@ -163,6 +163,7 @@ class CustomSocialGridview extends ConsumerWidget {
                                     // 10.verticalSpace,
 
                                     CustomPhoneNumber(
+                                      maxLength: notifier.maxLength,
                                       selectedCountryCode: notifier.countryCode,
                                       selectedCountryFlag: notifier.countryFlag,
                                       prefixIcon: Assets.icGender,

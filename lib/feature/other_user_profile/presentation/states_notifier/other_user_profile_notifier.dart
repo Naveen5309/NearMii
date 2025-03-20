@@ -28,6 +28,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
   final somethingElseController = TextEditingController();
 
   List<SelfPlatformCatagoryData> newPlatformLists = [];
+  List<SelfPlatformCatagoryData> newPlatformListProfile = [];
 
   OtherUserProfileModel? profile;
 
@@ -102,6 +103,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
             error: error.message, otherUserType: OtherUserType.getPlatform);
       }, (result) {
         newPlatformLists = result;
+        newPlatformListProfile = result;
         newPlatformLists = newPlatformLists
             .where((platformCatagory) =>
                 platformCatagory.list != null &&

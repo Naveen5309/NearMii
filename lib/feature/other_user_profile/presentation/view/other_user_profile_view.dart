@@ -43,9 +43,6 @@ class OtherUserProfileView extends ConsumerStatefulWidget {
 }
 
 class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
-  final ScrollController _scrollController =
-      ScrollController(); // Add ScrollController
-
   @override
   void initState() {
     super.initState();
@@ -624,7 +621,8 @@ Widget profileSection({
             alignment: WrapAlignment.center,
             spacing: 12,
             runSpacing: 12,
-            children: otherUserProfileProvider.newPlatformLists.map((entry) {
+            children:
+                otherUserProfileProvider.newPlatformListProfile.map((entry) {
               return InfoChip(
                   label: entry.title ?? "Unknown",
                   value: entry.list?.length.toString() ?? '0');

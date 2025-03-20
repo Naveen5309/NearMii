@@ -86,29 +86,33 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton:
           //login
-          Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: context.width * .05, vertical: context.height * .01),
-        child: CommonAppBtn(
-          onTap: () async {
-            if (widget.isFromProfile) {
-              back(context);
-            } else {
-              await Getters.getLocalStorage.saveIsLogin(true);
-              await Getters.getLocalStorage.saveFirstIn(false);
+          signupPro.selectedPlatform.isEmpty
+              ? const SizedBox()
+              : Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.width * .05,
+                      vertical: context.height * .01),
+                  child: CommonAppBtn(
+                    onTap: () async {
+                      if (widget.isFromProfile) {
+                        back(context);
+                      } else {
+                        await Getters.getLocalStorage.saveIsLogin(true);
+                        await Getters.getLocalStorage.saveFirstIn(false);
 
-              if (context.mounted) {
-                offAllNamed(context, Routes.bottomNavBar, args: true);
-                toast(msg: AppString.signupSuccess, isError: false);
-              }
+                        if (context.mounted) {
+                          offAllNamed(context, Routes.bottomNavBar, args: true);
+                          toast(msg: AppString.signupSuccess, isError: false);
+                        }
 
-              toast(msg: AppString.signupSuccess, isError: false);
-            }
-          },
-          title: widget.isFromProfile ? AppString.done : AppString.next,
-          textSize: 16.sp,
-        ),
-      ),
+                        toast(msg: AppString.signupSuccess, isError: false);
+                      }
+                    },
+                    title:
+                        widget.isFromProfile ? AppString.done : AppString.next,
+                    textSize: 16.sp,
+                  ),
+                ),
       body: BgImageContainer(
           bgImage: Assets.icProfileBg,
           child: Padding(
@@ -304,38 +308,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                           );
                         },
                       ),
-                    )
-
-                    //SOCIAL MEDIA
-
-                    // signupPro.socialMediaList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         title: AppString.socialMedia,
-                    //         socialMedia: signupPro.socialMediaList,
-                    //         notifier: signupPro,
-                    //       ),
-
-                    // //CONTACT INFORMATION
-
-                    // signupPro.contactList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         notifier: signupPro,
-                    //         title: AppString.contactInformation,
-                    //         socialMedia: signupPro.contactList,
-                    //       ),
-
-                    // //PORTFOLIO
-
-                    // signupPro.portfolioList.isEmpty
-                    //     ? const SizedBox()
-                    //     : CustomSocialGridview(
-                    //         notifier: signupPro,
-                    //         title: AppString.portfolio,
-                    //         socialMedia: signupPro.portfolioList,
-                    //       ),
-                    ,
+                    ),
                     SizedBox(
                       height: context.height * .05,
                     ),

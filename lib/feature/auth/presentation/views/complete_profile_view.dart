@@ -298,6 +298,7 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CustomPhoneNumber(
+            maxLength: createProfileNotifier.maxLength,
             selectedCountryCode: createProfileNotifier.countryCode,
             selectedCountryFlag: createProfileNotifier.countryFlag,
             // onCountryCodeChanged: (code, flag) {
