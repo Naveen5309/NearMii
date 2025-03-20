@@ -39,7 +39,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         final notifier = ref.read(historyProvider.notifier);
-
+        notifier.historySearchController.clear();
         // if (notifier.recentHistoryList.isEmpty) {
         notifier.historyApi(isFromSear: false);
         // }

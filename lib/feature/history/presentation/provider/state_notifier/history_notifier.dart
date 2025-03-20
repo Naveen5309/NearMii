@@ -43,7 +43,7 @@ class HistoryNotifier extends StateNotifier<HistoryState> {
         );
       }
       Map<String, dynamic> body = {
-        "name": historySearchController.text.trim(),
+        "name": isFromSear ? historySearchController.text.trim() : "",
       };
       final result = await historyUsecases.callHistory(body: body);
       state = result.fold((error) {
