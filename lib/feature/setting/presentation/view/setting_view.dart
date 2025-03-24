@@ -158,7 +158,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                               text: notifier.userProfileModel?.token ?? '',
                               title: AppString.inviteFriend,
                               subtitle:
-                                  "Invite & Earn, get 5 credits for each invite, and your friend gets 2 credits when they sign up!",
+                                  "Share the referral code with your friends and get 5 credits for each invite",
                             )),
                       ),
 

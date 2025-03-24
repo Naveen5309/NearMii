@@ -45,17 +45,21 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
 
       notifier.updateCoordinates(radius: '');
       bool? isTrue = Getters.getLocalStorage.getIsSaveVip();
-      if (isTrue!) {
-        notifier.checkAddress();
-        showDialog(
-          context: context,
-          builder: (context) => const VIPMembershipDialog(),
-        ).then(
-          (value) {
-            Getters.getLocalStorage.saveIShowVip(false);
-          },
-        );
+
+      if (isTrue != null) {
+        if (isTrue) {
+          notifier.checkAddress();
+          showDialog(
+            context: context,
+            builder: (context) => const VIPMembershipDialog(),
+          ).then(
+            (value) {
+              Getters.getLocalStorage.saveIShowVip(false);
+            },
+          );
+        }
       }
+
       homeDataNotifier.getHomeDataApi();
 
       // }

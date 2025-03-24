@@ -86,7 +86,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton:
           //login
-          signupPro.selectedPlatform.isEmpty
+          signupPro.addSocialList.isEmpty
               ? const SizedBox()
               : Padding(
                   padding: EdgeInsets.symmetric(
@@ -97,15 +97,21 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       if (widget.isFromProfile) {
                         back(context);
                       } else {
-                        await Getters.getLocalStorage.saveIsLogin(true);
-                        await Getters.getLocalStorage.saveFirstIn(false);
+                        signupPro.addPlatform().then(
+                          (value) async {
+                            await Getters.getLocalStorage.saveIsLogin(true);
+                            await Getters.getLocalStorage.saveFirstIn(false);
 
-                        if (context.mounted) {
-                          offAllNamed(context, Routes.bottomNavBar, args: true);
-                          toast(msg: AppString.signupSuccess, isError: false);
-                        }
+                            if (context.mounted) {
+                              offAllNamed(context, Routes.bottomNavBar,
+                                  args: true);
+                              toast(
+                                  msg: AppString.signupSuccess, isError: false);
+                            }
 
-                        toast(msg: AppString.signupSuccess, isError: false);
+                            toast(msg: AppString.signupSuccess, isError: false);
+                          },
+                        );
                       }
                     },
                     title:
@@ -284,7 +290,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     ),
 
                     SizedBox(
-                      height: context.height * .6,
+                      height: context.height * .7,
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         // physics: const NeverScrollableScrollPhysics(),

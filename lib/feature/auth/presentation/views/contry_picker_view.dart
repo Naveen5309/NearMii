@@ -24,6 +24,7 @@ class _CountryPickerViewState extends ConsumerState<CountryPickerView> {
         ref.read(countryPickerProvider.notifier).getCountries();
       },
     );
+    ref.read(countryPickerProvider.notifier).searchController.clear();
     super.initState();
   }
 

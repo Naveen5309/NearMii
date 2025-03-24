@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/debouncer.dart';
@@ -45,8 +44,8 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
       // notifier.getSocialPlatform(query: '');
       notifier.getProfileApi();
-      final selfNotifier = ref.read(getSocialProfileProvider.notifier);
-      selfNotifier.getSelfPlatformApi();
+      // final selfNotifier = ref.read(getSocialProfileProvider.notifier);
+      // selfNotifier.getSelfPlatformApi();
     });
   }
 
@@ -61,11 +60,17 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    printLog("profile screen called");
+    final next = ref.watch(getSocialProfileProvider);
+    printLog("======>>>>>>>>>>> $next");
     final notifier = ref.read(getSocialProfileProvider.notifier);
+    // ref.watch(getSocialProfileProvider);
     ref.listen(
       getSocialProfileProvider,
       (previous, next) {
         printLog("next is :-> $next");
+        printLog("next is :-> $previous");
+
         if (next is SelfUserProfileApiLoading &&
             next.selfProfileDataType == SelfProfileDataType.getProfile) {
           Utils.showLoader();
@@ -73,6 +78,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             next.selfProfileDataType == SelfProfileDataType.getProfile) {
           // toast(msg: AppString.loginSuccess, isError: false);
           Utils.hideLoader();
+          notifier.getSelfPlatformApi();
 
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is SelfUserProfileApiFailed &&
@@ -102,11 +108,9 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
             next.selfProfileDataType == SelfProfileDataType.hideAll) {
           Utils.hideLoader();
           back(context);
-          toast(msg: "Data updated", isError: false);
-          notifier.getSelfPlatformApi();
+          //   toast(msg: "Data updated", isError: false);
+          // notifier.getSelfPlatformApi();
           notifier.getProfileApi();
-
-          // toNamed(context, Routes.bottomNavBar);
         } else if (next is SelfUserProfileApiFailed &&
             next.selfProfileDataType == SelfProfileDataType.hideAll) {
           Utils.hideLoader();
@@ -122,6 +126,20 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
           // toNamed(context, Routes.bottomNavBar);
         } else if (next is SelfUserProfileApiFailed &&
             next.selfProfileDataType == SelfProfileDataType.hidePlatform) {
+          Utils.hideLoader();
+          toast(msg: next.error);
+        } else if (next is SelfUserProfileApiLoading &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+          Utils.showLoader();
+        } else if (next is SelfUserProfileApiSuccess &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+          Utils.hideLoader();
+          back(context);
+          notifier.getSelfPlatformApi();
+
+          // toNamed(context, Routes.bottomNavBar);
+        } else if (next is SelfUserProfileApiFailed &&
+            next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
           Utils.hideLoader();
           toast(msg: next.error);
         }
@@ -147,7 +165,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
         }
       },
     );
-    ref.watch(getSocialProfileProvider);
+
     return Scaffold(
         backgroundColor: AppColor.primary,
         floatingActionButton: InkWell(
@@ -346,17 +364,23 @@ Widget appBarWidgetSection({
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(
-            text: profile?.name ?? '',
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w500,
-            color: AppColor.whiteFFFFFF,
+          SizedBox(
+            width: context.width * .7,
+            child: AppText(
+              text: profile?.name ?? '',
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColor.whiteFFFFFF,
+            ),
           ),
-          AppText(
-            text: profile?.designation ?? '',
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
+          SizedBox(
+            width: context.width * .7,
+            child: AppText(
+              text: profile?.designation ?? '',
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColor.whiteFFFFFF.withOpacity(.8),
+            ),
           ),
         ],
       )
@@ -379,6 +403,7 @@ Widget bottomSection({
       padding: EdgeInsets.symmetric(
           horizontal: context.width * .04, vertical: context.width * .01),
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(children: [
           CustomSearchBarWidget(
             controller: selfUserProfileNotifier.searchTextController,
@@ -386,32 +411,40 @@ Widget bottomSection({
               onSearchChanged(value);
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: hideAllSection(
-                context: context,
-                profile: profile,
-                selfUserProfileNotifier: selfUserProfileNotifier),
-          ),
-          SizedBox(
-            // height: context.height * .8,
-            child: ListView.builder(
-                shrinkWrap: true, // Allow wrapping content height
-                physics: const NeverScrollableScrollPhysics(),
-                hitTestBehavior: HitTestBehavior.translucent,
-                padding: EdgeInsets.zero,
-                itemCount: selfUserProfileNotifier.newPlatformLists.length,
-                itemBuilder: (context, index) {
-                  var data = selfUserProfileNotifier.newPlatformLists[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProfileGridView(
-                      isMyProfile: true,
-                      title: data.title ?? '',
-                      socialMedia: data.list ?? [],
-                    ),
-                  );
-                }),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: hideAllSection(
+                      context: context,
+                      profile: profile,
+                      selfUserProfileNotifier: selfUserProfileNotifier),
+                ),
+                SizedBox(
+                  // height: context.height * .8,
+                  child: ListView.builder(
+                      shrinkWrap: true, // Allow wrapping content height
+                      physics: const NeverScrollableScrollPhysics(),
+                      hitTestBehavior: HitTestBehavior.translucent,
+                      padding: EdgeInsets.zero,
+                      itemCount:
+                          selfUserProfileNotifier.newPlatformLists.length,
+                      itemBuilder: (context, index) {
+                        var data =
+                            selfUserProfileNotifier.newPlatformLists[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ProfileGridView(
+                            isMyProfile: true,
+                            title: data.title ?? '',
+                            socialMedia: data.list ?? [],
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
           )
         ]),
       ),

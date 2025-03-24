@@ -5,6 +5,7 @@ import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/country_code_provider.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
@@ -38,26 +39,33 @@ class ProfileGridView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(selfUserProvider.notifier);
+    // ref.watch(selfUserProvider);
+    // final notifier = ref.read(selfUserProvider.notifier);
+    final notifier = ref.read(getSocialProfileProvider.notifier);
     final countryNotifier = ref.read(countryPickerProvider.notifier);
     ref.watch(countryPickerProvider);
+    final next = ref.watch(getSocialProfileProvider);
+    printLog("====>> $getSocialProfileProvider");
 
-    ref.listen(selfUserProvider, (previous, next) {
-      if (next is SelfUserProfileApiLoading &&
-          next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        Utils.showLoader();
-      } else if (next is SelfUserProfileApiSuccess &&
-          next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        // toast(msg: AppString.loginSuccess, isError: false);
-        Utils.hideLoader();
-        toast(msg: "Social profile updated successfully", isError: false);
-        notifier.getSelfPlatformApi();
-      } else if (next is SelfUserProfileApiFailed &&
-          next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
-        Utils.hideLoader();
-        toast(msg: next.error);
-      }
-    });
+    // ref.listen(selfUserProvider, (previous, next) {
+    //   printLog("State changed: $next");
+
+    //   if (next is SelfUserProfileApiLoading &&
+    //       next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+    //     Utils.showLoader();
+    //   } else if (next is SelfUserProfileApiSuccess &&
+    //       next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+    //     Utils.hideLoader();
+    //     toast(msg: "Social profile updated successfully", isError: false);
+
+    //     // ✅ Call API once to refresh data
+    //     notifier.getSelfPlatformApi();
+    //   } else if (next is SelfUserProfileApiFailed &&
+    //       next.selfProfileDataType == SelfProfileDataType.updatePlatform) {
+    //     Utils.hideLoader();
+    //     toast(msg: next.error);
+    //   }
+    // });
 
     return Container(
       margin: const EdgeInsets.symmetric(

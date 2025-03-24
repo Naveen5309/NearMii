@@ -175,7 +175,8 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                     ),
                     4.verticalSpace,
                     CustomTextFieldWidget(
-                        controller: deleteAccountNotifier.reasonController,
+                        controller:
+                            deleteAccountNotifier.somethingElseController,
                         enableBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: AppColor.greyEEEEEE,
@@ -196,7 +197,11 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                         ),
                         fillColor: AppColor.greyEEEEEE,
                         hintText: "Enter custom reason...",
-                        onChanged: (value) {}),
+                        onChanged: (value) {
+                          if (value!.isNotEmpty) {
+                            ref.read(selectedDeleteIndex.notifier).state = -1;
+                          }
+                        }),
                   ],
                 ));
               }),
@@ -207,34 +212,54 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                 //     args:
                 //         deleteAccountNotifier.userProfileModel?.socialId ?? ''),
                 onTap: () {
-                  log("social profile is :-. ${widget.socialId}");
-                  if (widget.socialId.isEmpty) {
-                    log("delete show 1");
-                    deleteAccountNotifier.currentPasswordController.clear();
-                    int selected = ref.watch(selectedDeleteIndex);
+                  int selected = ref.watch(selectedDeleteIndex);
+                  log("social profile is :-. $selected");
+                  log("social profile is :-. ${deleteAccountNotifier.somethingElseController.text}");
 
+                  if (widget.socialId.isEmpty) {
                     if ((selected == -1) &&
-                        (deleteAccountNotifier.reasonController.text
+                        (deleteAccountNotifier.somethingElseController.text
                             .trim()
                             .isEmpty)) {
                       toast(msg: "Select reason for delete account");
                       return;
+                    } else {
+                      deleteAccountNotifier.currentPasswordController.clear();
+                      showCustomBottomSheet(
+                          context: context,
+                          content: const DeleteAccountBottomSheet());
                     }
-
-                    showCustomBottomSheet(
-                        context: context,
-                        content: const DeleteAccountBottomSheet());
-                  } else {
-                    log("delete show 2");
-                    showCustomBottomSheet(
-                        context: context,
-                        content: DeleteAccountConfirmationView(delete: () {
-                          deleteAccountNotifier.deleteAccountApi(
-                              socialId: widget.socialId);
-                        }, onCancel: () {
-                          back(context);
-                        }));
                   }
+                  // log("social profile is :-. ${widget.socialId}");
+                  // log("social profile is :-. ${deleteAccountNotifier.somethingElseController.text}");
+
+                  // if (widget.socialId.isEmpty) {
+                  //   log("delete show 1");
+                  //   deleteAccountNotifier.currentPasswordController.clear();
+                  //   int selected = ref.watch(selectedDeleteIndex);
+
+                  //   if ((selected == -1) &&
+                  //       (deleteAccountNotifier.somethingElseController.text
+                  //           .trim()
+                  //           .isEmpty)) {
+                  //     toast(msg: "Select reason for delete account");
+                  //     return;
+                  //   }
+
+                  //   showCustomBottomSheet(
+                  //       context: context,
+                  //       content: const DeleteAccountBottomSheet());
+                  // } else {
+                  //   printLog("Normal user");
+                  //   showCustomBottomSheet(
+                  //       context: context,
+                  //       content: DeleteAccountConfirmationView(delete: () {
+                  //         deleteAccountNotifier.deleteAccountApi(
+                  //             socialId: widget.socialId);
+                  //       }, onCancel: () {
+                  //         back(context);
+                  //       }));
+                  // }
                 },
                 title: AppString.next,
               )

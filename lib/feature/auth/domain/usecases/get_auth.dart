@@ -22,7 +22,7 @@ abstract class AuthUseCase {
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, AddPlatformData>> addPlatformApi(
+  Future<Either<Failure, List<AddPlatformData>>> addPlatformApi(
       {required Map<String, dynamic> body});
 
   Future<Either<Failure, CompleteProfileData>> completeProfile(
@@ -83,7 +83,7 @@ class AuthUseCaseImpl implements AuthUseCase {
   }
 
   @override
-  Future<Either<Failure, AddPlatformData>> addPlatformApi(
+  Future<Either<Failure, List<AddPlatformData>>> addPlatformApi(
       {required Map<String, dynamic> body}) async {
     final result = await repository.addPlatform(body: body);
     return result.fold((l) => Left(l), (r) {

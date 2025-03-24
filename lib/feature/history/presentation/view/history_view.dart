@@ -83,12 +83,23 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                           (history.historyLastMonthTimeList.isEmpty))
                       ? SizedBox(
                           height: context.height * .8,
-                          child: Center(
-                            child: AppText(
-                              text: "No profile found",
-                              fontSize: 16.sp,
-                              color: AppColor.btnColor,
-                            ),
+                          child: Column(
+                            children: [
+                              CustomSearchBarWidget(
+                                controller: history.historySearchController,
+                                onChanged: onSearchChanged,
+                              ),
+                              SizedBox(
+                                height: context.height * .6,
+                                child: Center(
+                                  child: AppText(
+                                    text: "No profile found",
+                                    fontSize: 16.sp,
+                                    color: AppColor.btnColor,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       : SizedBox(

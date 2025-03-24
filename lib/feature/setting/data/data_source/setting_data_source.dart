@@ -14,6 +14,8 @@ abstract class SettingDataSource {
   Future<ResponseWrapper?> getProfile({required Map<String, dynamic> body});
 
   Future<ResponseWrapper?> deleteAccount({required Map<String, dynamic> body});
+  Future<ResponseWrapper?> verifyDeleteAccount(
+      {required Map<String, dynamic> body});
 }
 
 class SettingDataSourceImpl extends SettingDataSource {
@@ -71,6 +73,35 @@ class SettingDataSourceImpl extends SettingDataSource {
       return getFailedResponseWrapper(exceptionHandler(
         e: e,
         functionName: "userLogin",
+      ));
+    }
+  }
+
+  @override
+  Future<ResponseWrapper<dynamic>?> verifyDeleteAccount(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final dataResponse = await Getters.getHttpService.request<dynamic>(
+          body: body,
+          url: ApiConstants.verifyDeleteAccount,
+          fromJson: (json) {
+            log("json in data source :-> $json");
+            return json["data"];
+          });
+      printLog("dataResponse===>$dataResponse");
+      if (dataResponse.status == "success") {
+        log("user data is:-> ${dataResponse.data}");
+
+        return getSuccessResponseWrapper(dataResponse);
+      } else {
+        log("else called: ${dataResponse.message} ");
+        return getFailedResponseWrapper(dataResponse.message,
+            response: dataResponse.data);
+      }
+    } catch (e) {
+      return getFailedResponseWrapper(exceptionHandler(
+        e: e,
+        functionName: "verifyDeleteAccount",
       ));
     }
   }

@@ -95,7 +95,13 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                       vertical: context.height * .01),
                   child: CommonAppBtn(
                     onTap: () async {
-                      back(context);
+                      signupPro.addPlatform().then(
+                        (value) async {
+                          if (context.mounted) {}
+                        },
+                      );
+
+                      // back(context);
                     },
                     title: AppString.done,
                     textSize: 16.sp,

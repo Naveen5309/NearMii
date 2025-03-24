@@ -22,6 +22,8 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   final bioController = TextEditingController();
   final currentPasswordController = TextEditingController();
   final reasonController = TextEditingController();
+  final somethingElseController = TextEditingController();
+
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final subjectController = TextEditingController();
@@ -64,7 +66,7 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   //VALIDATE Delete Account
   bool validateDeleteAccount() {
     bool isValid = Validator().deleteAccountValidation(
-      reason: reasonController.text.trim(),
+      // reason: reasonController.text.trim(),
       currentPassword: currentPasswordController.text.trim(),
     );
     if (isValid) {
@@ -159,7 +161,9 @@ class SettingNotifier extends StateNotifier<SettingStates> {
       Map<String, dynamic> body = {
         if (socialId == null) "password": currentPasswordController.text.trim(),
         if (socialId != null) "social_id": socialId,
-        "reason": reasonController.text.trim()
+        "reason": reasonController.text.trim().isNotEmpty
+            ? reasonController.text.trim()
+            : somethingElseController.text.trim()
       };
       final result = await settingUseCase.callDeleteAccount(body: body);
       state = result.fold((error) {
@@ -172,6 +176,40 @@ class SettingNotifier extends StateNotifier<SettingStates> {
     } catch (e) {
       state = SettingApiFailed(
           error: e.toString(), settingType: Setting.deleteAccount);
+    }
+  }
+
+  //Delete Account
+  Future<void> verifyDeleteAccountApi({String? socialId}) async {
+    state = const SettingApiLoading(settingType: Setting.verifyDeleteAccount);
+    try {
+      if (!(await Getters.networkInfo.isConnected)) {
+        state = const SettingApiFailed(
+            error: AppString.noInternetConnection,
+            settingType: Setting.verifyDeleteAccount);
+        return;
+      }
+      if (await Getters.networkInfo.isSlow) {
+        toast(
+          msg: AppString.networkSlow,
+        );
+      }
+
+      Map<String, dynamic> body = {
+        "password": currentPasswordController.text.trim(),
+      };
+      final result = await settingUseCase.verifyDeleteAccount(body: body);
+      state = result.fold((error) {
+        log("login error:${error.message} ");
+        return SettingApiFailed(
+            error: error.message, settingType: Setting.verifyDeleteAccount);
+      }, (result) {
+        return const SettingApiSuccess(
+            settingType: Setting.verifyDeleteAccount);
+      });
+    } catch (e) {
+      state = SettingApiFailed(
+          error: e.toString(), settingType: Setting.verifyDeleteAccount);
     }
   }
 

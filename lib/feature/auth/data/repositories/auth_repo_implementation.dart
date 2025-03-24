@@ -22,7 +22,7 @@ abstract class AuthRepository {
   Future<Either<Failure, dynamic>> forgotPassword(
       {required Map<String, dynamic> body});
 
-  Future<Either<Failure, AddPlatformData>> addPlatform(
+  Future<Either<Failure, List<AddPlatformData>>> addPlatform(
       {required Map<String, dynamic> body});
   Future<Either<Failure, CompleteProfileData>> completeProfile(
       {required Map<String, dynamic> body, required String imagePath});
@@ -99,7 +99,7 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AddPlatformData>> addPlatform(
+  Future<Either<Failure, List<AddPlatformData>>> addPlatform(
       {required Map<String, dynamic> body}) async {
     try {
       final data = await dataSource.addPlatform(body: body);

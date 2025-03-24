@@ -8,6 +8,7 @@ import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/auth/data/models/new_get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
+import 'package:NearMii/feature/auth/data/models/social_profile_response_model.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -59,7 +60,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   List<PlatformCatagory> newPlatformLists = [];
 
-  List<int> selectedPlatform = [];
+  // List<int> selectedPlatform = [];
 
   SignupNotifiers({required this.authUseCase}) : super(AuthInitial());
 
@@ -69,6 +70,15 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   bool isSocialLoading = true;
 
   Timer? timer;
+
+  List<AddSocialProfileModel> addSocialList = [];
+
+  List<AddSocialMediaList> addNewSocialMediaList = [];
+
+  updateUserPhone() {
+    countryCode = urlController.text.split(' ').first;
+    urlController.text = urlController.text.split(' ').last;
+  }
 
   void startTimer() {
     // resendOtpApi();
@@ -342,10 +352,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
 // ADD PLATFORM
-  Future<void> addPlatform({
-    required String platformId,
-    required bool isPhone,
-  }) async {
+  Future<void> addPlatform() async {
     state = const AuthApiLoading(authType: AuthType.addPlatform);
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -359,11 +366,14 @@ class SignupNotifiers extends StateNotifier<AuthState> {
           msg: AppString.networkSlow,
         );
       }
+      List<Map<String, dynamic>> newDataList = addSocialList
+          .map((item) => {
+                "platform_id": item.platformId,
+                "url": item.url,
+              })
+          .toList();
       Map<String, dynamic> body = {
-        "platform_id": platformId,
-        "url": isPhone
-            ? "$countryCode ${urlController.text.trim()}"
-            : urlController.text.trim(),
+        "social_profiles": newDataList,
       };
       final result = await authUseCase.addPlatformApi(body: body);
       state = result.fold((error) {
@@ -371,8 +381,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         return AuthApiFailed(
             error: error.message, authType: AuthType.addPlatform);
       }, (result) {
-        selectedPlatform.add(int.parse(platformId));
-        selectedPlatform = selectedPlatform.toSet().toList();
+        // selectedPlatform.add(int.parse(platformId));
+        // selectedPlatform = selectedPlatform.toSet().toList();
         urlController.clear();
         return const AuthApiSuccess(authType: AuthType.addPlatform);
       });
@@ -381,6 +391,12 @@ class SignupNotifiers extends StateNotifier<AuthState> {
           AuthApiFailed(error: e.toString(), authType: AuthType.addPlatform);
     }
   }
+
+//update selected platform
+  // updateSelectedPlatform({required String platformId}) {
+  //   selectedPlatform.add(int.parse(platformId));
+  //   selectedPlatform = selectedPlatform.toSet().toList();
+  // }
 
 //COMPLETE PROFILE API
   Future<void> completeProfileApi() async {

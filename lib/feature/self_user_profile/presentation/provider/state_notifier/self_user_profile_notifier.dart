@@ -18,11 +18,6 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   SelfUserProfileNotifier({required this.selfUserProfileUsecases})
       : super(SelfUserProfileInitial());
   UserProfileModel? userProfileModel;
-  // List<SelfPlatformData> socialMediaList = [];
-  // List<SelfPlatformData> contactList = [];
-  // List<SelfPlatformData> portfolioList = [];
-  // List<SelfPlatformData> financeList = [];
-  // List<SelfPlatformData> businessList = [];
 
   TextEditingController searchTextController = TextEditingController();
   TextEditingController platformTextController = TextEditingController();
@@ -134,6 +129,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
 
   //HIDE PLATFORM
   Future<void> hidePlatformApi({required String platformId}) async {
+    state = SelfUserProfileInitial();
     state = const SelfUserProfileApiLoading(
       selfProfileDataType: SelfProfileDataType.hidePlatform,
     );
@@ -162,6 +158,8 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       }, (result) {
         // historyDataList = result ?? [];
         log("SelfUserProfile result is :->$result");
+        getProfileApi();
+
         return const SelfUserProfileApiSuccess(
           selfProfileDataType: SelfProfileDataType.hidePlatform,
         );
@@ -308,6 +306,7 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
         );
       }, (result) {
         userProfileModel = result;
+        // getSelfPlatformApi();
 
         return const SelfUserProfileApiSuccess(
           selfProfileDataType: SelfProfileDataType.getProfile,

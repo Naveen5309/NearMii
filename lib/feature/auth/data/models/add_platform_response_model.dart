@@ -38,12 +38,12 @@ class AddPlatformResponseModel {
 }
 
 class AddPlatformData {
-  int? userId;
-  String? platformId;
+  dynamic userId;
+  dynamic platformId;
   String? url;
   DateTime? updatedAt;
   DateTime? createdAt;
-  int? id;
+  dynamic id;
 
   AddPlatformData({
     this.userId,

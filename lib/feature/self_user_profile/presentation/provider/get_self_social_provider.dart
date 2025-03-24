@@ -20,14 +20,14 @@ final selfUserProfileRepoProvider =
 // Define a Provider for SelfUserProfileUseCase
 final selfUserProfileUseCaseProvider =
     Provider.autoDispose<SelfUserProfileUsecases>((ref) {
-  final repository = ref.watch(selfUserProfileRepoProvider);
+  final repository = ref.read(selfUserProfileRepoProvider);
   return SelfUserProfileUseCaseImpl(repository: repository);
 });
 
 // Define a StateNotifierProvider for SelfUserProfileNotifier
 final getSocialProfileProvider = StateNotifierProvider.autoDispose<
     SelfUserProfileNotifier, SelfUserProfileState>((ref) {
-  final selfUserProfileUseCase = ref.watch(selfUserProfileUseCaseProvider);
+  final selfUserProfileUseCase = ref.read(selfUserProfileUseCaseProvider);
   return SelfUserProfileNotifier(
       selfUserProfileUsecases: selfUserProfileUseCase);
 });

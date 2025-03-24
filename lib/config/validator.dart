@@ -260,12 +260,13 @@ class Validator {
   //Delete Account
   bool deleteAccountValidation({
     required String currentPassword,
-    required String reason,
+    // required String reason,
   }) {
-    if (reason.isEmpty) {
-      error = AppString.selectReason;
-      return false;
-    } else if (currentPassword.isEmpty) {
+    // if (reason.isEmpty) {
+    //   error = AppString.selectReason;
+    //   return false;
+    // } else
+    if (currentPassword.isEmpty) {
       error = AppString.pleaseEnterCurrentPassword;
       return false;
     }

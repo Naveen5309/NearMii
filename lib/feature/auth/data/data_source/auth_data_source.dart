@@ -168,17 +168,21 @@ class AuthDataSourceImpl extends AuthDataSource {
       {required Map<String, dynamic> body}) async {
     try {
       final dataResponse =
-          await Getters.getHttpService.request<AddPlatformData>(
+          await Getters.getHttpService.request<List<AddPlatformData>>(
               body: body,
               url: ApiConstants.addPlatform,
               fromJson: (json) {
-                log("json in data source :-> $json");
+                return (json["data"] as List)
+                    .map((item) =>
+                        AddPlatformData.fromJson(item as Map<String, dynamic>))
+                    .toList();
+                // log("json in data source :-> $json");
 
-                if (json is Map<String, dynamic>) {
-                  return AddPlatformData.fromJson(json["data"]);
-                }
+                // if (json is Map<String, dynamic>) {
+                //   return AddPlatformData.fromJson(json["data"]);
+                // }
 
-                return json;
+                // return json;
               });
 
       if (dataResponse.status == "success") {

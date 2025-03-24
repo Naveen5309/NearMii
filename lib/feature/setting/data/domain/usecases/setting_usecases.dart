@@ -9,6 +9,9 @@ abstract class SettingUsecases {
   Future<Either<Failure, dynamic>> callDeleteAccount(
       {required Map<String, dynamic> body});
 
+  Future<Either<Failure, dynamic>> verifyDeleteAccount(
+      {required Map<String, dynamic> body});
+
   Future<Either<Failure, dynamic>> callRadius(
       {required Map<String, dynamic> body});
 
@@ -37,6 +40,16 @@ class SettingUseCaseImpl implements SettingUsecases {
   Future<Either<Failure, dynamic>> callDeleteAccount(
       {required Map<String, dynamic> body}) async {
     final result = await repository.isdeleteAccount(body: body);
+    return result.fold((l) => Left(l), (r) {
+      return Right(r);
+    });
+  }
+
+//VERIFY DELETE ACCOUNT
+  @override
+  Future<Either<Failure, dynamic>> verifyDeleteAccount(
+      {required Map<String, dynamic> body}) async {
+    final result = await repository.verifyDeleteAccount(body: body);
     return result.fold((l) => Left(l), (r) {
       return Right(r);
     });

@@ -1,17 +1,22 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
+import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
+import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/setting/presentation/provider/delete_account_provider.dart';
+import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
 import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class DeleteAccountBottomSheet extends ConsumerWidget {
+class DeleteAccountBottomSheet extends ConsumerStatefulWidget {
   final String? title;
   final String? btnText;
 
@@ -22,8 +27,45 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DeleteAccountBottomSheet> createState() =>
+      _DeleteAccountBottomSheetState();
+}
+
+class _DeleteAccountBottomSheetState
+    extends ConsumerState<DeleteAccountBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
     final deleteAccountNotifier = ref.read(deleteAccountProvider.notifier);
+
+    ref.listen(
+      deleteAccountProvider,
+      (previous, next) async {
+        if (next is SettingApiLoading &&
+            next.settingType == Setting.verifyDeleteAccount) {
+          Utils.showLoader();
+        } else if (next is SettingApiSuccess &&
+            next.settingType == Setting.verifyDeleteAccount) {
+          Utils.hideLoader();
+          showCustomBottomSheet(
+              context: context,
+              content: DeleteAccountConfirmationView(delete: () {
+                deleteAccountNotifier.deleteAccountApi();
+              }, onCancel: () {
+                back(context);
+              }));
+          // await Getters.getLocalStorage.clearLoginData();
+          // toast(msg: AppString.accountDeleted);
+          // if (context.mounted) {
+          //   offAllNamed(context, Routes.login);
+          // }
+        } else if (next is SettingApiFailed &&
+            next.settingType == Setting.verifyDeleteAccount) {
+          Utils.hideLoader();
+
+          toast(msg: next.error);
+        }
+      },
+    );
 
     return Container(
       decoration: const BoxDecoration(
@@ -41,14 +83,14 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
             ),
           ),
           AppText(
-              text: title ?? AppString.deleteAccount,
+              text: widget.title ?? AppString.deleteAccount,
               fontSize: 20.sp,
               lineHeight: 1.5,
               textAlign: TextAlign.center,
               fontWeight: FontWeight.w500),
           5.verticalSpace,
           AppText(
-              text: title ?? AppString.enterYourCurrentPswd,
+              text: widget.title ?? AppString.enterYourCurrentPswd,
               fontSize: 12.sp,
               lineHeight: 1.5,
               textAlign: TextAlign.center,
@@ -107,15 +149,19 @@ class DeleteAccountBottomSheet extends ConsumerWidget {
                   final isValid = deleteAccountNotifier.validateDeleteAccount();
 
                   if (isValid) {
-                    showCustomBottomSheet(
-                        context: context,
-                        content: DeleteAccountConfirmationView(delete: () {
-                          deleteAccountNotifier.deleteAccountApi(
-                              // socialId: widget.socialId
-                              );
-                        }, onCancel: () {
-                          back(context);
-                        }));
+                    deleteAccountNotifier.verifyDeleteAccountApi(
+                        // socialId: widget.socialId
+                        );
+                    // showCustomBottomSheet(
+                    //   context: context,
+                    //   content: DeleteAccountConfirmationView(delete: () {
+                    //     deleteAccountNotifier.verifyDeleteAccountApi(
+                    //         // socialId: widget.socialId
+                    //         );
+                    //   }, onCancel: () {
+                    //     back(context);
+                    //   }),
+                    // );
                   } else {
                     // final isDeleteAccount =
                     //     deleteAccountNotifier.validateDeleteAccount();
