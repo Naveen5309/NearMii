@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:NearMii/feature/auth/data/models/get_my_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/new_other_user_social_platform.dart';
 import 'package:NearMii/feature/other_user_profile/data/model/other_user_profile_model.dart';
 

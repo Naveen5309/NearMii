@@ -14,19 +14,19 @@ import '../../../../../config/helper.dart';
 
 class BottomNavigationView extends ConsumerWidget {
   final bool isFromAuth;
-  BottomNavigationView({super.key, required this.isFromAuth});
+  const BottomNavigationView({super.key, required this.isFromAuth});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var indexSelected = ref.watch(selectedIndex);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
           bool shouldExit = await showExitConfirmationDialog(context);
-          if (shouldExit) {
-            if (context.mounted) {
-              back(context); // Exit if user confirms
-            }
+          if (shouldExit && context.mounted) {
+            back(context);
           }
         }
       },
@@ -40,11 +40,10 @@ class BottomNavigationView extends ConsumerWidget {
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
-                  color: AppColor.black000000
-                      .withOpacity(.06), // Adjust opacity as needed
+                  color: AppColor.black000000.withOpacity(.06),
                   blurRadius: 5,
-                  spreadRadius: 3, // No spreading to the sides
-                  offset: const Offset(0, 5), // Move shadow downwards
+                  spreadRadius: 3,
+                  offset: const Offset(0, 5),
                 ),
               ],
             ),
@@ -61,132 +60,80 @@ class BottomNavigationView extends ConsumerWidget {
                     ),
                     width: context.width,
                     height: context.height * .09,
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        return const Padding(
-                          padding: EdgeInsets.only(),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [],
-                          ),
-                        );
-                      },
-                    ),
                   ),
                 ),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-
-                    // color: AppColor.whiteFFFFFF.withOpacity(0.1),
                   ),
                   width: context.width,
                   height: context.height * .09,
-                  child: Consumer(
-                    builder: (context, ref, child) {
-                      var indexSelected = ref.watch(selectedIndex);
-                      return Padding(
-                        padding: const EdgeInsets.only(),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // HOME
-                            navItems(
-                              onTap: () {
-                                ref.read(selectedIndex.notifier).state = 0;
-                              },
-                              ref: ref,
-                              isSelected: indexSelected == 0,
-                              context: context,
-                              index: 0,
-                              icon: indexSelected == 0
-                                  ? Assets.icSelectedHome
-                                  : Assets.icUnselectedHome,
-                            ),
-                            // HISTORY
-                            navItems(
-                              onTap: () {
-                                ref.read(selectedIndex.notifier).state = 1;
-                              },
-                              ref: ref,
-                              isSelected: indexSelected == 1,
-                              context: context,
-                              index: 1,
-                              icon: indexSelected == 1
-                                  ? Assets.icSelectedClock
-                                  : Assets.icUnselectedClock,
-                            ),
-
-                            //PROFILE
-                            InkWell(
-                                onTap: () {
-                                  toNamed(context, Routes.profile);
-                                },
-                                child: const CustomProfileWidget()),
-                            // NOTIFICATION
-
-                            navItems(
-                              onTap: () {
-                                ref.read(selectedIndex.notifier).state = 2;
-                              },
-                              ref: ref,
-                              isSelected: indexSelected == 2,
-                              context: context,
-                              index: 2,
-                              icon: indexSelected == 2
-                                  ? Assets.icSelectedNotification
-                                  : Assets.icUnselectedNotification,
-                            ),
-                            // SETTINGS
-                            navItems(
-                              onTap: () {
-                                ref.read(selectedIndex.notifier).state = 3;
-                              },
-                              ref: ref,
-                              isSelected: indexSelected == 3,
-                              context: context,
-                              index: 3,
-                              icon: indexSelected == 3
-                                  ? Assets.icSelectedSetting
-                                  : Assets.icUnselectedSetting,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      navItems(
+                        onTap: () => ref.read(selectedIndex.notifier).state = 0,
+                        isSelected: indexSelected == 0,
+                        context: context,
+                        icon: indexSelected == 0
+                            ? Assets.icSelectedHome
+                            : Assets.icUnselectedHome,
+                      ),
+                      navItems(
+                        onTap: () => ref.read(selectedIndex.notifier).state = 1,
+                        isSelected: indexSelected == 1,
+                        context: context,
+                        icon: indexSelected == 1
+                            ? Assets.icSelectedClock
+                            : Assets.icUnselectedClock,
+                      ),
+                      InkWell(
+                        onTap: () => toNamed(context, Routes.profile),
+                        child: const CustomProfileWidget(),
+                      ),
+                      navItems(
+                        onTap: () => ref.read(selectedIndex.notifier).state = 2,
+                        isSelected: indexSelected == 2,
+                        context: context,
+                        icon: indexSelected == 2
+                            ? Assets.icSelectedNotification
+                            : Assets.icUnselectedNotification,
+                      ),
+                      navItems(
+                        onTap: () => ref.read(selectedIndex.notifier).state = 3,
+                        isSelected: indexSelected == 3,
+                        context: context,
+                        icon: indexSelected == 3
+                            ? Assets.icSelectedSetting
+                            : Assets.icUnselectedSetting,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
         ),
-        body: Consumer(
-          builder: (context, ref, child) {
-            return _pageController[ref.watch(selectedIndex)];
-          },
+        body: Stack(
+          children: [
+            const HomePageView(
+                isFromAuth: true), // Keep HomePageView always alive
+            if (indexSelected == 1) const HistoryView(),
+            if (indexSelected == 2) const NotificationView(),
+            if (indexSelected == 3) const SettingView(),
+          ],
         ),
       ),
     );
   }
 
-  final _pageController = [
-    const HomePageView(
-      isFromAuth: true,
-    ),
-    const HistoryView(),
-    const NotificationView(),
-    const SettingView()
-  ];
-
-  Widget navItems(
-      {required int index,
-      required bool isSelected,
-      required WidgetRef ref,
-      required String icon,
-      required VoidCallback onTap,
-      required BuildContext context}) {
+  Widget navItems({
+    required bool isSelected,
+    required String icon,
+    required VoidCallback onTap,
+    required BuildContext context,
+  }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(

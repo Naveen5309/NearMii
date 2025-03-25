@@ -24,6 +24,11 @@ abstract class HiveConst {
 
   static const String name = 'name';
   static const String isShowVip = 'isShowVip';
+  static const String isDeviceLocation = 'isDeviceLocation';
+  static const String isLocationPermssion = 'isLocationPermssion';
+  static const String lat = 'lat';
+
+  static const String lang = 'lang';
 }
 
 abstract class LocalStorage {
@@ -40,6 +45,10 @@ abstract class LocalStorage {
   Future<void> clearLoginData();
 
   String? getToken();
+  double? getLat();
+
+  double? getLang();
+
   String? getAddress();
 
   String? getLocation();
@@ -52,6 +61,10 @@ abstract class LocalStorage {
   Future<void> saveToken(String token);
   Future<void> saveAddress(String address);
   Future<void> saveLocation(String location);
+
+  Future<void> saveLat(double lat);
+  Future<void> saveLang(double lang);
+
   Future<void> saveProfileImg(String socialImg);
 
   Future<void> saveSocialImg(String pic);
@@ -59,11 +72,19 @@ abstract class LocalStorage {
   Future<void> saveName(String name);
 
   Future<void> saveIsLogin(bool isLogin);
+
+  Future<void> saveIsDeviceLocation(bool isDeviceLocation);
+
+  Future<void> saveIsLocationPermission(bool isLocationPermssion);
+
   Future<void> saveCredits(int credits);
 
   Future<void> saveIsSubscription(bool isSubscription);
 
   bool? getIsLogin();
+  bool? getIsDeviceLocation();
+  bool? getIsLocationPermission();
+
   bool? getIsSaveVip();
 
   bool? getIsSubscription();
@@ -195,6 +216,9 @@ class HiveStorageImp extends LocalStorage {
     await userBox.delete(HiveConst.isLogin);
     await userBox.delete(HiveConst.authToken);
     await userBox.delete(HiveConst.userData);
+    await userBox.delete(HiveConst.profilePic);
+    await userBox.delete(HiveConst.userData);
+    await userBox.delete(HiveConst.name);
   }
 
   @override
@@ -261,5 +285,49 @@ class HiveStorageImp extends LocalStorage {
   @override
   Future<void> saveIShowVip(bool isShowVip) async {
     await userBox.put(HiveConst.isShowVip, isShowVip);
+  }
+
+  @override
+  bool? getIsDeviceLocation() {
+    final isDevice = userBox.get(HiveConst.isDeviceLocation) ?? false;
+    return isDevice;
+  }
+
+  @override
+  bool? getIsLocationPermission() {
+    final isPermission = userBox.get(HiveConst.isLocationPermssion) ?? false;
+    return isPermission;
+  }
+
+  @override
+  Future<void> saveIsDeviceLocation(bool isDeviceLocation) async {
+    await userBox.put(HiveConst.isDeviceLocation, isDeviceLocation);
+  }
+
+  @override
+  Future<void> saveIsLocationPermission(bool isLocationPermssion) async {
+    await userBox.put(HiveConst.isLocationPermssion, isLocationPermssion);
+  }
+
+  @override
+  double? getLang() {
+    final lang = userBox.get(HiveConst.lang) ?? 0.0;
+    return lang;
+  }
+
+  @override
+  double? getLat() {
+    final lat = userBox.get(HiveConst.lat) ?? 0.0;
+    return lat;
+  }
+
+  @override
+  Future<void> saveLang(double lang) async {
+    await userBox.put(HiveConst.lang, lang);
+  }
+
+  @override
+  Future<void> saveLat(double lat) async {
+    await userBox.put(HiveConst.lat, lat);
   }
 }

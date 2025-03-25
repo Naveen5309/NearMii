@@ -4,6 +4,7 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
@@ -12,9 +13,11 @@ import 'package:NearMii/feature/common_widgets/custum_thumb.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
+import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class RadiusScreen extends ConsumerStatefulWidget {
@@ -69,141 +72,201 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
     );
 
     return Scaffold(
-      body: Column(
-        children: [
-          const CustomAppbarWidget(
-            title: AppString.radius,
-            backButton: true,
+      body: Column(children: [
+        Container(
+          width: context.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage(Assets.icHomePngBg),
+            ),
           ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: context.height * 0.6,
-                width: context.width,
-                child: Image.asset(
-                  Assets.imsMap,
-                  fit: BoxFit.cover,
+// height: MediaQuery.sizeOf(context).height * 0.2,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: totalHeight -
+                      MediaQuery.of(navigatorKey.currentState!.context)
+                          .padding
+                          .top,
                 ),
-              ),
-              Positioned(
-                child: Container(
-                  width: _currentRadius * 3,
-                  height: _currentRadius * 3,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(
-                      .5,
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColor.appThemeColor,
-                      width: 2,
-                    ),
+                10.verticalSpace,
+                SizedBox(
+                  width: context.width,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 0,
+                        child: InkWell(
+                          onTap: () => back(context),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            width: context.width * .2,
+                            child: SvgPicture.asset(
+                              Assets.icBackBtn,
+                              colorFilter: const ColorFilter.mode(
+                                AppColor.primary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: AppText(
+                          text: "Radius",
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.primary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              AppText(
-                text: "${_currentRadius.toStringAsFixed(2)} m",
-                // "${(double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50')?.toStringAsFixed(2)) ?? '50'} m",
-
-                //  "${_currentRadius.toStringAsFixed(2)} m",
-                color: AppColor.btnColor,
-              ),
-            ],
-          ),
-
-          30.verticalSpace,
-
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: 5, vertical: context.height * .01),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(
-                  text: "   20 m",
-                  fontSize: 12.sp,
-                  color: (_currentRadius - 20).abs() < 10
-                      ? AppColor.green00C56524
-                      : AppColor.black000000.withOpacity(0.3),
-                ),
-                AppText(
-                  text: "         50 m",
-                  fontSize: 12.sp,
-                  color: (_currentRadius - 50).abs() < 3
-                      ? AppColor.green00C56524
-                      : AppColor.black000000.withOpacity(0.3),
-                ),
-                // AppText(
-                //   text: "   60 m",
-                //   fontSize: 12.sp,
-                //   color: (_currentRadius - 60).abs() < 1
-                //       ? AppColor.green00C56524
-                //       : AppColor.black000000.withOpacity(0.3),
-                // ),
-                AppText(
-                  text: "           80 m",
-                  fontSize: 12.sp,
-                  color: (_currentRadius - 80).abs() < 3
-                      ? AppColor.green00C56524
-                      : AppColor.black000000.withOpacity(0.3),
-                ),
-                AppText(
-                  text: "100 m",
-                  fontSize: 12.sp,
-                  color: (_currentRadius - 100).abs() < 1
-                      ? AppColor.green00C56524
-                      : AppColor.black000000.withOpacity(0.3),
-                ),
+                5.verticalSpace,
               ],
             ),
           ),
+        ),
 
-          // Syncfusion Slider
-          SfSlider(
-            min: 20,
-            max: 100,
-            value: _currentRadius,
-            thumbShape: CustomThumbShape(),
-            interval: 20,
-            onChangeStart: (value) {
-              print(value);
-            },
-            onChangeEnd: (value) {
-              print(value);
-            },
-            activeColor: AppColor.green00C56524,
-            inactiveColor: Colors.grey.shade300,
-            minorTicksPerInterval: 0,
-            labelFormatterCallback: (dynamic value, String formattedText) {
-              return _customIntervals.contains(value)
-                  ? "${value.toInt()} m"
-                  : "";
-            },
-            onChanged: (dynamic value) {
-              setState(() {
-                _currentRadius = _getNearestValue(value);
+        // const CustomAppbarWidget(
+        //   title: AppString.radius,
+        //   backButton: true,
+        // ),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              height: context.height * 0.6,
+              width: context.width,
+              child: Image.asset(
+                Assets.imsMap,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              child: Container(
+                width: _currentRadius * 3,
+                height: _currentRadius * 3,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(
+                    .5,
+                  ),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColor.appThemeColor,
+                    width: 2,
+                  ),
+                ),
+              ),
+            ),
+            AppText(
+              text: "${_currentRadius.toStringAsFixed(2)} m",
+              // "${(double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50')?.toStringAsFixed(2)) ?? '50'} m",
 
-                // _currentRadius = value;
-                // _getNearestValue(value);
-              });
-            },
+              //  "${_currentRadius.toStringAsFixed(2)} m",
+              color: AppColor.btnColor,
+            ),
+          ],
+        ),
+
+        30.verticalSpace,
+
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 5, vertical: context.height * .01),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppText(
+                text: "   20 m",
+                fontSize: 12.sp,
+                color: (_currentRadius - 20).abs() < 10
+                    ? AppColor.green00C56524
+                    : AppColor.black000000.withOpacity(0.3),
+              ),
+              AppText(
+                text: "         50 m",
+                fontSize: 12.sp,
+                color: (_currentRadius - 50).abs() < 3
+                    ? AppColor.green00C56524
+                    : AppColor.black000000.withOpacity(0.3),
+              ),
+              // AppText(
+              //   text: "   60 m",
+              //   fontSize: 12.sp,
+              //   color: (_currentRadius - 60).abs() < 1
+              //       ? AppColor.green00C56524
+              //       : AppColor.black000000.withOpacity(0.3),
+              // ),
+              AppText(
+                text: "           80 m",
+                fontSize: 12.sp,
+                color: (_currentRadius - 80).abs() < 3
+                    ? AppColor.green00C56524
+                    : AppColor.black000000.withOpacity(0.3),
+              ),
+              AppText(
+                text: "100 m",
+                fontSize: 12.sp,
+                color: (_currentRadius - 100).abs() < 1
+                    ? AppColor.green00C56524
+                    : AppColor.black000000.withOpacity(0.3),
+              ),
+            ],
           ),
-          const Spacer(),
+        ),
 
-          // Save Button
-          CommonAppBtn(
-            title: AppString.saveText,
-            width: context.width * 0.9,
-            onTap: () {
-              notifier.updateCoordinates(radius: _currentRadius.toString());
-            },
-            borderRadius: 50,
-            backGroundColor: AppColor.green00C56524,
-          ),
-          10.verticalSpace,
-        ],
-      ),
+        // Syncfusion Slider
+        SfSlider(
+          min: 20,
+          max: 100,
+          value: _currentRadius,
+          thumbShape: CustomThumbShape(),
+          interval: 20,
+          onChangeStart: (value) {
+            print(value);
+          },
+          onChangeEnd: (value) {
+            print(value);
+          },
+          activeColor: AppColor.green00C56524,
+          inactiveColor: Colors.grey.shade300,
+          minorTicksPerInterval: 0,
+          labelFormatterCallback: (dynamic value, String formattedText) {
+            return _customIntervals.contains(value) ? "${value.toInt()} m" : "";
+          },
+          onChanged: (dynamic value) {
+            setState(() {
+              _currentRadius = _getNearestValue(value);
+
+              // _currentRadius = value;
+              // _getNearestValue(value);
+            });
+          },
+        ),
+        const Spacer(),
+
+        // Save Button
+        CommonAppBtn(
+          title: AppString.saveText,
+          width: context.width * 0.9,
+          onTap: () {
+            double lat = Getters.getLocalStorage.getLat() ?? 0.0;
+            double lang = Getters.getLocalStorage.getLang() ?? 0.0;
+
+            notifier.updateCoordinates(
+                radius: _currentRadius.toString(), lang: lang, lat: lat);
+          },
+          borderRadius: 50,
+          backGroundColor: AppColor.green00C56524,
+        ),
+        10.verticalSpace,
+      ]),
     );
   }
 

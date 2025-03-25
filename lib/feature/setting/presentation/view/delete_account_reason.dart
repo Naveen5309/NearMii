@@ -16,7 +16,6 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/delete_account_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
-import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/view/show_box_delete_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,11 +45,15 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
             next.settingType == Setting.deleteAccount) {
           Utils.hideLoader();
 
-          await Getters.getLocalStorage.clearLoginData();
-          toast(msg: AppString.accountDeleted);
-          if (context.mounted) {
-            offAllNamed(context, Routes.login);
-          }
+          await Getters.getLocalStorage.clearLoginData().then(
+            (value) {
+              toast(msg: AppString.accountDeleted);
+
+              if (context.mounted) {
+                offAllNamed(context, Routes.login);
+              }
+            },
+          );
         } else if (next is SettingApiFailed &&
             next.settingType == Setting.deleteAccount) {
           Utils.hideLoader();

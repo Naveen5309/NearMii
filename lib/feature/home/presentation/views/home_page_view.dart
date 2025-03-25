@@ -13,11 +13,13 @@ import 'package:NearMii/feature/common_widgets/home_shimmer.dart';
 import 'package:NearMii/feature/home/data/models/preferance_model.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
 import 'package:NearMii/feature/home/presentation/views/vip_dialog.dart';
+import 'package:NearMii/feature/location/location_provider.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
@@ -32,23 +34,24 @@ class HomePageView extends ConsumerStatefulWidget {
 class _HomePageViewState extends ConsumerState<HomePageView> {
   RewardedAd? _rewardedAd;
   int rewardedCount = 0;
+
   @override
   void initState() {
     super.initState();
     _loadRewardedAd();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var notifier = ref.watch(homeProvider.notifier);
+      notifier.getFromLocalStorage();
 
       // notifier.fetchLocation(context: context);
       // if (notifier.homeUserDataList.isEmpty) {
-      final homeDataNotifier = ref.read(homeProvider.notifier);
 
-      notifier.updateCoordinates(radius: '');
+      // notifier.updateCoordinates(radius: '');
       bool? isTrue = Getters.getLocalStorage.getIsSaveVip();
 
       if (isTrue != null) {
         if (isTrue) {
-          notifier.checkAddress();
+          // notifier.checkAddress();
           showDialog(
             context: context,
             builder: (context) => const VIPMembershipDialog(),
@@ -60,12 +63,10 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         }
       }
 
-      homeDataNotifier.getHomeDataApi();
+      // homeDataNotifier.getHomeDataApi();
 
       // }
       // ref.watch(getProfileProvider.notifier).getProfileApi();
-
-      notifier.getFromLocalStorage();
 
       // if ((notifier.addressName == "No address found") ||
       //     (notifier.addressName == "Fetching location")) {
@@ -119,68 +120,31 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
+    printLog("home build called");
     return Consumer(builder: (context, ref, child) {
       ref.watch(homeProvider);
       var notifier = ref.watch(homeProvider.notifier);
+      notifier.getFromLocalStorage();
 
-      // ref.listen(
-      //   homeProvider,
-      //   (previous, next) {
-      //     log("next is :-> $next");
-      //     log("next is :-> ${widget.isFromAuth}");
+      // ✅ Listen for live location updates
+      ref.listen<AsyncValue<Position>>(locationProvider, (previous, next) {
+        next.when(
+          data: (position) {
+            print(
+                "🚀 Location Updated: Lat ${position.latitude}, Lng ${position.longitude}");
 
-      //     if (next is UpdateLocation &&
-      //         next.locationType == LocationType.loading) {
-      //       showDialog(
-      //         context: context,
-      //         builder: (context) {
-      //           return Center(
-      //             child: Container(
-      //               decoration: BoxDecoration(
-      //                   // color: AppColor.btnColor,
-      //                   borderRadius: BorderRadius.circular(100)),
-      //               child: Padding(
-      //                 padding: const EdgeInsets.all(8.0),
-      //                 child: Column(
-      //                   mainAxisSize: MainAxisSize.min,
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: [
-      //                     Lottie.asset(Assets.locationAnimation,
-      //                         backgroundLoading: true,
-      //                         height: 100,
-      //                         width: 100,
-      //                         fit: BoxFit.cover),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //       );
-      //     } else if (next is UpdateLocation &&
-      //         next.locationType == LocationType.updated) {
-      //       back(context);
-      //     } else if (next is UpdateLocation &&
-      //         next.locationType == LocationType.error) {
-      //       back(context);
-      //     }
+            notifier.updateCoordinates(
+                radius: '', lang: position.longitude, lat: position.latitude);
 
-      //     if (next is HomeApiLoading && ((next.homeType == HomeType.home))) {
-      //       log("home loader called");
-      //       Utils.showLoader();
-      //     } else if (next is HomeApiSuccess && next.homeType == HomeType.home) {
-      //       Utils.hideLoader();
+            Getters.getLocalStorage.saveLat(position.latitude);
+            Getters.getLocalStorage.saveLang(position.longitude);
+          },
+          loading: () => print("⏳ Fetching Location..."),
+          error: (e, _) => print("❌ Error: $e"),
+        );
+      });
 
-      //       // toNamed(context, Routes.bottomNavBar);
-      //     } else if (next is HomeApiFailed && next.homeType == HomeType.home) {
-      //       if (context.mounted) {
-      //         Utils.hideLoader();
-      //       }
-
-      //       toast(msg: next.error);
-      //     }
-      //   },
-      // );
+      ref.watch(locationProvider);
 
       return Scaffold(
           body: Column(
@@ -329,7 +293,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   color: AppColor.appThemeColor,
                   onRefresh: () async {
                     var notifier = ref.read(homeProvider.notifier);
-                    notifier.updateCoordinates(radius: '');
+                    // notifier.updateCoordinates(radius: '');
                   },
                   child: notifier.homeUserDataList.isEmpty
                       ? SizedBox(

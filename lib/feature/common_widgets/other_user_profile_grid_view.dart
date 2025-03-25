@@ -75,6 +75,7 @@ class OtherUserProfileGridView extends ConsumerWidget {
                   itemBuilder: (context, pIndex) {
                     return GestureDetector(
                         onTap: () async {
+                          String? url = socialMedia[pIndex].url;
                           printLog(
                               "Click on url is :-> ${socialMedia[pIndex].platform?.name}");
                           printLog(
@@ -85,8 +86,17 @@ class OtherUserProfileGridView extends ConsumerWidget {
                             await launchUrl(Uri.parse(
                                 "https://wa.me/${socialMedia[pIndex].url}"));
                           } else {
-                            await launchUrl(
-                                Uri.parse(socialMedia[pIndex].url ?? ''));
+                            // Ensure the URL is not null and formatted correctly
+                            if (url != null && url.isNotEmpty) {
+                              if (!url.startsWith("http://") &&
+                                  !url.startsWith("https://")) {
+                                url = "https://www.$url";
+                              }
+
+                              await launchUrl(Uri.parse(url));
+                            } else {
+                              printLog("Invalid URL");
+                            }
                           }
                         },
                         child: ProfileSocialMedia(

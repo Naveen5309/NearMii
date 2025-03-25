@@ -6,7 +6,6 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/home/data/models/home_data_model.dart';
 import 'package:NearMii/feature/home/domain/usecases/get_home_usecases.dart';
 import 'package:NearMii/feature/home/presentation/provider/states/home_states.dart';
-import 'package:NearMii/feature/location/location_service.dart';
 import 'package:NearMii/feature/setting/data/model/profile_model.dart';
 import 'package:NearMii/main.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +37,7 @@ class HomeNotifier extends StateNotifier<HomeState>
   String socialImg = '';
   bool isSubscription = false;
   bool isHomeLoading = true;
+  bool _isUpdating = false; // ✅ Flag to track API status
 
   int credits = 0;
 
@@ -62,20 +62,23 @@ class HomeNotifier extends StateNotifier<HomeState>
   //   }
   // }
 
-  Future<void> fetchLocation({required BuildContext context}) async {
-    await Future.delayed(Duration.zero); // Ensures context is available
-    Position? position = await LocationService().getCurrentLocation(context);
-    // setState(() {
-    currentPosition = position;
+  // Future<void> fetchLocation({required BuildContext context}) async {
+  //   await Future.delayed(Duration.zero); // Ensures context is available
+  //   Position? position = await LocationService().getCurrentLocation(context);
+  //   // setState(() {
+  //   currentPosition = position;
 
-    printLog("current location data :-> $position");
+  //   printLog("current location data :-> $position");
 
-    updateCoordinates(radius: '');
-    // });
-  }
+  //   updateCoordinates(radius: '');
+  //   // });
+  // }
 
   void getFromLocalStorage() async {
+    printLog("get local storage called");
     name = Getters.getLocalStorage.getName() ?? '';
+    printLog("get local storage called :-> $name");
+
     profilePic = Getters.getLocalStorage.getProfilePic() ?? '';
     socialImg = Getters.getLocalStorage.getSocialProfilePic() ?? '';
     isSubscription = Getters.getLocalStorage.getIsSubscription() ?? false;
@@ -249,46 +252,65 @@ class HomeNotifier extends StateNotifier<HomeState>
   //   state = UpdateLocation2();
   // }
 
-  //UPDATE COORDINATES
-  Future<void> updateCoordinates({required String radius}) async {
-    log("update coordinates called");
+  // UPDATE COORDINATES
+
+  Future<void> updateCoordinates({
+    required String radius,
+    required double lat,
+    required double lang,
+  }) async {
+    if (_isUpdating) {
+      log("⚠️ Skipping API call: Previous request is still in progress.");
+      return; // ❌ Skip if previous request is not finished
+    }
+
+    _isUpdating = true; // ✅ Set flag before hitting API
+    log("📡 updateCoordinates called");
+
     state = const HomeApiLoading(homeType: HomeType.coordinates);
+
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const HomeApiFailed(
           homeType: HomeType.coordinates,
           error: AppString.noInternetConnection,
         );
+        _isUpdating = false;
         return;
       }
+
       if (await Getters.networkInfo.isSlow) {
-        toast(
-          msg: AppString.networkSlow,
-        );
+        toast(msg: AppString.networkSlow);
       }
+
       Map<String, dynamic> body = {
-        "lat": LocationService().currentPosition?.latitude ?? 30.710446,
-        "long": LocationService().currentPosition?.longitude ?? 76.71935,
-        if (radius.isNotEmpty) "radius": radius
+        "lat": lat,
+        "long": lang,
+        if (radius.isNotEmpty) "radius": radius,
       };
-      final result = await homeUseCase.updateCoordinates(
-        body: body,
+
+      final result = await homeUseCase.updateCoordinates(body: body);
+
+      state = result.fold(
+        (error) {
+          log("❌ API Error: ${error.message}");
+          _isUpdating = false; // ✅ Reset flag on failure
+          return HomeApiFailed(
+              error: error.message, homeType: HomeType.coordinates);
+        },
+        (success) {
+          log("✅ API Success");
+          _isUpdating = false; // ✅ Reset flag on success
+
+          getHomeDataApi();
+          return const HomeApiSuccess(homeType: HomeType.coordinates);
+        },
       );
-      state = result.fold((error) {
-        log("coordiantes update:${error.message} ");
-
-        return HomeApiFailed(
-            error: error.message, homeType: HomeType.coordinates);
-      }, (result) {
-        getHomeDataApi();
-        // userModel = result;
-
-        // clearLoginFields();
-        return const HomeApiSuccess(homeType: HomeType.coordinates);
-      });
     } catch (e) {
+      log("❌ Exception: $e");
       state =
           HomeApiFailed(error: e.toString(), homeType: HomeType.coordinates);
+      _isUpdating = false; // ✅ Reset flag on error
     }
   }
 

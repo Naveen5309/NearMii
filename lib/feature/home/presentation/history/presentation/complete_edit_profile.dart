@@ -306,7 +306,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
 
         //DESIGNATION
         CustomLabelTextField(
-          maxLength: 40,
+          maxLength: 30,
           suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: editProfileNotifier.designationController,
@@ -513,7 +513,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
         //Bio
 
         CustomTextformFeild(
-          maxLength: 60,
+          maxLength: 80,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: editProfileNotifier.bioController,

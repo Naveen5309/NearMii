@@ -249,7 +249,7 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
 
         //DESIGNATION
         CustomLabelTextField(
-          maxLength: 40,
+          maxLength: 30,
           suffixIcon: Assets.icInfo,
           prefixIcon: Assets.icDesignation,
           controller: createProfileNotifier.designationController,
@@ -396,7 +396,7 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
         //Bio
 
         CustomTextformFeild(
-          maxLength: 60,
+          maxLength: 80,
           radius: 19,
           prefixIcon: Assets.icCheck,
           controller: createProfileNotifier.bioController,

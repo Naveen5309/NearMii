@@ -109,7 +109,31 @@ class _OtherUserProfileViewState extends ConsumerState<OtherUserProfileView> {
                   (isCollapsed, scrollingOffset, maxExtent) {},
               collapsedBackgroundColor: AppColor.btnColor,
               expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-              expandedContentHeight: context.height * .55,
+              expandedContentHeight: () {
+                double baseHeight = context.height * .55;
+
+                if (otherUserData.profile == null) {
+                  return context.height *
+                      .5; // Default height when profile is null
+                }
+
+                int emptyFields = 0;
+
+                if (otherUserData.profile!.name == null ||
+                    otherUserData.profile!.name!.isEmpty) {
+                  emptyFields++;
+                }
+                if (otherUserData.profile!.designation == null ||
+                    otherUserData.profile!.designation!.isEmpty) {
+                  emptyFields++;
+                }
+                if (otherUserData.profile!.bio == null ||
+                    otherUserData.profile!.bio!.isEmpty) {
+                  emptyFields++;
+                }
+
+                return baseHeight - (emptyFields * context.height * .03);
+              }(),
               expandedContent: profileSection(
                   otherUserProfileProvider: otherUserData,
                   context: context,
@@ -176,6 +200,7 @@ Widget appBarWidgetSection({
       5.horizontalSpace,
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AppText(
             text: otherUserProfileData.name ?? '',
@@ -183,12 +208,15 @@ Widget appBarWidgetSection({
             fontWeight: FontWeight.w500,
             color: AppColor.whiteFFFFFF,
           ),
-          AppText(
-            text: otherUserProfileData.designation ?? '',
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
-          ),
+          otherUserProfileData.designation?.isNotEmpty == true
+              ? AppText(
+                  text: otherUserProfileData.designation!,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColor.whiteFFFFFF.withOpacity(.8),
+                )
+              : const SizedBox
+                  .shrink(), // Returns an empty widget if designation is empty
         ],
       ),
       const Spacer(),
@@ -602,20 +630,49 @@ Widget profileSection({
             fontWeight: FontWeight.w500,
           ),
           5.verticalSpace,
-          AppText(
-            text: profile?.designation ?? '',
-            fontWeight: FontWeight.w500,
-            fontSize: 16.sp,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
-          ),
-          25.verticalSpace,
-          AppText(
-            text: profile?.bio ?? "",
-            textAlign: TextAlign.center,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
-            color: AppColor.whiteFFFFFF.withOpacity(.8),
-          ),
+
+          if (profile?.designation != null &&
+              profile!.designation!.isNotEmpty) ...[
+            8.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              child: AppText(
+                text: profile.designation!,
+                fontWeight: FontWeight.w500,
+                fontSize: 16.sp,
+                textAlign: TextAlign.center,
+                color: AppColor.whiteFFFFFF.withOpacity(.8),
+              ),
+            ),
+          ],
+          if (profile?.bio != null && profile!.bio!.isNotEmpty) ...[
+            25.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              child: AppText(
+                text: profile.bio!,
+                textAlign: TextAlign.center,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColor.whiteFFFFFF.withOpacity(.8),
+              ),
+            ),
+          ],
+
+          // AppText(
+          //   text: profile?.designation ?? '',
+          //   fontWeight: FontWeight.w500,
+          //   fontSize: 16.sp,
+          //   color: AppColor.whiteFFFFFF.withOpacity(.8),
+          // ),
+          // 25.verticalSpace,
+          // AppText(
+          //   text: profile?.bio ?? "",
+          //   textAlign: TextAlign.center,
+          //   fontSize: 12.sp,
+          //   fontWeight: FontWeight.w400,
+          //   color: AppColor.whiteFFFFFF.withOpacity(.8),
+          // ),
           20.verticalSpace,
           Wrap(
             alignment: WrapAlignment.center,

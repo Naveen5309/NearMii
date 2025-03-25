@@ -301,7 +301,31 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                     (isCollapsed, scrollingOffset, maxExtent) {},
                 collapsedBackgroundColor: AppColor.btnColor,
                 expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-                expandedContentHeight: context.height * .55,
+                expandedContentHeight: () {
+                  double baseHeight = context.height * .55;
+
+                  if (notifier.userProfileModel == null) {
+                    return context.height *
+                        .5; // Default height when profile is null
+                  }
+
+                  int emptyFields = 0;
+
+                  if (notifier.userProfileModel!.name == null ||
+                      notifier.userProfileModel!.name!.isEmpty) {
+                    emptyFields++;
+                  }
+                  if (notifier.userProfileModel!.designation == null ||
+                      notifier.userProfileModel!.designation!.isEmpty) {
+                    emptyFields++;
+                  }
+                  if (notifier.userProfileModel!.bio == null ||
+                      notifier.userProfileModel!.bio!.isEmpty) {
+                    emptyFields++;
+                  }
+
+                  return baseHeight - (emptyFields * context.height * .03);
+                }(),
                 expandedContent: profileSection(
                     selfUserProfileNotifier: notifier,
                     context: context,
@@ -529,27 +553,55 @@ Widget profileSection(
             ),
           ),
           8.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-            child: AppText(
-              text: profile?.designation ?? '',
-              fontWeight: FontWeight.w500,
-              fontSize: 16.sp,
-              textAlign: TextAlign.center,
-              color: AppColor.whiteFFFFFF.withOpacity(.8),
+          if (profile?.designation != null &&
+              profile!.designation!.isNotEmpty) ...[
+            8.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              child: AppText(
+                text: profile.designation!,
+                fontWeight: FontWeight.w500,
+                fontSize: 16.sp,
+                textAlign: TextAlign.center,
+                color: AppColor.whiteFFFFFF.withOpacity(.8),
+              ),
             ),
-          ),
-          25.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-            child: AppText(
-              text: profile?.bio ?? '',
-              textAlign: TextAlign.center,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400,
-              color: AppColor.whiteFFFFFF.withOpacity(.8),
+          ],
+          if (profile?.bio != null && profile!.bio!.isNotEmpty) ...[
+            25.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+              child: AppText(
+                text: profile.bio!,
+                textAlign: TextAlign.center,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColor.whiteFFFFFF.withOpacity(.8),
+              ),
             ),
-          ),
+          ],
+
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+          //   child: AppText(
+          //     text: profile?.designation ?? '',
+          //     fontWeight: FontWeight.w500,
+          //     fontSize: 16.sp,
+          //     textAlign: TextAlign.center,
+          //     color: AppColor.whiteFFFFFF.withOpacity(.8),
+          //   ),
+          // ),
+          // 25.verticalSpace,
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: context.width * .05),
+          //   child: AppText(
+          //     text: profile?.bio ?? '',
+          //     textAlign: TextAlign.center,
+          //     fontSize: 12.sp,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.whiteFFFFFF.withOpacity(.8),
+          //   ),
+          // ),
           20.verticalSpace,
           Wrap(
             alignment: WrapAlignment.center,
