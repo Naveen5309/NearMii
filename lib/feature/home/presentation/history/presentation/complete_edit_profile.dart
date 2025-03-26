@@ -354,6 +354,7 @@ class _CompleteEditProfileState extends ConsumerState<CompleteEditProfile> {
           controller: editProfileNotifier.phoneController,
           labelText: AppString.phoneNumber,
           maxLength: editProfileNotifier.maxLength,
+          minLength: editProfileNotifier.minLength,
         ),
         SizedBox(
           height: context.height * 0.018,

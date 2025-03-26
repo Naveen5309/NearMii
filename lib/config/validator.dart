@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:NearMii/config/app_utils.dart';
+import 'package:NearMii/config/countries.dart';
 
 import 'helper.dart';
 
@@ -49,35 +50,40 @@ class Validator {
   bool completeProfileValidator({
     required String phoneNumber,
     required String fullName,
-    required String dob,
-    String? designation,
-    required String gender,
+    required String countryCode,
   }) {
+    printLog("Phone phoneNumber length: ->10 $phoneNumber");
+    printLog("Phone countryCode length: ->15 $countryCode");
+
     if (fullName.isEmpty) {
       error = AppString.pleaseEnterName;
       return false;
     }
-    // if (designation.isEmpty) {
-    //   error = AppString.pleaseEnterDesignation;
-    //   return false;
-    // }
 
     if (phoneNumber.isEmpty) {
       error = AppString.validNumber;
       return false;
-    } else if (phoneNumber.length < 6 || phoneNumber.length > 15) {
-      error = AppString.validPhoneNumber;
+    }
+
+    // Trim and clean the phone number of spaces or special characters
+    phoneNumber =
+        phoneNumber.replaceAll(RegExp(r'\D'), ''); // Removes non-digits
+
+    // Find the selected country based on the countryCode
+    Country? selectedCountry = allCountries.firstWhere(
+      (country) => country.dialCode == countryCode,
+      orElse: () => const Country(name: "Unknown"),
+    );
+
+    if (selectedCountry.minLength != null &&
+        selectedCountry.maxLength != null &&
+        (phoneNumber.length < selectedCountry.minLength! ||
+            phoneNumber.length > selectedCountry.maxLength!)) {
+      error =
+          "Phone number must be exactly ${selectedCountry.minLength} digits for ${selectedCountry.name}";
+      // "invalid phone number";
       return false;
     }
-    // if (gender.isEmpty) {
-    //   error = AppString.pleaseEnterGender;
-    //   return false;
-    // }
-
-    // if (dob.isEmpty) {
-    //   error = AppString.pleaseEnterDob;
-    //   return false;
-    // }
 
     return true;
   }

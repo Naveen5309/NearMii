@@ -170,6 +170,7 @@ class CustomSocialGridview extends ConsumerWidget {
                                     // 10.verticalSpace,
 
                                     CustomPhoneNumber(
+                                      minLength: notifier.minLength,
                                       maxLength: notifier.maxLength,
                                       selectedCountryCode: notifier.countryCode,
                                       selectedCountryFlag: notifier.countryFlag,
@@ -487,6 +488,7 @@ class CustomSocialGridview extends ConsumerWidget {
                                     // 10.verticalSpace,
 
                                     CustomPhoneNumber(
+                                      minLength: notifier.minLength,
                                       maxLength: notifier.maxLength,
                                       selectedCountryCode: notifier.countryCode,
                                       selectedCountryFlag: notifier.countryFlag,

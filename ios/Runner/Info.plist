@@ -20,6 +20,16 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+	     <!-- Location Usage Permission -->
+     <key>NSLocationWhenInUseUsageDescription</key>
+     <string>Need location when in use to get current location to get nearby users.</string>
+     <key>UIBackgroundModes</key>
+     <array>
+         <string>fetch</string>
+         <string>remote-notification</string>
+     </array>
+     <key>FirebaseAppDelegateProxyEnabled</key>
+     <false/>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>

@@ -39,6 +39,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   String countryCode = '+1';
   String countryNameCode = 'US';
   int maxLength = 10;
+  int minLength = 5;
 
   String countryFlag = '🇺🇸';
   String profilePic = '';
@@ -162,9 +163,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   bool validateProfile() {
     bool isValid = Validator().completeProfileValidator(
         fullName: fullNameController.text.trim(),
-        dob: dobController.text.trim(),
-        designation: designationController.text.trim(),
-        gender: genderController.text.trim(),
+        countryCode: countryCode.trim(),
         phoneNumber: phoneController.text.trim());
     if (isValid) {
       return true;
@@ -785,15 +784,17 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   void updateCountryData(
       {required String dialCode,
       required String countryNmCode,
-      required int maLength}) async {
+      required int maLength,
+      required int mnLength}) async {
     log("update code called");
     state = UpdateCodeLoading();
     countryCode = dialCode;
     countryNameCode = countryNmCode;
     maxLength = maLength;
+    minLength = mnLength;
 
     state = UpdateCodeLoaded();
 
-    log("update code called :-> $countryCode, $countryFlag, $countryNameCode, $maLength");
+    log("update code called :-> $countryCode, $countryFlag, $countryNameCode, $maLength ,$minLength");
   }
 }

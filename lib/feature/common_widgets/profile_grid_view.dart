@@ -164,6 +164,10 @@ class ProfileGridView extends ConsumerWidget {
                                               child: Divider(),
                                             ),
                                             CustomPhoneNumber(
+                                              minLength: countryNotifier
+                                                      .country.minLength ??
+                                                  5,
+
                                               maxLength: countryNotifier
                                                       .country.maxLength ??
                                                   10,

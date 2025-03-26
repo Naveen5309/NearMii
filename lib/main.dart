@@ -17,7 +17,7 @@ import 'core/utils/routing/routes_generator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  if (Platform.isAndroid) MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
 
   if (Platform.isAndroid) {
@@ -30,16 +30,16 @@ void main() async {
       // await service.initPushNotificationListeners();
     });
   } else {
-    await Firebase.initializeApp(
-      name: "Nearmii",
-      options: DefaultFirebaseOptions.currentPlatform,
-    ).then((value) async {
-      final NotificationService service = NotificationService();
-      await service.init();
+    // await Firebase.initializeApp(
+    //   name: "Nearmii",
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // ).then((value) async {
+    //   final NotificationService service = NotificationService();
+    //   await service.init();
 
-      // await service.initNotification();
-      // await service.initPushNotificationListeners();
-    });
+    //   // await service.initNotification();
+    //   // await service.initPushNotificationListeners();
+    // });
   }
 
   await AppInjector.init(

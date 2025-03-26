@@ -174,7 +174,6 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
                               createProfileNotifier.validateProfile();
                           if (isComplete) {
                             createProfileNotifier.completeProfileApi();
-                            // toNamed(context, Routes.selectSocialMedia);
                           }
                         },
                         title: AppString.next,
@@ -299,6 +298,7 @@ class _CompleteProfileViewState extends ConsumerState<CompleteProfileView> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: CustomPhoneNumber(
             maxLength: createProfileNotifier.maxLength,
+            minLength: createProfileNotifier.minLength,
             selectedCountryCode: createProfileNotifier.countryCode,
             selectedCountryFlag: createProfileNotifier.countryFlag,
             // onCountryCodeChanged: (code, flag) {
