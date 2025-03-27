@@ -15,7 +15,7 @@ class SocialMediaShimmer extends StatelessWidget {
         mainAxisSpacing: 20,
         childAspectRatio: 1,
       ),
-      itemCount: 9, // Number of placeholders
+      itemCount: 19, // Number of placeholders
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
           baseColor: Colors.grey[300]!,
@@ -23,8 +23,8 @@ class SocialMediaShimmer extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 80,
+                height: 80,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),

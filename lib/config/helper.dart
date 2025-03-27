@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 part 'extensions.dart';
 part '../config/app_colors.dart';
 part '../config/app_strings.dart';
@@ -27,6 +28,13 @@ double safeAreaHeight(BuildContext context) {
           MediaQuery.of(context).padding.bottom)*/
       +
       15;
+}
+
+String? encodeQueryParameters(Map<String, String> params) {
+  return params.entries
+      .map((MapEntry<String, String> e) =>
+          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+      .join('&');
 }
 
 Widget dividerVirtical({

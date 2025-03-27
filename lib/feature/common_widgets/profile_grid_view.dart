@@ -237,7 +237,7 @@ class ProfileGridView extends ConsumerWidget {
                                                     child: CommonAppBtn(
                                                       onTap: () {
                                                         var isValid = notifier
-                                                            .validateAddPlatform();
+                                                            .validatePhoneNumber();
 
                                                         if (isValid) {
                                                           notifier
@@ -369,7 +369,12 @@ class ProfileGridView extends ConsumerWidget {
                                                 child: CommonAppBtn(
                                                   onTap: () {
                                                     var isValid = notifier
-                                                        .validateAddPlatform();
+                                                        .validateAddPlatform(
+                                                            type: socialMedia[
+                                                                        pIndex]
+                                                                    .platform
+                                                                    ?.type ??
+                                                                '');
 
                                                     if (isValid) {
                                                       notifier

@@ -323,7 +323,7 @@ Widget profileSection({
         mainAxisSize:
             MainAxisSize.min, // Ensures column takes only necessary space
         children: [
-          SizedBox(height: context.height * .1),
+          SizedBox(height: context.height * .08),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

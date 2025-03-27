@@ -65,6 +65,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
   SignupNotifiers({required this.authUseCase}) : super(AuthInitial());
 
+  bool isLoading = false;
   int secondsRemaining = 30;
   bool enableResend = false;
 
@@ -174,9 +175,21 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   }
 
   //VALIDATE ADD PLATFORM
-  bool validateAddPlatform() {
-    bool isValid =
-        Validator().addPlatformValidator(url: urlController.text.trim());
+  bool validateAddPlatform({required String type}) {
+    bool isValid = Validator()
+        .addPlatformValidator(url: urlController.text.trim(), type: type);
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
+  //VALIDATE ADD PLATFORM
+  bool validatePhoneNumber() {
+    bool isValid = Validator().validatePhoneNumber(
+        phoneNumber: urlController.text.trim(), countryCode: countryCode);
     if (isValid) {
       return true;
     } else {
@@ -193,8 +206,11 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 //GET SOCIAL PROFILES
   Future<void> getSocialPlatform() async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);
+    isLoading = true;
     try {
       if (!(await Getters.networkInfo.isConnected)) {
+        isLoading = false;
+
         state = const AuthApiFailed(
             error: "No internet connection", authType: AuthType.socialMedia);
         return;
@@ -205,6 +221,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
       final result = await authUseCase.getPlatform(body: body);
       state = result.fold((error) {
+        isLoading = false;
+
         return AuthApiFailed(
             error: error.message, authType: AuthType.socialMedia);
       }, (result) {
@@ -217,6 +235,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
                 platformCatagory.list != null &&
                 platformCatagory.list!.isNotEmpty)
             .toList();
+        isLoading = false;
 
         log("social media result is:->1 platfomlist $result");
 
@@ -240,6 +259,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         );
       });
     } catch (e) {
+      isLoading = false;
+
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
     }
@@ -253,6 +274,8 @@ class SignupNotifiers extends StateNotifier<AuthState> {
     isSocialLoading = true;
     try {
       if (!(await Getters.networkInfo.isConnected)) {
+        isLoading = false;
+
         state = const AuthApiFailed(
             error: "No internet connection", authType: AuthType.socialMedia);
         return;

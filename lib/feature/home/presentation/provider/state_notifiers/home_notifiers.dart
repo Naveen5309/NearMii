@@ -23,8 +23,8 @@ class HomeNotifier extends StateNotifier<HomeState>
   List<HomeData> homeUserDataList = [];
   UserProfileModel? userProfileModel;
 
-  double lat = 30.710446;
-  double long = 76.719350;
+  // double lat = 30.710446;
+  // double long = 76.719350;
 
   // Location data varibale & methods
   List<Placemark> placemarks = [];
@@ -302,7 +302,7 @@ class HomeNotifier extends StateNotifier<HomeState>
           log("✅ API Success");
           _isUpdating = false; // ✅ Reset flag on success
 
-          getHomeDataApi();
+          getHomeDataApi(lat: lat, lang: lang);
           return const HomeApiSuccess(homeType: HomeType.coordinates);
         },
       );
@@ -315,7 +315,8 @@ class HomeNotifier extends StateNotifier<HomeState>
   }
 
   // Home Data Api
-  Future<void> getHomeDataApi() async {
+  Future<void> getHomeDataApi(
+      {required double lat, required double lang}) async {
     isHomeLoading = true;
     state = const HomeApiLoading(homeType: HomeType.home);
     try {
@@ -336,7 +337,7 @@ class HomeNotifier extends StateNotifier<HomeState>
       }
       Map<String, dynamic> body = {
         "lat": lat,
-        "long": long,
+        "long": lang,
       };
       // Map<String, dynamic> body = {};
       final result = await homeUseCase.callGetHome(body: body);
@@ -360,10 +361,14 @@ class HomeNotifier extends StateNotifier<HomeState>
               .toList();
 
           credits = result["user_points"] ?? 0;
+
+          Getters.getLocalStorage.saveCredits(credits);
         } else {
           homeUserDataList = [];
         }
         log("history result is :->$homeUserDataList");
+        log("user_points are :->$credits");
+
         isHomeLoading = false;
 
         return const HomeApiSuccess(homeType: HomeType.home);

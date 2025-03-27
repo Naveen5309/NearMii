@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:NearMii/firebase_options.dart';
 import 'package:NearMii/notification/notification_service.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -17,10 +16,9 @@ import 'core/utils/routing/routes_generator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid) MobileAds.instance.initialize();
   HttpOverrides.global = MyHttpOverrides();
-
   if (Platform.isAndroid) {
+    MobileAds.instance.initialize();
     await Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform, name: "Nearmii")
         .then((value) async {
@@ -29,18 +27,18 @@ void main() async {
       // await service.initNotification();
       // await service.initPushNotificationListeners();
     });
-  } else {
-    // await Firebase.initializeApp(
-    //   name: "Nearmii",
-    //   options: DefaultFirebaseOptions.currentPlatform,
-    // ).then((value) async {
-    //   final NotificationService service = NotificationService();
-    //   await service.init();
-
-    //   // await service.initNotification();
-    //   // await service.initPushNotificationListeners();
-    // });
   }
+  // else {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   ).then((value) async {
+  //     final NotificationService service = NotificationService();
+  //     await service.init();
+
+  //     // await service.initNotification();
+  //     // await service.initPushNotificationListeners();
+  //   });
+  // }
 
   await AppInjector.init(
     appRunner: () =>

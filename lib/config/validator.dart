@@ -46,6 +46,41 @@ class Validator {
     return true;
   }
 
+  bool validatePhoneNumber({
+    required String phoneNumber,
+    required String countryCode,
+  }) {
+    printLog("Phone phoneNumber length: ->10 $phoneNumber");
+    printLog("Phone countryCode length: ->15 $countryCode");
+
+    if (phoneNumber.isEmpty) {
+      error = AppString.validNumber;
+      return false;
+    }
+
+    // Trim and clean the phone number of spaces or special characters
+    phoneNumber =
+        phoneNumber.replaceAll(RegExp(r'\D'), ''); // Removes non-digits
+
+    // Find the selected country based on the countryCode
+    Country? selectedCountry = allCountries.firstWhere(
+      (country) => country.dialCode == countryCode,
+      orElse: () => const Country(name: "Unknown"),
+    );
+
+    if (selectedCountry.minLength != null &&
+        selectedCountry.maxLength != null &&
+        (phoneNumber.length < selectedCountry.minLength! ||
+            phoneNumber.length > selectedCountry.maxLength!)) {
+      error =
+          "Phone number must be exactly ${selectedCountry.minLength} digits for ${selectedCountry.name}";
+      // "invalid phone number";
+      return false;
+    }
+
+    return true;
+  }
+
 // cpmplete profile
   bool completeProfileValidator({
     required String phoneNumber,
@@ -146,10 +181,27 @@ class Validator {
   //otp
   bool addPlatformValidator({
     required String url,
+    required String type,
   }) {
     if (url.isEmpty) {
       error = AppString.fieldCantEmpty;
       return false;
+    }
+
+    if (type.trim() == "Enter URL") {
+      final urlPattern = RegExp(
+          r'^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$');
+      if (!urlPattern.hasMatch(url)) {
+        error = "invalid url";
+        return false;
+      }
+    } else if (type.trim() == "Enter email address") {
+      final emailPattern =
+          RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+      if (!emailPattern.hasMatch(url)) {
+        error = "invalid email";
+        return false;
+      }
     }
 
     return true;

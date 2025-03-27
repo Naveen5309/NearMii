@@ -1,0 +1,2 @@
+/Users/fluttermac/Documents/Projects/amit/Nearmii-Flutter/android/app/.cxx/RelWithDebInfo/6ejz6k21/x86_64/CMakeFiles/edit_cache.dir
+/Users/fluttermac/Documents/Projects/amit/Nearmii-Flutter/android/app/.cxx/RelWithDebInfo/6ejz6k21/x86_64/CMakeFiles/rebuild_cache.dir

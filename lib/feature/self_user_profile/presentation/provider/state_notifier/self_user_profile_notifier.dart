@@ -172,10 +172,23 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
     }
   }
 
+  //VALIDATE ADD PLATFORM
+  bool validatePhoneNumber() {
+    bool isValid = Validator().validatePhoneNumber(
+        phoneNumber: platformTextController.text.trim(),
+        countryCode: countryCode);
+    if (isValid) {
+      return true;
+    } else {
+      toast(msg: Validator().error, isError: true);
+      return false;
+    }
+  }
+
   //VALIDATE UPDATE PLATFORM
-  bool validateAddPlatform() {
-    bool isValid = Validator()
-        .addPlatformValidator(url: platformTextController.text.trim());
+  bool validateAddPlatform({required String type}) {
+    bool isValid = Validator().addPlatformValidator(
+        url: platformTextController.text.trim(), type: type);
     if (isValid) {
       return true;
     } else {
@@ -324,6 +337,6 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
     platformTextController.text = phoneNumber.split(' ').last;
     countryCode = phoneNumber.split(' ').first;
 
-    printLog("phone :-> $phoneNumber");
+    printLog("phone :-> $phoneNumber , $countryCode");
   }
 }

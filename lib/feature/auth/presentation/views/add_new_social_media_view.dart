@@ -88,7 +88,7 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton:
           //login
-          signupPro.newPlatformLists.isNotEmpty
+          (signupPro.addSocialList.isNotEmpty)
               ? Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: context.width * .05,
@@ -301,9 +301,12 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
 
                     // newPlatformLists
 
-                    ((signupPro.isSocialLoading) &&
-                            (signupPro.newPlatformLists.isNotEmpty))
-                        ? const SocialMediaShimmer()
+                    (signupPro.isSocialLoading)
+                        ?
+                        // ((signupPro.isSocialLoading) &&
+                        //         (signupPro.newPlatformLists.isNotEmpty))
+                        // ?
+                        const SocialMediaShimmer()
                         : signupPro.newPlatformLists.isNotEmpty
                             ? SizedBox(
                                 height: context.height * .8,

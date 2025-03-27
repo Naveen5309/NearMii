@@ -100,7 +100,14 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   void _showRewardedAd({required String id}) {
     if (_rewardedAd != null) {
       _rewardedAd?.show(onUserEarnedReward: (ad, reward) {
-        toNamed(context, Routes.otherUserProfile, args: id.toString());
+        toNamed(context, Routes.otherUserProfile, args: id.toString()).then(
+          (value) {
+            var notifier = ref.watch(homeProvider.notifier);
+            double lat = Getters.getLocalStorage.getLat() ?? 0.0;
+            double lang = Getters.getLocalStorage.getLang() ?? 0.0;
+            notifier.getHomeDataApi(lat: lat, lang: lang);
+          },
+        );
         // toNamed(context, rou);
       }
           // setState(() {
@@ -125,6 +132,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       ref.watch(homeProvider);
       var notifier = ref.watch(homeProvider.notifier);
       notifier.getFromLocalStorage();
+
+      int credit = Getters.getLocalStorage.getCredits() ?? 2;
 
       // ✅ Listen for live location updates
       ref.listen<AsyncValue<Position>>(locationProvider, (previous, next) {
@@ -366,13 +375,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                   : '',
                                               onUnlockTap: () {
                                                 printLog(
-                                                    "points are:-> ${notifier.credits}");
+                                                    "user_points are : on click $credit");
+
                                                 if (notifier.isSubscription) {
-                                                  toNamed(context,
-                                                      Routes.otherUserProfile,
-                                                      args: data.id.toString());
-                                                } else if (notifier.credits >
-                                                    0) {
                                                   toNamed(
                                                           context,
                                                           Routes
@@ -381,7 +386,39 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                               .toString())
                                                       .then(
                                                     (value) {
-                                                      notifier.getHomeDataApi();
+                                                      double lat = Getters
+                                                              .getLocalStorage
+                                                              .getLat() ??
+                                                          0.0;
+                                                      double lang = Getters
+                                                              .getLocalStorage
+                                                              .getLang() ??
+                                                          0.0;
+                                                      notifier.getHomeDataApi(
+                                                          lat: lat, lang: lang);
+                                                    },
+                                                  );
+                                                } else if (credit > 0) {
+                                                  printLog(
+                                                      "points are greater");
+                                                  toNamed(
+                                                          context,
+                                                          Routes
+                                                              .otherUserProfile,
+                                                          args: data.id
+                                                              .toString())
+                                                      .then(
+                                                    (value) {
+                                                      double lat = Getters
+                                                              .getLocalStorage
+                                                              .getLat() ??
+                                                          0.0;
+                                                      double lang = Getters
+                                                              .getLocalStorage
+                                                              .getLang() ??
+                                                          0.0;
+                                                      notifier.getHomeDataApi(
+                                                          lat: lat, lang: lang);
                                                     },
                                                   );
                                                 } else {

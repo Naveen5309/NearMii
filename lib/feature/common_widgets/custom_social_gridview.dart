@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
+import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/social_profile_response_model.dart';
@@ -17,6 +20,7 @@ import 'package:NearMii/feature/common_widgets/custom_label_text_field.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/social_media_profile.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,8 +41,9 @@ class CustomSocialGridview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(signupProvider);
-    final notifier = ref.watch(signupProvider.notifier);
+
     final countryNotifier = ref.read(countryPickerProvider.notifier);
+    ref.watch(countryPickerProvider.notifier);
     ref.listen(
       signupProvider,
       (previous, next) {
@@ -140,167 +145,185 @@ class CustomSocialGridview extends ConsumerWidget {
                                   matchedItem.url?.split(' ').first ?? '+1');
                               showCustomBottomSheet(
                                 context: context,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                content: Consumer(
+                                  builder: (context, ref, child) {
+                                    final notifier =
+                                        ref.watch(signupProvider.notifier);
+                                    ref.watch(countryPickerProvider.notifier);
+                                    ref.watch(
+                                        signupProvider); // Watch to trigger rebuild
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        AppText(
-                                          text: socialMedia[pIndex].name ?? '',
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            onTap: () {
-                                              back(context);
-                                            },
-                                            child: SvgPicture.asset(
-                                                Assets.icCloseCircle))
-                                      ],
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Divider(),
-                                    ),
-                                    // 10.verticalSpace,
-
-                                    CustomPhoneNumber(
-                                      minLength: notifier.minLength,
-                                      maxLength: notifier.maxLength,
-                                      selectedCountryCode: notifier.countryCode,
-                                      selectedCountryFlag: notifier.countryFlag,
-                                      prefixIcon: Assets.icGender,
-                                      controller: notifier.urlController,
-                                      labelText: AppString.phoneNumber,
-                                    ),
-                                    10.verticalSpace,
-
-                                    /**--------------------- CANCEL AND UPDATE  ---------------- **/
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: context.height * .02),
-                                      child: Row(
-                                        children: [
-                                          //GO BACK
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              textColor: AppColor.btnColor,
-                                              backGroundColor: AppColor
-                                                  .green00C56524
-                                                  .withOpacity(.14),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              title: AppString.cancel,
-                                              width: context.width,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AppText(
+                                              text: socialMedia[pIndex].name ??
+                                                  '',
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                          ),
-                                          10.horizontalSpace,
+                                            InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                onTap: () {
+                                                  back(context);
+                                                },
+                                                child: SvgPicture.asset(
+                                                    Assets.icCloseCircle))
+                                          ],
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10.0),
+                                          child: Divider(),
+                                        ),
+                                        // 10.verticalSpace,
 
-                                          //ADD/SAVE PLATFORM
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              onTap: () {
-                                                var isValid = notifier
-                                                    .validateAddPlatform();
+                                        CustomPhoneNumber(
+                                          minLength: notifier.minLength,
+                                          maxLength: notifier.maxLength,
+                                          selectedCountryCode:
+                                              notifier.countryCode,
+                                          selectedCountryFlag:
+                                              notifier.countryFlag,
+                                          prefixIcon: Assets.icGender,
+                                          controller: notifier.urlController,
+                                          labelText: AppString.phoneNumber,
+                                        ),
+                                        10.verticalSpace,
 
-                                                if (isValid) {
-                                                  printLog(
-                                                      "update phone :-> ${"${notifier.countryCode} ${notifier.urlController.text}"}");
+                                        /**--------------------- CANCEL AND UPDATE  ---------------- **/
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: context.height * .02),
+                                          child: Row(
+                                            children: [
+                                              //GO BACK
+                                              Expanded(
+                                                child: CommonAppBtn(
+                                                  textColor: AppColor.btnColor,
+                                                  backGroundColor: AppColor
+                                                      .green00C56524
+                                                      .withOpacity(.14),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  title: AppString.cancel,
+                                                  width: context.width,
+                                                ),
+                                              ),
+                                              10.horizontalSpace,
 
-                                                  // Find index of existing item with the same platformId
-                                                  int existingIndex = notifier
-                                                      .addSocialList
-                                                      .indexWhere(
-                                                    (item) =>
-                                                        item.platformId ==
-                                                        socialMedia[pIndex].id,
-                                                  );
+                                              //ADD/SAVE PLATFORM
+                                              Expanded(
+                                                child: CommonAppBtn(
+                                                  onTap: () {
+                                                    log("save called 1");
+                                                    var isValid = notifier
+                                                        .validatePhoneNumber();
 
-                                                  if (existingIndex != -1) {
-                                                    // ✅ Update the existing item
-                                                    notifier.addSocialList[
-                                                            existingIndex] =
-                                                        AddSocialProfileModel(
-                                                      platformId:
-                                                          socialMedia[pIndex]
-                                                              .id,
-                                                      url:
-                                                          "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
+                                                    if (isValid) {
+                                                      printLog(
+                                                          "update phone :-> ${"${notifier.countryCode} ${notifier.urlController.text}"}");
 
-                                                      type: socialMedia[pIndex]
-                                                              .type ??
-                                                          '',
-                                                    );
-                                                    printLog(
-                                                        "✅ Updated existing item: ${notifier.addSocialList[existingIndex].toJson()}");
-                                                    back(context);
-                                                  } else {
-                                                    // 🚀 Add new item if it doesn't exist
-                                                    notifier.addSocialList.add(
-                                                      AddSocialProfileModel(
-                                                        platformId:
+                                                      // Find index of existing item with the same platformId
+                                                      int existingIndex =
+                                                          notifier.addSocialList
+                                                              .indexWhere(
+                                                        (item) =>
+                                                            item.platformId ==
                                                             socialMedia[pIndex]
                                                                 .id,
-                                                        url:
-                                                            "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
+                                                      );
 
-                                                        type:
-                                                            socialMedia[pIndex]
+                                                      if (existingIndex != -1) {
+                                                        // ✅ Update the existing item
+                                                        notifier.addSocialList[
+                                                                existingIndex] =
+                                                            AddSocialProfileModel(
+                                                          platformId:
+                                                              socialMedia[
+                                                                      pIndex]
+                                                                  .id,
+                                                          url:
+                                                              "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
+
+                                                          type: socialMedia[
+                                                                      pIndex]
+                                                                  .type ??
+                                                              '',
+                                                        );
+                                                        printLog(
+                                                            "✅ Updated existing item: ${notifier.addSocialList[existingIndex].toJson()}");
+                                                        back(context);
+                                                      } else {
+                                                        // 🚀 Add new item if it doesn't exist
+                                                        notifier.addSocialList
+                                                            .add(
+                                                          AddSocialProfileModel(
+                                                            platformId:
+                                                                socialMedia[
+                                                                        pIndex]
+                                                                    .id,
+                                                            url:
+                                                                "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
+
+                                                            type: socialMedia[
+                                                                        pIndex]
                                                                     .type ??
                                                                 '',
-                                                      ),
-                                                    );
-                                                    print(
-                                                        "➕ Added new item: ${notifier.addSocialList.last.toJson()}");
-                                                    back(context);
-                                                  }
+                                                          ),
+                                                        );
+                                                        print(
+                                                            "➕ Added new item: ${notifier.addSocialList.last.toJson()}");
+                                                        back(context);
+                                                      }
 
-                                                  // If it doesn't exist, add a new item
-//                                                   notifier.addSocialList.add(
-//                                                     AddSocialProfileModel(
-//                                                       platformId:
-//                                                           socialMedia[pIndex]
-//                                                               .id,
-//                                                       url: notifier
-//                                                           .urlController.text,
-//                                                       type: socialMedia[pIndex]
-//                                                               .type ??
-//                                                           '',
-//                                                     ),
-//                                                   );
-//                                                 }
-// // Ensure uniqueness if needed
-//                                                 notifier.addSocialList =
-//                                                     notifier.addSocialList
-//                                                         .toSet()
-//                                                         .toList();
+                                                      // If it doesn't exist, add a new item
+                                                      //                                                   notifier.addSocialList.add(
+                                                      //                                                     AddSocialProfileModel(
+                                                      //                                                       platformId:
+                                                      //                                                           socialMedia[pIndex]
+                                                      //                                                               .id,
+                                                      //                                                       url: notifier
+                                                      //                                                           .urlController.text,
+                                                      //                                                       type: socialMedia[pIndex]
+                                                      //                                                               .type ??
+                                                      //                                                           '',
+                                                      //                                                     ),
+                                                      //                                                   );
+                                                      //                                                 }
+                                                      // // Ensure uniqueness if needed
+                                                      //                                                 notifier.addSocialList =
+                                                      //                                                     notifier.addSocialList
+                                                      //                                                         .toSet()
+                                                      //                                                         .toList();
 
-                                                  // printLog(
-                                                  //     "update phone data is :-> ${notifier.addSocialList[0].url}");
+                                                      // printLog(
+                                                      //     "update phone data is :-> ${notifier.addSocialList[0].url}");
 
-                                                  // notifier.addPlatform(
-                                                  //     isPhone: true,
-                                                  //     platformId:
-                                                  //         socialMedia[pIndex]
-                                                  //             .id
-                                                  //             .toString());
-                                                }
-                                              },
-                                              title: AppString.update,
-                                              width: context.width,
-                                            ),
+                                                      // notifier.addPlatform(
+                                                      //     isPhone: true,
+                                                      //     platformId:
+                                                      //         socialMedia[pIndex]
+                                                      //             .id
+                                                      //             .toString());
+                                                    }
+                                                  },
+                                                  title: AppString.update,
+                                                  width: context.width,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    10.verticalSpace,
-                                  ],
+                                        ),
+                                        10.verticalSpace,
+                                      ],
+                                    );
+                                  },
                                 ),
                               );
                             } else {
@@ -373,60 +396,69 @@ class CustomSocialGridview extends ConsumerWidget {
                                           Expanded(
                                             child: CommonAppBtn(
                                               onTap: () {
+                                                log("save called 2");
                                                 var isValid = notifier
-                                                    .validateAddPlatform();
+                                                    .validateAddPlatform(
+                                                        type:
+                                                            socialMedia[pIndex]
+                                                                    .type ??
+                                                                '');
 
-                                                int index = notifier
-                                                    .addSocialList
-                                                    .indexWhere((item) =>
-                                                        item.platformId ==
-                                                        socialMedia[pIndex].id);
-
-                                                if (index != -1) {
-                                                  // If the item exists, update its URL
-                                                  notifier.addSocialList[index]
-                                                          .url =
-                                                      notifier
-                                                          .urlController.text;
-                                                } else {
-                                                  // If it doesn't exist, add a new item
-                                                  notifier.addSocialList.add(
-                                                    AddSocialProfileModel(
-                                                      platformId:
+                                                if (isValid) {
+                                                  int index = notifier
+                                                      .addSocialList
+                                                      .indexWhere((item) =>
+                                                          item.platformId ==
                                                           socialMedia[pIndex]
-                                                              .id,
-                                                      url: notifier
-                                                          .urlController.text,
-                                                      type: socialMedia[pIndex]
-                                                              .type ??
-                                                          '',
-                                                    ),
-                                                  );
-                                                }
+                                                              .id);
+
+                                                  if (index != -1) {
+                                                    // If the item exists, update its URL
+                                                    notifier
+                                                            .addSocialList[index]
+                                                            .url =
+                                                        notifier
+                                                            .urlController.text;
+                                                  } else {
+                                                    // If it doesn't exist, add a new item
+                                                    notifier.addSocialList.add(
+                                                      AddSocialProfileModel(
+                                                        platformId:
+                                                            socialMedia[pIndex]
+                                                                .id,
+                                                        url: notifier
+                                                            .urlController.text,
+                                                        type:
+                                                            socialMedia[pIndex]
+                                                                    .type ??
+                                                                '',
+                                                      ),
+                                                    );
+                                                  }
 // Ensure uniqueness if needed
-                                                notifier.addSocialList =
-                                                    notifier.addSocialList
-                                                        .toSet()
-                                                        .toList();
+                                                  notifier.addSocialList =
+                                                      notifier.addSocialList
+                                                          .toSet()
+                                                          .toList();
 
-                                                // notifier.updateSelectedPlatform(
-                                                //     platformId:
-                                                //         socialMedia[pIndex]
-                                                //             .id
-                                                //             .toString());
+                                                  // notifier.updateSelectedPlatform(
+                                                  //     platformId:
+                                                  //         socialMedia[pIndex]
+                                                  //             .id
+                                                  //             .toString());
 
-                                                printLog(
-                                                    "added social list:-> ${notifier.addSocialList[0].url}");
-                                                back(context);
+                                                  printLog(
+                                                      "added social list:-> ${notifier.addSocialList[0].url}");
+                                                  back(context);
 
-                                                // if (isValid) {
-                                                //   notifier.addPlatform(
-                                                //       isPhone: false,
-                                                //       platformId:
-                                                //           socialMedia[pIndex]
-                                                //               .id
-                                                //               .toString());
-                                                // }
+                                                  // if (isValid) {
+                                                  //   notifier.addPlatform(
+                                                  //       isPhone: false,
+                                                  //       platformId:
+                                                  //           socialMedia[pIndex]
+                                                  //               .id
+                                                  //               .toString());
+                                                }
                                               },
                                               title: AppString.update,
                                               width: context.width,
@@ -458,118 +490,139 @@ class CustomSocialGridview extends ConsumerWidget {
                                 'Enter phone number') {
                               showCustomBottomSheet(
                                 context: context,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                content: Consumer(
+                                  builder: (_, WidgetRef ref, __) {
+                                    final notifier =
+                                        ref.watch(signupProvider.notifier);
+                                    ref.watch(countryPickerProvider.notifier);
+                                    ref.watch(
+                                        signupProvider); // Watch to trigger rebuild
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        AppText(
-                                          text: socialMedia[pIndex].name ?? '',
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            AppText(
+                                              text: socialMedia[pIndex].name ??
+                                                  '',
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            InkWell(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                onTap: () {
+                                                  back(context);
+                                                },
+                                                child: SvgPicture.asset(
+                                                    Assets.icCloseCircle))
+                                          ],
                                         ),
-                                        InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            onTap: () {
-                                              back(context);
-                                            },
-                                            child: SvgPicture.asset(
-                                                Assets.icCloseCircle))
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10.0),
+                                          child: Divider(),
+                                        ),
+                                        // 10.verticalSpace,
+
+                                        CustomPhoneNumber(
+                                          minLength: notifier.minLength,
+                                          maxLength: notifier.maxLength,
+                                          selectedCountryCode:
+                                              notifier.countryCode,
+                                          selectedCountryFlag:
+                                              notifier.countryFlag,
+                                          prefixIcon: Assets.icGender,
+                                          controller: notifier.urlController,
+                                          labelText: AppString.phoneNumber,
+                                        ),
+                                        10.verticalSpace,
+
+                                        /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: context.height * .02),
+                                          child: Row(
+                                            children: [
+                                              //GO BACK
+                                              Expanded(
+                                                child: CommonAppBtn(
+                                                  textColor: AppColor.btnColor,
+                                                  backGroundColor: AppColor
+                                                      .green00C56524
+                                                      .withOpacity(.14),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  title: AppString.cancel,
+                                                  width: context.width,
+                                                ),
+                                              ),
+                                              10.horizontalSpace,
+
+                                              //ADD/SAVE PLATFORM
+                                              Expanded(
+                                                child: CommonAppBtn(
+                                                  onTap: () {
+                                                    log("save called 2");
+                                                    bool isValid = notifier
+                                                        .validatePhoneNumber();
+
+                                                    if (isValid) {
+                                                      if (!notifier
+                                                          .addSocialList
+                                                          .any((item) =>
+                                                              item.platformId ==
+                                                              socialMedia[
+                                                                      pIndex]
+                                                                  .id)) {
+                                                        notifier.addSocialList
+                                                            .add(
+                                                          AddSocialProfileModel(
+                                                              platformId:
+                                                                  socialMedia[
+                                                                          pIndex]
+                                                                      .id,
+                                                              url:
+                                                                  "${notifier.countryCode} ${notifier.urlController.text}",
+                                                              type: socialMedia[
+                                                                          pIndex]
+                                                                      .type ??
+                                                                  ''),
+                                                        );
+                                                      }
+
+                                                      // Ensure uniqueness if needed
+                                                      notifier.addSocialList =
+                                                          notifier.addSocialList
+                                                              .toSet()
+                                                              .toList();
+                                                      back(context);
+                                                      // var isValid = notifier
+                                                      //     .validateAddPlatform();
+
+                                                      // if (isValid) {
+                                                      //   notifier.addPlatform(
+                                                      //       isPhone: true,
+                                                      //       platformId:
+                                                      //           socialMedia[pIndex]
+                                                      //               .id
+                                                      //               .toString());
+                                                    }
+                                                  },
+                                                  title: AppString.save,
+                                                  width: context.width,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        10.verticalSpace,
                                       ],
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Divider(),
-                                    ),
-                                    // 10.verticalSpace,
-
-                                    CustomPhoneNumber(
-                                      minLength: notifier.minLength,
-                                      maxLength: notifier.maxLength,
-                                      selectedCountryCode: notifier.countryCode,
-                                      selectedCountryFlag: notifier.countryFlag,
-                                      prefixIcon: Assets.icGender,
-                                      controller: notifier.urlController,
-                                      labelText: AppString.phoneNumber,
-                                    ),
-                                    10.verticalSpace,
-
-                                    /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: context.height * .02),
-                                      child: Row(
-                                        children: [
-                                          //GO BACK
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              textColor: AppColor.btnColor,
-                                              backGroundColor: AppColor
-                                                  .green00C56524
-                                                  .withOpacity(.14),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              title: AppString.cancel,
-                                              width: context.width,
-                                            ),
-                                          ),
-                                          10.horizontalSpace,
-
-                                          //ADD/SAVE PLATFORM
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              onTap: () {
-                                                if (!notifier.addSocialList.any(
-                                                    (item) =>
-                                                        item.platformId ==
-                                                        socialMedia[pIndex]
-                                                            .id)) {
-                                                  notifier.addSocialList.add(
-                                                    AddSocialProfileModel(
-                                                        platformId:
-                                                            socialMedia[pIndex]
-                                                                .id,
-                                                        url:
-                                                            "${notifier.countryCode} ${notifier.urlController.text}",
-                                                        type:
-                                                            socialMedia[pIndex]
-                                                                    .type ??
-                                                                ''),
-                                                  );
-                                                }
-
-// Ensure uniqueness if needed
-                                                notifier.addSocialList =
-                                                    notifier.addSocialList
-                                                        .toSet()
-                                                        .toList();
-                                                back(context);
-                                                // var isValid = notifier
-                                                //     .validateAddPlatform();
-
-                                                // if (isValid) {
-                                                //   notifier.addPlatform(
-                                                //       isPhone: true,
-                                                //       platformId:
-                                                //           socialMedia[pIndex]
-                                                //               .id
-                                                //               .toString());
-                                                // }
-                                              },
-                                              title: AppString.save,
-                                              width: context.width,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    10.verticalSpace,
-                                  ],
+                                    );
+                                  },
                                 ),
                               );
                             } else {
@@ -644,52 +697,60 @@ class CustomSocialGridview extends ConsumerWidget {
                                           Expanded(
                                             child: CommonAppBtn(
                                               onTap: () {
+                                                log("save called 3");
                                                 var isValid = notifier
-                                                    .validateAddPlatform();
-
-                                                if (!notifier.addSocialList.any(
-                                                    (item) =>
-                                                        item.platformId ==
-                                                        socialMedia[pIndex]
-                                                            .id)) {
-                                                  notifier.addSocialList.add(
-                                                    AddSocialProfileModel(
-                                                        platformId:
-                                                            socialMedia[pIndex]
-                                                                .id,
-                                                        url: notifier
-                                                            .urlController.text,
+                                                    .validateAddPlatform(
                                                         type:
                                                             socialMedia[pIndex]
                                                                     .type ??
-                                                                ''),
-                                                  );
-                                                }
+                                                                '');
+
+                                                if (isValid) {
+                                                  if (!notifier.addSocialList
+                                                      .any((item) =>
+                                                          item.platformId ==
+                                                          socialMedia[pIndex]
+                                                              .id)) {
+                                                    notifier.addSocialList.add(
+                                                      AddSocialProfileModel(
+                                                          platformId:
+                                                              socialMedia[
+                                                                      pIndex]
+                                                                  .id,
+                                                          url: notifier
+                                                              .urlController
+                                                              .text,
+                                                          type: socialMedia[
+                                                                      pIndex]
+                                                                  .type ??
+                                                              ''),
+                                                    );
+                                                  }
 
 // Ensure uniqueness if needed
-                                                notifier.addSocialList =
-                                                    notifier.addSocialList
-                                                        .toSet()
-                                                        .toList();
+                                                  notifier.addSocialList =
+                                                      notifier.addSocialList
+                                                          .toSet()
+                                                          .toList();
 
-                                                // notifier.updateSelectedPlatform(
-                                                //     platformId:
-                                                //         socialMedia[pIndex]
-                                                //             .id
-                                                //             .toString());
+                                                  // notifier.updateSelectedPlatform(
+                                                  //     platformId:
+                                                  //         socialMedia[pIndex]
+                                                  //             .id
+                                                  //             .toString());
 
-                                                printLog(
-                                                    "added social list:-> ${notifier.addSocialList}");
-                                                back(context);
+                                                  printLog(
+                                                      "added social list:-> ${notifier.addSocialList}");
+                                                  back(context);
 
-                                                // if (isValid) {
-                                                //   notifier.addPlatform(
-                                                //       isPhone: false,
-                                                //       platformId:
-                                                //           socialMedia[pIndex]
-                                                //               .id
-                                                //               .toString());
-                                                // }
+                                                  // if (isValid) {
+                                                  //   notifier.addPlatform(
+                                                  //       isPhone: false,
+                                                  //       platformId:
+                                                  //           socialMedia[pIndex]
+                                                  //               .id
+                                                  //               .toString());
+                                                }
                                               },
                                               title: AppString.save,
                                               width: context.width,

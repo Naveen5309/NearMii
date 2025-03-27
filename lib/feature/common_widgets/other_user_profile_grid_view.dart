@@ -1,3 +1,4 @@
+import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/states_notifier/other_user_profile_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/helper.dart';
@@ -7,6 +8,7 @@ import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class OtherUserProfileGridView extends ConsumerWidget {
   final String title;
@@ -81,10 +83,25 @@ class OtherUserProfileGridView extends ConsumerWidget {
                           printLog(
                               "Click on url is :-> ${socialMedia[pIndex].url}");
 
-                          if (socialMedia[pIndex].platform?.name ==
-                              "Whatsapp") {
+                          if ((socialMedia[pIndex].platform?.name ==
+                                  "Whatsapp") &&
+                              (socialMedia[pIndex].platform?.type ==
+                                  "Enter phone number")) {
                             await launchUrl(Uri.parse(
                                 "https://wa.me/${socialMedia[pIndex].url}"));
+                          } else if (socialMedia[pIndex].platform?.type ==
+                              "Enter phone number") {
+                            CallUtils.openDialer(url!.trim());
+                          } else if (socialMedia[pIndex].platform?.type ==
+                              "Enter email address") {
+                            final Uri emailLaunchUri = Uri(
+                              scheme: 'mailto',
+                              path: '$url',
+                              query: encodeQueryParameters(<String, String>{
+                                'subject': 'Join me in NearMii',
+                              }),
+                            );
+                            await launchUrl(emailLaunchUri);
                           } else {
                             // Ensure the URL is not null and formatted correctly
                             if (url != null && url.isNotEmpty) {
