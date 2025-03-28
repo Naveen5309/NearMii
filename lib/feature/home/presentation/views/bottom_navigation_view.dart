@@ -40,7 +40,7 @@ class BottomNavigationView extends ConsumerWidget {
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
                 BoxShadow(
-                  color: AppColor.black000000.withOpacity(.06),
+                  color: AppColor.black000000.withValues(alpha: .06),
                   blurRadius: 5,
                   spreadRadius: 3,
                   offset: const Offset(0, 5),
@@ -118,7 +118,10 @@ class BottomNavigationView extends ConsumerWidget {
         body: Stack(
           children: [
             const HomePageView(
-                isFromAuth: true), // Keep HomePageView always alive
+                isFromAuth: true, key: PageStorageKey('HomePageView')),
+
+            // const HomePageView(
+            //     isFromAuth: true), // Keep HomePageView always alive
             if (indexSelected == 1) const HistoryView(),
             if (indexSelected == 2) const NotificationView(),
             if (indexSelected == 3) const SettingView(),
@@ -138,7 +141,7 @@ class BottomNavigationView extends ConsumerWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        splashColor: AppColor.green00C56524.withOpacity(.5),
+        splashColor: AppColor.green00C56524.withValues(alpha: .5),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(8.0),

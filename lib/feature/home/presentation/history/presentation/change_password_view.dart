@@ -78,7 +78,7 @@ class ChangePasswordView extends ConsumerWidget {
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.currentPasswordController,
                 labelText: AppString.currentPassword,
-                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
+                suffixIcon: isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             Consumer(
@@ -93,7 +93,7 @@ class ChangePasswordView extends ConsumerWidget {
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.newPasswordController,
                 labelText: AppString.newPswd,
-                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
+                suffixIcon: isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             Consumer(
@@ -108,7 +108,7 @@ class ChangePasswordView extends ConsumerWidget {
                 prefixIcon: Assets.icLock,
                 controller: changePasswordNotifier.confirmPasswordController,
                 labelText: AppString.confirmPswd,
-                suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
+                suffixIcon: isVisible ? Assets.icEyeOff : Assets.icEye,
               );
             }),
             SizedBox(

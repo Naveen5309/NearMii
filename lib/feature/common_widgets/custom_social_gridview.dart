@@ -4,7 +4,6 @@ import 'package:NearMii/config/app_utils.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/config/helper.dart';
-import 'package:NearMii/config/validator.dart';
 import 'package:NearMii/core/network/http_service.dart';
 import 'package:NearMii/feature/auth/data/models/get_platform_model.dart';
 import 'package:NearMii/feature/auth/data/models/social_profile_response_model.dart';
@@ -24,6 +23,7 @@ import 'package:NearMii/feature/common_widgets/social_media_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomSocialGridview extends ConsumerWidget {
@@ -74,7 +74,8 @@ class CustomSocialGridview extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12), // Smooth rounded corners
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03), // Adjust opacity as needed
+            color: Colors.black
+                .withValues(alpha: 0.03), // Adjust opacity as needed
             blurRadius: 2,
             spreadRadius: 0, // No spreading to the sides
             offset: const Offset(0, 5), // Move shadow downwards
@@ -104,166 +105,151 @@ class CustomSocialGridview extends ConsumerWidget {
                     topRight: Radius.circular(16.0),
                   ),
                 ),
-                // margin: const EdgeInsets.all(10.0),
-                child: GridView.builder(
-                  padding: EdgeInsets.zero,
-                  // physics: const NeverScrollableScrollPhysics(),
+                child: AnimationLimiter(
+                  child: GridView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: socialMedia.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, pIndex) {
+                      return GestureDetector(
+                          onTap: () {
+                            var matchedItem = notifier.addSocialList.firstWhere(
+                              (item) =>
+                                  item.platformId == socialMedia[pIndex].id,
+                              orElse: () => AddSocialProfileModel(
+                                  platformId: -1,
+                                  url: '',
+                                  type: ''), // Provide a default object
+                            );
 
-                  itemCount: socialMedia.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, pIndex) {
-                    return GestureDetector(
-                        onTap: () {
-                          var matchedItem = notifier.addSocialList.firstWhere(
-                            (item) => item.platformId == socialMedia[pIndex].id,
-                            orElse: () => AddSocialProfileModel(
-                                platformId: -1,
-                                url: '',
-                                type: ''), // Provide a default object
-                          );
+                            if (matchedItem.platformId != -1) {
+                              printLog("Matched Item: ${matchedItem.toJson()}");
+                              printLog("Matched Item: ${matchedItem.type}");
 
-                          if (matchedItem.platformId != -1) {
-                            printLog("Matched Item: ${matchedItem.toJson()}");
-                            printLog("Matched Item: ${matchedItem.type}");
+                              notifier.urlController.text =
+                                  matchedItem.url ?? '';
+                              // if (socialMedia[pIndex].platform?.type ==
+                              //     "Enter phone number") {
+                              //   notifier.updateUserPhone(
+                              //       phoneNumber: socialMedia[pIndex].url ?? '');
 
-                            notifier.urlController.text = matchedItem.url ?? '';
-                            // if (socialMedia[pIndex].platform?.type ==
-                            //     "Enter phone number") {
-                            //   notifier.updateUserPhone(
-                            //       phoneNumber: socialMedia[pIndex].url ?? '');
+                              //   countryNotifier.updateInitialCountry(
+                              //       socialMedia[pIndex].url?.split(' ').first ??
+                              //           '+1');
 
-                            //   countryNotifier.updateInitialCountry(
-                            //       socialMedia[pIndex].url?.split(' ').first ??
-                            //           '+1');
+                              if (matchedItem.type == 'Enter phone number') {
+                                printLog("Its phone number");
+                                notifier.updateUserPhone();
 
-                            if (matchedItem.type == 'Enter phone number') {
-                              printLog("Its phone number");
-                              notifier.updateUserPhone();
-
-                              countryNotifier.updateInitialCountry(
-                                  matchedItem.url?.split(' ').first ?? '+1');
-                              showCustomBottomSheet(
-                                context: context,
-                                content: Consumer(
-                                  builder: (context, ref, child) {
-                                    final notifier =
-                                        ref.watch(signupProvider.notifier);
-                                    ref.watch(countryPickerProvider.notifier);
-                                    ref.watch(
-                                        signupProvider); // Watch to trigger rebuild
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            AppText(
-                                              text: socialMedia[pIndex].name ??
-                                                  '',
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                            InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                onTap: () {
-                                                  back(context);
-                                                },
-                                                child: SvgPicture.asset(
-                                                    Assets.icCloseCircle))
-                                          ],
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.0),
-                                          child: Divider(),
-                                        ),
-                                        // 10.verticalSpace,
-
-                                        CustomPhoneNumber(
-                                          minLength: notifier.minLength,
-                                          maxLength: notifier.maxLength,
-                                          selectedCountryCode:
-                                              notifier.countryCode,
-                                          selectedCountryFlag:
-                                              notifier.countryFlag,
-                                          prefixIcon: Assets.icGender,
-                                          controller: notifier.urlController,
-                                          labelText: AppString.phoneNumber,
-                                        ),
-                                        10.verticalSpace,
-
-                                        /**--------------------- CANCEL AND UPDATE  ---------------- **/
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: context.height * .02),
-                                          child: Row(
+                                countryNotifier.updateInitialCountry(
+                                    matchedItem.url?.split(' ').first ?? '+1');
+                                showCustomBottomSheet(
+                                  context: context,
+                                  content: Consumer(
+                                    builder: (context, ref, child) {
+                                      final notifier =
+                                          ref.watch(signupProvider.notifier);
+                                      ref.watch(countryPickerProvider.notifier);
+                                      ref.watch(
+                                          signupProvider); // Watch to trigger rebuild
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              //GO BACK
-                                              Expanded(
-                                                child: CommonAppBtn(
-                                                  textColor: AppColor.btnColor,
-                                                  backGroundColor: AppColor
-                                                      .green00C56524
-                                                      .withOpacity(.14),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  title: AppString.cancel,
-                                                  width: context.width,
-                                                ),
+                                              AppText(
+                                                text:
+                                                    socialMedia[pIndex].name ??
+                                                        '',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w500,
                                               ),
-                                              10.horizontalSpace,
-
-                                              //ADD/SAVE PLATFORM
-                                              Expanded(
-                                                child: CommonAppBtn(
+                                              InkWell(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
                                                   onTap: () {
-                                                    log("save called 1");
-                                                    var isValid = notifier
-                                                        .validatePhoneNumber();
+                                                    back(context);
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                      Assets.icCloseCircle))
+                                            ],
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.0),
+                                            child: Divider(),
+                                          ),
+                                          // 10.verticalSpace,
 
-                                                    if (isValid) {
-                                                      printLog(
-                                                          "update phone :-> ${"${notifier.countryCode} ${notifier.urlController.text}"}");
+                                          CustomPhoneNumber(
+                                            minLength: notifier.minLength,
+                                            maxLength: notifier.maxLength,
+                                            selectedCountryCode:
+                                                notifier.countryCode,
+                                            selectedCountryFlag:
+                                                notifier.countryFlag,
+                                            prefixIcon: Assets.icGender,
+                                            controller: notifier.urlController,
+                                            labelText: AppString.phoneNumber,
+                                          ),
+                                          10.verticalSpace,
 
-                                                      // Find index of existing item with the same platformId
-                                                      int existingIndex =
-                                                          notifier.addSocialList
-                                                              .indexWhere(
-                                                        (item) =>
-                                                            item.platformId ==
-                                                            socialMedia[pIndex]
-                                                                .id,
-                                                      );
+                                          /**--------------------- CANCEL AND UPDATE  ---------------- **/
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: context.height * .02),
+                                            child: Row(
+                                              children: [
+                                                //GO BACK
+                                                Expanded(
+                                                  child: CommonAppBtn(
+                                                    textColor:
+                                                        AppColor.btnColor,
+                                                    backGroundColor: AppColor
+                                                        .green00C56524
+                                                        .withValues(alpha: .14),
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    title: AppString.cancel,
+                                                    width: context.width,
+                                                  ),
+                                                ),
+                                                10.horizontalSpace,
 
-                                                      if (existingIndex != -1) {
-                                                        // ✅ Update the existing item
-                                                        notifier.addSocialList[
-                                                                existingIndex] =
-                                                            AddSocialProfileModel(
-                                                          platformId:
+                                                //ADD/SAVE PLATFORM
+                                                Expanded(
+                                                  child: CommonAppBtn(
+                                                    onTap: () {
+                                                      log("save called 1");
+                                                      var isValid = notifier
+                                                          .validatePhoneNumber();
+
+                                                      if (isValid) {
+                                                        printLog(
+                                                            "update phone :-> ${"${notifier.countryCode} ${notifier.urlController.text}"}");
+
+                                                        // Find index of existing item with the same platformId
+                                                        int existingIndex =
+                                                            notifier
+                                                                .addSocialList
+                                                                .indexWhere(
+                                                          (item) =>
+                                                              item.platformId ==
                                                               socialMedia[
                                                                       pIndex]
                                                                   .id,
-                                                          url:
-                                                              "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
-
-                                                          type: socialMedia[
-                                                                      pIndex]
-                                                                  .type ??
-                                                              '',
                                                         );
-                                                        printLog(
-                                                            "✅ Updated existing item: ${notifier.addSocialList[existingIndex].toJson()}");
-                                                        back(context);
-                                                      } else {
-                                                        // 🚀 Add new item if it doesn't exist
-                                                        notifier.addSocialList
-                                                            .add(
-                                                          AddSocialProfileModel(
+
+                                                        if (existingIndex !=
+                                                            -1) {
+                                                          // ✅ Update the existing item
+                                                          notifier.addSocialList[
+                                                                  existingIndex] =
+                                                              AddSocialProfileModel(
                                                             platformId:
                                                                 socialMedia[
                                                                         pIndex]
@@ -275,444 +261,148 @@ class CustomSocialGridview extends ConsumerWidget {
                                                                         pIndex]
                                                                     .type ??
                                                                 '',
-                                                          ),
-                                                        );
-                                                        print(
-                                                            "➕ Added new item: ${notifier.addSocialList.last.toJson()}");
-                                                        back(context);
-                                                      }
-
-                                                      // If it doesn't exist, add a new item
-                                                      //                                                   notifier.addSocialList.add(
-                                                      //                                                     AddSocialProfileModel(
-                                                      //                                                       platformId:
-                                                      //                                                           socialMedia[pIndex]
-                                                      //                                                               .id,
-                                                      //                                                       url: notifier
-                                                      //                                                           .urlController.text,
-                                                      //                                                       type: socialMedia[pIndex]
-                                                      //                                                               .type ??
-                                                      //                                                           '',
-                                                      //                                                     ),
-                                                      //                                                   );
-                                                      //                                                 }
-                                                      // // Ensure uniqueness if needed
-                                                      //                                                 notifier.addSocialList =
-                                                      //                                                     notifier.addSocialList
-                                                      //                                                         .toSet()
-                                                      //                                                         .toList();
-
-                                                      // printLog(
-                                                      //     "update phone data is :-> ${notifier.addSocialList[0].url}");
-
-                                                      // notifier.addPlatform(
-                                                      //     isPhone: true,
-                                                      //     platformId:
-                                                      //         socialMedia[pIndex]
-                                                      //             .id
-                                                      //             .toString());
-                                                    }
-                                                  },
-                                                  title: AppString.update,
-                                                  width: context.width,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        10.verticalSpace,
-                                      ],
-                                    );
-                                  },
-                                ),
-                              );
-                            } else {
-                              printLog("Item matched but no phone number");
-                              showCustomBottomSheet(
-                                context: context,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: socialMedia[pIndex].name ?? '',
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            onTap: () {
-                                              back(context);
-                                            },
-                                            child: SvgPicture.asset(
-                                                Assets.icCloseCircle))
-                                      ],
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Divider(),
-                                    ),
-                                    // 10.verticalSpace,
-                                    CustomLabelTextField(
-                                      labelBckColor: AppColor.primary,
-                                      labelText: "${socialMedia[pIndex].type}",
-                                      controller: notifier.urlController,
-                                      prefixWidget: CustomCacheNetworkImage(
-                                          img: ApiConstants.socialIconBaseUrl +
-                                              socialMedia[pIndex].icon!,
-                                          width: 25,
-                                          height: 25,
-                                          imageRadius: 10),
-                                    ),
-
-                                    /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: context.height * .02),
-                                      child: Row(
-                                        children: [
-                                          //GO BACK
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              textColor: AppColor.btnColor,
-                                              backGroundColor: AppColor
-                                                  .green00C56524
-                                                  .withOpacity(.14),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              title: AppString.cancel,
-                                              width: context.width,
-                                            ),
-                                          ),
-                                          10.horizontalSpace,
-
-                                          //UPDATE PLATFORM
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              onTap: () {
-                                                log("save called 2");
-                                                var isValid = notifier
-                                                    .validateAddPlatform(
-                                                        type:
-                                                            socialMedia[pIndex]
-                                                                    .type ??
-                                                                '');
-
-                                                if (isValid) {
-                                                  int index = notifier
-                                                      .addSocialList
-                                                      .indexWhere((item) =>
-                                                          item.platformId ==
-                                                          socialMedia[pIndex]
-                                                              .id);
-
-                                                  if (index != -1) {
-                                                    // If the item exists, update its URL
-                                                    notifier
-                                                            .addSocialList[index]
-                                                            .url =
-                                                        notifier
-                                                            .urlController.text;
-                                                  } else {
-                                                    // If it doesn't exist, add a new item
-                                                    notifier.addSocialList.add(
-                                                      AddSocialProfileModel(
-                                                        platformId:
-                                                            socialMedia[pIndex]
-                                                                .id,
-                                                        url: notifier
-                                                            .urlController.text,
-                                                        type:
-                                                            socialMedia[pIndex]
-                                                                    .type ??
-                                                                '',
-                                                      ),
-                                                    );
-                                                  }
-// Ensure uniqueness if needed
-                                                  notifier.addSocialList =
-                                                      notifier.addSocialList
-                                                          .toSet()
-                                                          .toList();
-
-                                                  // notifier.updateSelectedPlatform(
-                                                  //     platformId:
-                                                  //         socialMedia[pIndex]
-                                                  //             .id
-                                                  //             .toString());
-
-                                                  printLog(
-                                                      "added social list:-> ${notifier.addSocialList[0].url}");
-                                                  back(context);
-
-                                                  // if (isValid) {
-                                                  //   notifier.addPlatform(
-                                                  //       isPhone: false,
-                                                  //       platformId:
-                                                  //           socialMedia[pIndex]
-                                                  //               .id
-                                                  //               .toString());
-                                                }
-                                              },
-                                              title: AppString.update,
-                                              width: context.width,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    10.verticalSpace,
-                                  ],
-                                ),
-                              );
-                            }
-                          } else {
-                            printLog("item doesn't matched");
-                            printLog("item doesn't matched");
-                            notifier.urlController.clear();
-                            notifier.urlController.clear();
-                            notifier.countryCode = "+1";
-                            notifier.countryFlag = '🇺🇸';
-                            notifier.countryNameCode = 'US';
-
-                            final countryNotifier =
-                                ref.read(countryPickerProvider.notifier);
-
-                            countryNotifier.updateInitialCountry('+1');
-
-                            if (socialMedia[pIndex].type ==
-                                'Enter phone number') {
-                              showCustomBottomSheet(
-                                context: context,
-                                content: Consumer(
-                                  builder: (_, WidgetRef ref, __) {
-                                    final notifier =
-                                        ref.watch(signupProvider.notifier);
-                                    ref.watch(countryPickerProvider.notifier);
-                                    ref.watch(
-                                        signupProvider); // Watch to trigger rebuild
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            AppText(
-                                              text: socialMedia[pIndex].name ??
-                                                  '',
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                            InkWell(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                onTap: () {
-                                                  back(context);
-                                                },
-                                                child: SvgPicture.asset(
-                                                    Assets.icCloseCircle))
-                                          ],
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.0),
-                                          child: Divider(),
-                                        ),
-                                        // 10.verticalSpace,
-
-                                        CustomPhoneNumber(
-                                          minLength: notifier.minLength,
-                                          maxLength: notifier.maxLength,
-                                          selectedCountryCode:
-                                              notifier.countryCode,
-                                          selectedCountryFlag:
-                                              notifier.countryFlag,
-                                          prefixIcon: Assets.icGender,
-                                          controller: notifier.urlController,
-                                          labelText: AppString.phoneNumber,
-                                        ),
-                                        10.verticalSpace,
-
-                                        /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: context.height * .02),
-                                          child: Row(
-                                            children: [
-                                              //GO BACK
-                                              Expanded(
-                                                child: CommonAppBtn(
-                                                  textColor: AppColor.btnColor,
-                                                  backGroundColor: AppColor
-                                                      .green00C56524
-                                                      .withOpacity(.14),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  title: AppString.cancel,
-                                                  width: context.width,
-                                                ),
-                                              ),
-                                              10.horizontalSpace,
-
-                                              //ADD/SAVE PLATFORM
-                                              Expanded(
-                                                child: CommonAppBtn(
-                                                  onTap: () {
-                                                    log("save called 2");
-                                                    bool isValid = notifier
-                                                        .validatePhoneNumber();
-
-                                                    if (isValid) {
-                                                      if (!notifier
-                                                          .addSocialList
-                                                          .any((item) =>
-                                                              item.platformId ==
-                                                              socialMedia[
-                                                                      pIndex]
-                                                                  .id)) {
-                                                        notifier.addSocialList
-                                                            .add(
-                                                          AddSocialProfileModel(
+                                                          );
+                                                          printLog(
+                                                              "✅ Updated existing item: ${notifier.addSocialList[existingIndex].toJson()}");
+                                                          back(context);
+                                                        } else {
+                                                          // 🚀 Add new item if it doesn't exist
+                                                          notifier.addSocialList
+                                                              .add(
+                                                            AddSocialProfileModel(
                                                               platformId:
                                                                   socialMedia[
                                                                           pIndex]
                                                                       .id,
                                                               url:
-                                                                  "${notifier.countryCode} ${notifier.urlController.text}",
+                                                                  "${notifier.countryCode} ${notifier.urlController.text}", // Updated URL
+
                                                               type: socialMedia[
                                                                           pIndex]
                                                                       .type ??
-                                                                  ''),
-                                                        );
+                                                                  '',
+                                                            ),
+                                                          );
+                                                          print(
+                                                              "➕ Added new item: ${notifier.addSocialList.last.toJson()}");
+                                                          back(context);
+                                                        }
                                                       }
-
-                                                      // Ensure uniqueness if needed
-                                                      notifier.addSocialList =
-                                                          notifier.addSocialList
-                                                              .toSet()
-                                                              .toList();
-                                                      back(context);
-                                                      // var isValid = notifier
-                                                      //     .validateAddPlatform();
-
-                                                      // if (isValid) {
-                                                      //   notifier.addPlatform(
-                                                      //       isPhone: true,
-                                                      //       platformId:
-                                                      //           socialMedia[pIndex]
-                                                      //               .id
-                                                      //               .toString());
-                                                    }
-                                                  },
-                                                  title: AppString.save,
-                                                  width: context.width,
+                                                    },
+                                                    title: AppString.update,
+                                                    width: context.width,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        10.verticalSpace,
-                                      ],
-                                    );
-                                  },
-                                ),
-                              );
-                            } else {
-                              printLog('url called');
-
-                              notifier.urlController.clear();
-                              showCustomBottomSheet(
-                                context: context,
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        AppText(
-                                          text: socialMedia[pIndex].name ?? '',
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            onTap: () {
-                                              back(context);
-                                            },
-                                            child: SvgPicture.asset(
-                                                Assets.icCloseCircle))
-                                      ],
-                                    ),
-                                    const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.0),
-                                      child: Divider(),
-                                    ),
-                                    // 10.verticalSpace,
-                                    CustomLabelTextField(
-                                      labelBckColor: AppColor.primary,
-                                      labelText: "${socialMedia[pIndex].type}",
-                                      controller: notifier.urlController,
-                                      prefixWidget: CustomCacheNetworkImage(
-                                          img: ApiConstants.socialIconBaseUrl +
-                                              socialMedia[pIndex].icon!,
-                                          width: 25,
-                                          height: 25,
-                                          imageRadius: 10),
-                                    ),
-
-                                    /**--------------------- CANCEL AND SAVE  ---------------- **/
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: context.height * .02),
-                                      child: Row(
-                                        children: [
-                                          //GO BACK
-                                          Expanded(
-                                            child: CommonAppBtn(
-                                              textColor: AppColor.btnColor,
-                                              backGroundColor: AppColor
-                                                  .green00C56524
-                                                  .withOpacity(.14),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              },
-                                              title: AppString.cancel,
-                                              width: context.width,
+                                              ],
                                             ),
                                           ),
-                                          10.horizontalSpace,
-
-                                          //ADD PLATFORM
-                                          Expanded(
-                                            child: CommonAppBtn(
+                                          10.verticalSpace,
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                );
+                              } else {
+                                printLog("Item matched but no phone number");
+                                showCustomBottomSheet(
+                                  context: context,
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text:
+                                                socialMedia[pIndex].name ?? '',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
                                               onTap: () {
-                                                log("save called 3");
-                                                var isValid = notifier
-                                                    .validateAddPlatform(
-                                                        type:
-                                                            socialMedia[pIndex]
-                                                                    .type ??
-                                                                '');
+                                                back(context);
+                                              },
+                                              child: SvgPicture.asset(
+                                                  Assets.icCloseCircle))
+                                        ],
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: Divider(),
+                                      ),
+                                      // 10.verticalSpace,
+                                      CustomLabelTextField(
+                                        labelBckColor: AppColor.primary,
+                                        labelText:
+                                            "${socialMedia[pIndex].type}",
+                                        controller: notifier.urlController,
+                                        prefixWidget: CustomCacheNetworkImage(
+                                            img:
+                                                ApiConstants.socialIconBaseUrl +
+                                                    socialMedia[pIndex].icon!,
+                                            width: 25,
+                                            height: 25,
+                                            imageRadius: 10),
+                                      ),
 
-                                                if (isValid) {
-                                                  if (!notifier.addSocialList
-                                                      .any((item) =>
-                                                          item.platformId ==
-                                                          socialMedia[pIndex]
-                                                              .id)) {
-                                                    notifier.addSocialList.add(
-                                                      AddSocialProfileModel(
+                                      /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: context.height * .02),
+                                        child: Row(
+                                          children: [
+                                            //GO BACK
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                textColor: AppColor.btnColor,
+                                                backGroundColor: AppColor
+                                                    .green00C56524
+                                                    .withValues(alpha: .14),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                title: AppString.cancel,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                            10.horizontalSpace,
+
+                                            //UPDATE PLATFORM
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                onTap: () {
+                                                  log("save called 2");
+                                                  var isValid = notifier
+                                                      .validateAddPlatform(
+                                                          type: socialMedia[
+                                                                      pIndex]
+                                                                  .type ??
+                                                              '');
+
+                                                  if (isValid) {
+                                                    int index = notifier
+                                                        .addSocialList
+                                                        .indexWhere((item) =>
+                                                            item.platformId ==
+                                                            socialMedia[pIndex]
+                                                                .id);
+
+                                                    if (index != -1) {
+                                                      // If the item exists, update its URL
+                                                      notifier
+                                                              .addSocialList[index]
+                                                              .url =
+                                                          notifier.urlController
+                                                              .text;
+                                                    } else {
+                                                      // If it doesn't exist, add a new item
+                                                      notifier.addSocialList
+                                                          .add(
+                                                        AddSocialProfileModel(
                                                           platformId:
                                                               socialMedia[
                                                                       pIndex]
@@ -723,538 +413,853 @@ class CustomSocialGridview extends ConsumerWidget {
                                                           type: socialMedia[
                                                                       pIndex]
                                                                   .type ??
-                                                              ''),
-                                                    );
+                                                              '',
+                                                        ),
+                                                      );
+                                                    }
+                                                    // Ensure uniqueness if needed
+                                                    notifier.addSocialList =
+                                                        notifier.addSocialList
+                                                            .toSet()
+                                                            .toList();
+
+                                                    // notifier.updateSelectedPlatform(
+                                                    //     platformId:
+                                                    //         socialMedia[pIndex]
+                                                    //             .id
+                                                    //             .toString());
+
+                                                    printLog(
+                                                        "added social list:-> ${notifier.addSocialList[0].url}");
+                                                    back(context);
+
+                                                    // if (isValid) {
+                                                    //   notifier.addPlatform(
+                                                    //       isPhone: false,
+                                                    //       platformId:
+                                                    //           socialMedia[pIndex]
+                                                    //               .id
+                                                    //               .toString());
                                                   }
+                                                },
+                                                title: AppString.update,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      10.verticalSpace,
+                                    ],
+                                  ),
+                                );
+                              }
+                            } else {
+                              printLog("item doesn't matched");
+                              printLog("item doesn't matched");
+                              notifier.urlController.clear();
+                              notifier.urlController.clear();
+                              notifier.countryCode = "+1";
+                              notifier.countryFlag = '🇺🇸';
+                              notifier.countryNameCode = 'US';
 
-// Ensure uniqueness if needed
-                                                  notifier.addSocialList =
-                                                      notifier.addSocialList
-                                                          .toSet()
-                                                          .toList();
+                              final countryNotifier =
+                                  ref.read(countryPickerProvider.notifier);
 
-                                                  // notifier.updateSelectedPlatform(
-                                                  //     platformId:
-                                                  //         socialMedia[pIndex]
-                                                  //             .id
-                                                  //             .toString());
+                              countryNotifier.updateInitialCountry('+1');
 
-                                                  printLog(
-                                                      "added social list:-> ${notifier.addSocialList}");
-                                                  back(context);
+                              if (socialMedia[pIndex].type ==
+                                  'Enter phone number') {
+                                showCustomBottomSheet(
+                                  context: context,
+                                  content: Consumer(
+                                    builder: (_, WidgetRef ref, __) {
+                                      final notifier =
+                                          ref.watch(signupProvider.notifier);
+                                      ref.watch(countryPickerProvider.notifier);
+                                      ref.watch(
+                                          signupProvider); // Watch to trigger rebuild
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              AppText(
+                                                text:
+                                                    socialMedia[pIndex].name ??
+                                                        '',
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              InkWell(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  onTap: () {
+                                                    back(context);
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                      Assets.icCloseCircle))
+                                            ],
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.0),
+                                            child: Divider(),
+                                          ),
+                                          // 10.verticalSpace,
 
-                                                  // if (isValid) {
-                                                  //   notifier.addPlatform(
-                                                  //       isPhone: false,
-                                                  //       platformId:
-                                                  //           socialMedia[pIndex]
-                                                  //               .id
-                                                  //               .toString());
-                                                }
-                                              },
-                                              title: AppString.save,
-                                              width: context.width,
+                                          CustomPhoneNumber(
+                                            minLength: notifier.minLength,
+                                            maxLength: notifier.maxLength,
+                                            selectedCountryCode:
+                                                notifier.countryCode,
+                                            selectedCountryFlag:
+                                                notifier.countryFlag,
+                                            prefixIcon: Assets.icGender,
+                                            controller: notifier.urlController,
+                                            labelText: AppString.phoneNumber,
+                                          ),
+                                          10.verticalSpace,
+
+                                          /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: context.height * .02),
+                                            child: Row(
+                                              children: [
+                                                //GO BACK
+                                                Expanded(
+                                                  child: CommonAppBtn(
+                                                    textColor:
+                                                        AppColor.btnColor,
+                                                    backGroundColor: AppColor
+                                                        .green00C56524
+                                                        .withValues(alpha: .14),
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    title: AppString.cancel,
+                                                    width: context.width,
+                                                  ),
+                                                ),
+                                                10.horizontalSpace,
+
+                                                //ADD/SAVE PLATFORM
+                                                Expanded(
+                                                  child: CommonAppBtn(
+                                                    onTap: () {
+                                                      log("save called 2");
+                                                      bool isValid = notifier
+                                                          .validatePhoneNumber();
+
+                                                      if (isValid) {
+                                                        if (!notifier
+                                                            .addSocialList
+                                                            .any((item) =>
+                                                                item.platformId ==
+                                                                socialMedia[
+                                                                        pIndex]
+                                                                    .id)) {
+                                                          notifier.addSocialList
+                                                              .add(
+                                                            AddSocialProfileModel(
+                                                                platformId:
+                                                                    socialMedia[
+                                                                            pIndex]
+                                                                        .id,
+                                                                url:
+                                                                    "${notifier.countryCode} ${notifier.urlController.text}",
+                                                                type: socialMedia[
+                                                                            pIndex]
+                                                                        .type ??
+                                                                    ''),
+                                                          );
+                                                        }
+
+                                                        // Ensure uniqueness if needed
+                                                        notifier.addSocialList =
+                                                            notifier
+                                                                .addSocialList
+                                                                .toSet()
+                                                                .toList();
+                                                        back(context);
+                                                        // var isValid = notifier
+                                                        //     .validateAddPlatform();
+
+                                                        // if (isValid) {
+                                                        //   notifier.addPlatform(
+                                                        //       isPhone: true,
+                                                        //       platformId:
+                                                        //           socialMedia[pIndex]
+                                                        //               .id
+                                                        //               .toString());
+                                                      }
+                                                    },
+                                                    title: AppString.save,
+                                                    width: context.width,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
+                                          10.verticalSpace,
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                );
+                              } else {
+                                printLog('url called');
+
+                                notifier.urlController.clear();
+                                showCustomBottomSheet(
+                                  context: context,
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          AppText(
+                                            text:
+                                                socialMedia[pIndex].name ?? '',
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              onTap: () {
+                                                back(context);
+                                              },
+                                              child: SvgPicture.asset(
+                                                  Assets.icCloseCircle))
                                         ],
                                       ),
-                                    ),
-                                    10.verticalSpace,
-                                  ],
-                                ),
-                              );
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: Divider(),
+                                      ),
+                                      // 10.verticalSpace,
+                                      CustomLabelTextField(
+                                        labelBckColor: AppColor.primary,
+                                        labelText:
+                                            "${socialMedia[pIndex].type}",
+                                        controller: notifier.urlController,
+                                        prefixWidget: CustomCacheNetworkImage(
+                                            img:
+                                                ApiConstants.socialIconBaseUrl +
+                                                    socialMedia[pIndex].icon!,
+                                            width: 25,
+                                            height: 25,
+                                            imageRadius: 10),
+                                      ),
+
+                                      /**--------------------- CANCEL AND SAVE  ---------------- **/
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: context.height * .02),
+                                        child: Row(
+                                          children: [
+                                            //GO BACK
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                textColor: AppColor.btnColor,
+                                                backGroundColor: AppColor
+                                                    .green00C56524
+                                                    .withValues(alpha: .14),
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                title: AppString.cancel,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                            10.horizontalSpace,
+
+                                            //ADD PLATFORM
+                                            Expanded(
+                                              child: CommonAppBtn(
+                                                onTap: () {
+                                                  log("save called 3");
+                                                  var isValid = notifier
+                                                      .validateAddPlatform(
+                                                          type: socialMedia[
+                                                                      pIndex]
+                                                                  .type ??
+                                                              '');
+
+                                                  if (isValid) {
+                                                    if (!notifier.addSocialList
+                                                        .any((item) =>
+                                                            item.platformId ==
+                                                            socialMedia[pIndex]
+                                                                .id)) {
+                                                      notifier.addSocialList
+                                                          .add(
+                                                        AddSocialProfileModel(
+                                                            platformId:
+                                                                socialMedia[
+                                                                        pIndex]
+                                                                    .id,
+                                                            url: notifier
+                                                                .urlController
+                                                                .text,
+                                                            type: socialMedia[
+                                                                        pIndex]
+                                                                    .type ??
+                                                                ''),
+                                                      );
+                                                    }
+
+                                                    // Ensure uniqueness if needed
+                                                    notifier.addSocialList =
+                                                        notifier.addSocialList
+                                                            .toSet()
+                                                            .toList();
+
+                                                    // notifier.updateSelectedPlatform(
+                                                    //     platformId:
+                                                    //         socialMedia[pIndex]
+                                                    //             .id
+                                                    //             .toString());
+
+                                                    printLog(
+                                                        "added social list:-> ${notifier.addSocialList}");
+                                                    back(context);
+
+                                                    // if (isValid) {
+                                                    //   notifier.addPlatform(
+                                                    //       isPhone: false,
+                                                    //       platformId:
+                                                    //           socialMedia[pIndex]
+                                                    //               .id
+                                                    //               .toString());
+                                                  }
+                                                },
+                                                title: AppString.save,
+                                                width: context.width,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      10.verticalSpace,
+                                    ],
+                                  ),
+                                );
+                              }
                             }
-                          }
 
-                          if (notifier.addSocialList
-                              .contains(socialMedia[pIndex].id)) {
-                            // toast(
-                            //     msg: "This platform is already added",
+                            if (notifier.addSocialList
+                                .contains(socialMedia[pIndex].id)) {
+                              // toast(
+                              //     msg: "This platform is already added",
 
-                            //     isInfo: true);
+                              //     isInfo: true);
 
-                            // if (socialMedia[pIndex].type ==
-                            //     'Enter phone number') {
+                              // if (socialMedia[pIndex].type ==
+                              //     'Enter phone number') {
 
-                            //   showCustomBottomSheet(
-                            //     context: context,
-                            //     content: Column(
-                            //       mainAxisSize: MainAxisSize.min,
-                            //       children: [
-                            //         Row(
-                            //           mainAxisAlignment:
-                            //               MainAxisAlignment.spaceBetween,
-                            //           children: [
-                            //             AppText(
-                            //               text: socialMedia[pIndex].name ?? '',
-                            //               fontSize: 18.sp,
-                            //               fontWeight: FontWeight.w500,
-                            //             ),
-                            //             InkWell(
-                            //                 borderRadius:
-                            //                     BorderRadius.circular(50),
-                            //                 onTap: () {
-                            //                   back(context);
-                            //                 },
-                            //                 child: SvgPicture.asset(
-                            //                     Assets.icCloseCircle))
-                            //           ],
-                            //         ),
-                            //         const Padding(
-                            //           padding:
-                            //               EdgeInsets.symmetric(vertical: 10.0),
-                            //           child: Divider(),
-                            //         ),
-                            //         // 10.verticalSpace,
+                              //   showCustomBottomSheet(
+                              //     context: context,
+                              //     content: Column(
+                              //       mainAxisSize: MainAxisSize.min,
+                              //       children: [
+                              //         Row(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.spaceBetween,
+                              //           children: [
+                              //             AppText(
+                              //               text: socialMedia[pIndex].name ?? '',
+                              //               fontSize: 18.sp,
+                              //               fontWeight: FontWeight.w500,
+                              //             ),
+                              //             InkWell(
+                              //                 borderRadius:
+                              //                     BorderRadius.circular(50),
+                              //                 onTap: () {
+                              //                   back(context);
+                              //                 },
+                              //                 child: SvgPicture.asset(
+                              //                     Assets.icCloseCircle))
+                              //           ],
+                              //         ),
+                              //         const Padding(
+                              //           padding:
+                              //               EdgeInsets.symmetric(vertical: 10.0),
+                              //           child: Divider(),
+                              //         ),
+                              //         // 10.verticalSpace,
 
-                            //         CustomPhoneNumber(
-                            //           maxLength: notifier.maxLength,
-                            //           selectedCountryCode: notifier.countryCode,
-                            //           selectedCountryFlag: notifier.countryFlag,
-                            //           prefixIcon: Assets.icGender,
-                            //           controller: notifier.urlController,
-                            //           labelText: AppString.phoneNumber,
-                            //         ),
-                            //         10.verticalSpace,
+                              //         CustomPhoneNumber(
+                              //           maxLength: notifier.maxLength,
+                              //           selectedCountryCode: notifier.countryCode,
+                              //           selectedCountryFlag: notifier.countryFlag,
+                              //           prefixIcon: Assets.icGender,
+                              //           controller: notifier.urlController,
+                              //           labelText: AppString.phoneNumber,
+                              //         ),
+                              //         10.verticalSpace,
 
-                            //         /**--------------------- CANCEL AND SAVE  ---------------- **/
-                            //         Padding(
-                            //           padding: EdgeInsets.only(
-                            //               bottom: context.height * .02),
-                            //           child: Row(
-                            //             children: [
-                            //               //GO BACK
-                            //               Expanded(
-                            //                 child: CommonAppBtn(
-                            //                   textColor: AppColor.btnColor,
-                            //                   backGroundColor: AppColor
-                            //                       .green00C56524
-                            //                       .withOpacity(.14),
-                            //                   onTap: () {
-                            //                     Navigator.pop(context);
-                            //                   },
-                            //                   title: AppString.cancel,
-                            //                   width: context.width,
-                            //                 ),
-                            //               ),
-                            //               10.horizontalSpace,
+                              //         /**--------------------- CANCEL AND SAVE  ---------------- **/
+                              //         Padding(
+                              //           padding: EdgeInsets.only(
+                              //               bottom: context.height * .02),
+                              //           child: Row(
+                              //             children: [
+                              //               //GO BACK
+                              //               Expanded(
+                              //                 child: CommonAppBtn(
+                              //                   textColor: AppColor.btnColor,
+                              //                   backGroundColor: AppColor
+                              //                       .green00C56524
+                              //                       .withValues(alpha:.14),
+                              //                   onTap: () {
+                              //                     Navigator.pop(context);
+                              //                   },
+                              //                   title: AppString.cancel,
+                              //                   width: context.width,
+                              //                 ),
+                              //               ),
+                              //               10.horizontalSpace,
 
-                            //               //ADD/SAVE PLATFORM
-                            //               Expanded(
-                            //                 child: CommonAppBtn(
-                            //                   onTap: () {
-                            //                     var isValid = notifier
-                            //                         .validateAddPlatform();
+                              //               //ADD/SAVE PLATFORM
+                              //               Expanded(
+                              //                 child: CommonAppBtn(
+                              //                   onTap: () {
+                              //                     var isValid = notifier
+                              //                         .validateAddPlatform();
 
-                            //                     if (isValid) {
-                            //                       notifier.addPlatform(
-                            //                           isPhone: true,
-                            //                           platformId:
-                            //                               socialMedia[pIndex]
-                            //                                   .id
-                            //                                   .toString());
-                            //                     }
-                            //                   },
-                            //                   title: AppString.save,
-                            //                   width: context.width,
-                            //                 ),
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //         10.verticalSpace,
-                            //       ],
-                            //     ),
-                            //   );
-                            // } else {
-                            //   showCustomBottomSheet(
-                            //     context: context,
-                            //     content: Column(
-                            //       mainAxisSize: MainAxisSize.min,
-                            //       children: [
-                            //         Row(
-                            //           mainAxisAlignment:
-                            //               MainAxisAlignment.spaceBetween,
-                            //           children: [
-                            //             AppText(
-                            //               text: socialMedia[pIndex].name ?? '',
-                            //               fontSize: 18.sp,
-                            //               fontWeight: FontWeight.w500,
-                            //             ),
-                            //             InkWell(
-                            //                 borderRadius:
-                            //                     BorderRadius.circular(50),
-                            //                 onTap: () {
-                            //                   back(context);
-                            //                 },
-                            //                 child: SvgPicture.asset(
-                            //                     Assets.icCloseCircle))
-                            //           ],
-                            //         ),
-                            //         const Padding(
-                            //           padding:
-                            //               EdgeInsets.symmetric(vertical: 10.0),
-                            //           child: Divider(),
-                            //         ),
-                            //         // 10.verticalSpace,
-                            //         CustomLabelTextField(
-                            //           labelBckColor: AppColor.primary,
-                            //           labelText: "${socialMedia[pIndex].type}",
-                            //           controller: notifier.urlController,
-                            //           prefixWidget: CustomCacheNetworkImage(
-                            //               img: ApiConstants.socialIconBaseUrl +
-                            //                   socialMedia[pIndex].icon!,
-                            //               width: 25,
-                            //               height: 25,
-                            //               imageRadius: 10),
-                            //         ),
+                              //                     if (isValid) {
+                              //                       notifier.addPlatform(
+                              //                           isPhone: true,
+                              //                           platformId:
+                              //                               socialMedia[pIndex]
+                              //                                   .id
+                              //                                   .toString());
+                              //                     }
+                              //                   },
+                              //                   title: AppString.save,
+                              //                   width: context.width,
+                              //                 ),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         ),
+                              //         10.verticalSpace,
+                              //       ],
+                              //     ),
+                              //   );
+                              // } else {
+                              //   showCustomBottomSheet(
+                              //     context: context,
+                              //     content: Column(
+                              //       mainAxisSize: MainAxisSize.min,
+                              //       children: [
+                              //         Row(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.spaceBetween,
+                              //           children: [
+                              //             AppText(
+                              //               text: socialMedia[pIndex].name ?? '',
+                              //               fontSize: 18.sp,
+                              //               fontWeight: FontWeight.w500,
+                              //             ),
+                              //             InkWell(
+                              //                 borderRadius:
+                              //                     BorderRadius.circular(50),
+                              //                 onTap: () {
+                              //                   back(context);
+                              //                 },
+                              //                 child: SvgPicture.asset(
+                              //                     Assets.icCloseCircle))
+                              //           ],
+                              //         ),
+                              //         const Padding(
+                              //           padding:
+                              //               EdgeInsets.symmetric(vertical: 10.0),
+                              //           child: Divider(),
+                              //         ),
+                              //         // 10.verticalSpace,
+                              //         CustomLabelTextField(
+                              //           labelBckColor: AppColor.primary,
+                              //           labelText: "${socialMedia[pIndex].type}",
+                              //           controller: notifier.urlController,
+                              //           prefixWidget: CustomCacheNetworkImage(
+                              //               img: ApiConstants.socialIconBaseUrl +
+                              //                   socialMedia[pIndex].icon!,
+                              //               width: 25,
+                              //               height: 25,
+                              //               imageRadius: 10),
+                              //         ),
 
-                            //         /**--------------------- CANCEL AND SAVE  ---------------- **/
-                            //         Padding(
-                            //           padding: EdgeInsets.only(
-                            //               bottom: context.height * .02),
-                            //           child: Row(
-                            //             children: [
-                            //               //GO BACK
-                            //               Expanded(
-                            //                 child: CommonAppBtn(
-                            //                   textColor: AppColor.btnColor,
-                            //                   backGroundColor: AppColor
-                            //                       .green00C56524
-                            //                       .withOpacity(.14),
-                            //                   onTap: () {
-                            //                     Navigator.pop(context);
-                            //                   },
-                            //                   title: AppString.cancel,
-                            //                   width: context.width,
-                            //                 ),
-                            //               ),
-                            //               10.horizontalSpace,
+                              //         /**--------------------- CANCEL AND SAVE  ---------------- **/
+                              //         Padding(
+                              //           padding: EdgeInsets.only(
+                              //               bottom: context.height * .02),
+                              //           child: Row(
+                              //             children: [
+                              //               //GO BACK
+                              //               Expanded(
+                              //                 child: CommonAppBtn(
+                              //                   textColor: AppColor.btnColor,
+                              //                   backGroundColor: AppColor
+                              //                       .green00C56524
+                              //                       .withValues(alpha:.14),
+                              //                   onTap: () {
+                              //                     Navigator.pop(context);
+                              //                   },
+                              //                   title: AppString.cancel,
+                              //                   width: context.width,
+                              //                 ),
+                              //               ),
+                              //               10.horizontalSpace,
 
-                            //               //ADD PLATFORM
-                            //               Expanded(
-                            //                 child: CommonAppBtn(
-                            //                   onTap: () {
-                            //                     var isValid = notifier
-                            //                         .validateAddPlatform();
+                              //               //ADD PLATFORM
+                              //               Expanded(
+                              //                 child: CommonAppBtn(
+                              //                   onTap: () {
+                              //                     var isValid = notifier
+                              //                         .validateAddPlatform();
 
-                            //                     notifier.addSocialList.add(
-                            //                         AddSocialProfileModel(
-                            //                             platformId:
-                            //                                 socialMedia[pIndex]
-                            //                                     .id,
-                            //                             url: notifier
-                            //                                 .urlController
-                            //                                 .text));
+                              //                     notifier.addSocialList.add(
+                              //                         AddSocialProfileModel(
+                              //                             platformId:
+                              //                                 socialMedia[pIndex]
+                              //                                     .id,
+                              //                             url: notifier
+                              //                                 .urlController
+                              //                                 .text));
 
-                            //                     notifier.addSocialList
-                            //                         .toSet()
-                            //                         .toList();
+                              //                     notifier.addSocialList
+                              //                         .toSet()
+                              //                         .toList();
 
-                            //                     notifier.updateSelectedPlatform(
-                            //                         platformId:
-                            //                             socialMedia[pIndex]
-                            //                                 .id
-                            //                                 .toString());
+                              //                     notifier.updateSelectedPlatform(
+                              //                         platformId:
+                              //                             socialMedia[pIndex]
+                              //                                 .id
+                              //                                 .toString());
 
-                            //                     printLog(
-                            //                         "added social list:-> ${notifier.addSocialList}");
-                            //                     back(context);
+                              //                     printLog(
+                              //                         "added social list:-> ${notifier.addSocialList}");
+                              //                     back(context);
 
-                            //                     // if (isValid) {
-                            //                     //   notifier.addPlatform(
-                            //                     //       isPhone: false,
-                            //                     //       platformId:
-                            //                     //           socialMedia[pIndex]
-                            //                     //               .id
-                            //                     //               .toString());
-                            //                     // }
-                            //                   },
-                            //                   title: AppString.save,
-                            //                   width: context.width,
-                            //                 ),
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //         10.verticalSpace,
-                            //       ],
-                            //     ),
-                            //   );
-                            // }
-                          } else {
-//                             notifier.urlController.clear();
-//                             notifier.countryCode = "+1";
-//                             notifier.countryFlag = '🇺🇸';
-//                             notifier.countryNameCode = 'US';
+                              //                     // if (isValid) {
+                              //                     //   notifier.addPlatform(
+                              //                     //       isPhone: false,
+                              //                     //       platformId:
+                              //                     //           socialMedia[pIndex]
+                              //                     //               .id
+                              //                     //               .toString());
+                              //                     // }
+                              //                   },
+                              //                   title: AppString.save,
+                              //                   width: context.width,
+                              //                 ),
+                              //               ),
+                              //             ],
+                              //           ),
+                              //         ),
+                              //         10.verticalSpace,
+                              //       ],
+                              //     ),
+                              //   );
+                              // }
+                            } else {
+                              //                             notifier.urlController.clear();
+                              //                             notifier.countryCode = "+1";
+                              //                             notifier.countryFlag = '🇺🇸';
+                              //                             notifier.countryNameCode = 'US';
 
-//                             final countryNotifier =
-//                                 ref.read(countryPickerProvider.notifier);
+                              //                             final countryNotifier =
+                              //                                 ref.read(countryPickerProvider.notifier);
 
-//                             countryNotifier.updateInitialCountry('+1');
+                              //                             countryNotifier.updateInitialCountry('+1');
 
-//                             // notifier.updateCountryData(
-//                             //   dialCode: "+1",
-//                             //   countryNmCode: 'US',
-//                             // );
+                              //                             // notifier.updateCountryData(
+                              //                             //   dialCode: "+1",
+                              //                             //   countryNmCode: 'US',
+                              //                             // );
 
-//                             if (socialMedia[pIndex].type ==
-//                                 'Enter phone number') {
-//                               showCustomBottomSheet(
-//                                 context: context,
-//                                 content: Column(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   children: [
-//                                     Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       children: [
-//                                         AppText(
-//                                           text: socialMedia[pIndex].name ?? '',
-//                                           fontSize: 18.sp,
-//                                           fontWeight: FontWeight.w500,
-//                                         ),
-//                                         InkWell(
-//                                             borderRadius:
-//                                                 BorderRadius.circular(50),
-//                                             onTap: () {
-//                                               back(context);
-//                                             },
-//                                             child: SvgPicture.asset(
-//                                                 Assets.icCloseCircle))
-//                                       ],
-//                                     ),
-//                                     const Padding(
-//                                       padding:
-//                                           EdgeInsets.symmetric(vertical: 10.0),
-//                                       child: Divider(),
-//                                     ),
-//                                     // 10.verticalSpace,
+                              //                             if (socialMedia[pIndex].type ==
+                              //                                 'Enter phone number') {
+                              //                               showCustomBottomSheet(
+                              //                                 context: context,
+                              //                                 content: Column(
+                              //                                   mainAxisSize: MainAxisSize.min,
+                              //                                   children: [
+                              //                                     Row(
+                              //                                       mainAxisAlignment:
+                              //                                           MainAxisAlignment.spaceBetween,
+                              //                                       children: [
+                              //                                         AppText(
+                              //                                           text: socialMedia[pIndex].name ?? '',
+                              //                                           fontSize: 18.sp,
+                              //                                           fontWeight: FontWeight.w500,
+                              //                                         ),
+                              //                                         InkWell(
+                              //                                             borderRadius:
+                              //                                                 BorderRadius.circular(50),
+                              //                                             onTap: () {
+                              //                                               back(context);
+                              //                                             },
+                              //                                             child: SvgPicture.asset(
+                              //                                                 Assets.icCloseCircle))
+                              //                                       ],
+                              //                                     ),
+                              //                                     const Padding(
+                              //                                       padding:
+                              //                                           EdgeInsets.symmetric(vertical: 10.0),
+                              //                                       child: Divider(),
+                              //                                     ),
+                              //                                     // 10.verticalSpace,
 
-//                                     CustomPhoneNumber(
-//                                       maxLength: notifier.maxLength,
-//                                       selectedCountryCode: notifier.countryCode,
-//                                       selectedCountryFlag: notifier.countryFlag,
-//                                       prefixIcon: Assets.icGender,
-//                                       controller: notifier.urlController,
-//                                       labelText: AppString.phoneNumber,
-//                                     ),
-//                                     10.verticalSpace,
+                              //                                     CustomPhoneNumber(
+                              //                                       maxLength: notifier.maxLength,
+                              //                                       selectedCountryCode: notifier.countryCode,
+                              //                                       selectedCountryFlag: notifier.countryFlag,
+                              //                                       prefixIcon: Assets.icGender,
+                              //                                       controller: notifier.urlController,
+                              //                                       labelText: AppString.phoneNumber,
+                              //                                     ),
+                              //                                     10.verticalSpace,
 
-//                                     /**--------------------- CANCEL AND SAVE  ---------------- **/
-//                                     Padding(
-//                                       padding: EdgeInsets.only(
-//                                           bottom: context.height * .02),
-//                                       child: Row(
-//                                         children: [
-//                                           //GO BACK
-//                                           Expanded(
-//                                             child: CommonAppBtn(
-//                                               textColor: AppColor.btnColor,
-//                                               backGroundColor: AppColor
-//                                                   .green00C56524
-//                                                   .withOpacity(.14),
-//                                               onTap: () {
-//                                                 Navigator.pop(context);
-//                                               },
-//                                               title: AppString.cancel,
-//                                               width: context.width,
-//                                             ),
-//                                           ),
-//                                           10.horizontalSpace,
+                              //                                     /**--------------------- CANCEL AND SAVE  ---------------- **/
+                              //                                     Padding(
+                              //                                       padding: EdgeInsets.only(
+                              //                                           bottom: context.height * .02),
+                              //                                       child: Row(
+                              //                                         children: [
+                              //                                           //GO BACK
+                              //                                           Expanded(
+                              //                                             child: CommonAppBtn(
+                              //                                               textColor: AppColor.btnColor,
+                              //                                               backGroundColor: AppColor
+                              //                                                   .green00C56524
+                              //                                                   .withValues(alpha:.14),
+                              //                                               onTap: () {
+                              //                                                 Navigator.pop(context);
+                              //                                               },
+                              //                                               title: AppString.cancel,
+                              //                                               width: context.width,
+                              //                                             ),
+                              //                                           ),
+                              //                                           10.horizontalSpace,
 
-//                                           //ADD/SAVE PLATFORM
-//                                           Expanded(
-//                                             child: CommonAppBtn(
-//                                               onTap: () {
-//                                                 var isValid = notifier
-//                                                     .validateAddPlatform();
+                              //                                           //ADD/SAVE PLATFORM
+                              //                                           Expanded(
+                              //                                             child: CommonAppBtn(
+                              //                                               onTap: () {
+                              //                                                 var isValid = notifier
+                              //                                                     .validateAddPlatform();
 
-//                                                 if (isValid) {
-//                                                   notifier.addPlatform(
-//                                                       isPhone: true,
-//                                                       platformId:
-//                                                           socialMedia[pIndex]
-//                                                               .id
-//                                                               .toString());
-//                                                 }
-//                                               },
-//                                               title: AppString.save,
-//                                               width: context.width,
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ),
-//                                     10.verticalSpace,
-//                                   ],
-//                                 ),
-//                               );
-//                             } else {
-//                               showCustomBottomSheet(
-//                                 context: context,
-//                                 content: Column(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   children: [
-//                                     Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       children: [
-//                                         AppText(
-//                                           text: socialMedia[pIndex].name ?? '',
-//                                           fontSize: 18.sp,
-//                                           fontWeight: FontWeight.w500,
-//                                         ),
-//                                         InkWell(
-//                                             borderRadius:
-//                                                 BorderRadius.circular(50),
-//                                             onTap: () {
-//                                               back(context);
-//                                             },
-//                                             child: SvgPicture.asset(
-//                                                 Assets.icCloseCircle))
-//                                       ],
-//                                     ),
-//                                     const Padding(
-//                                       padding:
-//                                           EdgeInsets.symmetric(vertical: 10.0),
-//                                       child: Divider(),
-//                                     ),
-//                                     // 10.verticalSpace,
-//                                     CustomLabelTextField(
-//                                       labelBckColor: AppColor.primary,
-//                                       labelText: "${socialMedia[pIndex].type}",
-//                                       controller: notifier.urlController,
-//                                       prefixWidget: CustomCacheNetworkImage(
-//                                           img: ApiConstants.socialIconBaseUrl +
-//                                               socialMedia[pIndex].icon!,
-//                                           width: 25,
-//                                           height: 25,
-//                                           imageRadius: 10),
-//                                     ),
+                              //                                                 if (isValid) {
+                              //                                                   notifier.addPlatform(
+                              //                                                       isPhone: true,
+                              //                                                       platformId:
+                              //                                                           socialMedia[pIndex]
+                              //                                                               .id
+                              //                                                               .toString());
+                              //                                                 }
+                              //                                               },
+                              //                                               title: AppString.save,
+                              //                                               width: context.width,
+                              //                                             ),
+                              //                                           ),
+                              //                                         ],
+                              //                                       ),
+                              //                                     ),
+                              //                                     10.verticalSpace,
+                              //                                   ],
+                              //                                 ),
+                              //                               );
+                              //                             } else {
+                              //                               showCustomBottomSheet(
+                              //                                 context: context,
+                              //                                 content: Column(
+                              //                                   mainAxisSize: MainAxisSize.min,
+                              //                                   children: [
+                              //                                     Row(
+                              //                                       mainAxisAlignment:
+                              //                                           MainAxisAlignment.spaceBetween,
+                              //                                       children: [
+                              //                                         AppText(
+                              //                                           text: socialMedia[pIndex].name ?? '',
+                              //                                           fontSize: 18.sp,
+                              //                                           fontWeight: FontWeight.w500,
+                              //                                         ),
+                              //                                         InkWell(
+                              //                                             borderRadius:
+                              //                                                 BorderRadius.circular(50),
+                              //                                             onTap: () {
+                              //                                               back(context);
+                              //                                             },
+                              //                                             child: SvgPicture.asset(
+                              //                                                 Assets.icCloseCircle))
+                              //                                       ],
+                              //                                     ),
+                              //                                     const Padding(
+                              //                                       padding:
+                              //                                           EdgeInsets.symmetric(vertical: 10.0),
+                              //                                       child: Divider(),
+                              //                                     ),
+                              //                                     // 10.verticalSpace,
+                              //                                     CustomLabelTextField(
+                              //                                       labelBckColor: AppColor.primary,
+                              //                                       labelText: "${socialMedia[pIndex].type}",
+                              //                                       controller: notifier.urlController,
+                              //                                       prefixWidget: CustomCacheNetworkImage(
+                              //                                           img: ApiConstants.socialIconBaseUrl +
+                              //                                               socialMedia[pIndex].icon!,
+                              //                                           width: 25,
+                              //                                           height: 25,
+                              //                                           imageRadius: 10),
+                              //                                     ),
 
-//                                     /**--------------------- CANCEL AND SAVE  ---------------- **/
-//                                     Padding(
-//                                       padding: EdgeInsets.only(
-//                                           bottom: context.height * .02),
-//                                       child: Row(
-//                                         children: [
-//                                           //GO BACK
-//                                           Expanded(
-//                                             child: CommonAppBtn(
-//                                               textColor: AppColor.btnColor,
-//                                               backGroundColor: AppColor
-//                                                   .green00C56524
-//                                                   .withOpacity(.14),
-//                                               onTap: () {
-//                                                 Navigator.pop(context);
-//                                               },
-//                                               title: AppString.cancel,
-//                                               width: context.width,
-//                                             ),
-//                                           ),
-//                                           10.horizontalSpace,
+                              //                                     /**--------------------- CANCEL AND SAVE  ---------------- **/
+                              //                                     Padding(
+                              //                                       padding: EdgeInsets.only(
+                              //                                           bottom: context.height * .02),
+                              //                                       child: Row(
+                              //                                         children: [
+                              //                                           //GO BACK
+                              //                                           Expanded(
+                              //                                             child: CommonAppBtn(
+                              //                                               textColor: AppColor.btnColor,
+                              //                                               backGroundColor: AppColor
+                              //                                                   .green00C56524
+                              //                                                   .withValues(alpha:.14),
+                              //                                               onTap: () {
+                              //                                                 Navigator.pop(context);
+                              //                                               },
+                              //                                               title: AppString.cancel,
+                              //                                               width: context.width,
+                              //                                             ),
+                              //                                           ),
+                              //                                           10.horizontalSpace,
 
-//                                           //ADD PLATFORM
-//                                           Expanded(
-//                                             child: CommonAppBtn(
-//                                               onTap: () {
-//                                                 var isValid = notifier
-//                                                     .validateAddPlatform();
+                              //                                           //ADD PLATFORM
+                              //                                           Expanded(
+                              //                                             child: CommonAppBtn(
+                              //                                               onTap: () {
+                              //                                                 var isValid = notifier
+                              //                                                     .validateAddPlatform();
 
-//                                                 if (!notifier.addSocialList.any(
-//                                                     (item) =>
-//                                                         item.platformId ==
-//                                                         socialMedia[pIndex]
-//                                                             .id)) {
-//                                                   notifier.addSocialList.add(
-//                                                     AddSocialProfileModel(
-//                                                         platformId:
-//                                                             socialMedia[pIndex]
-//                                                                 .id,
-//                                                         url: notifier
-//                                                             .urlController.text,
-//                                                         type:
-//                                                             socialMedia[pIndex]
-//                                                                     .type ??
-//                                                                 ''),
-//                                                   );
-//                                                 }
+                              //                                                 if (!notifier.addSocialList.any(
+                              //                                                     (item) =>
+                              //                                                         item.platformId ==
+                              //                                                         socialMedia[pIndex]
+                              //                                                             .id)) {
+                              //                                                   notifier.addSocialList.add(
+                              //                                                     AddSocialProfileModel(
+                              //                                                         platformId:
+                              //                                                             socialMedia[pIndex]
+                              //                                                                 .id,
+                              //                                                         url: notifier
+                              //                                                             .urlController.text,
+                              //                                                         type:
+                              //                                                             socialMedia[pIndex]
+                              //                                                                     .type ??
+                              //                                                                 ''),
+                              //                                                   );
+                              //                                                 }
 
-// // Ensure uniqueness if needed
-//                                                 notifier.addSocialList =
-//                                                     notifier.addSocialList
-//                                                         .toSet()
-//                                                         .toList();
+                              // // Ensure uniqueness if needed
+                              //                                                 notifier.addSocialList =
+                              //                                                     notifier.addSocialList
+                              //                                                         .toSet()
+                              //                                                         .toList();
 
-//                                                 // notifier.updateSelectedPlatform(
-//                                                 //     platformId:
-//                                                 //         socialMedia[pIndex]
-//                                                 //             .id
-//                                                 //             .toString());
+                              //                                                 // notifier.updateSelectedPlatform(
+                              //                                                 //     platformId:
+                              //                                                 //         socialMedia[pIndex]
+                              //                                                 //             .id
+                              //                                                 //             .toString());
 
-//                                                 printLog(
-//                                                     "added social list:-> ${notifier.addSocialList}");
-//                                                 back(context);
+                              //                                                 printLog(
+                              //                                                     "added social list:-> ${notifier.addSocialList}");
+                              //                                                 back(context);
 
-//                                                 // if (isValid) {
-//                                                 //   notifier.addPlatform(
-//                                                 //       isPhone: false,
-//                                                 //       platformId:
-//                                                 //           socialMedia[pIndex]
-//                                                 //               .id
-//                                                 //               .toString());
-//                                                 // }
-//                                               },
-//                                               title: AppString.save,
-//                                               width: context.width,
-//                                             ),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ),
-//                                     10.verticalSpace,
-//                                   ],
-//                                 ),
-//                               );
-//                             }
-                          }
-                        },
-                        child: SizedBox(
-                          height: 150,
-                          width: 150,
-                          child: Stack(children: [
-                            SocialMediaProfile(
-                              index: pIndex,
-                              icon: socialMedia[pIndex].icon ?? '',
-                              name:
-                                  socialMedia[pIndex].name?.split(' ').first ??
-                                      '',
-                            ),
-                            Visibility(
-                              visible: notifier.addSocialList.any((item) =>
-                                  item.platformId == socialMedia[pIndex].id),
-                              child: Positioned(
-                                right: 0,
-                                top: -2,
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.primary,
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: SvgPicture.asset(Assets.checkBox),
+                              //                                                 // if (isValid) {
+                              //                                                 //   notifier.addPlatform(
+                              //                                                 //       isPhone: false,
+                              //                                                 //       platformId:
+                              //                                                 //           socialMedia[pIndex]
+                              //                                                 //               .id
+                              //                                                 //               .toString());
+                              //                                                 // }
+                              //                                               },
+                              //                                               title: AppString.save,
+                              //                                               width: context.width,
+                              //                                             ),
+                              //                                           ),
+                              //                                         ],
+                              //                                       ),
+                              //                                     ),
+                              //                                     10.verticalSpace,
+                              //                                   ],
+                              //                                 ),
+                              //                               );
+                              //                             }
+                            }
+                          },
+                          child: AnimationConfiguration.staggeredGrid(
+                            position: pIndex,
+                            duration: const Duration(milliseconds: 500),
+                            columnCount: socialMedia.length,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: SizedBox(
+                                  height: 150,
+                                  width: 150,
+                                  child: Stack(children: [
+                                    SocialMediaProfile(
+                                      index: pIndex,
+                                      icon: socialMedia[pIndex].icon ?? '',
+                                      name: socialMedia[pIndex]
+                                              .name
+                                              ?.split(' ')
+                                              .first ??
+                                          '',
+                                    ),
+                                    Visibility(
+                                      visible: notifier.addSocialList.any(
+                                          (item) =>
+                                              item.platformId ==
+                                              socialMedia[pIndex].id),
+                                      child: Positioned(
+                                        right: 0,
+                                        top: -2,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                              color: AppColor.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(100)),
+                                          child:
+                                              SvgPicture.asset(Assets.checkBox),
+                                        ),
+                                      ),
+                                    )
+                                  ]),
                                 ),
                               ),
-                            )
-                          ]),
-                        ));
-                  },
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 1.15,
-                      crossAxisSpacing: context.width * .12,
-                      mainAxisExtent: 100,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 3),
+                            ),
+                          ));
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 1.15,
+                        crossAxisSpacing: context.width * .12,
+                        mainAxisExtent: 100,
+                        mainAxisSpacing: 10,
+                        crossAxisCount: 3),
+                  ),
                 ))
           ],
         ),

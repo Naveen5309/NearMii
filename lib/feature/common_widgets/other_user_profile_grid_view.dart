@@ -7,8 +7,8 @@ import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class OtherUserProfileGridView extends ConsumerWidget {
   final String title;
@@ -35,7 +35,7 @@ class OtherUserProfileGridView extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: AppColor.black000000.withValues(alpha: 0.03),
             blurRadius: 2,
             spreadRadius: 0,
             offset: const Offset(0, 5),
@@ -116,20 +116,30 @@ class OtherUserProfileGridView extends ConsumerWidget {
                             }
                           }
                         },
-                        child: ProfileSocialMedia(
-                          onToggleChanged: (p0) {},
-                          isToggled: socialMedia[pIndex].platform?.status == 1
-                              ? true
-                              : false,
-                          isMyProfile: false,
-                          index: pIndex,
-                          icon: socialMedia[pIndex].platform?.icon ?? '',
-                          name: socialMedia[pIndex]
-                                  .platform
-                                  ?.name
-                                  ?.split(' ')
-                                  .first ??
-                              '',
+                        child: AnimationConfiguration.staggeredGrid(
+                          position: pIndex,
+                          duration: const Duration(milliseconds: 300),
+                          columnCount: socialMedia.length,
+                          child: ScaleAnimation(
+                            child: FadeInAnimation(
+                              child: ProfileSocialMedia(
+                                onToggleChanged: (p0) {},
+                                isToggled:
+                                    socialMedia[pIndex].platform?.status == 1
+                                        ? true
+                                        : false,
+                                isMyProfile: false,
+                                index: pIndex,
+                                icon: socialMedia[pIndex].platform?.icon ?? '',
+                                name: socialMedia[pIndex]
+                                        .platform
+                                        ?.name
+                                        ?.split(' ')
+                                        .first ??
+                                    '',
+                              ),
+                            ),
+                          ),
                         ));
                   },
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -22,6 +22,7 @@ import 'package:NearMii/feature/home/presentation/history/presentation/invite_fr
 import 'package:NearMii/feature/home/presentation/history/presentation/logout_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/provider/get_profile_provider.dart';
 import 'package:NearMii/feature/setting/presentation/view/shimmer_loader.dart';
+import 'package:NearMii/feature/web_view/web_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -182,13 +183,45 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       10.verticalSpace,
 
                       CustomTile(
-                        leadingIcon: Assets.iconCheckBox,
-                        title: AppString.termsAndConditions,
-                        subtitle: AppString.viewOurPolicies,
-                        trailingIcon: Assets.iconArrowRight,
-                        onTap: () =>
-                            toNamed(context, Routes.termsAndConditions),
-                      ),
+                          leadingIcon: Assets.iconCheckBox,
+                          title: AppString.termsAndConditions,
+                          subtitle: AppString.viewOurPolicies,
+                          trailingIcon: Assets.iconArrowRight,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CustomWebView(
+                                    url: ApiConstants.termsAndConditions,
+                                    title: AppString.termsAndConditions,
+                                    // url:
+                                    //     "https://www.latlong.net/Show-Latitude-Longitude.html",
+                                  ),
+                                ));
+                          }
+
+                          // toNamed(context, Routes.termsAndConditions),
+                          ),
+                      10.verticalSpace,
+
+                      CustomTile(
+                          leadingIcon: Assets.iconCheckBox,
+                          title: AppString.privacyPolicy,
+                          subtitle: AppString.viewOurPolicies,
+                          trailingIcon: Assets.iconArrowRight,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CustomWebView(
+                                    url: ApiConstants.privacyPolicy,
+                                    title: AppString.privacyPolicy,
+                                  ),
+                                ));
+                          }
+
+                          // toNamed(context, Routes.termsAndConditions),
+                          ),
                       10.verticalSpace,
 
                       //CHANGE PASSWORD
@@ -323,7 +356,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: const Color(0xff01C27D).withOpacity(0.1),
+            color: const Color(0xff01C27D).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: AppText(
@@ -374,7 +407,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                   text: AppString.pricePerMonth,
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColor.grey21203F.withOpacity(.5),
+                  color: AppColor.grey21203F.withValues(alpha: .5),
                 ),
               ],
             ),

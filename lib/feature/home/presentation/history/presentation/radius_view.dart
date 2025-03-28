@@ -153,8 +153,8 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
                 width: _currentRadius * 3,
                 height: _currentRadius * 3,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(
-                    .5,
+                  color: Colors.white.withValues(
+                    alpha: .5,
                   ),
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -187,35 +187,35 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
                 fontSize: 12.sp,
                 color: (_currentRadius - 20).abs() < 10
                     ? AppColor.green00C56524
-                    : AppColor.black000000.withOpacity(0.3),
+                    : AppColor.black000000.withValues(alpha: 0.3),
               ),
               AppText(
                 text: "         50 m",
                 fontSize: 12.sp,
                 color: (_currentRadius - 50).abs() < 3
                     ? AppColor.green00C56524
-                    : AppColor.black000000.withOpacity(0.3),
+                    : AppColor.black000000.withValues(alpha: 0.3),
               ),
               // AppText(
               //   text: "   60 m",
               //   fontSize: 12.sp,
               //   color: (_currentRadius - 60).abs() < 1
               //       ? AppColor.green00C56524
-              //       : AppColor.black000000.withOpacity(0.3),
+              //       : AppColor.black000000.withValues(alpha:0.3),
               // ),
               AppText(
                 text: "           80 m",
                 fontSize: 12.sp,
                 color: (_currentRadius - 80).abs() < 3
                     ? AppColor.green00C56524
-                    : AppColor.black000000.withOpacity(0.3),
+                    : AppColor.black000000.withValues(alpha: 0.3),
               ),
               AppText(
                 text: "100 m",
                 fontSize: 12.sp,
                 color: (_currentRadius - 100).abs() < 1
                     ? AppColor.green00C56524
-                    : AppColor.black000000.withOpacity(0.3),
+                    : AppColor.black000000.withValues(alpha: 0.3),
               ),
             ],
           ),

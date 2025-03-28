@@ -284,6 +284,10 @@ class SettingNotifier extends StateNotifier<SettingStates> {
 
           Getters.getLocalStorage.saveCredits(userProfileModel?.points ?? 0);
 
+          log("subcription is :-. ${userProfileModel?.isSubscription == 1}");
+          Getters.getLocalStorage.saveIsSubscription(
+              (userProfileModel?.isSubscription == 1) ? true : false);
+
           Getters.getLocalStorage
               .saveSocialImg(userProfileModel?.socialImage ?? '');
         }

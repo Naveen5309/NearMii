@@ -354,18 +354,16 @@ Widget appBarWidgetSection({
         onTap: () {
           back(context);
         },
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: 15.w,
-              top: 15,
-              bottom: 15,
-            ),
-            child: SvgPicture.asset(
-              Assets.icBackBtn,
-              colorFilter:
-                  const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
-            ),
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 15.w,
+            top: 15,
+            bottom: 15,
+          ),
+          child: SvgPicture.asset(
+            Assets.icBackBtn,
+            colorFilter:
+                const ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
           ),
         ),
       ),
@@ -397,15 +395,17 @@ Widget appBarWidgetSection({
               color: AppColor.whiteFFFFFF,
             ),
           ),
-          SizedBox(
-            width: context.width * .7,
-            child: AppText(
-              text: profile?.designation ?? '',
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w400,
-              color: AppColor.whiteFFFFFF.withOpacity(.8),
-            ),
-          ),
+          profile?.designation != null
+              ? SizedBox(
+                  width: context.width * .7,
+                  child: AppText(
+                    text: profile?.designation ?? '',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.whiteFFFFFF.withValues(alpha: .8),
+                  ),
+                )
+              : const SizedBox(),
         ],
       )
     ],
@@ -563,7 +563,7 @@ Widget profileSection(
                 fontWeight: FontWeight.w500,
                 fontSize: 16.sp,
                 textAlign: TextAlign.center,
-                color: AppColor.whiteFFFFFF.withOpacity(.8),
+                color: AppColor.whiteFFFFFF.withValues(alpha: .8),
               ),
             ),
           ],
@@ -576,32 +576,11 @@ Widget profileSection(
                 textAlign: TextAlign.center,
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w400,
-                color: AppColor.whiteFFFFFF.withOpacity(.8),
+                color: AppColor.whiteFFFFFF.withValues(alpha: .8),
               ),
             ),
           ],
 
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-          //   child: AppText(
-          //     text: profile?.designation ?? '',
-          //     fontWeight: FontWeight.w500,
-          //     fontSize: 16.sp,
-          //     textAlign: TextAlign.center,
-          //     color: AppColor.whiteFFFFFF.withOpacity(.8),
-          //   ),
-          // ),
-          // 25.verticalSpace,
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: context.width * .05),
-          //   child: AppText(
-          //     text: profile?.bio ?? '',
-          //     textAlign: TextAlign.center,
-          //     fontSize: 12.sp,
-          //     fontWeight: FontWeight.w400,
-          //     color: AppColor.whiteFFFFFF.withOpacity(.8),
-          //   ),
-          // ),
           20.verticalSpace,
           Wrap(
             alignment: WrapAlignment.center,

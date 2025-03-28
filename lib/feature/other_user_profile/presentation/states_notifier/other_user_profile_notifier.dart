@@ -29,7 +29,7 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
   List<SelfPlatformCatagoryData> newPlatformLists = [];
   List<SelfPlatformCatagoryData> newPlatformListProfile = [];
-
+  bool isOtherPlatformLoading = true;
   OtherUserProfileModel? profile;
 
   bool isLoading = true;

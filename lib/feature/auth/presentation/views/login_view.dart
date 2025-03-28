@@ -336,7 +336,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               prefixIcon: Assets.icLock,
               controller: loginNotifier.passwordController,
               labelText: AppString.pswd,
-              suffixIcon: !isVisible ? Assets.icEyeOff : Assets.icEye,
+              suffixIcon: isVisible ? Assets.icEyeOff : Assets.icEye,
             );
           },
         )

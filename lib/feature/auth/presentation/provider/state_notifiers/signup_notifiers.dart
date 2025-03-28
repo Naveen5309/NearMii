@@ -66,6 +66,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
   SignupNotifiers({required this.authUseCase}) : super(AuthInitial());
 
   bool isLoading = false;
+
   int secondsRemaining = 30;
   bool enableResend = false;
 
@@ -206,10 +207,10 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 //GET SOCIAL PROFILES
   Future<void> getSocialPlatform() async {
     state = const AuthApiLoading(authType: AuthType.socialMedia);
-    isLoading = true;
+    isSocialLoading = true;
     try {
       if (!(await Getters.networkInfo.isConnected)) {
-        isLoading = false;
+        isSocialLoading = false;
 
         state = const AuthApiFailed(
             error: "No internet connection", authType: AuthType.socialMedia);
@@ -221,7 +222,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 
       final result = await authUseCase.getPlatform(body: body);
       state = result.fold((error) {
-        isLoading = false;
+        isSocialLoading = false;
 
         return AuthApiFailed(
             error: error.message, authType: AuthType.socialMedia);
@@ -235,7 +236,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
                 platformCatagory.list != null &&
                 platformCatagory.list!.isNotEmpty)
             .toList();
-        isLoading = false;
+        isSocialLoading = false;
 
         log("social media result is:->1 platfomlist $result");
 
@@ -259,7 +260,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
         );
       });
     } catch (e) {
-      isLoading = false;
+      isSocialLoading = false;
 
       state =
           AuthApiFailed(error: e.toString(), authType: AuthType.socialMedia);
@@ -376,6 +377,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
 // ADD PLATFORM
   Future<void> addPlatform() async {
     state = const AuthApiLoading(authType: AuthType.addPlatform);
+
     try {
       if (!(await Getters.networkInfo.isConnected)) {
         state = const AuthApiFailed(
@@ -400,6 +402,7 @@ class SignupNotifiers extends StateNotifier<AuthState> {
       final result = await authUseCase.addPlatformApi(body: body);
       state = result.fold((error) {
         log("forgot password error:${error.message} ");
+
         return AuthApiFailed(
             error: error.message, authType: AuthType.addPlatform);
       }, (result) {

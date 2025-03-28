@@ -39,6 +39,7 @@ class HomeNotifier extends StateNotifier<HomeState>
   bool isHomeLoading = true;
   bool _isUpdating = false; // ✅ Flag to track API status
 
+  bool isRefreshLoading = false;
   int credits = 0;
 
   String name = '';
@@ -315,14 +316,19 @@ class HomeNotifier extends StateNotifier<HomeState>
   }
 
   // Home Data Api
-  Future<void> getHomeDataApi(
-      {required double lat, required double lang}) async {
-    isHomeLoading = true;
+  Future<void> getHomeDataApi({
+    required double lat,
+    required double lang,
+    bool isFromRefresh = false,
+  }) async {
+    if (!isFromRefresh) isHomeLoading = true;
+    if (isFromRefresh) isRefreshLoading = true;
     state = const HomeApiLoading(homeType: HomeType.home);
     try {
       checkAddress();
       if (!(await Getters.networkInfo.isConnected)) {
-        isHomeLoading = false;
+        if (!isFromRefresh) isHomeLoading = false;
+        if (isFromRefresh) isRefreshLoading = false;
 
         state = const HomeApiFailed(
           homeType: HomeType.home,
@@ -343,7 +349,8 @@ class HomeNotifier extends StateNotifier<HomeState>
       final result = await homeUseCase.callGetHome(body: body);
       state = result.fold((error) {
         log("login error:${error.message} ");
-        isHomeLoading = false;
+        if (!isFromRefresh) isHomeLoading = false;
+        if (isFromRefresh) isRefreshLoading = false;
 
         return HomeApiFailed(
           homeType: HomeType.home,
@@ -361,21 +368,25 @@ class HomeNotifier extends StateNotifier<HomeState>
               .toList();
 
           credits = result["user_points"] ?? 0;
+          isSubscription = result["isSubscription"] == 1 ? true : false;
 
           Getters.getLocalStorage.saveCredits(credits);
+          Getters.getLocalStorage.saveIsSubscription(isSubscription);
         } else {
           homeUserDataList = [];
         }
         log("history result is :->$homeUserDataList");
         log("user_points are :->$credits");
 
-        isHomeLoading = false;
+        if (!isFromRefresh) isHomeLoading = false;
+        if (isFromRefresh) isRefreshLoading = false;
 
         return const HomeApiSuccess(homeType: HomeType.home);
       });
     } catch (e) {
       printLog("catch called");
-      isHomeLoading = false;
+      if (!isFromRefresh) isHomeLoading = false;
+      if (isFromRefresh) isRefreshLoading = false;
 
       state = HomeApiFailed(error: e.toString(), homeType: HomeType.home);
     }

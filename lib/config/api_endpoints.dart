@@ -44,8 +44,10 @@ abstract final class ApiConstants {
   static const String deletePlatform = "$baseUrl/deleteSocialLink";
   static const String getOtherUserPlatform = "$baseUrl/getsocialprofile";
   static const String hidePlatform = "$baseUrl/hidePlatform";
-  // static const String completeProfile = "$baseUrl/completeProfile";
-  // static const String completeProfile = "$baseUrl/completeProfile";
+  static const String termsAndConditions =
+      "https://php.parastechnologies.in/nearmii/termsconditions";
+  static const String privacyPolicy =
+      "https://php.parastechnologies.in/nearmii/privacypolicy";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";
   // static const String completeProfile = "$baseUrl/completeProfile";

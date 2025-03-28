@@ -40,7 +40,7 @@ class CustomProfileCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: AppColor.green173E01.withOpacity(0.06),
+              color: AppColor.green173E01.withValues(alpha: 0.06),
               blurRadius: 3,
               offset: const Offset(0, 1),
             ),
@@ -85,7 +85,7 @@ class CustomProfileCard extends StatelessWidget {
                             text: designation,
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w400,
-                            color: AppColor.black000000.withOpacity(.34),
+                            color: AppColor.black000000.withValues(alpha: .34),
                           ),
                         )
                       ],

@@ -1,12 +1,8 @@
 import 'dart:developer';
 
-import 'package:NearMii/config/app_utils.dart';
-import 'package:NearMii/config/enums.dart';
 import 'package:NearMii/feature/auth/presentation/provider/states/country_code_provider.dart';
 import 'package:NearMii/feature/common_widgets/custom_phone_number.dart';
-import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/self_user_profile/presentation/provider/get_self_social_provider.dart';
-import 'package:NearMii/feature/self_user_profile/presentation/provider/state/self_user_profile_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
@@ -21,9 +17,8 @@ import 'package:NearMii/feature/common_widgets/profile_social_media.dart';
 import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../self_user_profile/presentation/provider/get_self_platform_provider.dart';
 
 class ProfileGridView extends ConsumerWidget {
   final String title;
@@ -44,7 +39,7 @@ class ProfileGridView extends ConsumerWidget {
     final notifier = ref.read(getSocialProfileProvider.notifier);
     final countryNotifier = ref.read(countryPickerProvider.notifier);
     ref.watch(countryPickerProvider);
-    final next = ref.watch(getSocialProfileProvider);
+    ref.watch(getSocialProfileProvider);
     printLog("====>> $getSocialProfileProvider");
 
     // ref.listen(selfUserProvider, (previous, next) {
@@ -402,23 +397,34 @@ class ProfileGridView extends ConsumerWidget {
                                 : null;
                           }
                         },
-                        child: ProfileSocialMedia(
-                          onToggleChanged: (val) {
-                            log("p0 :-> $val");
-                            notifier.hidePlatformApi(
-                                platformId: socialMedia[pIndex].id.toString());
-                          },
-                          isToggled:
-                              socialMedia[pIndex].status == 1 ? true : false,
-                          isMyProfile: isMyProfile,
-                          index: pIndex,
-                          icon: socialMedia[pIndex].platform?.icon ?? '',
-                          name: socialMedia[pIndex]
-                                  .platform
-                                  ?.name
-                                  ?.split(' ')
-                                  .first ??
-                              '',
+                        child: AnimationConfiguration.staggeredGrid(
+                          position: pIndex,
+                          duration: const Duration(milliseconds: 300),
+                          columnCount: socialMedia.length,
+                          child: ScaleAnimation(
+                            child: FadeInAnimation(
+                              child: ProfileSocialMedia(
+                                onToggleChanged: (val) {
+                                  log("p0 :-> $val");
+                                  notifier.hidePlatformApi(
+                                      platformId:
+                                          socialMedia[pIndex].id.toString());
+                                },
+                                isToggled: socialMedia[pIndex].status == 1
+                                    ? true
+                                    : false,
+                                isMyProfile: isMyProfile,
+                                index: pIndex,
+                                icon: socialMedia[pIndex].platform?.icon ?? '',
+                                name: socialMedia[pIndex]
+                                        .platform
+                                        ?.name
+                                        ?.split(' ')
+                                        .first ??
+                                    '',
+                              ),
+                            ),
+                          ),
                         ));
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

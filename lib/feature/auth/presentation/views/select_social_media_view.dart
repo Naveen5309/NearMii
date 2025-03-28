@@ -16,6 +16,7 @@ import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
+import 'package:NearMii/feature/common_widgets/social_shimmer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -282,6 +283,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     15.verticalSpace,
 
                     //SEARCH FIELD
+
                     CustomSearchBarWidget(
                       controller: signupPro.searchTextController,
                       onChanged: (value) {
@@ -289,32 +291,36 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                       },
                     ),
 
-                    SizedBox(
-                      height: context.height * .7,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        // physics: const NeverScrollableScrollPhysics(),
-                        itemCount: signupPro.newPlatformLists.length +
-                            1, // Add 1 for the extra item
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          if (index == signupPro.newPlatformLists.length) {
-                            return SizedBox(
-                              width: context.width,
-                              height: context.height * .1, // Add extra space
-                            );
-                          }
+                    (signupPro.isSocialLoading)
+                        ? const SocialMediaShimmer()
+                        : SizedBox(
+                            height: context.height * .7,
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              // physics: const NeverScrollableScrollPhysics(),
+                              itemCount: signupPro.newPlatformLists.length +
+                                  1, // Add 1 for the extra item
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                if (index ==
+                                    signupPro.newPlatformLists.length) {
+                                  return SizedBox(
+                                    width: context.width,
+                                    height:
+                                        context.height * .1, // Add extra space
+                                  );
+                                }
 
-                          var data = signupPro.newPlatformLists[index];
+                                var data = signupPro.newPlatformLists[index];
 
-                          return CustomSocialGridview(
-                            title: data.title ?? '',
-                            socialMedia: data.list ?? [],
-                            notifier: signupPro,
-                          );
-                        },
-                      ),
-                    ),
+                                return CustomSocialGridview(
+                                  title: data.title ?? '',
+                                  socialMedia: data.list ?? [],
+                                  notifier: signupPro,
+                                );
+                              },
+                            ),
+                          ),
                     SizedBox(
                       height: context.height * .05,
                     ),

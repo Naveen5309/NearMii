@@ -14,6 +14,7 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
+import 'package:NearMii/feature/common_widgets/shimmer_search_bar.dart';
 import 'package:NearMii/feature/common_widgets/social_shimmer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -156,7 +157,10 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
 
                     //ADD SOCIAL PROFILES TEXT
 
-                    signupPro.newPlatformLists.isNotEmpty
+//  (signupPro.isSocialLoading)?
+
+                    (signupPro.newPlatformLists.isNotEmpty ||
+                            signupPro.isSocialLoading)
                         ? AppText(
                             text: AppString.addSocialProfiles,
                             fontSize: 32.sp,
@@ -165,7 +169,8 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
 
                     10.verticalSpace,
 
-                    signupPro.newPlatformLists.isNotEmpty
+                    ((signupPro.newPlatformLists.isNotEmpty) ||
+                            (signupPro.isSocialLoading))
                         ? RichText(
                             text: TextSpan(
                               text: 'Upload the URL of your profiles. ',
@@ -289,15 +294,26 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
 
                     15.verticalSpace,
 
+                    CustomSearchBarWidget(
+                      controller: signupPro.searchTextController,
+                      onChanged: (value) {
+                        _onSearchChanged(value);
+                      },
+                    ),
                     //SEARCH FIELD
-                    signupPro.newPlatformLists.isNotEmpty
-                        ? CustomSearchBarWidget(
-                            controller: signupPro.searchTextController,
-                            onChanged: (value) {
-                              _onSearchChanged(value);
-                            },
-                          )
-                        : const SizedBox(),
+
+                    // (signupPro.isSocialLoading)
+                    //     ? const ShimmerSearchBar()
+                    //     :
+
+                    // signupPro.newPlatformLists.isNotEmpty
+                    //     ? CustomSearchBarWidget(
+                    //         controller: signupPro.searchTextController,
+                    //         onChanged: (value) {
+                    //           _onSearchChanged(value);
+                    //         },
+                    //       )
+                    //     : const SizedBox(),
 
                     // newPlatformLists
 

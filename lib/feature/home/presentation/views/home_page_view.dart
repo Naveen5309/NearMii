@@ -40,6 +40,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     super.initState();
     _loadRewardedAd();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      printLog("HOME INIT CALLED");
       var notifier = ref.watch(homeProvider.notifier);
       notifier.getFromLocalStorage();
 
@@ -128,12 +129,13 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   @override
   Widget build(BuildContext context) {
     printLog("home build called");
+
     return Consumer(builder: (context, ref, child) {
       ref.watch(homeProvider);
       var notifier = ref.watch(homeProvider.notifier);
       notifier.getFromLocalStorage();
 
-      int credit = Getters.getLocalStorage.getCredits() ?? 2;
+      // int credit = Getters.getLocalStorage.getCredits() ?? 2;
 
       // ✅ Listen for live location updates
       ref.listen<AsyncValue<Position>>(locationProvider, (previous, next) {
@@ -303,6 +305,10 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   onRefresh: () async {
                     var notifier = ref.read(homeProvider.notifier);
                     // notifier.updateCoordinates(radius: '');
+                    double lat = Getters.getLocalStorage.getLat() ?? 0.0;
+                    double lang = Getters.getLocalStorage.getLang() ?? 0.0;
+                    notifier.getHomeDataApi(
+                        lat: lat, lang: lang, isFromRefresh: true);
                   },
                   child: notifier.homeUserDataList.isEmpty
                       ? SizedBox(
@@ -327,6 +333,14 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                         )
                       : Column(
                           children: [
+                            if (notifier.isRefreshLoading)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: LinearProgressIndicator(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColor.appThemeColor,
+                                ),
+                              ),
                             AnimatedContainer(
                               duration: const Duration(seconds: 1),
                               width: context.width,
@@ -374,10 +388,23 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                       data.distance.toString())
                                                   : '',
                                               onUnlockTap: () {
-                                                printLog(
-                                                    "user_points are : on click $credit");
+                                                // printLog(
+                                                // "user_points are : on click $credit");
 
-                                                if (notifier.isSubscription) {
+                                                int credit = Getters
+                                                        .getLocalStorage
+                                                        .getCredits() ??
+                                                    0;
+
+                                                bool isSubscription = Getters
+                                                        .getLocalStorage
+                                                        .getIsSubscription() ??
+                                                    false;
+                                                printLog(
+                                                    "user_points are : on click 2  -> $credit");
+                                                printLog(
+                                                    "user_points are : on click 3  -> $isSubscription");
+                                                if (isSubscription) {
                                                   toNamed(
                                                           context,
                                                           Routes
@@ -424,14 +451,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                 } else {
                                                   _showRewardedAd(
                                                       id: data.id.toString());
-                                                  // showDialog(
-                                                  //   context: context,
-                                                  //   builder: (context) =>
-                                                  //       const VIPMembershipDialog(),
-                                                  // );
                                                 }
 
-                                                // print("Unlock Now Clicked!");
+                                                print("Unlock Now Clicked!");
                                               },
                                             ),
                                           ),

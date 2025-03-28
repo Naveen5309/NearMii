@@ -345,6 +345,8 @@ class LoginNotifier extends StateNotifier<AuthState> {
     await Getters.getLocalStorage.saveName(name);
     await Getters.getLocalStorage.saveProfileImg(profilePic);
     await Getters.getLocalStorage.saveCredits(userModel?.points ?? 0);
+    Getters.getLocalStorage
+        .saveIsSubscription(userModel?.isSubscription == 1 ? true : false);
     // await Getters.getLocalStorage.saveIsSubscription(userModel?.i??0);
 
     await Getters.getLocalStorage.saveSocialImg(socialImg);

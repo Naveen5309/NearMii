@@ -75,12 +75,22 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: totalHeight - AppBar().preferredSize.height,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: context.height * .05),
-                      child: const CommonBackBtn(),
+                    // SizedBox(
+                    //   height: totalHeight - AppBar().preferredSize.height,
+                    // ),
+                    InkWell(
+                      onTap: () {
+                        back(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            bottom: context.height * .05,
+                            top: totalHeight - AppBar().preferredSize.height),
+                        child: Container(
+                            alignment: Alignment.centerLeft,
+                            width: 100,
+                            child: const CommonBackBtn()),
+                      ),
                     ),
                     //Logo
 

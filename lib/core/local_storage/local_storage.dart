@@ -262,7 +262,7 @@ class HiveStorageImp extends LocalStorage {
 
   @override
   Future<void> saveIsSubscription(bool isSubscription) async {
-    await userBox.put(HiveConst.isOnboard, isSubscription);
+    await userBox.put(HiveConst.isSubscription, isSubscription);
   }
 
   @override

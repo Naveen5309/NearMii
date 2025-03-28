@@ -56,6 +56,8 @@ class UserModel {
   int? isProfile;
   String? token;
   int? points;
+  int? isSubscription;
+
   dynamic deviceType;
   dynamic deviceToken;
   dynamic status;
@@ -79,6 +81,7 @@ class UserModel {
     this.isProfile,
     this.token,
     this.points,
+    this.isSubscription,
     this.deviceType,
     this.deviceToken,
     this.status,
@@ -103,6 +106,7 @@ class UserModel {
         isProfile: json["is_profile"],
         token: json["token"],
         points: json["points"],
+        isSubscription: json["isSubscription"],
         deviceType: json["device_type"],
         deviceToken: json["device_token"],
         status: json["status"],
@@ -131,6 +135,7 @@ class UserModel {
         "is_profile": isProfile,
         "token": token,
         "points": points,
+        "isSubscription": isSubscription,
         "device_type": deviceType,
         "device_token": deviceToken,
         "status": status,
