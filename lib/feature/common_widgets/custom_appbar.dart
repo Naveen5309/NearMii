@@ -10,8 +10,14 @@ import 'package:flutter_svg/svg.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBackPress;
+  final Color? backgroundColor;
 
-  const CustomAppBar({super.key, required this.title, this.onBackPress});
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.onBackPress,
+    this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         statusBarBrightness: Brightness.light,
       ),
       leadingWidth: 55,
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor ?? AppColor.whiteFFFFFF,
       elevation: 0,
       centerTitle: true,
       leading: GestureDetector(
@@ -30,16 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 18),
             child: SvgPicture.asset(Assets.iconBackBtn),
-          )
-          //  Container(
-          //   margin: const EdgeInsets.all(8),
-          //   decoration: BoxDecoration(
-          //     color: Colors.green.shade100,
-          //     shape: BoxShape.circle,
-          //   ),
-          //   child: const Icon(Icons.arrow_back, color: Colors.green),
-          // ),
-          ),
+          )),
       title: AppText(
         text: title,
         color: AppColor.black000000,

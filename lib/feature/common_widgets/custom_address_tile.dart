@@ -24,7 +24,7 @@ class LocationCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(110), // Smooth rounded corners
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -41,13 +41,19 @@ class LocationCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(200)),
               child: SvgPicture.asset(Assets.icLocation)),
           const SizedBox(width: 8),
-
-          // Location Text
+          // if (location == "No address found" && address == "No address found")
+          //   AppText(
+          //     text: address,
+          //     fontSize: 12.sp,
+          //     fontWeight: FontWeight.w400,
+          //     color: AppColor.black000000.withValues(alpha: 0.4),
+          //   )
+          // else
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //LOCATION
+              // LOCATION
               SizedBox(
                 width: context.width * .7,
                 child: AppText(
@@ -60,16 +66,15 @@ class LocationCard extends StatelessWidget {
               ),
               5.verticalSpace,
 
-              //ADDRESS
-
+              // ADDRESS
               AppText(
                 text: address,
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w400,
-                color: AppColor.black000000.withOpacity(.4),
+                color: AppColor.black000000.withValues(alpha: 0.4),
               ),
             ],
-          ),
+          )
         ],
       ),
     );

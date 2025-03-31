@@ -32,4 +32,5 @@ class Routes {
 
   static const String share = '/share';
   static const String notification = '/notification';
+  static const String subscription = '/subscription';
 }

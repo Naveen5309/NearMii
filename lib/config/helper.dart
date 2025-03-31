@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 part 'extensions.dart';
 part '../config/app_colors.dart';
 part '../config/app_strings.dart';

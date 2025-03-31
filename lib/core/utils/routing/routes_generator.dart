@@ -21,6 +21,7 @@ import 'package:NearMii/feature/auth/presentation/views/signup_view.dart';
 import 'package:NearMii/feature/auth/presentation/views/verity_otp_view.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/view/other_user_profile_view.dart';
 import 'package:NearMii/feature/splash/presentation/splash_view.dart';
+import 'package:NearMii/feature/subscription/presentation/views/subscription_view.dart';
 import 'package:flutter/material.dart';
 import '../../../feature/home/presentation/views/home_page_view.dart';
 import 'routes.dart';
@@ -109,6 +110,9 @@ class RouteGenerator {
 
       case Routes.notification:
         return MaterialPageRoute(builder: (_) => const NotificationView());
+
+      case Routes.subscription:
+        return MaterialPageRoute(builder: (_) => const SubscriptionView());
       // case Routes.deleteAccount:
       //   final args = settings.arguments as dynamic;
       //   return MaterialPageRoute(

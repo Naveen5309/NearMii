@@ -419,7 +419,7 @@ class _SettingViewState extends ConsumerState<SettingView> {
                     child: CommonBtn(
                       text: "Buy Now",
                       onPressed: () {
-                        print("Button Pressed!");
+                        toNamed(context, Routes.subscription);
                       },
                     ),
                   )
