@@ -29,6 +29,8 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
 
   List<SelfPlatformCatagoryData> newPlatformLists = [];
   List<SelfPlatformCatagoryData> newPlatformListProfile = [];
+  List<SelfPlatformCatagoryData> otherUserPlatformListProfile = [];
+
   bool isOtherPlatformLoading = true;
   OtherUserProfileModel? profile;
 
@@ -104,6 +106,11 @@ class OtherUserProfileNotifier extends StateNotifier<OtherUserProfileStates> {
       }, (result) {
         newPlatformLists = result;
         newPlatformListProfile = result;
+
+        if (platformSearchController.text.trim().isEmpty) {
+          otherUserPlatformListProfile = result;
+        }
+
         newPlatformLists = newPlatformLists
             .where((platformCatagory) =>
                 platformCatagory.list != null &&

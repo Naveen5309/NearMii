@@ -678,8 +678,8 @@ Widget profileSection({
             alignment: WrapAlignment.center,
             spacing: 12,
             runSpacing: 12,
-            children:
-                otherUserProfileProvider.newPlatformListProfile.map((entry) {
+            children: otherUserProfileProvider.otherUserPlatformListProfile
+                .map((entry) {
               return InfoChip(
                   label: entry.title ?? "Unknown",
                   value: entry.list?.length.toString() ?? '0');

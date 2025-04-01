@@ -64,7 +64,9 @@ class ApiProvider {
           status: response.data["status"],
           data: parsedData,
           userPoints: response.data["user_points"],
-          token: response.data["token"] ?? '');
+          token: response.data["token"] ?? '',
+          isSubscription: response.data["isSubscription"] ?? 0);
+
       return dataResponse;
     } catch (err, c) {
       functionLog(msg: "t>>>>>>>>err$err", fun: "requestData");

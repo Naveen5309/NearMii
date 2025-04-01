@@ -228,9 +228,9 @@ String getDistance(String value) {
 
   // Check if it's an integer
   if (number % 1 == 0) {
-    return "${number.toInt()} meters away";
+    return "${number.toInt() * 1000} meters away";
   } else {
-    return "${number.toStringAsFixed(1)} meters away";
+    return "${(number * 1000).toStringAsFixed(1)} meters away";
   }
 }
 

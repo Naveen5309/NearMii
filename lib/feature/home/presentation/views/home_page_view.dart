@@ -196,7 +196,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                             overflow: TextOverflow.ellipsis,
-                            color: AppColor.primary.withOpacity(.8),
+                            color: AppColor.primary.withValues(alpha: .8),
                           ),
                           5.verticalSpace,
                           //NAME

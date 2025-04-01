@@ -1,4 +1,5 @@
 import 'package:NearMii/config/debouncer.dart';
+import 'package:NearMii/core/utils/routing/routes.dart';
 import 'package:NearMii/feature/common_widgets/history_shimmer.dart';
 import 'package:NearMii/feature/common_widgets/notification_tile.dart';
 import 'package:NearMii/feature/history/presentation/provider/state_notifier/history_notifier.dart';
@@ -210,7 +211,11 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                                 child: FadeInAnimation(
                                                                                   child: NotificationTile(
                                                                                     type: "${data.type}",
-                                                                                    onTap: () {},
+                                                                                    onTap: () {
+                                                                                      if (data.senderId != null) {
+                                                                                        toNamed(context, Routes.otherUserProfile, args: data.senderId.toString());
+                                                                                      }
+                                                                                    },
                                                                                     time: timeAgo,
                                                                                     title: data.message ?? '',
                                                                                     leadingIcon: "",
@@ -347,7 +352,11 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                                 child: FadeInAnimation(
                                                                                   child: NotificationTile(
                                                                                     type: "${data.type}",
-                                                                                    onTap: () {},
+                                                                                    onTap: () {
+                                                                                      if (data.senderId != null) {
+                                                                                        toNamed(context, Routes.otherUserProfile, args: data.senderId.toString());
+                                                                                      }
+                                                                                    },
                                                                                     time: timeAgo,
                                                                                     title: data.message ?? '',
                                                                                     leadingIcon: "",
@@ -469,7 +478,11 @@ class _NotificationViewState extends ConsumerState<NotificationView> {
                                                                                 child: FadeInAnimation(
                                                                                   child: NotificationTile(
                                                                                     type: "${data.type}",
-                                                                                    onTap: () {},
+                                                                                    onTap: () {
+                                                                                      if (data.senderId != null) {
+                                                                                        toNamed(context, Routes.otherUserProfile, args: data.senderId.toString());
+                                                                                      }
+                                                                                    },
                                                                                     time: timeAgo,
                                                                                     title: data.message ?? '',
                                                                                     leadingIcon: "",

@@ -17,6 +17,7 @@ ResponseWrapper<TModel> _$ResponseWrapperFromJson<TModel>(
       data: _$nullableGenericFromJson(json['data'], fromJsonTModel),
       token: json['token'] as String?,
       userPoints: json['user_points'] as int?,
+      isSubscription: json['isSubscription'] as int?,
     );
 
 Map<String, dynamic> _$ResponseWrapperToJson<TModel>(
@@ -37,6 +38,7 @@ Map<String, dynamic> _$ResponseWrapperToJson<TModel>(
   writeNotNull('data', _$nullableGenericToJson(instance.data, toJsonTModel));
   writeNotNull('token', instance.token);
   writeNotNull('userPoints', instance.userPoints);
+  writeNotNull('isSubscription', instance.isSubscription);
 
   return val;
 }

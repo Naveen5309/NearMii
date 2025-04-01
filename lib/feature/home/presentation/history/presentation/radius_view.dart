@@ -7,7 +7,6 @@ import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/core/helpers/all_getter.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
 import 'package:NearMii/feature/common_widgets/common_button.dart';
-import 'package:NearMii/feature/common_widgets/custom_appbar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/common_widgets/custum_thumb.dart';
 import 'package:NearMii/feature/home/presentation/provider/home_provider.dart';
@@ -35,8 +34,9 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
     super.initState();
     var radiusNotifier = ref.read(getProfileProvider.notifier);
     double savedRadius =
-        double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50') ?? 50;
-    _currentRadius = savedRadius;
+        double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50') ??
+            0.05;
+    _currentRadius = savedRadius * 1000;
   }
 
   @override
@@ -260,7 +260,9 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
             double lang = Getters.getLocalStorage.getLang() ?? 0.0;
 
             notifier.updateCoordinates(
-                radius: _currentRadius.toString(), lang: lang, lat: lat);
+                radius: (_currentRadius / 1000).toString(),
+                lang: lang,
+                lat: lat);
           },
           borderRadius: 50,
           backGroundColor: AppColor.green00C56524,

@@ -25,6 +25,8 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
   List<SelfPlatformCatagoryData> newPlatformLists = [];
   List<SelfPlatformCatagoryData> newPlatformListsProfile = [];
 
+  List<SelfPlatformCatagoryData> profilePlatformListsProfile = [];
+
   String countryCode = '+1';
   String countryNameCode = 'US';
 
@@ -228,6 +230,10 @@ class SelfUserProfileNotifier extends StateNotifier<SelfUserProfileState> {
       }, (result) {
         newPlatformLists = result;
         newPlatformListsProfile = result;
+
+        if (searchTextController.text.trim().isEmpty) {
+          profilePlatformListsProfile = result;
+        }
         newPlatformLists = newPlatformLists
             .where((platformCatagory) =>
                 platformCatagory.list != null &&

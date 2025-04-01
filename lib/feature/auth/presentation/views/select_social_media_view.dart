@@ -294,7 +294,7 @@ class _SelectSocialMediaViewState extends ConsumerState<SelectSocialMediaView> {
                     (signupPro.isSocialLoading)
                         ? const SocialMediaShimmer()
                         : SizedBox(
-                            height: context.height * .7,
+                            height: context.height * .65,
                             child: ListView.builder(
                               padding: EdgeInsets.zero,
                               // physics: const NeverScrollableScrollPhysics(),

@@ -45,18 +45,21 @@ class NotificationTile extends StatelessWidget {
         ),
 
         //DESIGNATION
-        subtitle: AppText(
-          text: subtitle,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w400,
-          color: AppColor.black000000.withOpacity(.37),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: AppText(
+            text: subtitle,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            color: AppColor.black000000.withValues(alpha: .37),
+          ),
         ),
 
         trailing: AppText(
           text: time,
           fontSize: 12.sp,
           fontWeight: FontWeight.w400,
-          color: AppColor.black000000.withOpacity(.18),
+          color: AppColor.black000000.withValues(alpha: .18),
         ),
         onTap: onTap,
       ),

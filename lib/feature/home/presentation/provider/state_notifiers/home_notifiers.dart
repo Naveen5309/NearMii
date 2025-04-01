@@ -358,7 +358,7 @@ class HomeNotifier extends StateNotifier<HomeState>
         );
       }, (result) {
         log("getHomeDataApi result is :->2 $result");
-        log("getHomeDataApi result is :->1 ${result["user_points"]}");
+        log("getHomeDataApi result is isSubscription :->1 ${result["isSubscription"]}");
 
         // log("getHomeDataApi result is :->2 ${result["data "]}");
 
@@ -368,10 +368,12 @@ class HomeNotifier extends StateNotifier<HomeState>
               .toList();
 
           credits = result["user_points"] ?? 0;
-          isSubscription = result["isSubscription"] == 1 ? true : false;
+          isSubscription = (result["isSubscription"] == 1) ? true : false;
 
           Getters.getLocalStorage.saveCredits(credits);
           Getters.getLocalStorage.saveIsSubscription(isSubscription);
+
+          log("getHomeDataApi result is isSubscription :->2 $isSubscription");
         } else {
           homeUserDataList = [];
         }

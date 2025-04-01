@@ -169,8 +169,13 @@ class _SettingViewState extends ConsumerState<SettingView> {
                       CustomTile(
                         leadingIcon: Assets.iconSetRadius,
                         title: AppString.setRadius,
-                        subtitle:
-                            "${(double.tryParse(notifier.userProfileModel?.radius ?? '50')?.toStringAsFixed(2)) ?? '50'} M",
+                        subtitle: (notifier.userProfileModel?.radius != null &&
+                                double.tryParse(notifier
+                                        .userProfileModel!.radius
+                                        .toString()) !=
+                                    null)
+                            ? "${(double.parse(notifier.userProfileModel!.radius.toString()) * 1000).toStringAsFixed(0)} M"
+                            : "50 M",
                         trailingIcon: Assets.iconArrowRight,
                         onTap: () {
                           toNamed(context, Routes.setRadius).then(

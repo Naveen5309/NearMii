@@ -7,6 +7,7 @@ class ResponseWrapper<TModel> {
   TModel? data;
   String? token;
   int? userPoints;
+  int? isSubscription;
 
   ResponseWrapper({
     this.status,
@@ -15,6 +16,7 @@ class ResponseWrapper<TModel> {
     this.data,
     this.token,
     this.userPoints,
+    this.isSubscription,
   });
 
   factory ResponseWrapper.fromJson(
