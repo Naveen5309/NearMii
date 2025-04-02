@@ -154,17 +154,17 @@ class NotificationService {
     });
   }
 
-  /* Future? _onSelectNotification(String? payload) {
-    if (Getters.authToken?.isEmpty??true) {
-      return null;
-    }
-    NotificationEntity? entity = convertStringToNotificationEntity(payload);
-    printLog("notification onSelectNotification ${entity.toString()}");
-    if (entity != null) {
-      _pushNextScreenFromForeground(entity);
-    }
-    return null;
-  }*/
+  //  Future? _onSelectNotification(String? payload) {
+  //   if (Getters.authToken?.isEmpty??true) {
+  //     return null;
+  //   }
+  //   NotificationEntity? entity = convertStringToNotificationEntity(payload);
+  //   printLog("notification onSelectNotification ${entity.toString()}");
+  //   if (entity != null) {
+  //     _pushNextScreenFromForeground(entity);
+  //   }
+  //   return null;
+  // }
 
   Future<void> _showNotifications(NotificationEntity notificationEntity) async {
     Random random = Random();

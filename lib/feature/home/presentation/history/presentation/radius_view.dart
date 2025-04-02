@@ -34,7 +34,7 @@ class _RadiusScreenState extends ConsumerState<RadiusScreen> {
     super.initState();
     var radiusNotifier = ref.read(getProfileProvider.notifier);
     double savedRadius =
-        double.tryParse(radiusNotifier.userProfileModel?.radius ?? '50') ??
+        double.tryParse(radiusNotifier.userProfileModel?.radius ?? '0.05') ??
             0.05;
     _currentRadius = savedRadius * 1000;
   }

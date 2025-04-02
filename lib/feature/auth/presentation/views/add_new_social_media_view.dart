@@ -14,7 +14,6 @@ import 'package:NearMii/feature/common_widgets/common_button.dart';
 import 'package:NearMii/feature/common_widgets/custom_bottom_sheet.dart';
 import 'package:NearMii/feature/common_widgets/custom_search_bar_widget.dart';
 import 'package:NearMii/feature/common_widgets/custom_social_gridview.dart';
-import 'package:NearMii/feature/common_widgets/shimmer_search_bar.dart';
 import 'package:NearMii/feature/common_widgets/social_shimmer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -114,9 +113,6 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: context.width * .05),
             child: SingleChildScrollView(
-              physics: signupPro.newPlatformLists.isNotEmpty
-                  ? const AlwaysScrollableScrollPhysics()
-                  : const NeverScrollableScrollPhysics(),
               child: Consumer(builder:
                   (BuildContext context, WidgetRef ref, Widget? child) {
                 return Column(
@@ -300,32 +296,12 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                         _onSearchChanged(value);
                       },
                     ),
-                    //SEARCH FIELD
-
-                    // (signupPro.isSocialLoading)
-                    //     ? const ShimmerSearchBar()
-                    //     :
-
-                    // signupPro.newPlatformLists.isNotEmpty
-                    //     ? CustomSearchBarWidget(
-                    //         controller: signupPro.searchTextController,
-                    //         onChanged: (value) {
-                    //           _onSearchChanged(value);
-                    //         },
-                    //       )
-                    //     : const SizedBox(),
-
-                    // newPlatformLists
 
                     (signupPro.isSocialLoading)
-                        ?
-                        // ((signupPro.isSocialLoading) &&
-                        //         (signupPro.newPlatformLists.isNotEmpty))
-                        // ?
-                        const SocialMediaShimmer()
+                        ? const SocialMediaShimmer()
                         : signupPro.newPlatformLists.isNotEmpty
                             ? SizedBox(
-                                height: context.height * .8,
+                                height: context.height * .68,
                                 child: ListView.builder(
                                   itemCount: signupPro.newPlatformLists.length,
                                   padding: EdgeInsets.zero,

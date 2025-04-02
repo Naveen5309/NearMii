@@ -89,7 +89,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       height: 8,
                       width: context.width * .5,
                       decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(.4),
+                          color: Colors.grey.withValues(alpha: .4),
                           borderRadius: BorderRadius.circular(100)),
                     ),
                     20.verticalSpace,
@@ -377,8 +377,8 @@ Widget orContinueWith({required BuildContext context}) {
       children: [
         Expanded(
           child: customDividerContainer(gradientColor: [
-            AppColor.black000000.withOpacity(.01),
-            AppColor.black000000.withOpacity(.2),
+            AppColor.black000000.withValues(alpha: .01),
+            AppColor.black000000.withValues(alpha: .2),
           ]),
         ),
         Padding(
@@ -387,13 +387,13 @@ Widget orContinueWith({required BuildContext context}) {
             text: AppString.orContinueWiths,
             fontSize: 14.sp,
             fontWeight: FontWeight.w400,
-            color: AppColor.black000000.withOpacity(.6),
+            color: AppColor.black000000.withValues(alpha: .6),
           ),
         ),
         Expanded(
           child: customDividerContainer(gradientColor: [
-            AppColor.black000000.withOpacity(.2),
-            AppColor.black000000.withOpacity(.01),
+            AppColor.black000000.withValues(alpha: .2),
+            AppColor.black000000.withValues(alpha: .01),
           ]),
         ),
       ],

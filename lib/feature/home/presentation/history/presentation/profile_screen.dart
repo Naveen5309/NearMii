@@ -302,7 +302,7 @@ class _MyProfileViewState extends ConsumerState<MyProfileView> {
                 collapsedBackgroundColor: AppColor.btnColor,
                 expandedBackgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                 expandedContentHeight: () {
-                  double baseHeight = context.height * .55;
+                  double baseHeight = context.height * .58;
 
                   if (notifier.userProfileModel == null) {
                     return context.height *

@@ -1,3 +1,5 @@
+import 'package:NearMii/feature/subscription/presentation/provider/subscription_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:NearMii/config/assets.dart';
 import 'package:NearMii/config/helper.dart';
 import 'package:NearMii/feature/common_widgets/app_text.dart';
@@ -6,11 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SubscriptionView extends StatelessWidget {
+class SubscriptionView extends ConsumerStatefulWidget {
   const SubscriptionView({super.key});
 
   @override
+  ConsumerState<SubscriptionView> createState() => _SubscriptionViewState();
+}
+
+class _SubscriptionViewState extends ConsumerState<SubscriptionView> {
+  @override
+  void initState() {
+    final subscriptionNotifier = ref.read(subscriptionProvider.notifier);
+    subscriptionNotifier.init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final subscriptionNotifiers = ref.read(subscriptionProvider.notifier);
+
+    ref.watch(subscriptionProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appThemeColor,
@@ -142,6 +159,9 @@ class SubscriptionView extends StatelessWidget {
               backGroundColor: AppColor.whiteFFFFFF,
               title: AppString.buyNow,
               textColor: AppColor.black000000,
+              onTap: () {
+                subscriptionNotifiers.buySubscription();
+              },
             ),
             SizedBox(
               height: context.height * .1,

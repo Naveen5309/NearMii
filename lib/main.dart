@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'config/helper.dart';
 import 'config/provider_logs.dart';
 import 'core/helpers/app_injector.dart';
@@ -16,6 +17,11 @@ import 'core/utils/routing/routes_generator.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
   HttpOverrides.global = MyHttpOverrides();
   if (Platform.isAndroid) {
     MobileAds.instance.initialize();

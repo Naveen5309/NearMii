@@ -16,6 +16,7 @@ import 'package:NearMii/feature/common_widgets/custom_toast.dart';
 import 'package:NearMii/feature/other_user_profile/presentation/provider/report_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/delete_account_provider.dart';
 import 'package:NearMii/feature/setting/presentation/provider/states/setting_states.dart';
+import 'package:NearMii/feature/setting/presentation/view/delete_account_confirmation_view.dart';
 import 'package:NearMii/feature/setting/presentation/view/show_box_delete_account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -218,6 +219,7 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                   int selected = ref.watch(selectedDeleteIndex);
                   log("social profile is :-. $selected");
                   log("social profile is :-. ${deleteAccountNotifier.somethingElseController.text}");
+                  log("social profile is :-. ${widget.socialId}");
 
                   if (widget.socialId.isEmpty) {
                     if ((selected == -1) &&
@@ -232,6 +234,15 @@ class _DeleteReasonViewState extends ConsumerState<DeleteReasonView> {
                           context: context,
                           content: const DeleteAccountBottomSheet());
                     }
+                  } else {
+                    showCustomBottomSheet(
+                        context: context,
+                        content: DeleteAccountConfirmationView(delete: () {
+                          deleteAccountNotifier.deleteAccountApi(
+                              socialId: widget.socialId);
+                        }, onCancel: () {
+                          back(context);
+                        }));
                   }
                   // log("social profile is :-. ${widget.socialId}");
                   // log("social profile is :-. ${deleteAccountNotifier.somethingElseController.text}");
