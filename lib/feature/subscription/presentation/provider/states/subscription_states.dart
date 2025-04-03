@@ -20,9 +20,10 @@ class SubscriptionApiLoading extends SubscriptionStates {
 }
 
 class SubscriptionApiSuccess extends SubscriptionStates {
-  const SubscriptionApiSuccess();
+  final String productId;
+  const SubscriptionApiSuccess({required this.productId});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [productId];
 }
 
 class SubscriptionApiFailed extends SubscriptionStates {

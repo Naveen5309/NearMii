@@ -26,7 +26,6 @@ class UserProfileModel {
   final int? isSubscription;
   final String? subscriptionPlan;
   final String? socialImage;
-
   final String? paymentToken;
   final DateTime? startDate;
   final DateTime? endDate;

@@ -421,18 +421,37 @@ class _SettingViewState extends ConsumerState<SettingView> {
                 ? SizedBox(
                     height: 28.h,
                     width: 76.w,
-                    child: CommonBtn(
-                      text: "Buy Now",
-                      onPressed: () {
-                        toNamed(context, Routes.subscription);
+                    child: Consumer(
+                      builder: (_, WidgetRef ref, __) {
+                        return CommonBtn(
+                          text: "Buy Now",
+                          onPressed: () {
+                            toNamed(context, Routes.subscription).then(
+                              (value) {
+                                ref
+                                    .read(getProfileProvider.notifier)
+                                    .getProfileApi();
+                              },
+                            );
+                          },
+                        );
                       },
                     ),
                   )
-                : AppText(
-                    fontFamily: Constants.fontFamily,
-                    text: "25 days left",
-                    color: const Color(0xff00C565),
-                    fontSize: 12.sp,
+                : Consumer(
+                    builder: (_, WidgetRef ref, __) {
+                      ref.watch(getProfileProvider);
+
+                      String daysLeft = ref
+                          .read(getProfileProvider.notifier)
+                          .subscriptionDaysLeft;
+                      return AppText(
+                        fontFamily: Constants.fontFamily,
+                        text: "$daysLeft days left",
+                        color: const Color(0xff00C565),
+                        fontSize: 12.sp,
+                      );
+                    },
                   ),
           ],
         ),

@@ -39,6 +39,8 @@ class SettingNotifier extends StateNotifier<SettingStates> {
   String countryCode = '+1';
   String countryFlag = '🇺🇸';
 
+  String subscriptionDaysLeft = '0';
+
   // List<UserProfileModel> getProfileDataList = [];
   UserProfileModel? userProfileModel;
 
@@ -269,6 +271,10 @@ class SettingNotifier extends StateNotifier<SettingStates> {
       }, (result) {
         log("result is :-> $result");
         userProfileModel = result;
+
+        subscriptionDaysLeft =
+            daysLeft(endDate: userProfileModel?.endDate ?? DateTime.now())
+                .toString();
 
         if (userProfileModel?.phoneNumber != null) {
           countryCode =

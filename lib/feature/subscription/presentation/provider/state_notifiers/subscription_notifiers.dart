@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:NearMii/config/helper.dart';
@@ -9,48 +10,111 @@ import 'package:NearMii/feature/subscription/presentation/provider/states/subscr
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:intl/intl.dart';
 
 class SubscriptionNotifiers extends StateNotifier<SubscriptionStates> {
   final SubscriptionUseCases subscriptionUseCase;
 
-  SubscriptionNotifiers({required this.subscriptionUseCase})
-      : super(SubscriptionInitial());
-
   final InAppPurchase _iap = InAppPurchase.instance;
-
-  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
-
+  SubscriptionNotifiers({required this.subscriptionUseCase})
+      : super(SubscriptionInitial()) {
+    _initPurchaseListener();
+  }
   List<String> ids = [];
 
-  final List<String> _kProductIds = ["membership"];
+  String transactionID = '';
+
+  bool isSubscriptionLoading = false;
+
   final String _kConsumableId = 'consumable';
   List<ProductDetails> products = [];
 
-  initializeSubscription() {
-    printLog("Initialize Subscription");
-    final Stream<List<PurchaseDetails>> purchaseUpdated =
-        _inAppPurchase.purchaseStream;
+  String subscriptionDaysLeft = '';
 
-    printLog("purchaseUpdated :-> $purchaseUpdated");
-    _subscription =
-        purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
-      printLog("purchaseUpdated :-> $_subscription");
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription.cancel();
-    }, onError: (Object error) {
-      // handle error here.
+  /// Initialize purchase listener
+  void _initPurchaseListener() {
+    _iap.purchaseStream.listen((List<PurchaseDetails> purchases) {
+      for (var purchase in purchases) {
+        switch (purchase.status) {
+          case PurchaseStatus.pending:
+            log("Purchase Pending: ${purchase.productID}");
+            isSubscriptionLoading = true;
+            // state = SubscriptionPending();
+            break;
+
+          case PurchaseStatus.purchased:
+            log("Purchase Successful: ${purchase.productID}");
+            _verifyPurchaseAndCallAPI(purchase);
+            break;
+
+          case PurchaseStatus.error:
+            log("Subscription Failed: ${purchase.error?.message}");
+            state = const SubscriptionApiFailed(error: "Purchase failed");
+            break;
+
+          default:
+            log("Unhandled Purchase Status: ${purchase.status}");
+        }
+      }
+    }, onError: (error) {
+      log("Purchase Error: $error");
+      state = SubscriptionApiFailed(error: "Purchase Error: $error");
     });
   }
+
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
 
   void init() async {
     bool isAvailable = await _iap.isAvailable();
     if (isAvailable) {
       await _getProductDetails();
     }
+  }
+
+  /// Verify purchase and call API
+  Future<void> _verifyPurchaseAndCallAPI(PurchaseDetails purchase) async {
+    bool isValid = await verifyPurchase(purchase);
+
+    if (isValid) {
+      log("Purchase Verified Successfully :-> $purchase");
+      log("Transaction ID: ${purchase.purchaseID}");
+      log("Purchase Date: ${purchase.transactionDate}");
+      log("Product ID: ${purchase.productID}");
+      log("Status: ${purchase.status}");
+
+      state = SubscriptionApiSuccess(productId: purchase.productID);
+
+      if (Platform.isAndroid) {
+        if (purchase is GooglePlayPurchaseDetails) {
+          PurchaseWrapper purchaseWrapper = purchase.billingClientPurchase;
+
+          printLog(
+              "purchase wrapper is acknowledge :-> ${purchaseWrapper.isAcknowledged}");
+
+          printLog(
+              "purchase wrapper is acknowledge :-> ${purchaseWrapper.originalJson}");
+
+          if (transactionID != purchaseWrapper.purchaseToken) {
+            addSubscription(
+              paymentToken: purchaseWrapper.purchaseToken,
+              orderID: purchase.purchaseID!,
+            );
+          }
+        }
+      }
+    } else {
+      log("Purchase Verification Failed");
+      state =
+          const SubscriptionApiFailed(error: "Purchase verification failed");
+    }
+  }
+
+  /// Simulate backend verification
+  Future<bool> verifyPurchase(PurchaseDetails purchase) async {
+    _iap.completePurchase(purchase);
+    return true; // Assume valid for now
   }
 
   Future<List<ProductDetails>> _getProductDetails() async {
@@ -116,74 +180,27 @@ class SubscriptionNotifiers extends StateNotifier<SubscriptionStates> {
     return null;
   }
 
-  Future<void> deliverProduct(PurchaseDetails purchaseDetails) async {
-    // IMPORTANT!! Always verify purchase details before delivering the product.
-    // if (purchaseDetails.productID == _kConsumableId) {
-    //   await ConsumableStore.save(purchaseDetails.purchaseID!);
-    //   final List<String> consumables = await ConsumableStore.load();
-    //   setState(() {
-    //     _purchasePending = false;
-    //     _consumables = consumables;
-    //   });
-    // } else {
-    //   setState(() {
-    //     _purchases.add(purchaseDetails);
-    //     _purchasePending = false;
-    //   });
-    // }
-  }
+  /// Complete all pending purchases
+  Future<void> completeAllPendingPurchases() async {
+    // Restore past purchases
+    await _iap.restorePurchases();
 
-  void showPendingUI() {}
-
-  void handleError(IAPError error) {}
-
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) {
-    // IMPORTANT!! Always verify a purchase before delivering the product.
-    // For the purpose of an example, we directly return true.
-    return Future<bool>.value(true);
-  }
-
-  void _handleInvalidPurchase(PurchaseDetails purchaseDetails) {
-    // handle invalid purchase here if  _verifyPurchase` failed.
-  }
-  Future<void> _listenToPurchaseUpdated(
-      List<PurchaseDetails> purchaseDetailsList) async {
-    printLog("purchaseDetails is :-> $purchaseDetailsList");
-
-    for (final PurchaseDetails purchaseDetails in purchaseDetailsList) {
-      printLog("purchaseDetails is :-> $purchaseDetails");
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        showPendingUI();
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          handleError(purchaseDetails.error!);
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          final bool valid = await _verifyPurchase(purchaseDetails);
-          if (valid) {
-            unawaited(deliverProduct(purchaseDetails));
-          } else {
-            _handleInvalidPurchase(purchaseDetails);
-            return;
-          }
-        }
-        if (Platform.isAndroid) {
-          if (purchaseDetails.productID == _kConsumableId) {
-            final InAppPurchaseAndroidPlatformAddition androidAddition =
-                _inAppPurchase.getPlatformAddition<
-                    InAppPurchaseAndroidPlatformAddition>();
-            await androidAddition.consumePurchase(purchaseDetails);
-          }
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          await _inAppPurchase.completePurchase(purchaseDetails);
+    // Listen for restored purchases
+    _iap.purchaseStream.listen((List<PurchaseDetails> purchases) async {
+      for (var purchase in purchases) {
+        if (purchase.status == PurchaseStatus.pending) {
+          log("Completing pending purchase: ${purchase.productID}");
+          await _iap.completePurchase(purchase);
         }
       }
-    }
+    });
   }
 
   //Report
-  Future<void> addSubscription({required String paymentToken}) async {
+  Future<void> addSubscription({
+    required String paymentToken,
+    required String orderID,
+  }) async {
     state = const SubscriptionApiLoading();
     try {
       if (!(await Getters.networkInfo.isConnected)) {
@@ -204,6 +221,9 @@ class SubscriptionNotifiers extends StateNotifier<SubscriptionStates> {
         "startDate": DateFormat('yyyy-MM-dd').format(
           DateTime.now(),
         ),
+        "endDate": DateFormat('yyyy-MM-dd').format(
+          DateTime.now().copyWith(month: DateTime.now().month + 1),
+        ),
       };
 
       printLog("body is :->$body");
@@ -218,7 +238,7 @@ class SubscriptionNotifiers extends StateNotifier<SubscriptionStates> {
       }, (result) {
         printLog("result is::$result");
 
-        return const SubscriptionApiSuccess();
+        return const SubscriptionApiSuccess(productId: '');
       });
     } catch (e) {
       state = SubscriptionApiFailed(

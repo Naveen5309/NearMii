@@ -241,3 +241,9 @@ String formatDob(String dateString) {
   }
   return dateString; // Return original if format is incorrect
 }
+
+int daysLeft({required DateTime endDate}) {
+  DateTime today = DateTime.now();
+  Duration difference = endDate.difference(today);
+  return difference.inDays;
+}

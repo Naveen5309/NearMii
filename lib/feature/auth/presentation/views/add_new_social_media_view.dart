@@ -265,8 +265,9 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                                                                         .w400,
                                                                 color: AppColor
                                                                     .black000000
-                                                                    .withOpacity(
-                                                                        .6),
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            .6),
                                                                 text: data[
                                                                         "msg"] ??
                                                                     ''),
@@ -301,7 +302,7 @@ class _AddNewSocialMediaViewState extends ConsumerState<AddNewSocialMediaView> {
                         ? const SocialMediaShimmer()
                         : signupPro.newPlatformLists.isNotEmpty
                             ? SizedBox(
-                                height: context.height * .68,
+                                height: context.height * .61,
                                 child: ListView.builder(
                                   itemCount: signupPro.newPlatformLists.length,
                                   padding: EdgeInsets.zero,
